@@ -440,6 +440,7 @@
 												</div>
                                             </div>
 
+                                        <div class="col-sm-12">
                                             <div class="col-sm-4">
 												<div class="input-group">
 													<span class="input-group-addon">
@@ -474,7 +475,8 @@
 			                                          <input name="instagram_url" id="instagram_url" type="text" class="form-control">
 			                                        </div>
 												</div>
-                                            </div>                                         
+                                            </div> 
+                                        </div>                                        
                                             
                                             <div class="col-sm-12">
                                                 <div class="form-group">

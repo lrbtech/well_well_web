@@ -29,7 +29,7 @@ class PageController extends Controller
 
     public function getArea($id){ 
     
-        $data = city::where('parent_id',$id)->get();
+        $data = city::where('parent_id',$id)->orderBy('city','ASC')->get();
     
             $output ='<option value="">SELECT Area</option>';
             foreach ($data as $key => $value) {

@@ -114,13 +114,16 @@
                     </tr>
                 </table>
             </td>
-        </tr>
+        </tr
+        <?php
+                    $url = asset('');
+                    ?>>
         <tr>
             <td bgcolor="#0064a6" align="center" style="padding: 0px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
-                            <h1 style="font-size: 48px; font-weight: 400; margin: 2;">Welcome!</h1> <img src=" http://wellwell.ae/wp-content/uploads/2021/01/Asset-1.png" width="125" height="120" style="display: block; border: 0px;" />
+                            <h1 style="font-size: 48px; font-weight: 400; margin: 2;">Welcome!</h1> <img src="{{$url}}assets/images/logo.png" width="125" height="120" style="display: block; border: 0px;" />
                         </td>
                     </tr>
                 </table>
@@ -134,9 +137,7 @@
                             <p style="margin: 0;">your account verification process is completed</p>
                         </td>
                     </tr>
-                    <?php
-                    $url = asset('');
-                    ?>
+                    
                     <tr>
                         <td bgcolor="#ffffff" align="left">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
