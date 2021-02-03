@@ -1,0 +1,117 @@
+@font-face {
+    font-family: "cairo";
+    src: url("./assets/Cairo/Cairo-Regular.ttf");
+}
+
+@page {
+    size: A4;
+    margin: 20px 40px;
+}
+
+body {
+    font-family: 'open-sans', sans-serif;
+    font-size: 16px;
+    color: #000;
+    margin: 20px 40px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.align-item-end {
+    align-items: flex-end;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.px-2 {
+    padding: 0 15px;
+}
+
+.pt-2 {
+    padding-top: 15px;
+}
+
+.pb-2 {
+    padding-bottom: 15px;
+}
+
+.ml-2 {
+    margin-left: 15px;
+}
+
+.mr-2 {
+    margin-right: 15px;
+}
+
+.mb-2 {
+    margin-bottom: 15px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.title {
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.title_line {
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    padding: 10px 0;
+}
+
+
+/* Table style */
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    /* border-bottom: 2px solid #dee2e6; */
+}
+
+.table td,
+.table th {
+    padding: .65rem;
+    vertical-align: top;
+    /* border-top: 1px solid #dee2e6; */
+}
+
+th {
+    text-align: inherit;
+}
+
+
+/* .table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: rgba(0, 0, 0, .05);
+} */
