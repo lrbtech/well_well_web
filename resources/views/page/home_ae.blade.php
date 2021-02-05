@@ -17,14 +17,27 @@
 <body class="body_rtl" data-spy="scroll" data-target=".site-navbar-target" data-offset="300" data-aos-easing="slide" data-aos-duration="800" data-aos-delay="0">
 
     <div class="site-wrap" id="home-section">
-        <div class="site-mobile-menu site-navbar-target">
-            <div class="site-mobile-menu-header">
-                <div class="site-mobile-menu-close mt-3">
-                    <span class="icon-close2 js-menu-toggle"></span>
-                </div>
+        <nav class="header__nav nav-bar sidebar_toggle">
+            <div class="toggle-menu">
+                <div class="line line1"></div>
+                <div class="line line2"></div>
+                <div class="line line3"></div>
             </div>
+            <ul class="nav-list">
+                <li><a href="#home-section" class="nav-link active">Home</a></li>
+                <li><a href="#about-section" class="nav-link">About Us</a></li>
+                <li><a href="/track/1" class="nav-link">Track</a></li>
+                <!-- <li><a href="#" class="nav-link">Ship</a></li> -->
 
-        </div>
+                <li><a href="#service-solution" class="nav-link">Soluction & Services</a></li>
+                <li><a href="#service-advance" class="nav-link">Help & Support</a></li>
+                <li><a href="#contact" class="nav-link">Contact Us</a></li>
+                <li><a href="/login" class="nav-link">Login</a></li>
+                <li><a href="/register" class="nav-link">Register</a></li>
+                <!--<li><a href="/home-arabic" class="nav-link">العربية</a></li>-->
+                <!-- <li><a href="#" class="nav-link" onclick='changeToRTL()'>العربية</a></li> -->
+            </ul>
+        </nav>
         <div id="sticky-wrapper" class="sticky-wrapper" style="height: 74.7px;">
             <header class="site-navbar js-sticky-header site-navbar-target" role="banner" style="">
                 <div class="container">
@@ -495,6 +508,13 @@ function Tracking(){
                 }, 400);
                 return false;
             });
+        });
+    </script>
+    <script>
+        var toggleButton = document.querySelector('.toggle-menu');
+        var navBar = document.querySelector('.nav-bar');
+        toggleButton.addEventListener('click', function() {
+            navBar.classList.toggle('toggle');
         });
     </script>
 </body>

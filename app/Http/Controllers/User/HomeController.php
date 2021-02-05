@@ -31,7 +31,7 @@ class HomeController extends Controller
         $cldate = date('Y-m-d',strtotime('last day of this month'));
 
         $shipment = shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'desc')->take('5')->get();
-        $current_month_value = shipment::whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
+        $current_month_value = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
         return view('user.dashboard',compact('total_shipment','shipment','current_month_value'));
     }
     

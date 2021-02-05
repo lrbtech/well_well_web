@@ -92,7 +92,7 @@ visibility: visible;
                                 <label class="col-form-label">Express</label>
                                 @endif
                             </div>
-
+                            @if(!empty($user))
                             <div class="form-group col-md-4">
                                 <label class="col-form-label">Name</label><br>
                                 <label class="col-form-label">{{$user->first_name}} {{$user->last_name}}</label>
@@ -106,6 +106,7 @@ visibility: visible;
                                 <label class="col-form-label">Email</label><br>
                                 <label class="col-form-label">{{$user->email}}</label>
                             </div>
+                            @endif
                         </div>
                         </div>
 

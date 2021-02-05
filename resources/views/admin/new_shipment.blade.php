@@ -1081,7 +1081,7 @@ function subAmount(total_price1,total_weight1) {
   $("#shipment_price").val(total_price);
   
   var postal_charge_enable = Number($('#postal_charge_enable').val());
-  var postal_charge_percentage =Number($('#postal_charge_enable').val());
+  var postal_charge_percentage =Number($('#postal_charge_percentage').val());
   var insurance_enable = Number($('#insurance_enable').val());
   var insurance_percentage = Number($('#insurance_percentage').val());
   var cod_enable = Number($('#cod_enable').val());

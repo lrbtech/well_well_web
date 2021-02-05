@@ -141,7 +141,7 @@ class ReportController extends Controller
             ->addColumn('action', function ($shipment) {
                 if($shipment->status == 8){
                     return '<td>
-                    <p><a target="_blank" href="/user/print-invoice/'.$shipment->id.'" >Print</a></p>
+                    <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
                     </td>';
                 }
                 else{

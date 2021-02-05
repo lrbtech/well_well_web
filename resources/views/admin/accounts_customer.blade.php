@@ -48,7 +48,7 @@
                         </thead>
                         <tbody>
                         @foreach($customer as $key => $row)
-                        @if($row->status == 3)
+                        @if($row->status >= 3)
                           <tr>
                             <td>
                               @if($row->user_type == 0)
@@ -82,7 +82,12 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
+                                @if($row->status == 3)
+                                  <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
+                                @elseif($row->status == 4)
+                                  <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Block User</a>
+                                @endif
+                                    
                                     <a class="dropdown-item" href="/admin/view-profile/{{$row->id}}">View Profile</a>
                                 </div>
                             </td>

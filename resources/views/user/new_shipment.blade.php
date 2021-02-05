@@ -531,7 +531,7 @@ visibility: visible;
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Insurance <span id="insurance_percentage_lbel">{{$add_rate->insurance_percentage}}</span>%</label>
+                            <label class="col-sm-6 col-form-label">Insurance <span id="insurance_percentage_label">{{$add_rate->insurance_percentage}}</span>%</label>
                             <div class="col-sm-6">
                             <input value="{{$add_rate->insurance_enable}}" readonly name="insurance_enable" id="insurance_enable" type="hidden">
                             <input value="{{$add_rate->insurance_percentage}}" readonly name="insurance_percentage" id="insurance_percentage" type="hidden">
@@ -1045,7 +1045,7 @@ function subAmount(total_price1,total_weight1) {
   $("#shipment_price").val(total_price);
   
   var postal_charge_enable = Number($('#postal_charge_enable').val());
-  var postal_charge_percentage =Number($('#postal_charge_enable').val());
+  var postal_charge_percentage =Number($('#postal_charge_percentage').val());
   var insurance_enable = Number($('#insurance_enable').val());
   var insurance_percentage = Number($('#insurance_percentage').val());
   var cod_enable = Number($('#cod_enable').val());

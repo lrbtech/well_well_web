@@ -43,10 +43,16 @@ Route::get('/view-clear', function() {
 
 Auth::routes(['register' => false]);
 
-Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
+// Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home-arabic', [App\Http\Controllers\PageController::class, 'HomeArabic']);
 Route::get('/track/{id}', [App\Http\Controllers\PageController::class, 'Track']);
+
+Route::get('/ship-now', [App\Http\Controllers\PageController::class, 'shipNow']);
+Route::get('/get-area-price/{weight}', [App\Http\Controllers\PageController::class, 'getAreaPrice']);
+Route::post('/save-mobile-verify', [App\Http\Controllers\PageController::class, 'saveMobileVerify']);
+Route::get('/verify-otp/{mobile}/{otp}', [App\Http\Controllers\PageController::class, 'verifyOtp']);
+Route::post('/save-new-shipment', [App\Http\Controllers\PageController::class, 'saveNewShipment']);
 
 Route::get('/register', [App\Http\Controllers\PageController::class, 'userRegister']);
 Route::post('/save-user-register', [App\Http\Controllers\PageController::class, 'saveUserRegister']);
@@ -73,6 +79,7 @@ Route::group(['prefix' => 'admin'],function(){
 	Route::get('/dashboard', [App\Http\Controllers\Admin\HomeController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/view-customer', [App\Http\Controllers\Admin\CustomerController::class, 'viewCustomer']);
+    
     Route::get('/view-profile/{id}', [App\Http\Controllers\Admin\CustomerController::class, 'viewProfile']);
 
     Route::get('/edit-customer/{id}', [App\Http\Controllers\Admin\CustomerController::class, 'editCustomer']);

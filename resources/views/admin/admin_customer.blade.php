@@ -89,7 +89,9 @@
                                     <a onclick="addRate({{$row->id}})" class="dropdown-item" href="#">Add RateCard</a>
                                     <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Approved</a>
                                 @elseif($row->status == 3)
-                                    <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
+                                  <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
+                                @elseif($row->status == 4)
+                                  <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Block User</a>
                                 @endif
                                     <a class="dropdown-item" href="/admin/view-profile/{{$row->id}}">View Profile</a>
                                 </div>
