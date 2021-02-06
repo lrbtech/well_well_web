@@ -239,7 +239,8 @@ class ShipmentController extends Controller
     public function assignAgent(Request $request){
         $shipment = shipment::find($request->shipment_id);
         $shipment->pickup_agent_id = $request->pickup_agent_id;
-        $shipment->pickup_assign_date_time = date('Y-m-d H:i:s');
+        $shipment->pickup_assign_date = date('Y-m-d');
+        $shipment->pickup_assign_time = date('H:i:s');
         $shipment->status = 1;
         $shipment->save();
         return response()->json('successfully update'); 
@@ -265,7 +266,8 @@ class ShipmentController extends Controller
 
     public function updatePickupStation(Request $request){
         $shipment = shipment::find($request->shipment_id);
-        $shipment->pickup_received_date_time = date('Y-m-d H:i:s');
+        $shipment->package_collect_date = date('Y-m-d');
+        $shipment->package_collect_time = date('H:i:s');
         $shipment->status = 4;
         $shipment->save();
         return response()->json('successfully update'); 
@@ -274,7 +276,8 @@ class ShipmentController extends Controller
     public function AssignAgentStation(Request $request){
         $shipment = shipment::find($request->shipment_id1);
         $shipment->station_agent_id = $request->station_agent_id;
-        $shipment->station_assign_date_time = date('Y-m-d H:i:s');
+        $shipment->station_assign_date = date('Y-m-d');
+        $shipment->station_assign_time = date('H:i:s');
         $shipment->status = 5;
         $shipment->save();
         return response()->json('successfully update'); 
@@ -300,7 +303,8 @@ class ShipmentController extends Controller
 
     public function updateReceivedStation(Request $request){
         $shipment = shipment::find($request->shipment_id);
-        $shipment->station_received_date_time = date('Y-m-d H:i:s');
+        $shipment->station_received_date = date('Y-m-d');
+        $shipment->station_received_time = date('H:i:s');
         $shipment->status = 6;
         $shipment->save();
         return response()->json('successfully update'); 
@@ -309,7 +313,8 @@ class ShipmentController extends Controller
     public function AssignAgentDelivery(Request $request){
         $shipment = shipment::find($request->shipment_id2);
         $shipment->delivery_agent_id = $request->delivery_agent_id;
-        $shipment->delivery_assign_date_time = date('Y-m-d H:i:s');
+        $shipment->delivery_assign_date = date('Y-m-d');
+        $shipment->delivery_assign_time = date('H:i:s');
         $shipment->status = 7;
         $shipment->save();
         return response()->json('successfully update'); 
@@ -342,7 +347,8 @@ class ShipmentController extends Controller
         ]);
 
         $shipment = shipment::find($request->shipment_id);
-        $shipment->delivery_date_time = date('Y-m-d H:i:s');
+        $shipment->delivery_date = date('Y-m-d');
+        $shipment->delivery_time = date('H:i:s');
         $shipment->status = 8;
 
         if($request->file('receiver_id_copy')!=""){
@@ -362,10 +368,12 @@ class ShipmentController extends Controller
         $package_category = package_category::all();
         $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->get();
 
-        Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
-            $message->to($user->email)->subject('Well Well Express - Delivery Completed');
-            $message->from('info@lrbinfotech.com','Well Well Express');
-        });
+        if(!empty($user)){
+            Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
+                $message->to($user->email)->subject('Well Well Express - Delivery Completed');
+                $message->from('info@lrbinfotech.com','Well Well Express');
+            });
+        }
 
         return response()->json('successfully update'); 
     }
@@ -454,10 +462,6 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 3){
                     return 'Exception';
-                    return '<td>
-                    <p>Exception</p>
-                    <p>' . $shipment->exception_remark . '</p>
-                    </td>';
                 }
                 elseif($shipment->status == 4){
                     return 'Received Station Hub';

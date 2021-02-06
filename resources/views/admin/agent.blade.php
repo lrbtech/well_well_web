@@ -200,6 +200,56 @@
             </div>
          </div>
 
+        <div class="row">
+
+          <div class="form-group col-md-4">
+            <div class="checkbox checkbox-primary">
+              <input value="1" id="pickup" name="pickup" type="checkbox">
+              <label for="pickup">Pickup</label>
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <div class="checkbox checkbox-primary">
+              <input value="1" id="delivery" name="delivery" type="checkbox">
+              <label for="delivery">Delivery</label>
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <div class="checkbox checkbox-primary">
+              <input value="1" id="revenue_exception" name="revenue_exception" type="checkbox">
+              <label for="revenue_exception">Revenue Exception</label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="form-group col-md-4">
+            <div class="checkbox checkbox-primary">
+              <input value="1" id="cash_report" name="cash_report" type="checkbox">
+              <label for="cash_report">Cash Report</label>
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <div class="checkbox checkbox-primary">
+              <input value="1" id="hub" name="hub" type="checkbox">
+              <label for="hub">Hub</label>
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <div class="checkbox checkbox-primary">
+              <input value="1" id="van_scan" name="van_scan" type="checkbox">
+              <label for="van_scan">Van Scan</label>
+            </div>
+          </div>
+
+        </div>
+
         
 
         </form>
@@ -306,6 +356,50 @@ function Edit(id){
       else{
         $('#gender2').prop("checked", true);
       }
+
+      if(data.pickup == 1){
+        $('#pickup').prop("checked", true);
+      }
+      else{
+        $('#pickup').prop("checked", false);
+      }
+
+      if(data.delivery == 1){
+        $('#delivery').prop("checked", true);
+      }
+      else{
+        $('#delivery').prop("checked", false);
+      }
+
+      if(data.van_scan == 1){
+        $('#van_scan').prop("checked", true);
+      }
+      else{
+        $('#van_scan').prop("checked", false);
+      }
+
+      if(data.cash_report == 1){
+        $('#cash_report').prop("checked", true);
+      }
+      else{
+        $('#cash_report').prop("checked", false);
+      }
+
+      if(data.hub == 1){
+        $('#hub').prop("checked", true);
+      }
+      else{
+        $('#hub').prop("checked", false);
+      }
+
+      if(data.revenue_exception == 1){
+        $('#revenue_exception').prop("checked", true);
+      }
+      else{
+        $('#revenue_exception').prop("checked", false);
+      }
+
+
       $('#popup_modal').modal('show');
       action_type = 2;
     }

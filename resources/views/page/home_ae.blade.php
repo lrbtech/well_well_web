@@ -27,7 +27,7 @@
                 <li><a href="#home-section" class="nav-link active">Home</a></li>
                 <li><a href="#about-section" class="nav-link">About Us</a></li>
                 <li><a href="/track/1" class="nav-link">Track</a></li>
-                <!-- <li><a href="#" class="nav-link">Ship</a></li> -->
+                <li><a href="/ship-now" class="nav-link">Ship</a></li>
 
                 <li><a href="#service-solution" class="nav-link">Soluction & Services</a></li>
                 <li><a href="#service-advance" class="nav-link">Help & Support</a></li>
@@ -52,12 +52,15 @@
                                     <li><a href="#home-section" class="nav-link active">الرئيسية</a></li>
                                     <li><a href="#about-section" class="nav-link">من نحن</a></li>
                                     <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
-                                    <!-- <li><a href="#" class="nav-link">الشحن</a></li> -->
+                                    <li><a href="/ship-now" class="nav-link">الشحن</a></li>
 
                                     <li><a href="#service-solution" class="nav-link">الحلول والمساعدة</a></li>
                                     <li><a href="#service-advance" class="nav-link">المساعدة والدعم</a></li>
                                     <li><a href="#contact" class="nav-link">اتصل بنا
                                     </a></li>
+
+                                    <li><a href="/login" class="nav-link">Login</a></li>
+                                    <li><a href="/register" class="nav-link">Register</a></li>
 
                                     <li><a href="/home" class="nav-link">English</a></li>
                                 </ul>
@@ -69,7 +72,47 @@
                 </div>
             </header>
         </div>
+
+
         <div class="slider-area ">
+            <div class="slider-active slick-initialized slick-slider">
+
+                <div class="slick-list draggable">
+                    <div class="slick-track" style="opacity: 1; width: 1349px;">
+                        <div class="single-slider slider-height d-flex align-items-center slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="0" style="width: 1349px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
+                            <video src="/assets/app-assets/video/auth-bg.mp4" autoplay loop playsinline muted></video>
+                            <div class="video_overlay"></div>
+                            <div class="container banner_content">
+                                <div class="row">
+                                    <div class="col-xl-9 col-lg-9 aos-init" data-aos="fade-left" data-aos-delay="">
+                                        <div class="hero__caption">
+                                            <h1>Safe &amp; Reliable <span>Logistic</span> Solutions!</h1>
+                                        </div>
+
+                                        <form action="#" class="search-box">
+                                            <div class="input-form">
+                                                <input autocomplete="off" name="track_id" id="track_id" type="text" placeholder="Your Tracking ID" tabindex="0">
+                                            </div>
+                                            <div class="search-form">
+                                                <a onclick="Tracking()" href="#" tabindex="0">Track &amp;
+                                                    Trace</a>
+                                            </div>
+                                        </form>
+
+                                        <div class="hero-pera">
+                                            <p>For order status inquiry</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="slider-area ">
             <div class="slider-active slick-initialized slick-slider">
 
                 <div class="slick-list draggable">
@@ -102,7 +145,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="categories-area" id="service-advance">
             <div class="site-section">

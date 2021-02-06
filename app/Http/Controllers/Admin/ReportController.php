@@ -42,13 +42,26 @@ class ReportController extends Controller
     }
 
 
-    public function getShipmentReport($status){
-
-        if ($status != 9) {
-            $shipment = shipment::where('status',$status)->orderBy('id','DESC')->get();
-        }else{
-            $shipment = shipment::orderBy('id','DESC')->get();
+    public function getShipmentReport($status,$user_type){
+        
+        $i =DB::table('shipments');
+        if ( $user_type != 3 )
+        {
+            if ( $user_type != 2 ){
+                $i->join('users', 'users.id', '=', 'shipments.sender_id');
+                $i->where('users.user_type', $user_type);
+            }
+            else{
+                $i->where('shipments.sender_id', 0);
+            }
         }
+        if ( $status != 9 )
+        {
+            $i->where('shipments.status', $status);
+        }
+
+        $i->orderBy('shipments.id','DESC');
+        $shipment = $i->get();
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {

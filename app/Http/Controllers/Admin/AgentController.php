@@ -50,6 +50,13 @@ class AgentController extends Controller
         $agent->area_ids = $request->area_ids;
         $agent->password = Hash::make($request->password);
 
+        $agent->pickup = $request->pickup;
+        $agent->delivery = $request->delivery;
+        $agent->van_scan = $request->van_scan;
+        $agent->hub = $request->hub;
+        $agent->revenue_exception = $request->revenue_exception;
+        $agent->cash_report = $request->cash_report;
+
         if($request->driving_license_file!=""){
             if($request->file('driving_license_file')!=""){
             $image = $request->file('driving_license_file');
@@ -102,6 +109,14 @@ class AgentController extends Controller
         $agent->vehicle_details = $request->vehicle_details;
         $agent->city_id = $request->city_id;
         $agent->area_ids = $request->area_ids;
+
+        $agent->pickup = $request->pickup;
+        $agent->delivery = $request->delivery;
+        $agent->van_scan = $request->van_scan;
+        $agent->hub = $request->hub;
+        $agent->revenue_exception = $request->revenue_exception;
+        $agent->cash_report = $request->cash_report;
+
         if($request->password != ''){
             $agent->password = Hash::make($request->password);
         }

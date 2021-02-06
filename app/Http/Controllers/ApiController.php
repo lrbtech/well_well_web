@@ -11,6 +11,7 @@ use App\Models\shipment_package;
 use App\Models\station;
 use App\Models\manage_address;
 use App\Models\package_category;
+use App\Models\exception_category;
 use Hash;
 use Mail;
 
@@ -32,6 +33,12 @@ class ApiController extends Controller
 
                 return response()->json(['message' => 'Login Successfully',
                 'name'=>$exist[0]->name,
+                'pickup'=>$exist[0]->pickup,
+                'delivery'=>$exist[0]->delivery,
+                'revenue_exception'=>$exist[0]->revenue_exception,
+                'cash_report'=>$exist[0]->cash_report,
+                'hub'=>$exist[0]->hub,
+                'van_scan'=>$exist[0]->van_scan,
                 'agent_id'=>$exist[0]->id,'status'=>200], 200);
                 }else{
                     return response()->json(['message' => 'Records Does not Match','status'=>403], 403);
@@ -383,13 +390,15 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             if($request->status == 0){
                 $shipment->status = 2;
-                $shipment->package_collect_date_time = date('Y-m-d H:i:s');
+                $shipment->package_collect_date = date('Y-m-d');
+                $shipment->package_collect_time = date('H:i:s');
                 
             }
             else{
                 $shipment->status = 3;
                 $shipment->exception_remark = $request->remark;
-                $shipment->exception_assign_date_time = date('Y-m-d H:i:s');
+                $shipment->exception_assign_date = date('Y-m-d');
+                $shipment->exception_assign_time = date('H:i:s');
             }
             $shipment->save();
             
@@ -409,7 +418,8 @@ class ApiController extends Controller
         try{
             $shipment = shipment::find($request->shipment_id);
             $shipment->status = 8;
-            $shipment->delivery_date_time = date('Y-m-d H:i:s');
+            $shipment->delivery_date = date('Y-m-d');
+            $shipment->delivery_time = date('H:i:s');
             //$shipment->receiver_id_copy = $request->receiver_id_copy;
             $shipment->receiver_signature = $request->receiver_signature;
             
@@ -521,6 +531,141 @@ class ApiController extends Controller
             return response()->json($e);
             return response()->json(['message' => 'Shipment Not Available','status'=>200], 200);
         }
+    }
+
+
+    public function exceptionCategory(){
+        $exception_category = exception_category::all();
+
+        $data =array();
+        $datas =array();
+        foreach ($exception_category as $key => $value) {
+            $data = array(
+                'category' => $value->category,
+            );
+            $datas[] = $data;
+        }   
+        return response()->json($datas); 
+    }
+
+
+    public function getTodayStation(){
+        $today = date('Y-m-d');
+        $shipment = shipment::where('date',$today)->get();
+
+        $data =array();
+        $datas =array();
+        foreach ($shipment as $key => $value) {
+            $from_station = station::find($value->from_station_id);
+            $to_station = station::find($value->to_station_id);
+            $data = array(
+                'id' => $value->id,
+                'order_id' => $value->order_id,
+                'from_station' => $from_station->station,
+                'to_station' => $to_station->station,
+                'status' => '',
+            );
+            if($value->status == 0){
+                $data['status'] = 'New Request';
+            }
+            elseif($value->status == 1){
+                $data['status'] = 'Approved';
+            }
+            elseif($value->status == 2){
+                $data['status'] = 'Package Collected';
+            }
+            elseif($value->status == 3){
+                $data['status'] = 'Exception';
+            }
+            elseif($value->status == 4){
+                $data['status'] = 'Received Station Hub';
+            }
+            elseif($value->status == 5){
+                $data['status'] = 'Assign Agent to Transit Out (Hub)';
+            }
+            elseif($value->status == 6){
+                $data['status'] = 'Other Transit in Received (Hub)';
+            }
+            elseif($value->status == 7){
+                $data['status'] = 'Assign Agent to Delivery';
+            }
+            elseif($value->status == 8){
+                $data['status'] = 'Shipment delivered';
+            }
+            $datas[] = $data;
+        }   
+        return response()->json($datas); 
+    }
+
+
+    public function getTodayData(){
+        $today = date('Y-m-d');
+        $total_shipment = shipment::where('date',$today)->count();
+
+        $total_shipment_value = shipment::where('date', $today)->get()->sum("total");
+
+        $collected_value = shipment::where('date', $today)->where('status',8)->get()->sum("special_cod");
+
+        $on_pickup = shipment::where('pickup_assign_date',$today)->where('status',1)->count();
+
+        $pickup = shipment::where('package_collect_date',$today)->where('status',2)->count();
+
+        $exception = shipment::where('exception_assign_date',$today)->where('status',3)->count();
+
+        $hub = shipment::where('station_assign_date',$today)->where('status',4)->count();
+
+        $delivery = shipment::where('delivery_assign_date',$today)->where('status',7)->count();
+        $completed = shipment::where('delivery_date',$today)->where('status',8)->count();
+
+        $data = array(
+            'total_shipment' => $total_shipment,
+            'total_shipment_value' => $total_shipment_value,
+            'collected_value' => $collected_value,
+            'on_pickup' => $on_pickup,
+            'pickup' => $pickup,
+            'exception' => $exception,
+            'hub' => $hub,
+            'delivery' => $delivery,
+            'completed' => $completed,
+        );
+   
+        return response()->json($data); 
+    }
+
+
+    public function getExceptionShipment(){
+        $today = date('Y-m-d');
+        $shipment = shipment::where('status',3)->get();
+
+        $data =array();
+        $datas =array();
+        foreach ($shipment as $key => $value) {
+            $from_station = station::find($value->from_station_id);
+            $to_station = station::find($value->to_station_id);
+            $data = array(
+                'id' => $value->id,
+                'order_id' => $value->order_id,
+                'from_station' => $from_station->station,
+                'to_station' => $to_station->station,
+            );
+            
+            $datas[] = $data;
+        }   
+        return response()->json($datas); 
+    }
+
+    public function getExceptionDetails($id){
+        $today = date('Y-m-d');
+        $shipment = shipment::find($id);
+
+        if($shipment->exception_category != null){
+            $data['exception_category'] = $shipment->exception_category;
+        }
+        if($shipment->exception_remark != null){
+            $data['exception_remark'] = $shipment->exception_remark;
+        }
+
+        return response()->json($data); 
     }
 
 

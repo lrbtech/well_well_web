@@ -30,6 +30,7 @@ class UserController extends Controller
         ]);
 
         $admin = new admin;
+        $admin->employee_id = $request->employee_id;
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->mobile = $request->mobile;
@@ -63,6 +64,7 @@ class UserController extends Controller
             //'image.required' => 'Item Image Field is Required',
         ]);
         $admin = admin::find($request->id);
+        $admin->employee_id = $request->employee_id;
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->mobile = $request->mobile;

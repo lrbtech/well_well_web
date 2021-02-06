@@ -161,7 +161,7 @@
             <div class="col-sm-4">
                 <label class="control-label">Area</label>
                 <div class="form-group is-empty">
-                    <select name="fom_area_id" id="from_area_id" class="form-control" aria-required="true">
+                    <select name="from_area_id" id="from_area_id" class="form-control" aria-required="true">
                         <option disabled="" selected="">Choose City</option>
                         @foreach($area as $row)
                         <option value="{{$row->id}}"> {{$row->city}} </option>

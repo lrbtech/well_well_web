@@ -139,7 +139,13 @@ th {
                     <strong>Order ID :</strong> </p><span>{{$row->order_id}}</span> -->
                 </div>
                 <p class="m-0">
-                {{$from_address->address1}} {{$from_address->address2}} {{$from_address->address3}}
+                <!-- {{$from_address->address1}} {{$from_address->address2}} {{$from_address->address3}} -->
+                @foreach($area as $area1)
+                @if($area1->id == $from_address->area_id)
+                {{$area1->city}}
+                @endif
+                @endforeach
+                <br>
                 @foreach($city as $city1)
                 @if($city1->id == $from_address->city_id)
                 {{$city1->city}}

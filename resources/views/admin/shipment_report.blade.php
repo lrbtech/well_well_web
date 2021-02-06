@@ -31,18 +31,38 @@
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <select id="shipment_status" name="shipment_status" class="form-control">
-                        <option value="9">All Data</option>
-                        <option value="0">New Request</option>
-                        <option value="1">Approved</option>
-                        <option value="2">Package Collected</option>
-                        <option value="3">Exception</option>
-                        <option value="4">Received Station Hub</option>
-                        <option value="5">Assign Agent to Transit Out (Hub)</option>
-                        <option value="6">Other Transit in Received (Hub)</option>
-                        <option value="7">Assign Agent to Delivery</option>
-                        <option value="8">Shipment delivered</option>
-                    </select>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label>Shipment Status</label>
+                            <select id="shipment_status" name="shipment_status" class="form-control">
+                              <option value="9">All Data</option>
+                              <option value="0">New Request</option>
+                              <option value="1">Approved</option>
+                              <option value="2">Package Collected</option>
+                              <option value="3">Exception</option>
+                              <option value="4">Received Station Hub</option>
+                              <option value="5">Assign Agent to Transit Out (Hub)</option>
+                              <option value="6">Other Transit in Received (Hub)</option>
+                              <option value="7">Assign Agent to Delivery</option>
+                              <option value="8">Shipment delivered</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>User Type</label>
+                            <select id="user_type" name="user_type" class="form-control">
+                              <option value="3">All Data</option>
+                              <option value="0">Individual</option>
+                              <option value="1">Commercial</option>
+                              <option value="2">Guest</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">Search</button>
+                        </div>
+                    </div>
+                    
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -91,7 +111,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-shipment-report/9",
+        "url": "/admin/get-shipment-report/9/3",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -108,9 +128,19 @@ var orderPageTable = $('#datatable').DataTable({
     ]
 });
 
-$('#shipment_status').change(function(){
+// $('#shipment_status').change(function(){
+//     var shipment_status = $('#shipment_status').val();
+//     var new_url = '/admin/get-shipment-report/'+shipment_status;
+//     orderPageTable.ajax.url(new_url).load();
+//     //orderPageTable.draw();
+// });
+
+
+$('#search').click(function(){
+    //alert('hi');
     var shipment_status = $('#shipment_status').val();
-    var new_url = '/admin/get-shipment-report/'+shipment_status;
+    var user_type = $('#user_type').val();
+    var new_url = '/admin/get-shipment-report/'+shipment_status+'/'+user_type;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });

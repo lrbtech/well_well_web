@@ -40,11 +40,13 @@
                                     <li><a href="/home/#home-section" class="nav-link">Home</a></li>
                                     <li><a href="/home/#about-section" class="nav-link">About Us</a></li>
                                     <li><a href="track/1" class="nav-link active">Track</a></li>
-                                    <!-- <li><a href="#" class="nav-link">Ship</a></li> -->
+                                    <li><a href="/ship-now" class="nav-link">Ship</a></li>
 
                                     <li><a href="/home/#service-solution" class="nav-link">Soluction & Services</a></li>
                                     <li><a href="/home/#service-advance" class="nav-link">Help & Support</a></li>
                                     <li><a href="/home/#contact" class="nav-link">Contact Us</a></li>
+                                    <li><a href="/login" class="nav-link">Login</a></li>
+                                    <li><a href="/register" class="nav-link">Register</a></li>
                                     <li><a href="/home-arabic" class="nav-link">العربية</a></li>
                                     <!-- <li><a href="#" class="nav-link" onclick='changeToRTL()'>العربية</a></li> -->
                                 </ul>

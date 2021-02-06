@@ -218,7 +218,7 @@ Route::group(['prefix' => 'admin'],function(){
 
     //report
     Route::get('/shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'ShipmentReport']);
-    Route::POST('/get-shipment-report/{status}', [App\Http\Controllers\Admin\ReportController::class, 'getShipmentReport']);
+    Route::POST('/get-shipment-report/{status}/{user_type}', [App\Http\Controllers\Admin\ReportController::class, 'getShipmentReport']);
 
     Route::get('/revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'RevenueReport']);
     Route::POST('/get-revenue-report/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getRevenueReport']);

@@ -107,10 +107,70 @@ visibility: visible;
                                 <label class="col-form-label">{{$user->email}}</label>
                             </div>
                             @endif
+
+                            <div class="form-group col-md-6">
+                                <label class="col-form-label">Status</label><br>
+                                <label class="col-form-label">
+                                <?php
+                          if($shipment->status == 0){
+                            echo 'New Request';
+                        }
+                        elseif($shipment->status == 1){
+                            echo 'Approved';
+                        }
+                        elseif($shipment->status == 2){
+                            echo 'Package Collected';
+                        }
+                        elseif($shipment->status == 3){
+                            echo '
+                            <p>Exception</p>
+                            <p>' . $shipment->exception_remark . '</p>';
+                        }
+                        elseif($shipment->status == 4){
+                            echo 'Received Station Hub';
+                        }
+                        elseif($shipment->status == 5){
+                            echo 'Assign Agent to Transit Out (Hub)';
+                        }
+                        elseif($shipment->status == 6){
+                            echo 'Other Transit in Received (Hub)';
+                        }
+                        elseif($shipment->status == 7){
+                            echo 'Assign Agent to Delivery';
+                        }
+                        elseif($shipment->status == 8){
+                            echo 'Shipment delivered';
+                        }
+                          ?>
+                                </label>
+                            </div>
+
+                            @if($shipment->status == 8)
+                            <div class="form-group col-md-6">
+                                <label class="col-form-label">Receiver ID Copy</label><br>
+                                <label class="col-form-label">
+                                <a target="_blank" href="/upload_files/{{$shipment->receiver_id_copy}}"><img src="/assets/images/folder.png" class="picture-src" style="padding: 20px" title=""></a>
+                                </label>
+                            </div>
+
+
+                            <div class="form-group col-md-6">
+                                <label class="col-form-label">Receiver Signature</label><br>
+                                <label class="col-form-label">
+                                <img src="{{$shipment->receiver_signature}}" class="picture-src" id="wizardPicturePreview" style="padding: 20px" title="">
+                                </label>
+                            </div>
+                            @endif
+
+
+
+
+
                         </div>
                         </div>
 
                       </div>
+
                   </div>
             
                 </div>

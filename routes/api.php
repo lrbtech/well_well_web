@@ -39,3 +39,12 @@ Route::post('/update-delivery', [App\Http\Controllers\ApiController::class, 'upd
 Route::post('/change-password', [App\Http\Controllers\ApiController::class, 'changePassword']);
 
 Route::post('/scan-package', [App\Http\Controllers\ApiController::class, 'scanPackage']);
+
+Route::get('/exception-category', [App\Http\Controllers\ApiController::class, 'exceptionCategory']);
+
+Route::get('/get-today-station', [App\Http\Controllers\ApiController::class, 'getTodayStation']);
+Route::get('/get-today-data', [App\Http\Controllers\ApiController::class, 'getTodayData']);
+
+Route::get('/get-exception-shipment', [App\Http\Controllers\ApiController::class, 'getExceptionShipment']);
+
+Route::get('/get-exception-details/{id}', [App\Http\Controllers\ApiController::class, 'getExceptionDetails']);

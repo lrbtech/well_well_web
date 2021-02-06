@@ -43,6 +43,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Mobile</th>
@@ -53,6 +54,7 @@
                         @foreach($user as $key => $row)
                           <tr>
                             <td>{{$key+1}}</td>
+                            <td>{{$row->employee_id}}</td>
                             <td>{{$row->name}}</td>
                             <td>{{$row->email}}</td>
                             <td>{{$row->mobile}}</td>
@@ -92,9 +94,16 @@
         {{ csrf_field() }}
         <input type="hidden" name="id" id="id">
 
-        <div class="form-group">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label class="col-form-label">Employee ID</label>
+            <input autocomplete="off" type="text" id="employee_id" name="employee_id" class="form-control">
+          </div>
+
+          <div class="form-group col-md-6">
             <label class="col-form-label">Name</label>
             <input autocomplete="off" type="text" id="name" name="name" class="form-control">
+          </div>
         </div>
 
         <div class="row">
@@ -258,6 +267,7 @@ function Edit(id){
       $('#modal-title').text('Update User');
       $('#save').text('Save Change');
       $('input[name=name]').val(data.name);
+      $('input[name=employee_id]').val(data.employee_id);
       $('input[name=mobile]').val(data.mobile);
       $('input[name=email]').val(data.email);
       $('input[name=dob]').val(data.dob);
