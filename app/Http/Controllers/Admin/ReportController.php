@@ -88,7 +88,6 @@ class ReportController extends Controller
                 $user = User::find($shipment->sender_id);
                 if(!empty($from_area)){
                 return '<td>
-                <p>' . $user->first_name . ' ' . $user->last_name . '</p>
                 <p>' . $user->mobile . '</p>
                 <p>' . $user->email . '</p>
                 </td>';
