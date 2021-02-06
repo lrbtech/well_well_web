@@ -30,12 +30,12 @@ class CreateAgentsTable extends Migration
             $table->string('vehicle_number')->nullable();  
             $table->string('vehicle_details')->nullable();  
             $table->string('firebase_key')->nullable(); 
-            $table->integer('pickup')->default('0'); 
-            $table->integer('delivery')->default('0'); 
-            $table->integer('revenue_exception')->default('0'); 
-            $table->integer('cash_report')->default('0'); 
-            $table->integer('hub')->default('0'); 
-            $table->integer('van_scan')->default('0');  
+            $table->string('pickup')->default('0')->nullable();
+            $table->string('delivery')->default('0')->nullable();
+            $table->string('revenue_exception')->default('0')->nullable();
+            $table->string('cash_report')->default('0')->nullable();
+            $table->string('hub')->default('0')->nullable();
+            $table->string('van_scan')->default('0')->nullable();
             $table->string('status')->default('0');  
             $table->timestamps();
         });

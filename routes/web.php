@@ -43,7 +43,7 @@ Route::get('/view-clear', function() {
 
 Auth::routes(['register' => false]);
 
-// Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
+Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home-arabic', [App\Http\Controllers\PageController::class, 'HomeArabic']);
 Route::get('/track/{id}', [App\Http\Controllers\PageController::class, 'Track']);
