@@ -30,7 +30,7 @@
                 <li><a href="/track/1" class="nav-link">Track</a></li>
                 <li><a href="/ship-now" class="nav-link">Ship</a></li>
 
-                <li><a href="#service-solution" class="nav-link">Soluction & Services</a></li>
+                <li><a href="#service-solution" class="nav-link">Solution & Services</a></li>
                 <li><a href="#service-advance" class="nav-link">Help & Support</a></li>
                 <li><a href="#contact" class="nav-link">Contact Us</a></li>
                 <li><a href="/login" class="nav-link">Login</a></li>
@@ -56,7 +56,7 @@
                                     <li><a href="/track/1" class="nav-link">Track</a></li>
                                     <li><a href="/ship-now" class="nav-link">Ship</a></li>
 
-                                    <li><a href="#service-solution" class="nav-link">Soluction & Services</a></li>
+                                    <li><a href="#service-solution" class="nav-link">Solution & Services</a></li>
                                     <li><a href="#service-advance" class="nav-link">Help & Support</a></li>
                                     <li><a href="#contact" class="nav-link">Contact Us</a></li>
                                     <li><a href="/login" class="nav-link">Login</a></li>

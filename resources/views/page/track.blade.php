@@ -42,7 +42,7 @@
                                     <li><a href="track/1" class="nav-link active">Track</a></li>
                                     <li><a href="/ship-now" class="nav-link">Ship</a></li>
 
-                                    <li><a href="/home/#service-solution" class="nav-link">Soluction & Services</a></li>
+                                    <li><a href="/home/#service-solution" class="nav-link">Solution & Services</a></li>
                                     <li><a href="/home/#service-advance" class="nav-link">Help & Support</a></li>
                                     <li><a href="/home/#contact" class="nav-link">Contact Us</a></li>
                                     <li><a href="/login" class="nav-link">Login</a></li>
