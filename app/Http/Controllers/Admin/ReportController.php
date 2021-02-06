@@ -88,8 +88,8 @@ class ReportController extends Controller
                 $user = User::find($shipment->sender_id);
                 if(!empty($from_area)){
                 return '<td>
-                <p>' . $user->mobile . '</p>
-                <p>' . $user->email . '</p>
+                <p>' . $from_area->city . '</p>
+                <p>' . $from_city->city . '</p>
                 </td>';
                 }
                 else{
