@@ -33,18 +33,29 @@ Route::get('/get-station/{agent_id}', [App\Http\Controllers\ApiController::class
 Route::get('/get-shipment-package/{id}', [App\Http\Controllers\ApiController::class, 'getShipmentPacakgae']);
 
 
-Route::post('/update-pickup', [App\Http\Controllers\ApiController::class, 'updatePickup']);
-Route::post('/update-delivery', [App\Http\Controllers\ApiController::class, 'updateDelivery']);
-
 Route::post('/change-password', [App\Http\Controllers\ApiController::class, 'changePassword']);
 
 Route::post('/scan-package', [App\Http\Controllers\ApiController::class, 'scanPackage']);
+
+Route::post('/barcode-scan', [App\Http\Controllers\ApiController::class, 'barcodeScan']);
+
+Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
 
 Route::get('/exception-category', [App\Http\Controllers\ApiController::class, 'exceptionCategory']);
 
 Route::get('/get-today-station', [App\Http\Controllers\ApiController::class, 'getTodayStation']);
 Route::get('/get-today-data', [App\Http\Controllers\ApiController::class, 'getTodayData']);
+Route::get('/print-today-data', [App\Http\Controllers\ApiController::class, 'printTodayData']);
 
 Route::get('/get-exception-shipment', [App\Http\Controllers\ApiController::class, 'getExceptionShipment']);
 
 Route::get('/get-exception-details/{id}', [App\Http\Controllers\ApiController::class, 'getExceptionDetails']);
+
+
+Route::post('/transist-in', [App\Http\Controllers\ApiController::class, 'transistIn']);
+Route::post('/transist-out', [App\Http\Controllers\ApiController::class, 'transistOut']);
+Route::post('/van-scan', [App\Http\Controllers\ApiController::class, 'vanScan']);
+Route::post('/package-at-station', [App\Http\Controllers\ApiController::class, 'packageAtStation']);
+Route::post('/update-pickup', [App\Http\Controllers\ApiController::class, 'updatePickup']);
+Route::post('/update-delivery', [App\Http\Controllers\ApiController::class, 'updateDelivery']);
+Route::post('/delivery-exception', [App\Http\Controllers\ApiController::class, 'deliveryException']);

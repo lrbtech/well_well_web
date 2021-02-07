@@ -24,7 +24,7 @@ class AgentController extends Controller
             'emirates_id'=>'required',
             'vehicle_number'=>'required',
             'city_id'=>'required',
-            'area_ids'=>'required',
+            //'area_ids'=>'required',
             'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:6',
             'driving_license_file' => 'mimes:jpeg,jpg,png|max:1000', // max 1000kb
@@ -47,7 +47,7 @@ class AgentController extends Controller
         $agent->vehicle_number = $request->vehicle_number;
         $agent->vehicle_details = $request->vehicle_details;
         $agent->city_id = $request->city_id;
-        $agent->area_ids = $request->area_ids;
+        //$agent->area_ids = $request->area_ids;
         $agent->password = Hash::make($request->password);
 
         $agent->pickup = $request->pickup;
@@ -85,7 +85,7 @@ class AgentController extends Controller
             'emirates_id'=>'required',
             'vehicle_number'=>'required',
             'city_id'=>'required',
-            'area_ids'=>'required',
+            //'area_ids'=>'required',
             'password' => 'nullable|min:6|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'nullable|min:6',
             'driving_license_file' => 'mimes:jpeg,jpg,png|max:1000', // max 1000kb
@@ -108,7 +108,7 @@ class AgentController extends Controller
         $agent->vehicle_number = $request->vehicle_number;
         $agent->vehicle_details = $request->vehicle_details;
         $agent->city_id = $request->city_id;
-        $agent->area_ids = $request->area_ids;
+        //$agent->area_ids = $request->area_ids;
 
         $agent->pickup = $request->pickup;
         $agent->delivery = $request->delivery;

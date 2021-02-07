@@ -18,6 +18,7 @@ use App\Models\add_rate;
 use App\Models\add_rate_item;
 use App\Models\common_price;
 use App\Models\settings;
+use App\Models\station;
 use App\Models\ship_now_mobile_verify;
 use Mail;
 use Hash;
@@ -110,10 +111,11 @@ class PageController extends Controller
         if(!empty($shipment)){
         $user =User::find($shipment->sender_id);
         $shipment_package = shipment_package::where('shipment_id',$shipment_id)->get();
-
+        $from_station = station::find($shipment->from_station_id);
+        $to_station = station::find($shipment->to_station_id);
         $from_address =manage_address::find($shipment->from_address);
         $to_address =manage_address::find($shipment->to_address);
-        return view('page.track',compact('package_category','city','area','shipment','user','shipment_package','from_address','to_address','id'));
+        return view('page.track',compact('package_category','city','area','shipment','user','shipment_package','from_address','to_address','id','from_station','to_station'));
         }
         else{
             return view('page.track',compact('shipment','id'));

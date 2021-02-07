@@ -153,7 +153,7 @@
               </select>
           </div>
 
-          <div class="form-group col-md-6">
+          <!-- <div class="form-group col-md-6">
               <label class="col-form-label">Select Area</label>
               <select id="area_ids" name="area_ids" class="form-control">
                   <option value="">SELECT</option>
@@ -161,7 +161,7 @@
                   <option value="{{$row->id}}">{{$row->city}}</option>
                   @endforeach
               </select>
-          </div>
+          </div> -->
          </div>
 
          <div class="row">
@@ -347,7 +347,7 @@ function Edit(id){
       $('input[name=vehicle_number]').val(data.vehicle_number);
       $('textarea[name=vehicle_details]').val(data.vehicle_details);
       $('select[name=city_id]').val(data.city_id);
-      $('select[name=area_ids]').val(data.area_ids);
+      //$('select[name=area_ids]').val(data.area_ids);
       $('input[name=id]').val(id);
 
       if(data.gender == 'male'){

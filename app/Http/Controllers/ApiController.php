@@ -12,8 +12,11 @@ use App\Models\station;
 use App\Models\manage_address;
 use App\Models\package_category;
 use App\Models\exception_category;
+use App\Models\country;
 use Hash;
 use Mail;
+use PDF;
+use DB;
 
 class ApiController extends Controller
 {
@@ -86,6 +89,10 @@ class ApiController extends Controller
                 }
                 $data['mobile'] = $user->mobile;
             }
+            else{
+                $data['name'] = $address->contact_name;
+            }
+            
             if(!empty($address->address1)){
                 $data['address1'] = $address->address1;
             }
@@ -141,6 +148,9 @@ class ApiController extends Controller
                     $data['name'] = $user->business_name;
                 }
                 $data['mobile'] = $user->mobile;
+            }
+            else{
+                $data['name'] = $address->contact_name;
             }
             if(!empty($address->address1)){
                 $data['address1'] = $address->address1;
@@ -273,6 +283,9 @@ class ApiController extends Controller
             }
             $data['mobile'] = $user->mobile;
         }
+        else{
+            $data['name'] = $address->contact_name;
+        }
         if(!empty($address->address1)){
             $data['address1'] = $address->address1;
         }
@@ -288,7 +301,7 @@ class ApiController extends Controller
         if(!empty($address->longitude)){
             $data['longitude'] = $address->longitude;
         }
-        if(empty($city)){
+        if(!empty($city)){
             $data['city'] = $city->city;
         }
         if(!empty($area)){
@@ -317,7 +330,7 @@ class ApiController extends Controller
             'area' => '',
             'name' => '',
             'mobile' => '',
-            'special_cod' => $shipment->special_cod,
+            'special_cod' => '',
             'shipment_price' => $shipment->shipment_price,
             'no_of_packages' => $shipment->no_of_packages,
             'declared_value' => $shipment->declared_value,
@@ -330,7 +343,22 @@ class ApiController extends Controller
             'insurance_percentage' => '',
             'insurance_amount' => '',
             'cod_amount' => '',
+            'from_station' => '',
+            'to_station' => '',
         );
+
+        $from_station = station::find($shipment->from_station_id);
+        $to_station = station::find($shipment->to_station_id);
+            
+        if(!empty($from_station)){
+            $data['from_station'] = $from_station->station;
+        }
+        if(!empty($to_station)){
+            $data['to_station'] = $to_station->station;
+        }
+        if($shipment->special_cod_enable == '1'){
+            $data['special_cod'] = $shipment->special_cod;
+        }
         if($shipment->postal_charge_percentage != 'null'){
             $data['postal_charge_percentage'] = $shipment->postal_charge_percentage;
             $data['postal_charge'] = $shipment->postal_charge;
@@ -360,22 +388,13 @@ class ApiController extends Controller
             }
             $data['mobile'] = $user->mobile;
         }
-        if(!empty($address->address1)){
-            $data['address1'] = $address->address1;
-        }
-        if(!empty($address->address2)){
-            $data['address2'] = $address->address2;
-        }
-        if(!empty($address->address3)){
-            $data['address3'] = $address->address3;
-        }
-        if(!empty($address->latitude)){
-            $data['latitude'] = $address->latitude;
+        else{
+            $data['name'] = $address->contact_name;
         }
         if(!empty($address->longitude)){
             $data['longitude'] = $address->longitude;
         }
-        if(empty($city)){
+        if(!empty($city)){
             $data['city'] = $city->city;
         }
         if(!empty($area)){
@@ -396,6 +415,7 @@ class ApiController extends Controller
             }
             else{
                 $shipment->status = 3;
+                $shipment->exception_category = $request->category;
                 $shipment->exception_remark = $request->remark;
                 $shipment->exception_assign_date = date('Y-m-d');
                 $shipment->exception_assign_time = date('H:i:s');
@@ -414,31 +434,112 @@ class ApiController extends Controller
     }
 
 
+    public function transistIn(Request $request){
+        try{
+            $shipment = shipment::find($request->shipment_id);
+            
+            $shipment->status = 4;
+            $shipment->pickup_received_date = date('Y-m-d');
+            $shipment->pickup_received_time = date('H:i:s');
+            $shipment->save();
+
+           // return response()->json($shipment);
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
+
+    public function transistOut(Request $request){
+        try{
+            $shipment = shipment::find($request->shipment_id);
+            
+            $shipment->status = 6;
+            $shipment->station_received_date = date('Y-m-d');
+            $shipment->station_received_time = date('H:i:s');
+            $shipment->save();
+
+           // return response()->json($shipment);
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
+
+
+    public function packageAtStation(Request $request){
+        try{
+            $shipment = shipment::find($request->shipment_id);
+            
+            $shipment->status = 6;
+            $shipment->save();
+
+           // return response()->json($shipment);
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
+
+
+    public function vanScan(Request $request){
+        try{
+            $shipment = shipment::find($request->shipment_id);
+            
+            $shipment->status = 7;
+            $shipment->delivery_agent_id = $request->agent_id;
+            $shipment->delivery_assign_date = date('Y-m-d');
+            $shipment->delivery_assign_time = date('H:i:s');
+            $shipment->save();
+
+           // return response()->json($shipment);
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
+
+
     public function updateDelivery(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
             $shipment->status = 8;
             $shipment->delivery_date = date('Y-m-d');
             $shipment->delivery_time = date('H:i:s');
-            //$shipment->receiver_id_copy = $request->receiver_id_copy;
+
+            $shipment->collect_cod_amount = $request->cod_amount;
+            $shipment->delivery_notes = $request->delivery_notes;
+
             $shipment->receiver_signature = $request->receiver_signature;
             
-            if(isset($request->receiver_id_copy)){
-                if($request->receiver_id_copy!=""){                
-                    $image = $request->receiver_id_copy;
-                    $image_name = $request->receiver_id_copy_name;
-                    $filename1='';
-                    foreach(explode('.', $image_name) as $info){
-                        $filename1 = $info;
-                    }
-                    $fileName = rand() . '.' . $filename1;
+            // if(isset($request->receiver_id_copy)){
+            //     if($request->receiver_id_copy!=""){                
+            //         $image = $request->receiver_id_copy;
+            //         $image_name = $request->receiver_id_copy_name;
+            //         $filename1='';
+            //         foreach(explode('.', $image_name) as $info){
+            //             $filename1 = $info;
+            //         }
+            //         $fileName = rand() . '.' . $filename1;
     
-                    $realImage = base64_decode($image);
-                    file_put_contents(public_path().'/upload_files/'.$fileName, $realImage);    
-                $shipment->receiver_id_copy =  $fileName;
+            //         $realImage = base64_decode($image);
+            //         file_put_contents(public_path().'/upload_files/'.$fileName, $realImage);    
+            //     $shipment->receiver_id_copy =  $fileName;
     
-              }
-            }
+            //   }
+            // }
 
             // if(isset($request->receiver_signature)){
             //     if($request->receiver_signature!=""){                
@@ -479,6 +580,28 @@ class ApiController extends Controller
             return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
         } 
     }
+
+    public function deliveryException(Request $request){
+        try{
+            $shipment = shipment::find($request->shipment_id);
+            
+            $shipment->status = 9;
+            $shipment->delivery_exception_category = $request->category;
+            $shipment->delivery_exception_remark = $request->remark;
+            $shipment->delivery_exception_assign_date = date('Y-m-d');
+            $shipment->delivery_exception_assign_time = date('H:i:s');
+            $shipment->save();
+            
+           // return response()->json($shipment);
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
+
 
 
     public function changePassword(Request $request){
@@ -534,16 +657,70 @@ class ApiController extends Controller
     }
 
 
+    public function barcodeScan(Request $request){ 
+        //return response()->json($request);
+        try{
+            $check1 = shipment_package::where('barcode_package',$request->barcode)->first();
+            $check2 = shipment::where('order_id',$request->barcode)->first();
+            $shipment_id='';
+            if(!empty($check1)){
+                $shipment_id = $check1->shipment_id;
+            }
+            elseif(!empty($check2)){
+                $shipment_id = $check2->id;
+            }
+            
+            $shipment = shipment::find($shipment_id);
+            
+            return response()->json([
+            'no_of_packages'=>$shipment->no_of_packages,
+            'shipment_id'=>$shipment->order_id,
+            'id'=>$shipment->id,
+            'status'=>$shipment->status,
+            ], 200);
+        
+        }catch (\Exception $e) {
+            return response()->json($e);
+            return response()->json(['message' => 'Shipment Not Available','status'=>200], 200);
+        }
+    }
+
+
+    public function mobilePrintLabel($id){
+        $shipment = shipment::find($id);
+        $shipment_package = shipment_package::where('shipment_id',$id)->get();
+
+        $shipment_count = shipment_package::where('shipment_id',$id)->count();
+
+        $all_shipments = DB::table("shipment_packages as sp")
+        ->where("sp.shipment_id",$id)
+        ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
+        ->join('stations as st', 'st.id', '=', 's.to_station_id')
+        ->select('s.*','sp.barcode_package','sp.length','sp.width','sp.height','st.station')
+        //->groupBy("users.id")
+        ->get();
+
+        $country = country::all();
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+        $from_address = manage_address::find($shipment->from_address);
+        $to_address = manage_address::find($shipment->to_address);
+
+        $pdf = PDF::loadView('print.mobile_print_label',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments'));
+        $pdf->setPaper('A4');
+        return $pdf->stream('report.pdf');
+
+        // $view = view('print.printlabel',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments'))->render();
+
+        // return response()->json($view);
+    }
+
+
     public function exceptionCategory(){
         $exception_category = exception_category::all();
-
-        $data =array();
         $datas =array();
         foreach ($exception_category as $key => $value) {
-            $data = array(
-                'category' => $value->category,
-            );
-            $datas[] = $data;
+            $datas[] = $value->category;
         }   
         return response()->json($datas); 
     }
@@ -635,7 +812,7 @@ class ApiController extends Controller
 
     public function getExceptionShipment(){
         $today = date('Y-m-d');
-        $shipment = shipment::where('status',3)->get();
+        $shipment = shipment::where('status',3)->orWhere('status',9)->get();
 
         $data =array();
         $datas =array();
@@ -658,14 +835,105 @@ class ApiController extends Controller
         $today = date('Y-m-d');
         $shipment = shipment::find($id);
 
-        if($shipment->exception_category != null){
-            $data['exception_category'] = $shipment->exception_category;
+        if($shipment->status == '3'){
+            if($shipment->exception_category != null){
+                $data['exception_category'] = $shipment->exception_category;
+            }
+            if($shipment->exception_remark != null){
+                $data['exception_remark'] = $shipment->exception_remark;
+            }
         }
-        if($shipment->exception_remark != null){
-            $data['exception_remark'] = $shipment->exception_remark;
+        elseif($shipment->status == '9'){
+            if($shipment->delivery_exception_category != null){
+                $data['exception_category'] = $shipment->delivery_exception_category;
+            }
+            if($shipment->delivery_exception_remark != null){
+                $data['exception_remark'] = $shipment->delivery_exception_remark;
+            }
         }
 
         return response()->json($data); 
+    }
+
+
+
+    public function printTodayData(){
+        $today = date('Y-m-d');
+        $total_shipment = shipment::where('date',$today)->count();
+
+        $total_shipment_value = shipment::where('date', $today)->get()->sum("total");
+
+        $collected_value = shipment::where('date', $today)->where('status',8)->get()->sum("special_cod");
+
+        $on_pickup = shipment::where('pickup_assign_date',$today)->where('status',1)->count();
+
+        $pickup = shipment::where('package_collect_date',$today)->where('status',2)->count();
+
+        $exception = shipment::where('exception_assign_date',$today)->where('status',3)->count();
+
+        $hub = shipment::where('station_assign_date',$today)->where('status',4)->count();
+
+        $delivery = shipment::where('delivery_assign_date',$today)->where('status',7)->count();
+        $completed = shipment::where('delivery_date',$today)->where('status',8)->count();
+
+        $shipment = shipment::where('date',$today)->get();
+
+        $datas =array();
+        foreach ($shipment as $key => $value) {
+            $from_station = station::find($value->from_station_id);
+            $to_station = station::find($value->to_station_id);
+            $data = array(
+                'id' => $value->id,
+                'order_id' => $value->order_id,
+                'from_station' => $from_station->station,
+                'to_station' => $to_station->station,
+                'status' => '',
+            );
+            if($value->status == 0){
+                $data['status'] = 'New Request';
+            }
+            elseif($value->status == 1){
+                $data['status'] = 'Approved';
+            }
+            elseif($value->status == 2){
+                $data['status'] = 'Package Collected';
+            }
+            elseif($value->status == 3){
+                $data['status'] = 'Exception';
+            }
+            elseif($value->status == 4){
+                $data['status'] = 'Received Station Hub';
+            }
+            elseif($value->status == 5){
+                $data['status'] = 'Assign Agent to Transit Out (Hub)';
+            }
+            elseif($value->status == 6){
+                $data['status'] = 'Other Transit in Received (Hub)';
+            }
+            elseif($value->status == 7){
+                $data['status'] = 'Assign Agent to Delivery';
+            }
+            elseif($value->status == 8){
+                $data['status'] = 'Shipment delivered';
+            }
+            $datas[] = $data;
+        }   
+
+        $shipment_data = array(
+            'total_shipment' => $total_shipment,
+            'total_shipment_value' => $total_shipment_value,
+            'collected_value' => $collected_value,
+            'on_pickup' => $on_pickup,
+            'pickup' => $pickup,
+            'exception' => $exception,
+            'hub' => $hub,
+            'delivery' => $delivery,
+            'completed' => $completed,
+        );
+   
+        $pdf = PDF::loadView('print.mobile_today_data',compact('shipment_data','datas'));
+        $pdf->setPaper('A4');
+        return $pdf->stream('report.pdf');
     }
 
 

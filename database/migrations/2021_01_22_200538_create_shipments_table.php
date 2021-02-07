@@ -32,6 +32,7 @@ class CreateShipmentsTable extends Migration
             $table->string('return_package_cost_enable')->nullable();
             $table->string('special_cod_enable')->nullable();
             $table->string('special_cod')->nullable();
+            $table->string('collect_cod_amount')->nullable();
             $table->string('return_package_cost')->nullable();
             $table->string('shipment_mode')->nullable();
             $table->string('no_of_packages')->nullable();  
@@ -58,6 +59,8 @@ class CreateShipmentsTable extends Migration
             $table->string('pickup_assign_time')->nullable();
             $table->string('package_collect_date')->nullable();
             $table->string('package_collect_time')->nullable();
+            $table->string('pickup_received_date')->nullable();
+            $table->string('pickup_received_time')->nullable();
             $table->string('exception_category')->nullable();
             $table->TEXT('exception_remark')->nullable();
             $table->string('exception_assign_date')->nullable();
@@ -73,6 +76,12 @@ class CreateShipmentsTable extends Migration
             $table->string('delivery_date')->nullable();
             $table->string('delivery_time')->nullable();
             $table->TEXT('delivery_notes')->nullable();
+            $table->string('delivery_exception_category')->nullable();
+            $table->TEXT('delivery_exception_remark')->nullable();
+            $table->string('delivery_exception_assign_date')->nullable();
+            $table->string('delivery_exception_assign_time')->nullable();
+            $table->string('delivery_exception_solved_date')->nullable();
+            $table->string('delivery_exception_solved_time')->nullable();
             $table->string('receiver_id_copy')->nullable();
             $table->TEXT('receiver_signature')->nullable();
             $table->string('pdf_print')->nullable();

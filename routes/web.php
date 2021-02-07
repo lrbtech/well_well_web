@@ -63,6 +63,8 @@ Route::get('/verify-account/{id}', [App\Http\Controllers\PageController::class, 
 
 Route::get('/get-area/{id}', [App\Http\Controllers\PageController::class, 'getArea']);
 
+Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
+
 
 Route::group(['prefix' => 'admin'],function(){
 
