@@ -520,6 +520,10 @@ class ApiController extends Controller
             $shipment->delivery_time = date('H:i:s');
 
             $shipment->cod_type = $request->cod_type;
+            if($request->cod_type == 'Credit Card'){
+            $shipment->credit_verification_code = $request->credit_verification_code;
+            }
+
             $shipment->collect_cod_amount = $request->cod_amount;
             $shipment->delivery_notes = $request->delivery_notes;
 
@@ -550,12 +554,12 @@ class ApiController extends Controller
             $user = User::find($all->sender_id);
             $package_category = package_category::all();
             $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->get();
-            if(!empty($user)){
-                Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
-                    $message->to($user->email)->subject('Well Well Express - Delivery Completed');
-                    $message->from('info@lrbinfotech.com','Well Well Express');
-                });
-            }
+            // if(!empty($user)){
+            //     Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
+            //         $message->to($user->email)->subject('Well Well Express - Delivery Completed');
+            //         $message->from('info@lrbinfotech.com','Well Well Express');
+            //     });
+            // }
             
 
            // return response()->json($shipment);
