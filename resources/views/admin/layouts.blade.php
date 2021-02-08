@@ -390,7 +390,7 @@
                   <li><a class="drop-point" href="/admin/drop-point">Drop Point List</a></li>
                   <li><a class="package-category" href="/admin/package-category">Package Category List</a></li>
                   <li><a class="exception-category" href="/admin/exception-category">Exception Category List</a></li>
-                  <li><a class="push-notification" href="/admin/push-notification">Push Notification</a></li>
+                  <!-- <li><a class="push-notification" href="/admin/push-notification">Push Notification</a></li> -->
                   <li><a class="station" href="/admin/station">Station List</a></li>
                   <li><a class="settings" href="/admin/settings">Settings</a></li>
                   <li><a class="common-price" href="/admin/common-price">Common Price</a></li>
