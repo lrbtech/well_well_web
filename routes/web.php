@@ -164,6 +164,26 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/edit-agent/{id}', [App\Http\Controllers\Admin\AgentController::class, 'editAgent']);
     Route::get('/agent-delete/{id}', [App\Http\Controllers\Admin\AgentController::class, 'deleteAgent']);
 
+
+    //exception-category
+	Route::get('/exception-category', [App\Http\Controllers\Admin\SettingsController::class, 'ExceptionCategory']);
+    Route::POST('/save-exception-category', [App\Http\Controllers\Admin\SettingsController::class, 'saveExceptionCategory']);
+    Route::POST('/update-exception-category', [App\Http\Controllers\Admin\SettingsController::class, 'updateExceptionCategory']);
+    Route::get('/edit-exception-category/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'editExceptionCategory']);
+    Route::get('/exception-category-delete/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'deleteExceptionCategory']);
+
+
+    //notification
+    Route::POST('/save-notification', [App\Http\Controllers\Admin\NotificationController::class, 'saveNotification']);
+    Route::POST('/save-send-notification', [App\Http\Controllers\Admin\NotificationController::class, 'saveSendNotification']);
+    Route::POST('/update-notification', [App\Http\Controllers\Admin\NotificationController::class, 'updateNotification']);
+    Route::POST('/update-send-notification', [App\Http\Controllers\Admin\NotificationController::class, 'updateSendNotification']);
+    Route::get('/notification/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'editNotification']);
+    Route::get('/push-notification', [App\Http\Controllers\Admin\NotificationController::class, 'Notification']);
+    Route::get('/notification-delete/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'deleteNotification']);
+    Route::get('/notification-send/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'sendNotification']);
+    Route::get('/get-notification-agent/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'getNotificationAgent']);
+
     //settings
     Route::get('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'Settings']);
     Route::POST('/update-settings', [App\Http\Controllers\Admin\SettingsController::class, 'updateSettings']);

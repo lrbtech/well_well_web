@@ -104,17 +104,17 @@
                 <h3 class="text-center">
                     <!-- Scheduled delivery: <br> -->
                     @if($shipment->status == 0)
-                        <span>Shipment Create</span>
+                        <span>Shipment Created</span>
                     @elseif($shipment->status == 1)
-                        <span>Agent Assign to Pick Your Package</span>
+                        <span>Schedule for Pickup</span>
                     @elseif($shipment->status == 2)
                         <span>Packaege Collected</span>
                     @elseif($shipment->status >= 4)
-                        <span>Received Hub to <b>{{$from_station->station}}</b></span>
+                        <span>Transit In <b>{{$from_station->station}}</b></span>
                     @elseif($shipment->status == 6)
-                        <span>Received Hub to <b>{{$to_station->station}}</b></span>
+                        <span>Transit Out <b>{{$to_station->station}}</b></span>
                     @elseif($shipment->status == 7)
-                        <span>Ready fo Delivery</span>
+                        <span>In the Van for Delivery</span>
                     @elseif($shipment->status == 8)
                         <span>Shipment Delivered</span>
                     @endif
@@ -233,13 +233,13 @@
                                 @if($shipment->status > 0)
                                 <tr>
                                     <td>{{date('d-m-Y H:m a',strtotime($shipment->created_at))}}</td>
-                                    <td>Shipment Create</td>
+                                    <td>Shipment Created</td>
                                 </tr>
                                 @endif
                                 @if($shipment->status > 1)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->pickup_assign_date))}} {{date('H:m a',strtotime($shipment->pickup_assign_time))}}</td>
-                                    <td>Agent Assign Date and Time</td>
+                                    <td>Schedule for Pickup</td>
                                 </tr>
                                 @endif
                                 @if($shipment->status >= 2)
@@ -260,19 +260,19 @@
                                 @if($shipment->status >= 4)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->pickup_received_date))}} {{date('H:m a',strtotime($shipment->pickup_received_time))}}</td>
-                                    <td>Received Hub to <b>{{$from_station->station}}</b></td>
+                                    <td>Transit In <b>{{$from_station->station}}</b></td>
                                 </tr>
                                 @endif
                                 @if($shipment->status >= 6)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->station_received_date))}} {{date('H:m a',strtotime($shipment->station_received_time))}}</td>
-                                    <td>Received Hub to <b>{{$to_station->station}}</b></td>
+                                    <td>Transit Out <b>{{$to_station->station}}</b></td>
                                 </tr>
                                 @endif
                                 @if($shipment->status >= 7)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->delivery_assign_date))}} {{date('H:m a',strtotime($shipment->delivery_assign_time))}}</td>
-                                    <td>Ready fo Delivery</td>
+                                    <td>In the Van for Delivery</td>
                                 </tr>
                                 @endif
                                 @if($shipment->status >= 8)

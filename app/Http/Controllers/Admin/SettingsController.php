@@ -14,6 +14,7 @@ use App\Models\settings;
 use App\Models\station;
 use App\Models\admin;
 use App\Models\common_price;
+use App\Models\exception_category;
 use Hash;
 use Auth;
 
@@ -170,6 +171,50 @@ class SettingsController extends Controller
     public function deletepackageCategory($id){
         $package_category = package_category::find($id);
         $package_category->delete();
+        return response()->json(['message'=>'Successfully Delete'],200); 
+    }
+
+
+    public function saveExceptionCategory(Request $request){
+        $this->validate($request, [
+            'category'=>'required',
+          ],[
+            'category.required' => 'Exception Category Field is Required',
+        ]);
+
+        $exception_category = new exception_category;
+        $exception_category->category = $request->category;
+        $exception_category->save();
+
+        return response()->json('successfully save'); 
+    }
+    public function updateExceptionCategory(Request $request){
+        $this->validate($request, [
+            'category'=>'required',
+          ],[
+            'category.required' => 'Exception Category Field is Required',
+        ]);
+
+        $exception_category = exception_category::find($request->id);
+        $exception_category->category = $request->category;
+        $exception_category->save();
+
+        return response()->json('successfully update'); 
+    }
+
+    public function ExceptionCategory(){
+        $exception_category = exception_category::all();
+        return view('admin.exception_category',compact('exception_category'));
+    }
+
+    public function editExceptionCategory($id){
+        $exception_category = exception_category::find($id);
+        return response()->json($exception_category); 
+    }
+    
+    public function deleteExceptionCategory($id){
+        $exception_category = exception_category::find($id);
+        $exception_category->delete();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 

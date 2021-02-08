@@ -519,10 +519,11 @@ class ApiController extends Controller
             $shipment->delivery_date = date('Y-m-d');
             $shipment->delivery_time = date('H:i:s');
 
+            $shipment->cod_type = $request->cod_type;
             $shipment->collect_cod_amount = $request->cod_amount;
             $shipment->delivery_notes = $request->delivery_notes;
 
-            $shipment->receiver_signature = $request->receiver_signature;
+            $shipment->receiver_signature = 'data:image/png;base64,'.$request->receiver_signature;
             
             // if(isset($request->receiver_id_copy)){
             //     if($request->receiver_id_copy!=""){                
@@ -541,22 +542,7 @@ class ApiController extends Controller
             //   }
             // }
 
-            // if(isset($request->receiver_signature)){
-            //     if($request->receiver_signature!=""){                
-            //         $image = $request->receiver_signature;
-            //         $image_name = $request->receiver_signature_name;
-            //         $filename1='';
-            //         foreach(explode('.', $image_name) as $info){
-            //             $filename1 = $info;
-            //         }
-            //         $fileName = rand() . '.' . $filename1;
-    
-            //         $realImage = base64_decode($image);
-            //         file_put_contents(public_path().'/upload_files/'.$fileName, $realImage);    
-            //     $shipment->receiver_signature =  $fileName;
-    
-            //   }
-            // }
+
             $shipment->save();
 
 
@@ -564,11 +550,12 @@ class ApiController extends Controller
             $user = User::find($all->sender_id);
             $package_category = package_category::all();
             $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->get();
-
-            Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
-                $message->to($user->email)->subject('Well Well Express - Delivery Completed');
-                $message->from('info@lrbinfotech.com','Well Well Express');
-            });
+            if(!empty($user)){
+                Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
+                    $message->to($user->email)->subject('Well Well Express - Delivery Completed');
+                    $message->from('info@lrbinfotech.com','Well Well Express');
+                });
+            }
             
 
            // return response()->json($shipment);

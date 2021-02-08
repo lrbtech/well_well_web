@@ -452,28 +452,40 @@ class ShipmentController extends Controller
             })
             ->addColumn('status', function ($shipment) {
                 if($shipment->status == 0){
-                    return 'New Request';
+                    return 'Shipment Created';
                 }
                 elseif($shipment->status == 1){
-                    return 'Approved';
+                    $agent = agent::find($shipment->pickup_agent_id);
+                    if(!empty($agent)){
+                        return 'Schedule for Pickup '.$agent->name;
+                    }
+                    else{
+                        return 'Schedule for Pickup';
+                    }
                 }
                 elseif($shipment->status == 2){
                     return 'Package Collected';
                 }
                 elseif($shipment->status == 3){
                     return 'Exception';
+                    return '<td>
+                    <p>Exception</p>
+                    <p>' . $shipment->exception_remark . '</p>
+                    </td>';
                 }
                 elseif($shipment->status == 4){
-                    return 'Received Station Hub';
+                    $from_station = station::find($shipment->from_station_id);
+                    return 'Transit In '.$from_station->station;
                 }
                 elseif($shipment->status == 5){
                     return 'Assign Agent to Transit Out (Hub)';
                 }
                 elseif($shipment->status == 6){
-                    return 'Other Transit in Received (Hub)';
+                    $to_station = station::find($shipment->to_station_id);
+                    return 'Transit Out '.$to_station->station;
                 }
                 elseif($shipment->status == 7){
-                    return 'Assign Agent to Delivery';
+                    return 'In the Van for Delivery';
                 }
                 elseif($shipment->status == 8){
                     return 'Shipment delivered';
