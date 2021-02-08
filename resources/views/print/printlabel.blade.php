@@ -177,6 +177,9 @@ th {
                 {{$city1->city}}
                 @endif
                 @endforeach</div>
+                @if($row->special_cod_enable == '1')
+                <center><p class="m-0 pt-2"><strong>C.O.D Amount : {{$row->special_cod}}</strong></p></center>
+                @endif
             </div>
         </div>
 

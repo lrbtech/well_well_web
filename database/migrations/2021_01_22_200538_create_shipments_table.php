@@ -33,6 +33,8 @@ class CreateShipmentsTable extends Migration
             $table->string('special_cod_enable')->nullable();
             $table->string('special_cod')->nullable();
             $table->string('collect_cod_amount')->nullable();
+            $table->string('cod_type')->nullable();
+            $table->string('credit_verification_code')->nullable();
             $table->string('return_package_cost')->nullable();
             $table->string('shipment_mode')->nullable();
             $table->string('no_of_packages')->nullable();  
