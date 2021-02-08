@@ -24,20 +24,21 @@
                 <div class="line line3"></div>
             </div>
             <ul class="nav-list">
-                <li><a href="#home-section" class="nav-link active">Home</a></li>
-                <li><a href="#about-section" class="nav-link">About Us</a></li>
-                <li><a href="/track/1" class="nav-link">Track</a></li>
-                <li><a href="/ship-now" class="nav-link">Ship</a></li>
+                <li><a href="#home-section" class="nav-link active">الرئيسية</a></li>
+                <li><a href="#about-section" class="nav-link">من نحن</a></li>
+                <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
+                <li><a href="/ship-now" class="nav-link">الشحن</a></li>
 
-                <li><a href="#service-solution" class="nav-link">Soluction & Services</a></li>
-                <li><a href="#service-advance" class="nav-link">Help & Support</a></li>
-                <li><a href="#contact" class="nav-link">Contact Us</a></li>
-                <li><a href="/login" class="nav-link">Login</a></li>
-                <li><a href="/register" class="nav-link">Register</a></li>
-                <!--<li><a href="/home-arabic" class="nav-link">العربية</a></li>-->
-                <!-- <li><a href="#" class="nav-link" onclick='changeToRTL()'>العربية</a></li> -->
+                <li><a href="#service-solution" class="nav-link">الحلول والمساعدة</a></li>
+                <li><a href="#service-advance" class="nav-link">المساعدة والدعم</a></li>
+                <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
+
+                <li><a href="/login" class="nav-link">تسجيل الدخول</a></li>
+                <li><a href="/register" class="nav-link">تسجيل</a></li>
+
+                <li><a href="/home" class="nav-link">English</a></li>
             </ul>
-        </nav>
+        </nav> 
         <div id="sticky-wrapper" class="sticky-wrapper" style="height: 74.7px;">
             <header class="site-navbar js-sticky-header site-navbar-target" role="banner" style="">
                 <div class="container">
@@ -56,11 +57,11 @@
 
                                     <li><a href="#service-solution" class="nav-link">الحلول والمساعدة</a></li>
                                     <li><a href="#service-advance" class="nav-link">المساعدة والدعم</a></li>
-                                    <li><a href="#contact" class="nav-link">اتصل بنا
-                                    </a></li>
+                                    <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
 
-                                    <li><a href="/login" class="nav-link">Login</a></li>
-                                    <li><a href="/register" class="nav-link">Register</a></li>
+                                    <li><a href="/login" class="nav-link">تسجيل الدخول
+                                    </a></li>
+                                    <li><a href="/register" class="nav-link">تسجيل</a></li>
 
                                     <li><a href="/home" class="nav-link">English</a></li>
                                 </ul>
@@ -86,7 +87,7 @@
                                 <div class="row">
                                     <div class="col-xl-9 col-lg-9 aos-init" data-aos="fade-left" data-aos-delay="">
                                         <div class="hero__caption">
-                                            <h1>Safe &amp; Reliable <span>Logistic</span> Solutions!</h1>
+                                            <h1>آمنة &amp; موثوق <span>جمارك</span> حلول!</h1>
                                         </div>
 
                                         <form action="#" class="search-box">
@@ -100,7 +101,7 @@
                                         </form>
 
                                         <div class="hero-pera">
-                                            <p>For order status inquiry</p>
+                                            <p>للاستعلام عن حالة الطلب</p>
                                         </div>
                                     </div>
                                 </div>
@@ -560,6 +561,7 @@ function Tracking(){
             navBar.classList.toggle('toggle');
         });
     </script>
+    
 </body>
 
 </html>

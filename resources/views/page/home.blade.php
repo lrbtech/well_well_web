@@ -35,7 +35,7 @@
                 <li><a href="#contact" class="nav-link">Contact Us</a></li>
                 <li><a href="/login" class="nav-link">Login</a></li>
                 <li><a href="/register" class="nav-link">Register</a></li>
-                <!--<li><a href="/home-arabic" class="nav-link">العربية</a></li>-->
+                <li><a href="/home-arabic" class="nav-link">العربية</a></li>
                 <!-- <li><a href="#" class="nav-link" onclick='changeToRTL()'>العربية</a></li> -->
             </ul>
         </nav>
@@ -61,8 +61,8 @@
                                     <li><a href="#contact" class="nav-link">Contact Us</a></li>
                                     <li><a href="/login" class="nav-link">Login</a></li>
                                     <li><a href="/register" class="nav-link">Register</a></li>
-                                    <!--<li><a href="/home-arabic" class="nav-link">العربية</a></li>-->
-                                    <!-- <li><a href="#" class="nav-link" onclick='changeToRTL()'>العربية</a></li> -->
+                                    <li><a href="/home-arabic" class="nav-link">العربية</a></li>
+                                                                            <!-- <li><a href="#" class="nav-link" onclick='changeToRTL()'>العربية</a></li> -->
                                 </ul>
                             </nav>
                         </div>
