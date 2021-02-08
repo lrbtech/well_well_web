@@ -164,7 +164,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-6 aos-init" data-aos="fade-right" data-aos-delay="">
                             <div class="single-cat text-center mb-50">
                                 <div class="cat-icon mb-4">
-                                    <img src="https://wellwell.ae/wp-content/uploads/2021/01/Asset-4.png" title="" alt="" class="" height="50px">
+                                    <img src="/web_site_image/24-7.png" title="" alt="" class="" height="50px">
                                 </div>
                                 <div class="cat-cap">
                                     <h5>
@@ -176,7 +176,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="single-cat text-center mb-50">
                                 <div class="cat-icon mb-4">
-                                    <img src="https://wellwell.ae/wp-content/uploads/2021/01/Asset-5.png" title="" alt="" class="" height="50px">
+                                    <img src="/web_site_image/email-clipart.png" title="" alt="" class="" height="50px">
                                 </div>
                                 <div class="cat-cap">
                                     <h5>
@@ -189,7 +189,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-6 aos-init" data-aos="fade-left" data-aos-delay="">
                             <div class="single-cat text-center mb-50">
                                 <div class="cat-icon mb-4">
-                                    <img src="https://wellwell.ae/wp-content/uploads/2021/01/Asset-7.png" title="" alt="" class="" height="50px">
+                                    <img src="/web_site_image/world.png" title="" alt="" class="" height="50px">
                                 </div>
                                 <div class="cat-cap">
                                     <h5>ميزة “Well protect”</h5>
@@ -209,10 +209,10 @@
                         <div class="col-lg-6 col-md-12 aos-init" data-aos="fade-right" data-aos-delay="">
                             <div class="about-img ">
                                 <div class="about-font-img">
-                                    <img src="https://wellwell.ae/wp-content/uploads/2021/01/home-page-image-1.png" alt="">
+                                    <img src="/web_site_image/home-page-image-1 (1).png" alt="">
                                 </div>
                                 <div class="about-back-img d-none d-lg-block">
-                                    <img src="https://wellwell.ae/wp-content/uploads/2021/01/home-page-image-1.png" alt="">
+                                    <img src="/web_site_image/home-page-image-1 (1).png" alt="">
                                 </div>
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                                 <div class="home-blog-single">
                                     <div class="blog-img-cap">
                                         <div class="blog-img">
-                                            <img src="https://wellwell.ae/wp-content/uploads/2021/01/4-1.png" alt="">
+                                            <img src="/web_site_image/4-1.png" alt="">
                                         </div>
                                     </div>
                                     <div class="blog-caption">
@@ -269,7 +269,7 @@
                                 <div class="home-blog-single">
                                     <div class="blog-img-cap">
                                         <div class="blog-img">
-                                            <img src="https://wellwell.ae/wp-content/uploads/2021/01/5.png" alt="">
+                                            <img src="/web_site_image/5.png" alt="">
                                         </div>
                                     </div>
                                     <div class="blog-caption">
@@ -283,7 +283,7 @@
                                 <div class="home-blog-single">
                                     <div class="blog-img-cap">
                                         <div class="blog-img">
-                                            <img src="https://wellwell.ae/wp-content/uploads/2021/01/6.png" alt="">
+                                            <img src="/web_site_image/6.png" alt="">
                                         </div>
                                     </div>
                                     <div class="blog-caption">
@@ -297,7 +297,7 @@
                                 <div class="home-blog-single">
                                     <div class="blog-img-cap">
                                         <div class="blog-img">
-                                            <img src="https://wellwell.ae/wp-content/uploads/2021/01/4-1.png" alt="">
+                                            <img src="/web_site_image/4-1.png" alt="">
                                         </div>
                                     </div>
                                     <div class="blog-caption">
@@ -311,7 +311,7 @@
                                 <div class="home-blog-single">
                                     <div class="blog-img-cap">
                                         <div class="blog-img">
-                                            <img src="https://wellwell.ae/wp-content/uploads/2021/01/5.png" alt="">
+                                            <img src="/web_site_image/5.png" alt="">
                                         </div>
                                     </div>
                                     <div class="blog-caption">
@@ -325,7 +325,7 @@
                                 <div class="home-blog-single">
                                     <div class="blog-img-cap">
                                         <div class="blog-img">
-                                            <img src="https://wellwell.ae/wp-content/uploads/2021/01/6.png" alt="">
+                                            <img src="/web_site_image/6.png" alt="">
                                         </div>
                                     </div>
                                     <div class="blog-caption">
@@ -431,7 +431,7 @@
 
                 <div class="col-md-5">
                     <div class="w-75">
-                        <img loading="lazy" class="mb-4" src="https://wellwell.ae/wp-content/uploads/2021/01/white-logo-wellwell.png" alt="" width="98" height="94">
+                        <img loading="lazy" class="mb-4" src="assets/images/logo.png" alt="" width="98" height="94">
 
                         <p>نؤمن أن نجاح عملائنا هو سر نجاحنا
                         </p>
