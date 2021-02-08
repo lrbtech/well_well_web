@@ -80,22 +80,22 @@
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">{{$key + 1}}</td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row->order_id}}
+                        {{$row['order_id']}}
                         </span>
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row->from_station}}
+                        {{$row['from_station']}}
                         </span>
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row->to_station}}
+                        {{$row['to_station']}}
                         </span>
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row->status}}
+                        {{$row['status']}}
                         </span>
                         </td>
                     </tr>

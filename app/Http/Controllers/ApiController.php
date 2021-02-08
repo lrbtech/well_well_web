@@ -867,10 +867,10 @@ class ApiController extends Controller
         $delivery = shipment::where('delivery_assign_date',$today)->where('status',7)->count();
         $completed = shipment::where('delivery_date',$today)->where('status',8)->count();
 
-        $shipment = shipment::where('date',$today)->get();
-
+        $shipment_new = shipment::where('date','=',$today)->get();
+        
         $datas =array();
-        foreach ($shipment as $key => $value) {
+        foreach ($shipment_new as $key => $value) {
             $from_station = station::find($value->from_station_id);
             $to_station = station::find($value->to_station_id);
             $data = array(
@@ -925,6 +925,9 @@ class ApiController extends Controller
         $pdf = PDF::loadView('print.mobile_today_data',compact('shipment_data','datas'));
         $pdf->setPaper('A4');
         return $pdf->stream('report.pdf');
+
+        //return response()->json($datas); 
+
     }
 
 
