@@ -55,7 +55,7 @@ visibility: visible;
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>New <span>Shipment  </span></h2>
+                  <h2>{{$language[17][Auth::guard('admin')->user()->lang]}} <span>{{$language[18][Auth::guard('admin')->user()->lang]}}  </span></h2>
                 </div>
                 <div class="col-lg-6 breadcrumb-right">
                   <ol class="breadcrumb">
@@ -77,32 +77,32 @@ visibility: visible;
             <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5>Customer Details </h5>
+                    <h5>{{$language[19][Auth::guard('admin')->user()->lang]}} </h5>
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
                       <div class="row">
 
                         <div class="col-md-12">
-                          <label>Search Customer</label>
+                          <label>{{$language[20][Auth::guard('admin')->user()->lang]}}</label>
                           <input class="form-control" id="user_search" name="user_search" type="text">
                         </div>
 
                         <div class="col-sm-12 show_from_address">
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label class="col-form-label">First Name</label>
+                                <label class="col-form-label">{{$language[21][Auth::guard('admin')->user()->lang]}}</label>
                                 <input readonly class="form-control" id="first_name" name="first_name" type="text">
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="col-form-label">Last Name</label>
+                                <label class="col-form-label">{{$language[22][Auth::guard('admin')->user()->lang]}}</label>
                                 <input readonly class="form-control" id="last_name" name="last_name" type="text">
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="col-form-label">Mobile</label>
+                                <label class="col-form-label">{{$language[14][Auth::guard('admin')->user()->lang]}}</label>
                                 <input readonly class="form-control" id="mobile" name="mobile" type="text">
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="col-form-label">Email</label>
+                                <label class="col-form-label">{{$language[13][Auth::guard('admin')->user()->lang]}}</label>
                                 <input readonly class="form-control" id="email" name="email" type="text">
                             </div>
                         </div>
@@ -117,14 +117,14 @@ visibility: visible;
               <div class="col-sm-6">
                 <div class="card">
                   <div class="card-header">
-                    <h5>From Address <button id="add_from_address" class="btn btn-primary m-r-15" type="button">Create From Address</button></h5>
-                    <span>Shipment starting location</span>
+                    <h5>{{$language[24][Auth::guard('admin')->user()->lang]}}<button id="add_from_address" class="btn btn-primary m-r-15" type="button">{{$language[25][Auth::guard('admin')->user()->lang]}}</button></h5>
+                    <span>{{$language[26][Auth::guard('admin')->user()->lang]}}</span>
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
                       <div class="row">
 
                         <div class="col-md-12">
-                          <label>Search From Address</label>
+                          <label>{{$language[27][Auth::guard('admin')->user()->lang]}}</label>
                           <input class="form-control" id="search_from_address" name="search_from_address" type="text">
                         </div>
 
@@ -141,13 +141,13 @@ visibility: visible;
               <div class="col-sm-6">
                 <div class="card">
                   <div class="card-header">
-                    <h5>To Address <button id="add_to_address" class="btn btn-primary m-r-15" type="button">Create To Address</button></h5
-                    ><span>Shipment where to delivery location</span>
+                    <h5>{{$language[28][Auth::guard('admin')->user()->lang]}} <button id="add_to_address" class="btn btn-primary m-r-15" type="button">{{$language[29][Auth::guard('admin')->user()->lang]}}</button></h5
+                    ><span>{{$language[30][Auth::guard('admin')->user()->lang]}}</span>
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
                     <div class="row">
                         <div class="col-md-12">
-                          <label>Search To Address</label>
+                          <label>{{$language[31][Auth::guard('admin')->user()->lang]}}</label>
                           <input autocomplete="off" class="form-control" id="search_to_address" name="search_to_address" type="text">
                         </div>
                         <br>
@@ -165,7 +165,7 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5>Shipping Mode</h5>
+                    <h5>{{$language[32][Auth::guard('admin')->user()->lang]}}</h5>
                     <!-- <span>Shipment Type </span> -->
                   </div>
                     <div class="card-body megaoptions-border-space-sm">
@@ -179,10 +179,10 @@ visibility: visible;
                                 <label for="shipment_mode2"></label>
                               </div>
                               <div class="media-body">
-                                <h6 class="mt-0 mega-title-badge">Standard
+                                <h6 class="mt-0 mega-title-badge">{{$language[34][Auth::guard('admin')->user()->lang]}}
                                   <!-- <span class="badge badge-secondary pull-right digits">0 AED</span> -->
                                 </h6>
-                                <p>Estimated 3 Day Shipping ( Duties end taxes may be due upon delivery )</p>
+                                <p>{{$language[33][Auth::guard('admin')->user()->lang]}}</p>
                               </div>
                             </div>
                           </div>
@@ -196,10 +196,10 @@ visibility: visible;
                                 <label for="shipment_mode1"></label>
                               </div>
                               <div class="media-body">
-                                <h6 class="mt-0 mega-title-badge">Express
+                                <h6 class="mt-0 mega-title-badge">{{$language[35][Auth::guard('admin')->user()->lang]}}
                                   <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
                                 </h6>
-                                <p>Estimated 1 Day Shipping ( Duties end taxes may be due upon delivery )</p>
+                                <p>{{$language[36][Auth::guard('admin')->user()->lang]}}</p>
                               </div>
                             </div>
                           </div>
@@ -216,19 +216,19 @@ visibility: visible;
                     <div class="col-sm-12 col-xl-12 xl-100">
                         <div class="card">
                           <div class="card-header">
-                            <h5>Package & Shipment Details</h5>
+                            <h5>{{$language[37][Auth::guard('admin')->user()->lang]}}</h5>
                              <!-- <button class="btn btn-warning sweet-5" type="button" onclick="_gaq.push(['_trackEvent', 'example', 'try', 'sweet-5']);">Warning alert</button> -->
                           </div>
                           <div class="card-body">
 
                             <div class="row">
                               <div class="form-group col-md-6">
-                                <label class="col-form-label">Number of Packages</label>
+                                <label class="col-form-label">{{$language[38][Auth::guard('admin')->user()->lang]}}</label>
                                 <input class="form-control" id="no_of_packages" name="no_of_packages" type="number" min="1">
                               </div>
                           
                               <div class="form-group col-md-6">
-                                <label class="col-form-label">Declared Value</label>
+                                <label class="col-form-label">{{$language[39][Auth::guard('admin')->user()->lang]}}</label>
                                 <input class="form-control" id="declared_value" name="declared_value" type="number" >
                                 <input type="hidden" name="same_data" id="same_data">                           
                               </div>
@@ -237,9 +237,10 @@ visibility: visible;
                             <div class="row">
 
                               <div class="form-group col-md-4">
-                                <label class="col-form-label">Category</label>
+                                <label class="col-form-label">{{$language[40][Auth::guard('admin')->user()->lang]}}</label>
                                 <select class="form-control" id="category1" name="category[]">
-                                  <option value="">SELECT</option>
+                                  <option value="">{{$language[46][Auth::guard('admin')->user()->lang]}}
+                                  </option>
                                   @foreach($package_category as $row)
                                   <option value="{{$row->id}}">{{$row->category}}</option>
                                   @endforeach
@@ -247,12 +248,14 @@ visibility: visible;
                               </div>
 
                               <div class="form-group col-md-8">
-                                <label class="col-form-label">Description</label>
+                                <label class="col-form-label">{{$language[41][Auth::guard('admin')->user()->lang]}}
+                                </label>
                                 <input class="form-control" id="description1" name="description[]" type="text" >
                               </div>
 
                               <div class="form-group col-md-2">
-                                <label class="col-form-label">Actual Weight</label>
+                                <label class="col-form-label">{{$language[42][Auth::guard('admin')->user()->lang]}}
+                                </label>
                                 <input class="form-control" id="weight1" name="weight[]" type="number" >
                               </div>
 
@@ -260,7 +263,8 @@ visibility: visible;
                                 <div class="col-md-12">
                                   <div class="kt-form__group--inline">
                                     <div class="kt-form__label">
-                                        <label class="kt-label m-label--single">Dimensions&nbsp;<i class="flaticon2-delivery-package"></i>&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm):</label>
+                                        <label class="kt-label m-label--single">{{$language[43][Auth::guard('admin')->user()->lang]}}
+                                          &nbsp;<i class="flaticon2-delivery-package"></i>&nbsp;[{{$language[44][Auth::guard('admin')->user()->lang]}}&nbsp;x&nbsp;{{$language[45][Auth::guard('admin')->user()->lang]}}&nbsp;x&nbsp;{{$language[47][Auth::guard('admin')->user()->lang]}}] (cm):</label>
                                     </div>
                                     <div class="kt-form__control">
                                       <div class="input-group">
@@ -316,7 +320,7 @@ visibility: visible;
                               </div>
 
                               <div class="form-group col-md-2">
-                                <label class="col-form-label">Chargeable Weight</label>
+                                <label class="col-form-label">{{$language[48][Auth::guard('admin')->user()->lang]}}</label>
                                 <input readonly class="form-control" id="chargeable_weight1" name="chargeable_weight[]" type="text" >
                               </div>
 
@@ -331,21 +335,21 @@ visibility: visible;
 <div class="col-sm-12 col-xl-12 xl-100">
     <div class="card">
       <div class="card-header">
-        <h5>Return package</h5>
+        <h5>{{$language[49][Auth::guard('admin')->user()->lang]}}</h5>
       </div>
       <div class="card-body">
 
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Return Package Cost</label>
+            <label class="col-sm-3 col-form-label">{{$language[50][Auth::guard('admin')->user()->lang]}}</label>
             <div class="col-sm-9">
               <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml">
                 <div class="radio radio-primary">
-                  <input id="return_package_cost_enable1" type="radio" name="return_package_cost_enable" value="1">
-                  <label class="mb-0" for="return_package_cost_enable1">Yes</label>
+                  <input id="return_package_cost1" type="radio" name="return_package_cost" value="1">
+                  <label class="mb-0" for="return_package_cost1">{{$language[51][Auth::guard('admin')->user()->lang]}}</label>
                 </div>
                 <div class="radio radio-primary">
-                  <input id="return_package_cost_enable2" type="radio" name="return_package_cost_enable" value="2">
-                  <label class="mb-0" for="return_package_cost_enable2">No</label>
+                  <input checked id="return_package_cost2" type="radio" name="return_package_cost" value="2">
+                  <label class="mb-0" for="return_package_cost2">{{$language[52][Auth::guard('admin')->user()->lang]}}</label>
                 </div>
               </div>
             </div>
@@ -361,7 +365,7 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5>Special Services</h5><span>(optional) </span>
+                    <!-- <h5>Special Services</h5><span>(optional) </span> -->
                   </div>
                     <div class="card-body megaoptions-border-space-sm">
                       <div class="row">
@@ -374,10 +378,10 @@ visibility: visible;
                                 <label for="special_cod_enable1"></label>
                               </div>
                               <div class="media-body">
-                                <h6 class="mt-0 mega-title-badge">Cash on Delivery
+                                <h6 class="mt-0 mega-title-badge">{{$language[53][Auth::guard('admin')->user()->lang]}}
                                   <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
                                 </h6>
-                                <p>(C.O.D)</p>
+                                <p>({{$language[54][Auth::guard('admin')->user()->lang]}})</p>
                               </div>
                             </div>
                           </div>
@@ -398,7 +402,7 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5>Pickup/Drop-off</h5><span>Shipment Type </span>
+                    <h5>{{$language[55][Auth::guard('admin')->user()->lang]}}</h5><span>{{$language[56][Auth::guard('admin')->user()->lang]}} </span>
                   </div>
                     <div class="card-body megaoptions-border-space-sm">
                       <div class="row">
@@ -411,10 +415,10 @@ visibility: visible;
                                 <label for="shipment_type1"></label>
                               </div>
                               <div class="media-body">
-                                <h6 class="mt-0 mega-title-badge">Pickup
+                                <h6 class="mt-0 mega-title-badge">{{$language[57][Auth::guard('admin')->user()->lang]}}
                                   <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
                                 </h6>
-                                <p>For door to door delivery</p>
+                                <p>{{$language[58][Auth::guard('admin')->user()->lang]}}</p>
                               </div>
                             </div>
                           </div>
@@ -441,18 +445,18 @@ visibility: visible;
                       
                       <div class="row">
                         <div class="col-md-4">
-                          <label>Shipment Date</label>
+                          <label>{{$language[59][Auth::guard('admin')->user()->lang]}}</label>
                           <input min="<?php echo date('Y-m-d', strtotime("+0 days")); ?>" max="<?php echo date('Y-m-d', strtotime("+60 days")); ?>" class="form-control" id="shipment_date" name="shipment_date" type="date">
                         </div>
 
                         <div class="col-md-4">
-                          <label>Shipment From Time</label>
+                          <label>{{$language[60][Auth::guard('admin')->user()->lang]}}</label>
                             <input class="form-control" id="shipment_from_time" name="shipment_from_time" type="time">
                         </div>
 
                         <div class="col-md-4">
-                          <label>Shipment To Time</label>
-                          <input readonly class="form-control" id="shipment_to_time" name="shipment_to_time" type="time">
+                          <label>{{$language[61][Auth::guard('admin')->user()->lang]}}</label>
+                          <input readonly class="form-control" id="shipment_to_time" name="shipment_to_time" type="text">
                         </div>
 
                         <!-- <div class="col-md-3">
@@ -479,7 +483,7 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">
-                    <h5>Billing</h5><span>Details </span>
+                    <h5>{{$language[62][Auth::guard('admin')->user()->lang]}}</h5><span>{{$language[63][Auth::guard('admin')->user()->lang]}} </span>
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
                   
@@ -487,7 +491,7 @@ visibility: visible;
                       <div class="col">
 
                           <div class="form-group row">
-                          <label class="col-sm-6 col-form-label">Shipment Price (Total Weight = <span id="total_weight_label">0</span> Kg)</label>
+                          <label class="col-sm-6 col-form-label">{{$language[64][Auth::guard('admin')->user()->lang]}} ({{$language[65][Auth::guard('admin')->user()->lang]}} = <span id="total_weight_label">0</span> Kg)</label>
                             <div class="col-sm-6">
                               <input type="hidden" name="total_weight" id="total_weight">
                               <input readonly class="form-control" name="shipment_price" id="shipment_price" type="text">
@@ -495,22 +499,24 @@ visibility: visible;
                           </div>
 
                           <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Postal Charge <span id="postal_charge_percentage_label">0</span>%</label>
+                            <label class="col-sm-6 col-form-label">{{$language[66][Auth::guard('admin')->user()->lang]}} <span id="postal_charge_percentage_label">0</span>%</label>
                             <div class="col-sm-6">
                             <input readonly name="postal_charge_enable" id="postal_charge_enable" type="hidden">
                             <input readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
                               <input readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
+                              <input readonly class="form-control" name="sub_total" id="sub_total" type="hidden">
                             </div>
                           </div>
 
-                          <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Sub Total </label>
+                          <!-- <div class="form-group row">
+                            <label class="col-sm-6 col-form-label">{{$language[67][Auth::guard('admin')->user()->lang]}} </label>
                             <div class="col-sm-6">
                               <input readonly class="form-control" name="sub_total" id="sub_total" type="text">
                             </div>
-                          </div>
+                          </div> -->
+
                           <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">VAT <span id="vat_percentage_label">0</span>%</label>
+                            <label class="col-sm-6 col-form-label">{{$language[68][Auth::guard('admin')->user()->lang]}} <span id="vat_percentage_label">0</span>%</label>
                             <div class="col-sm-6">
                             <input readonly name="vat_enable" id="vat_enable" type="hidden">
                             <input readonly name="vat_percentage" id="vat_percentage" type="hidden">
@@ -518,7 +524,7 @@ visibility: visible;
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Insurance <span id="insurance_percentage_label">0</span>%</label>
+                            <label class="col-sm-6 col-form-label">{{$language[69][Auth::guard('admin')->user()->lang]}} <span id="insurance_percentage_label">0</span>%</label>
                             <div class="col-sm-6">
                             <input readonly name="insurance_enable" id="insurance_enable" type="hidden">
                             <input readonly name="insurance_percentage" id="insurance_percentage" type="hidden">
@@ -526,7 +532,7 @@ visibility: visible;
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Cash on Delivery </label>
+                            <label class="col-sm-6 col-form-label">{{$language[53][Auth::guard('admin')->user()->lang]}} </label>
                             <div class="col-sm-6">
                               <input readonly name="cod_enable" id="cod_enable" type="hidden">
                               <input readonly name="cod_price" id="cod_price" type="hidden">
@@ -536,7 +542,7 @@ visibility: visible;
                           </div>
 
                           <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Total </label>
+                            <label class="col-sm-6 col-form-label">{{$language[70][Auth::guard('admin')->user()->lang]}} </label>
                             <div class="col-sm-6">
                               <input readonly class="form-control" name="total" id="total" type="text">
                             </div>
@@ -553,8 +559,8 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-footer text-right">
-                    <button onclick="SaveShipment()" class="btn btn-primary m-r-15" type="button">Submit</button>
-                    <button class="btn btn-light" type="button">Cancel</button>
+                    <button onclick="SaveShipment()" class="btn btn-primary m-r-15" type="button">{{$language[71][Auth::guard('admin')->user()->lang]}}</button>
+                    <button class="btn btn-light" type="button">{{$language[72][Auth::guard('admin')->user()->lang]}}</button>
                   </div>
                 </div>
               </div>
@@ -784,10 +790,9 @@ $('#city_id').change(function(){
 
 $('#shipment_from_time').blur(function(){
   var shipment_from_time = $("#shipment_from_time").val();
-  //alert(shipment_from_time);
-  <?php //echo date('H:m a',strtotime($_POST['shipment_from_time']."+2 hour")); ?>
+  // //alert(shipment_from_time);
 
-  var to_time = moment.utc(shipment_from_time,'hh:mm').add(2,'hour').format('hh:mm');
+  var to_time = moment.utc(shipment_from_time,'hh:mm A').add(2,'hour').format('hh:mm A');
   $("#shipment_to_time").val(to_time);
 });
 
@@ -848,17 +853,17 @@ $( "#user_search" ).autocomplete({
             success:function(data) {
               $("#user_id").val(contact_id);
               $("#customer_id").val(contact_id);
-              $("#insurance_enable").val(data.insurance_enable);
-              $("#insurance_percentage").val(data.insurance_percentage);
-              $("#insurance_percentage_label").html(data.insurance_percentage);
-              $("#cod_enable").val(data.cod_enable);
-              $("#cod_price").val(data.cod_price);
-              $("#vat_enable").val(data.vat_enable);
-              $("#vat_percentage").val(data.vat_percentage);
-              $("#vat_percentage_label").html(data.vat_percentage);
-              $("#postal_charge_enable").val(data.postal_charge_enable);
-              $("#postal_charge_percentage").val(data.postal_charge_percentage);  
-              $("#postal_charge_percentage_label").html(data.postal_charge_percentage);    
+              $("#insurance_enable").val(data.data.insurance_enable);
+              $("#insurance_percentage").val(data.settings.insurance_percentage);
+              $("#insurance_percentage_label").html(data.settings.insurance_percentage);
+              $("#cod_enable").val(data.data.cod_enable);
+              $("#cod_price").val(data.data.cod_price);
+              $("#vat_enable").val(data.data.vat_enable);
+              $("#vat_percentage").val(data.settings.vat_percentage);
+              $("#vat_percentage_label").html(data.settings.vat_percentage);
+              $("#postal_charge_enable").val(data.data.postal_charge_enable);
+              $("#postal_charge_percentage").val(data.settings.postal_charge_percentage);  
+              $("#postal_charge_percentage_label").html(data.settings.postal_charge_percentage);    
             }
         });
     }       
@@ -932,6 +937,7 @@ $( "#search_to_address" ).autocomplete({
 
 function SaveAddress(){
   var formData = new FormData($('#address_form')[0]);
+  var from_to = $('#from_to').val();
   $.ajax({
       url : '/admin/save-new-address',
       type: "POST",
@@ -941,18 +947,45 @@ function SaveAddress(){
       dataType: "JSON",
       success: function(data)
       {                
-          $("#address_form")[0].reset();
           $('#address_modal').modal('hide');
-          //location.reload();
-          //$('.show_from_address').load(location.href+' .show_from_address');
-          //$('.show_to_address').load(location.href+' .show_to_address');
+          if(from_to == '1'){
+            getFromAddress(data.id);
+          }
+          else if(from_to == '2'){
+            getToAddress(data.id);
+          }
           toastr.success(data, 'Successfully Save');
+          $("#address_form")[0].reset();
       },error: function (data) {
           var errorData = data.responseJSON.errors;
           $.each(errorData, function(i, obj) {
           toastr.error(obj[0]);
     });
   }
+  });
+}
+
+function getFromAddress(contact_id){
+  $.ajax({
+      url : '/admin/get-from-address-id/'+contact_id,
+      type: "GET",
+      //dataType: "JSON",
+      success:function(response) {
+        // $("#address").val(response.address);    
+        $('.show_from_address').html(response);
+      }
+  });
+}
+
+function getToAddress(contact_id){
+  $.ajax({
+      url : '/admin/get-to-address-id/'+contact_id,
+      type: "GET",
+      //dataType: "JSON",
+      success:function(response) {
+        // $("#address").val(response.address);    
+        $('.show_to_address').html(response);
+      }
   });
 }
 
@@ -1101,24 +1134,24 @@ function subAmount(total_price1,total_weight1) {
     }
   }
 
-  sub_total = Number(postal_charge + total_price);
-  sub_total =  Number(sub_total.toFixed(2));
+  // sub_total = Number(postal_charge + total_price);
+  // sub_total =  Number(sub_total.toFixed(2));
 
-  $("#sub_total").val(sub_total);
+  $("#sub_total").val('0');
 
   if(vat_enable == 1){
-    vat_amount = Number((vat_percentage/100) * sub_total);
+    vat_amount = Number((vat_percentage/100) * total_price);
     vat_amount =  Number(vat_amount.toFixed(2));
     $("#vat_amount").val(vat_amount);
   }
 
   if(insurance_enable == 1){
-    insurance_amount = Number((insurance_percentage/100) * sub_total);
+    insurance_amount = Number((insurance_percentage/100) * total_price);
     insurance_amount =  Number(insurance_amount.toFixed(2));
     $("#insurance_amount").val(insurance_amount);
   }
 
-  before_total = Number(sub_total + vat_amount + insurance_amount);
+  before_total = Number(total_price + vat_amount + insurance_amount + postal_charge);
 
   if(cod_enable == 1){
     cod_amount = cod_price;

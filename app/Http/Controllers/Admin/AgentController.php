@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\agent;
 use App\Models\city;
+use App\Models\language;
 use Hash;
 
 class AgentController extends Controller
@@ -37,6 +38,7 @@ class AgentController extends Controller
         ]);
 
         $agent = new agent;
+        $agent->agent_id = $request->agent_id;
         $agent->name = $request->name;
         $agent->email = $request->email;
         $agent->mobile = $request->mobile;
@@ -99,6 +101,7 @@ class AgentController extends Controller
         
         $agent = agent::find($request->id);
         $agent->name = $request->name;
+        $agent->agent_id = $request->agent_id;
         $agent->email = $request->email;
         $agent->mobile = $request->mobile;
         $agent->dob = $request->dob;
@@ -153,9 +156,10 @@ class AgentController extends Controller
 
     public function Agent(){
         $agent = agent::all();
+        $language = language::all();
         $city = city::where('parent_id',0)->get();
         $area = city::where('parent_id','!=',0)->get();
-        return view('admin.agent',compact('agent','city','area'));
+        return view('admin.agent',compact('agent','city','area','language'));
     }
 
     public function editAgent($id){

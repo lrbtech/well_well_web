@@ -15,13 +15,13 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>Customer <span>Dashboard  </span></h2>
+                  <h2>{{$language[141][Auth::user()->lang]}} <span>{{$language[1][Auth::user()->lang]}}  </span></h2>
                
                 </div>
                 <div class="col-lg-6 breadcrumb-right">
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html"><i class="pe-7s-home"></i></a></li>
-                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item"><a href="/user/dashboard"><i class="pe-7s-home"></i></a></li>
+                    <li class="breadcrumb-item">{{$language[1][Auth::user()->lang]}}</li>
                     <li class="breadcrumb-item active"> </li>
                   </ol>
                 </div>
@@ -44,7 +44,7 @@
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
                                 <h6 class="f-w-100 m-l-10">{{$total_shipment}}</h6>
-                                <h4 class="mb-0 f-w-700 m-l-10">Total Shipment</h4>
+                                <h4 class="mb-0 f-w-700 m-l-10">{{$language[70][Auth::user()->lang]}} <br>{{$language[18][Auth::user()->lang]}}</h4>
                               </div>
                             </div>
                           </div>
@@ -104,7 +104,7 @@
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
                                 <h6 class="f-w-100 m-l-10">AED {{$current_month_value}}</h6>
-                                <h4 class="mb-0 f-w-700 m-l-10">Current Month Transaction</h4>
+                                <h4 class="mb-0 f-w-700 m-l-10">{{$language[142][Auth::user()->lang]}} <br>{{$language[143][Auth::user()->lang]}}</h4>
                               </div>
                             </div>
                           </div>
@@ -118,7 +118,7 @@
            <div class="col-xl-8 xl-100 box-col-12">
                 <div class="card">
                   <div class="card-header no-border">
-                    <h5>Last Shipment Details</h5>
+                    <h5>{{$language[7][Auth::user()->lang]}}</h5>
                     <ul class="creative-dots">
                       <li class="bg-primary big-dot"></li>
                       <li class="bg-secondary semi-big-dot"></li>
@@ -157,35 +157,35 @@
                               </h5>
                             </td>
                             <td class="f-w-700">AED {{$row->total}}</td>
-                            <td>
+                            <td class="f-w-700">
                               <h6 class="mb-0">
                               <?php
                               if($row->status == 0){
-                                echo 'Pending';
+                                echo '<button class="btn btn-shadow-primary">Shipment Created</button>';
                               }
                               elseif($row->status == 1){
-                                  echo 'Approved';
+                                echo '<button class="btn btn-shadow-primary">Schedule for Pickup</button>';
                               }
                               elseif($row->status == 2){
-                                  echo 'Package Collected';
+                                echo '<button class="btn btn-shadow-primary">Package Collected</button>';
                               }
                               elseif($row->status == 3){
-                                  echo 'Exception';
+                                echo '<button class="btn btn-shadow-primary">Exception</button>';
                               }
                               elseif($row->status == 4){
-                                  echo 'Received Station Hub';
+                                echo '<button class="btn btn-shadow-primary">Transit In</button>';
                               }
                               elseif($row->status == 5){
-                                  echo 'Assign Agent to Transit Out (Hub)';
+                                echo '<button class="btn btn-shadow-primary">Assign Agent to Transit Out (Hub)</button>';
                               }
                               elseif($row->status == 6){
-                                  echo 'Other Transit in Received (Hub)';
+                                echo '<button class="btn btn-shadow-primary">Transit Out</button>';
                               }
                               elseif($row->status == 7){
-                                  echo 'Assign Agent to Delivery';
+                                echo '<button class="btn btn-shadow-primary">In the Van for Delivery</button>';
                               }
                               elseif($row->status == 8){
-                                  echo 'Shipment delivered';
+                                echo '<button class="btn btn-shadow-primary">Shipment delivered</button>';
                               }
                               ?>
                               </h6>

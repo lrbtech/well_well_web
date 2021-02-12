@@ -10,8 +10,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>View <span>Shipment  </span></h2> 
-                  <h6 class="mb-0">Admin Panel</h6>
+                  <h2>{{$language[3][Auth::guard('admin')->user()->lang]}} <span>{{$language[92][Auth::guard('admin')->user()->lang]}}  </span></h2> 
+                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -42,13 +42,14 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Shipment Date</th>
-                            <th>Shipment Time</th>
-                            <th>Shipment Mode</th>
-                            <th>From Address</th>
-                            <th>To Address</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>User ID</th>
+                            <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[24][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[28][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -192,7 +193,8 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
-        { data: 'order_id', name: 'order_id' },
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'user_id', name: 'user_id' },
         { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_time', name: 'shipment_time' },
         { data: 'shipment_mode', name: 'shipment_mode' },
@@ -229,7 +231,6 @@ function PrintLabel(id){
             window.location.href="/admin/shipment";
         }
         //PrintDiv(data);
-        
     }
   });
 }

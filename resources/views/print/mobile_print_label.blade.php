@@ -129,6 +129,13 @@ th {
                 </div>
                 <p class="m-0">
                 <!-- {{$from_address->address1}} {{$from_address->address2}} {{$from_address->address3}} -->
+                @if($row->sender_id == 0)
+                {{$from_address->contact_name}}<br>
+                {{$from_address->contact_mobile}}<br>
+                @else 
+                {{$user->first_name}} {{$user->last_name}}<br>
+                {{$user->mobile}}<br>
+                @endif
                 @foreach($area as $area1)
                 @if($area1->id == $from_address->area_id)
                 {{$area1->city}}
@@ -170,11 +177,23 @@ th {
         </div>
 
         <div class="d-flex justify-between pt-2 pb-2" style="border-bottom: 1px solid #cdcdcd;">
-            <div class="text-center"> 
-            <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($row->order_id, 'C39',1,60)}}" alt="barcode"   />
+        <div class="text-center"> 
+            <!-- <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($row->order_id, 'C39',1,60)}}" alt="barcode"   /> -->
+
+            <p class="m-0 pt-2"><strong>
+            @foreach($package_category as $cat)
+            @if($cat->id == $row->category)
+            {{$cat->category}}
+            @endif
+            @endforeach
+            </strong>
+            <br>
+            <strong>{{$row->description}}
+            </strong></p>
     
             </div>
             <div class="">
+                <div><img src="http://wellwell.ae/assets/images/logo.png" alt="" height="50" width="70"></div>
                 <div class="pt-2 text-center">
                     <!-- <strong style="
                     font-size: 27px;
@@ -186,11 +205,8 @@ th {
             </div>
         </div>
         <div class="d-flex justify-between pt-2 ">
-
             <div style="font-size: 16px;">{{$key + 1}} of {{$shipment_count}}</div>
             <!-- <div style="font-size: 16px;"><strong>H2</strong></div> -->
-
-
         </div>
         <div class="d-flex justify-between pt-2 ">
             <div>
@@ -201,17 +217,17 @@ th {
                     <div style="font-size: 20px;"><strong>7654321</strong></div>
                 </div> -->
                 <div style="font-size: 18px;"><strong>Your Tracking ID</strong></div>
-                <div style="font-size: 25px;"><strong>{{$row->barcode_package}}</strong></div>
+                <div style="font-size: 25px;"><strong>{{$row->sku_value}}</strong></div>
             </div>
             <div>
 
-                <div style="font-size: 18px;float:right;"><strong>{{$row->station}}</strong></div>
+                <div style="font-size: 24px;float:right;"><strong>{{$row->station}}</strong></div>
                 <!-- <div style="font-size: 18px;text-align: right;"><strong>SY20 9HI</strong></div>
                 <div style="font-size: 18px;text-align: right;"><strong>SNI</strong></div> -->
             </div>
         </div>
         <div class="pt-2 text-center"> 
-        <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($row->barcode_package, 'C39',1,50)}}" alt="barcode"   />
+        <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($row->sku_value, 'C39',1,50)}}" alt="barcode"   />
         </div>
         @if($row->status == 3)
         <br>

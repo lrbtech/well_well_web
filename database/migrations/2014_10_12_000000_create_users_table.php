@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('date')->nullable();
+            $table->string('customer_id')->nullable();
             $table->string('user_type')->nullable();    
             $table->string('first_name')->nullable();   
             $table->string('last_name')->nullable(); 
@@ -49,6 +50,7 @@ class CreateUsersTable extends Migration
             $table->string('sales_date_time')->nullable();
             $table->string('accounts_user_id')->nullable();  
             $table->string('accounts_date_time')->nullable();
+            $table->string('lang')->default('english');
             $table->rememberToken();
             $table->timestamps();
         });

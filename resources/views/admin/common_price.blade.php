@@ -10,8 +10,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>View <span>Common Price  </span></h2>
-                  <h6 class="mb-0">admin panel</h6>
+                  <h2>{{$language[3][Auth::guard('admin')->user()->lang]}} <span>{{$language[136][Auth::guard('admin')->user()->lang]}}  </span></h2>
+                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -40,9 +40,9 @@
                         <table id="productTable" class="display" id="basic-1">
                             <thead class="thead-primary">
                                 <tr style="text-align: center;">
-                                    <th>Weight from</th>
-                                    <th>Weight to</th>
-                                    <th>Price</th>
+                                    <th>{{$language[137][Auth::guard('admin')->user()->lang]}}</th>
+                                    <th>{{$language[138][Auth::guard('admin')->user()->lang]}}</th>
+                                    <th>{{$language[139][Auth::guard('admin')->user()->lang]}}</th>
                                     <th style="width: 3%;padding: .0rem !important;">
                                         <button type="button" class="btn btn-default" onclick="addRow()" id="addRowBtn" data-loading-text="Loading..."> <i class="fa fa-plus" aria-hidden="true"></i></button>
                                     </th>
@@ -70,7 +70,7 @@
                   </div>
 
                   <div class="card-footer text-right">
-                    <button onclick="SavePrice()" class="btn btn-primary m-r-15" type="button">Update Price</button>
+                    <button onclick="SavePrice()" class="btn btn-primary m-r-15" type="button">{{$language[140][Auth::guard('admin')->user()->lang]}}</button>
                     <button class="btn btn-light" type="button">Cancel</button>
                   </div>
 

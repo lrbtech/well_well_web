@@ -113,7 +113,9 @@ visibility: visible;
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
+                                    @if(Auth::guard('admin')->user()->role_id == '0')
                                     <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#">Delete</a>
+                                    @endif
                                 </div>
                             </td>
                           </tr>

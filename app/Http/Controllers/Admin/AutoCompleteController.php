@@ -15,6 +15,7 @@ use App\Models\shipment_notification;
 use App\Models\User;
 use App\Models\add_rate;
 use App\Models\add_rate_item;
+use App\Models\settings;
 use DB;
 use Auth;
 class AutoCompleteController extends Controller
@@ -30,9 +31,11 @@ class AutoCompleteController extends Controller
         $availableResults = DB::table('users')
             //->select('id,name,register_number,mobile')
             ->where('first_name', 'like', '%' . $search_term . '%')
-            ->where('last_name', 'like', '%' . $search_term . '%')
+            ->orWhere('last_name', 'like', '%' . $search_term . '%')
             ->orWhere('email', 'like', '%' . $search_term . '%')
             ->orWhere('mobile', 'like', '%' . $search_term . '%')
+            ->orWhere('customer_id', 'like', '%' . $search_term . '%')
+            ->where('status', 4)
             ->get();
     
         if(!empty($availableResults)){     
@@ -40,8 +43,8 @@ class AutoCompleteController extends Controller
             $data['message'] = array();       
             foreach ($availableResults as $key => $value) {                
                 $data['message'][] = array(  
-                    'label' => $value->first_name.'-'.$value->mobile,
-                    'value' => $value->first_name.'-'.$value->mobile,
+                    'label' => $value->customer_id.'-'.$value->first_name.$value->last_name.'-'.$value->mobile,
+                    'value' => $value->customer_id.'-'.$value->first_name.$value->last_name.'-'.$value->mobile,
                     'id'=>$value->id,
                     'first_name'=>$value->first_name,
                     'last_name'=>$value->last_name,
@@ -60,7 +63,9 @@ class AutoCompleteController extends Controller
     public function getUserId($id)
     {
     $data = add_rate::where('user_id',$id)->first();
-    return response()->json($data); 
+    $settings = settings::find(1);
+    return response()->json(['data'=>$data , 'settings'=>$settings]);
+    //return response()->json($data); 
     }
 
     public function getFromAddress(Request $request){

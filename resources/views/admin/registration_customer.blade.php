@@ -38,6 +38,7 @@
                       <table class="display" id="basic-1">
                         <thead>
                           <tr>
+                          <th>ID</th>
                             <th>Business Type</th>
                             <th>Name</th>
                             <th>Email</th>
@@ -50,6 +51,7 @@
                         @foreach($customer as $key => $row)
                         @if($row->status == 1)
                           <tr>
+                          <td>{{$row->customer_id}}</td>
                             <td>
                               @if($row->user_type == 0)
                               Individual Business

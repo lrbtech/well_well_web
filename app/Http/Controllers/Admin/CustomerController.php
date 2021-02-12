@@ -11,6 +11,7 @@ use App\Models\add_rate_item;
 use App\Models\country;
 use App\Models\city;
 use App\Models\settings;
+use App\Models\language;
 use Auth;
 use Mail;
 
@@ -27,18 +28,19 @@ class CustomerController extends Controller
         $customer = User::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
         $settings = settings::find(1);
+        $language = language::all();
 
         if(Auth::guard('admin')->user()->role_id == 1){
-            return view('admin.admin_customer',compact('customer','role_get','settings'));
+            return view('admin.admin_customer',compact('customer','role_get','settings', 'language' ));
         }
         elseif(Auth::guard('admin')->user()->role_id == 2){
-            return view('admin.registration_customer',compact('customer','role_get','settings'));
+            return view('admin.registration_customer',compact('customer','role_get','settings', 'language'));
         }
         elseif(Auth::guard('admin')->user()->role_id == 3){
-            return view('admin.sales_customer',compact('customer','role_get','settings'));
+            return view('admin.sales_customer',compact('customer','role_get','settings','language'));
         }
         elseif(Auth::guard('admin')->user()->role_id == 4){
-            return view('admin.accounts_customer',compact('customer','role_get','settings'));
+            return view('admin.accounts_customer',compact('customer','role_get','settings','language'));
         }
     }
 
@@ -208,8 +210,9 @@ class CustomerController extends Controller
         $rate_item = add_rate_item::where('user_id',$id)->get();
 
         $customer = User::find($id);
+        $settings = settings::find(1);
         
-        return view('admin.profile',compact('rate','rate_item','customer','country','city','area'));
+        return view('admin.profile',compact('rate','rate_item','customer','country','city','area','settings'));
     }
 
 
@@ -217,6 +220,7 @@ class CustomerController extends Controller
 public function editRateCard($id)
 {
 $data = add_rate::where('user_id',$id)->first();
+$settings = settings::find(1);
 $output='<div class="row service_area">
 <div class="form-group col-md-3">
   <div class="checkbox checkbox-primary">';
@@ -228,7 +232,7 @@ $output='<div class="row service_area">
   }
     $output.='<label for="insurance_enable">Insurance (%)</label>
   </div>
-  <input value="'.$data->insurance_percentage.'" readonly autocomplete="off" type="text" id="insurance_percentage" name="insurance_percentage" class="form-control">
+  <input value="'.$settings->insurance_percentage.'" readonly autocomplete="off" type="text" id="insurance_percentage" name="insurance_percentage" class="form-control">
 </div>
 <div class="form-group col-md-3">
   <div class="checkbox checkbox-primary">';
@@ -240,7 +244,7 @@ $output='<div class="row service_area">
   }
   $output.='<label for="vat_enable">Vat (%)</label>
   </div>
-  <input value="'.$data->vat_percentage.'" readonly autocomplete="off" type="text" id="vat_percentage" name="vat_percentage" class="form-control">
+  <input value="'.$settings->vat_percentage.'" readonly autocomplete="off" type="text" id="vat_percentage" name="vat_percentage" class="form-control">
 </div>
 <div class="form-group col-md-3">
   <div class="checkbox checkbox-primary">';
@@ -252,7 +256,7 @@ $output='<div class="row service_area">
   }
   $output.='<label for="postal_charge_enable">Postal Charge (%)</label>
   </div>
-  <input value="'.$data->postal_charge_percentage.'" readonly autocomplete="off" type="text" id="postal_charge_percentage" name="postal_charge_percentage" class="form-control">
+  <input value="'.$settings->postal_charge_percentage.'" readonly autocomplete="off" type="text" id="postal_charge_percentage" name="postal_charge_percentage" class="form-control">
 </div>
 <div class="form-group col-md-3">
   <div class="checkbox checkbox-primary">';

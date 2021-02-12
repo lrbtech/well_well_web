@@ -207,327 +207,46 @@
       <div class="vertical-menu-main">
         <nav id="main-nav">
           <!-- Sample menu definition-->
-          <ul class="sm pixelstrap custom-scrollbar" id="main-menu" data-smartmenus-id="16111720102752585">
+          <ul class="sm pixelstrap custom-scrollbar" id="main-menu">
             <li>
               <div class="text-right mobile-back">Back<i class="fa fa-angle-right pl-2" aria-hidden="true"></i></div>
             </li>
-            {{-- <li><a href="#" class="has-submenu" id="sm-16111720102752585-1" aria-haspopup="true" aria-controls="sm-16111720102752585-2" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home font-primary"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Dashboard<span class="sub-arrow"></span></a>
-              <ul id="sm-16111720102752585-2" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-1" aria-expanded="false" class="sm-nowrap" style="width: auto; min-width: 10em; display: none; max-width: 20em; top: auto; left: 0px; margin-left: 0px; margin-top: 0px;">
-                <li><a href="index.html">Default</a></li>
-                <li><a href="dashboard-crypto.html">Crypto</a></li>
-                <li><a href="dashboard-ecommerce.html">Ecommerce</a></li>
-              </ul>
-            </li> --}}
             
-            <li>
-              <a class="sidebar-header" href="/user/dashboard">
+            <li class="dashboard">
+              <a class="sidebar-header dashboard" href="/user/dashboard">
                 <i data-feather="home"></i>
                 <span> Dashboard</span>
               </a>
             </li>
 
-            <li>
-              <a class="sidebar-header" href="/user/new-shipment">
+            <li class="new-shipment">
+              <a class="sidebar-header new-shipment" href="/user/new-shipment">
               <i data-feather="folder-plus"></i>
               <span> New Shipment</span>
               </a>
             </li>
 
-            <li>
-              <a class="sidebar-header" href="/user/shipment">
+            <li class="new-shipment">
+              <a class="sidebar-header pending-shipment" href="/user/pending-shipment">
+              <i data-feather="folder-plus"></i>
+              <span> Pending Shipment</span>
+              </a>
+            </li>
+
+            <li class="shipment">
+              <a class="sidebar-header shipment" href="/user/shipment">
               <i data-feather="eye"></i>
               <span> View Shipment</span>
               </a>
             </li>
             
-            <li>
-              <a class="sidebar-header" href="/user/edit-profile">
+            <li class="profile">
+              <a class="sidebar-header profile" href="/user/edit-profile">
               <i data-feather="settings"></i>
               <span> Profile</span>
               </a>
             </li>
 
-            {{-- <li><a href="#" class="has-submenu" id="sm-16111720102752585-3" aria-haspopup="true" aria-controls="sm-16111720102752585-4" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay font-primary"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg> Widgets<span class="sub-arrow"></span></a>
-              <ul id="sm-16111720102752585-4" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-3" aria-expanded="false">
-                <li><a href="general-widget.html">General</a></li>
-                <li><a href="chart-widget.html">Chart</a></li>
-              </ul>
-            </li>
-            <li><a class="sidebar-header" href="../starter-kit/index.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-anchor font-primary"><circle cx="12" cy="5" r="3"></circle><line x1="12" y1="22" x2="12" y2="8"></line><path d="M5 12H2a10 10 0 0 0 20 0h-3"></path></svg><span> Starter kit</span></a></li>
-            <li><a href="#" class="has-submenu" id="sm-16111720102752585-5" aria-haspopup="true" aria-controls="sm-16111720102752585-6" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layout font-primary"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg> Menu Options<span class="sub-arrow"></span></a>
-              <ul id="sm-16111720102752585-6" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-5" aria-expanded="false">
-                <li class="active"><a href="hide-on-scroll.html">Hide menu on Scroll</a></li>
-                <li><a class="current" href="vertical.html">Vertical Menu</a></li>
-                <li><a href="mega-menu.html">Mega Menu</a></li>
-                <li><a href="fix-header.html">Fix header</a></li>
-              </ul>
-            </li>
-            <li><a href="#" class="has-submenu" id="sm-16111720102752585-7" aria-haspopup="true" aria-controls="sm-16111720102752585-8" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit font-primary"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg> Builder<span class="sub-arrow"></span></a>
-              <ul id="sm-16111720102752585-8" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-7" aria-expanded="false">
-                <li><a href="form-builder-1.html">Form Builder 1</a></li>
-                <li><a href="button-builder.html">Button Builder</a></li>
-              </ul>
-            </li>
-            <li><a href="#" class="has-submenu" id="sm-16111720102752585-9" aria-haspopup="true" aria-controls="sm-16111720102752585-10" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder font-primary"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg> Components<span class="sub-arrow"></span></a>
-              <ul id="sm-16111720102752585-10" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-9" aria-expanded="false">
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-11" aria-haspopup="true" aria-controls="sm-16111720102752585-12" aria-expanded="false"><span> Base</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-12" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-11" aria-expanded="false">
-                    <li><a href="state-color.html">State color</a></li>
-                    <li><a href="typography.html">Typography</a></li>
-                    <li><a href="helper-classes.html">helper classes</a></li>
-                    <li><a href="grid.html">Grid</a></li>
-                    <li><a href="tag-pills.html">Tag &amp; pills</a></li>
-                    <li><a href="progress-bar.html">Progress</a></li>
-                    <li><a href="modal.html">Modal</a></li>
-                    <li><a href="alert.html">Alert</a></li>
-                    <li><a href="popover.html">Popover</a></li>
-                    <li><a href="tooltip.html">Tooltip</a></li>
-                    <li><a href="loader.html">Spinners</a></li>
-                    <li><a href="dropdown.html">Dropdown</a></li>
-                    <li><a href="#" class="has-submenu" id="sm-16111720102752585-13" aria-haspopup="true" aria-controls="sm-16111720102752585-14" aria-expanded="false">Tabs<span class="sub-arrow"></span></a>
-                      <ul class="sidebar-submenu" id="sm-16111720102752585-14" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-13" aria-expanded="false">
-                        <li><a href="tab-bootstrap.html">Bootstrap Tabs</a></li>
-                        <li><a href="tab-material.html">Line Tabs</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="according.html">According</a></li>
-                    <li><a href="navs.html">Navs</a></li>
-                    <li><a href="list.html">Lists</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-15" aria-haspopup="true" aria-controls="sm-16111720102752585-16" aria-expanded="false"><span> Advance</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-16" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-15" aria-expanded="false">
-                    <li><a href="scrollable.html">Scrollable</a></li>
-                    <li><a href="tree.html">Tree view</a></li>
-                    <li><a href="bootstrap-notify.html">Bootstrap Notify</a></li>
-                    <li><a href="rating.html">Rating</a></li>
-                    <li><a href="dropzone.html">dropzone</a></li>
-                    <li><a href="tour.html">Tour</a></li>
-                    <li><a href="sweet-alert2.html">SweetAlert2</a></li>
-                    <li><a href="modal-animated.html">Animated Modal</a></li>
-                    <li><a href="owl-carousel.html">Owl Carousel</a></li>
-                    <li><a href="ribbons.html">Ribbons</a></li>
-                    <li><a href="pagination.html">Pagination</a></li>
-                    <li><a href="steps.html">Steps</a></li>
-                    <li><a href="breadcrumb.html">Breadcrumb</a></li>
-                    <li><a href="range-slider.html">Range Slider</a></li>
-                    <li><a href="image-cropper.html">Image cropper</a></li>
-                    <li><a href="sticky.html">Sticky</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-17" aria-haspopup="true" aria-controls="sm-16111720102752585-18" aria-expanded="false"><span>Animation</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-18" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-17" aria-expanded="false">
-                    <li><a href="animate.html">Animate</a></li>
-                    <li><a href="scroll-reval.html">Scroll Reveal</a></li>
-                    <li><a href="AOS.html">AOS animation</a></li>
-                    <li><a href="tilt.html">Tilt Animation</a></li>
-                    <li><a href="wow.html">Wow Animation</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-19" aria-haspopup="true" aria-controls="sm-16111720102752585-20" aria-expanded="false"><span>Icons</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-20" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-19" aria-expanded="false">
-                    <li><a href="flag-icon.html">Flag icon</a></li>
-                    <li><a href="font-awesome.html">Fontawesome Icon</a></li>
-                    <li><a href="ico-icon.html">Ico Icon</a></li>
-                    <li><a href="themify-icon.html">Thimify Icon</a></li>
-                    <li><a href="whether-icon.html">Whether Icon</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header" href="buttons.html"><span>Buttons</span></a></li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-21" aria-haspopup="true" aria-controls="sm-16111720102752585-22" aria-expanded="false"><span>Forms</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-22" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-21" aria-expanded="false">
-                    <li><a href="#" class="has-submenu" id="sm-16111720102752585-23" aria-haspopup="true" aria-controls="sm-16111720102752585-24" aria-expanded="false">Form Controls<span class="sub-arrow"></span></a>
-                      <ul class="sidebar-submenu" id="sm-16111720102752585-24" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-23" aria-expanded="false">
-                        <li><a href="form-validation.html">Form Validation</a></li>
-                        <li><a href="base-input.html">Base Inputs</a></li>
-                        <li><a href="radio-checkbox-control.html">Checkbox &amp; Radio</a></li>
-                        <li><a href="input-group.html">Input Groups</a></li>
-                        <li><a href="megaoptions.html">Mega Options</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#" class="has-submenu" id="sm-16111720102752585-25" aria-haspopup="true" aria-controls="sm-16111720102752585-26" aria-expanded="false">Form Widgets<span class="sub-arrow"></span></a>
-                      <ul class="sidebar-submenu" id="sm-16111720102752585-26" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-25" aria-expanded="false">
-                        <li><a href="datepicker.html">Datepicker</a></li>
-                        <li><a href="time-picker.html">Timepicker</a></li>
-                        <li><a href="datetimepicker.html">Datetimepicker </a></li>
-                        <li><a href="daterangepicker.html">Daterangepicker </a></li>
-                        <li><a href="touchspin.html">Touchspin</a></li>
-                        <li><a href="select2.html">Select2</a></li>
-                        <li><a href="switch.html">Switch</a></li>
-                        <li><a href="typeahead.html">Typeahead</a></li>
-                        <li><a href="clipboard.html">Clipboard</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="font-awesome.html" class="has-submenu" id="sm-16111720102752585-27" aria-haspopup="true" aria-controls="sm-16111720102752585-28" aria-expanded="false">Form Layout<span class="sub-arrow"></span></a>
-                      <ul class="sidebar-submenu" id="sm-16111720102752585-28" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-27" aria-expanded="false">
-                        <li><a href="default-form.html">Default Forms</a></li>
-                        <li><a href="form-wizard.html">Form Wizard 1</a></li>
-                        <li><a href="form-wizard-two.html">Form Wizard 2</a></li>
-                        <li><a href="form-wizard-three.html">Form Wizard 3</a></li>
-                        <li><a href="form-wizard-four.html">Form Wizard 4</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-29" aria-haspopup="true" aria-controls="sm-16111720102752585-30" aria-expanded="false"><span>Tables</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-30" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-29" aria-expanded="false">
-                    <li><a href="#" class="has-submenu" id="sm-16111720102752585-31" aria-haspopup="true" aria-controls="sm-16111720102752585-32" aria-expanded="false">Bootstrap Tables<span class="sub-arrow"></span></a>
-                      <ul class="sidebar-submenu" id="sm-16111720102752585-32" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-31" aria-expanded="false">
-                        <li><a href="bootstrap-basic-table.html">Basic Tables</a></li>
-                        <li><a href="bootstrap-sizing-table.html">Sizing Tables</a></li>
-                        <li><a href="bootstrap-border-table.html">Border Tables</a></li>
-                        <li><a href="bootstrap-styling-table.html">Styling Tables</a></li>
-                        <li><a href="table-components.html">Table components</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#" class="has-submenu" id="sm-16111720102752585-33" aria-haspopup="true" aria-controls="sm-16111720102752585-34" aria-expanded="false">Data Tables<span class="sub-arrow"></span></a>
-                      <ul class="sidebar-submenu" id="sm-16111720102752585-34" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-33" aria-expanded="false">
-                        <li><a href="datatable-basic-init.html">Basic Init</a></li>
-                        <li><a href="datatable-advance.html">Advance Init</a></li>
-                        <li><a href="datatable-styling.html">Styling</a></li>
-                        <li><a href="datatable-AJAX.html">AJAX</a></li>
-                        <li><a href="datatable-server-side.html">Server Side</a></li>
-                        <li><a href="datatable-plugin.html">Plug-in</a></li>
-                        <li><a href="datatable-API.html">API</a></li>
-                        <li><a href="datatable-data-source.html">Data Sources</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#" class="has-submenu" id="sm-16111720102752585-35" aria-haspopup="true" aria-controls="sm-16111720102752585-36" aria-expanded="false">Extension Data Tables<span class="sub-arrow"></span></a>
-                      <ul class="sidebar-submenu" id="sm-16111720102752585-36" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-35" aria-expanded="false">
-                        <li><a href="datatable-ext-autofill.html">Auto Fill</a></li>
-                        <li><a href="datatable-ext-basic-button.html">Basic Button</a></li>
-                        <li><a href="datatable-ext-col-reorder.html">Column Reorder</a></li>
-                        <li><a href="datatable-ext-fixed-header.html">Fixed Header</a></li>
-                        <li><a href="datatable-ext-html-5-data-export.html">HTML 5 Export</a></li>
-                        <li><a href="datatable-ext-key-table.html">Key Table</a></li>
-                        <li><a href="datatable-ext-responsive.html">Responsive</a></li>
-                        <li><a href="datatable-ext-row-reorder.html">Row Reorder</a></li>
-                        <li><a href="datatable-ext-scroller.html">Scroller</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="jsgrid-table.html">Js Grid Tables</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-37" aria-haspopup="true" aria-controls="sm-16111720102752585-38" aria-expanded="false"><span>Cards</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-38" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-37" aria-expanded="false">
-                    <li><a href="basic-card.html">Basic Card</a></li>
-                    <li><a href="theme-card.html">Theme Card</a></li>
-                    <li><a href="tabbed-card.html">Tabbed Card</a></li>
-                    <li><a href="dragable-card.html">Draggable Card</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-39" aria-haspopup="true" aria-controls="sm-16111720102752585-40" aria-expanded="false"><span>Charts</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-40" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-39" aria-expanded="false">
-                    <li><a href="chart-google.html">Google Chart</a></li>
-                    <li><a href="chart-sparkline.html">sparkline chart</a></li>
-                    <li><a href="chart-flot.html">Flot Chart</a></li>
-                    <li><a href="chart-morris.html">Morris Chart</a></li>
-                    <li><a href="chartjs.html">chatjs Chart</a></li>
-                    <li><a href="chartist.html">chatist Chart</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-41" aria-haspopup="true" aria-controls="sm-16111720102752585-42" aria-expanded="false"><span>Maps</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-42" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-41" aria-expanded="false">
-                    <li><a href="map-js.html">Map Js</a></li>
-                    <li><a href="vector-map.html">Vector Maps</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-43" aria-haspopup="true" aria-controls="sm-16111720102752585-44" aria-expanded="false"><span>Editors</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-44" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-43" aria-expanded="false">
-                    <li><a href="summernote.html">Summer Note</a></li>
-                    <li><a href="ckeditor.html">CK editor</a></li>
-                    <li><a href="simple-MDE.html">MDE editor</a></li>
-                    <li><a href="ace-code-editor.html">ACE code editor</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#" class="has-submenu" id="sm-16111720102752585-45" aria-haspopup="true" aria-controls="sm-16111720102752585-46" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase font-primary"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Apps<span class="sub-arrow"></span></a>
-              <ul id="sm-16111720102752585-46" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-45" aria-expanded="false">
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-47" aria-haspopup="true" aria-controls="sm-16111720102752585-48" aria-expanded="false"><span>Users</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-48" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-47" aria-expanded="false">
-                    <li><a href="user-profile.html">Users Profile</a></li>
-                    <li><a href="edit-profile.html">Users Edit</a></li>
-                    <li><a href="user-cards.html">Users Cards</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-49" aria-haspopup="true" aria-controls="sm-16111720102752585-50" aria-expanded="false"><span>Calender</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-50" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-49" aria-expanded="false">
-                    <li><a href="calendar.html">Full Calender Basic</a></li>
-                    <li><a href="calendar-event.html">Full Calender Events </a></li>
-                    <li><a href="calendar-advanced.html">Full Calender Advance </a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-51" aria-haspopup="true" aria-controls="sm-16111720102752585-52" aria-expanded="false"><span>Gallery</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-52" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-51" aria-expanded="false">
-                    <li><a href="gallery.html">Gallery Grid</a></li>
-                    <li><a href="gallery-with-description.html">Gallery Grid with Desc</a></li>
-                    <li><a href="gallery-masonry.html">Masonry Gallery</a></li>
-                    <li><a href="masonry-gallery-with-disc.html">Masonry Gallery Desc</a></li>
-                    <li><a href="gallery-hover.html">Hover Effects</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-53" aria-haspopup="true" aria-controls="sm-16111720102752585-54" aria-expanded="false"><span>Email</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-54" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-53" aria-expanded="false">
-                    <li><a href="email-application.html">Email App</a></li>
-                    <li><a href="email-compose.html">Email Compose</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-55" aria-haspopup="true" aria-controls="sm-16111720102752585-56" aria-expanded="false"><span> Blog</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-56" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-55" aria-expanded="false">
-                    <li><a href="blog.html">Blog Details</a></li>
-                    <li><a href="blog-single.html">Blog Single</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-57" aria-haspopup="true" aria-controls="sm-16111720102752585-58" aria-expanded="false"><span>chat</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-58" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-57" aria-expanded="false">
-                    <li><a href="chat.html">Chat App</a></li>
-                    <li><a href="chat-video.html">Video chat              </a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header" href="support-ticket.html"><span>Support Ticket</span></a></li>
-                <li><a class="sidebar-header" href="to-do.html"><span>To-Do</span></a></li>
-                <li><a class="sidebar-header" href="../index.html"><span>Landing page</span></a></li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-59" aria-haspopup="true" aria-controls="sm-16111720102752585-60" aria-expanded="false"><span>Ecommerce</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-60" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-59" aria-expanded="false">
-                    <li><a href="product.html">Product</a></li>
-                    <li><a href="product-page.html">Product page</a></li>
-                    <li><a href="list-products.html">Product list</a></li>
-                    <li><a href="payment-details.html">Payment Details</a></li>
-                    <li><a href="invoice-template.html">Invoice</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header" href="pricing.html"><span> Pricing</span></a></li>
-              </ul>
-            </li>
-            <li><a href="#" class="has-submenu" id="sm-16111720102752585-61" aria-haspopup="true" aria-controls="sm-16111720102752585-62" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus font-primary"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg> Pages<span class="sub-arrow"></span></a>
-              <ul id="sm-16111720102752585-62" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-61" aria-expanded="false">
-                <li><a class="sidebar-header" href="sample-page.html"><span> Sample page</span></a></li>
-                <li><a class="sidebar-header" href="search.html"><span>Search Website</span></a></li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-63" aria-haspopup="true" aria-controls="sm-16111720102752585-64" aria-expanded="false"><span> Error Page</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-64" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-63" aria-expanded="false">
-                    <li><a href="error-400.html">Error 400</a></li>
-                    <li><a href="error-404.html">Error 404</a></li>
-                    <li><a href="error-500.html">Error 500</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-65" aria-haspopup="true" aria-controls="sm-16111720102752585-66" aria-expanded="false"><span> Authentication</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-66" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-65" aria-expanded="false">
-                    <li><a href="login.html">Login Simple</a></li>
-                    <li><a href="signup.html">Register Simple </a></li>
-                    <li><a href="forget-password.html">Forget Password</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header has-submenu" href="#" id="sm-16111720102752585-67" aria-haspopup="true" aria-controls="sm-16111720102752585-68" aria-expanded="false"><span>Coming Soon</span><span class="sub-arrow"></span></a>
-                  <ul class="sidebar-submenu" id="sm-16111720102752585-68" role="group" aria-hidden="true" aria-labelledby="sm-16111720102752585-67" aria-expanded="false">
-                    <li><a href="comingsoon.html">Coming Simple</a></li>
-                    <li><a href="comingsoon-bg-img.html">Coming with Bg Image </a></li>
-                    <li><a href="comingsoon-bg-video.html">Coming with Bg video</a></li>
-                  </ul>
-                </li>
-                <li><a class="sidebar-header" href="maintenance.html"><span> Maintenance</span></a></li>
-              </ul>
-            </li> --}}
           </ul>
         </nav>
       </div>
@@ -640,11 +359,13 @@
     <script src="{{ asset('sweetalert2/sweetalert2.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
     @yield('extra-js')
-    <script src="/assets/app-assets/js/vertical-menu.js"></script>
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="/assets/app-assets/js/script.js"></script>
     <script src="/assets/app-assets/js/theme-customizer/customizer.js"></script>
+    <script src="/assets/app-assets/js/jquery.drilldown.js"></script>
+    <script src="/assets/app-assets/js/vertical-menu.js"></script>
+    <script src="/assets/app-assets/js/megamenu.js"></script>
     <!-- login js-->
     <!-- Plugin used-->
     <script src="{{ asset('assets/toastr/toastr.min.js')}}" type="text/javascript"></script>

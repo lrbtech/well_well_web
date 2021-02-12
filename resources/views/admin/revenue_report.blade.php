@@ -10,8 +10,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>Shipment <span>Report  </span></h2> 
-                  <h6 class="mb-0">Admin Panel</h6>
+                  <h2>{{$language[18][Auth::guard('admin')->user()->lang]}} <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
+                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -33,17 +33,17 @@
                   <div class="card-header">
                     <div class="row">
                         <div class="form-group col-md-4">
-                            <label>From Date</label>
+                            <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label>To Date</label>
+                            <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
 
                         <div class="form-group col-md-4">
-                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">Search</button>
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}</button>
                         </div>
                     </div>
                   </div>
@@ -53,13 +53,13 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Shipment <brr> Details</th>
-                            <th>Shipment Price</th>
-                            <th>Postal Charge</th>
-                            <th>Vat</th>
-                            <th>Insurance</th>
-                            <th>C.O.D</th>
-                            <th>Total</th>
+                            <th>{{$language[119][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[64][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[66][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[68][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[69][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[54][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[70][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>

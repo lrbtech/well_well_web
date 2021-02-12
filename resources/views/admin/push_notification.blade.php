@@ -74,14 +74,18 @@
                                     @if($row->expiry_date != '')
                                     @if($row->expiry_date >= date('Y-m-d'))
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-edit-alt mr-1"></i> edit</a>
+                                    @if(Auth::guard('admin')->user()->role_id == '0')
                                     <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-trash mr-1"></i> delete</a>
+                                    @endif
                                     <a onclick="SendNotification({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-chat mr-1"></i> Send</a>
                                     @else
                                     <a class="dropdown-item" href="#">Expired</a>
                                     @endif
                                     @else
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-edit-alt mr-1"></i> edit</a>
+                                    @if(Auth::guard('admin')->user()->role_id == '0')
                                     <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-trash mr-1"></i> delete</a>
+                                    @endif
                                     <a onclick="SendNotification({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-chat mr-1"></i> Send</a>
                                     @endif
                                 </div>

@@ -24,8 +24,10 @@ class CreateShipmentPackagesTable extends Migration
             $table->string('height')->nullable();  
             $table->string('chargeable_weight')->nullable();  
             $table->string('status')->default('0'); 
-            $table->string('barcode_package')->nullable();
-            $table->string('barcode_package_image')->nullable();
+            $table->string('sku_value')->nullable();
+            $table->string('exception')->default('0'); 
+            $table->string('exception_category')->nullable();
+            $table->TEXT('exception_remark')->nullable();
             $table->timestamps();
         });
     }

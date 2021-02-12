@@ -11,8 +11,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>View <span>Package Category  </span></h2>
-                  <h6 class="mb-0">admin panel</h6>
+                  <h2>{{$language[3][Auth::guard('admin')->user()->lang]}} <span>{{$language[125][Auth::guard('admin')->user()->lang]}}  </span></h2>
+                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -35,7 +35,7 @@
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
                     <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
-                    <span>New Package Category</span>
+                    <span>{{$language[126][Auth::guard('admin')->user()->lang]}}</span>
                     </button>
                   </div>
                   <div class="card-body">
@@ -44,8 +44,9 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Package Category</th>
-                            <th>Action</th>
+                            <th>{{$language[125][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -54,10 +55,23 @@
                             <td>{{$key+1}}</td>
                             <td>{{$row->category}}</td>
                             <td>
+                            @if($row->status == 0)
+                            Active
+                            @else 
+                            DeActive
+                            @endif
+                            </td>
+                            <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
-                                    <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#">Delete</a>
+                                    @if(Auth::guard('admin')->user()->role_id == '0')
+                                    @if($row->status == 0)
+                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
+                                    @else 
+                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">Active</a>
+                                    @endif
+                                    @endif
                                 </div>
                             </td>
                           </tr>
@@ -191,11 +205,11 @@ function Edit(id){
   });
 }
 
-function Delete(id){
+function Delete(id,status){
     var r = confirm("Are you sure");
     if (r == true) {
       $.ajax({
-        url : '/admin/package-category-delete/'+id,
+        url : '/admin/package-category-delete/'+id+'/'+status,
         type: "GET",
         dataType: "JSON",
         success: function(data)

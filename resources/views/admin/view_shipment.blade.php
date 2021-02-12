@@ -113,30 +113,31 @@ visibility: visible;
                                 <label class="col-form-label">
                                 <?php
                           if($shipment->status == 0){
-                            echo 'New Request';
+                            echo 'Shipment Created';
                         }
                         elseif($shipment->status == 1){
-                            echo 'Approved';
+                            echo 'Schedule for Pickup';
                         }
                         elseif($shipment->status == 2){
                             echo 'Package Collected';
                         }
                         elseif($shipment->status == 3){
-                            echo '
+                            echo '<td>
                             <p>Exception</p>
-                            <p>' . $shipment->exception_remark . '</p>';
+                            <p>' . $shipment->exception_remark . '</p>
+                            </td>';
                         }
                         elseif($shipment->status == 4){
-                            echo 'Received Station Hub';
+                            echo 'Transit In ';
                         }
                         elseif($shipment->status == 5){
                             echo 'Assign Agent to Transit Out (Hub)';
                         }
                         elseif($shipment->status == 6){
-                            echo 'Other Transit in Received (Hub)';
+                            echo 'Transit Out ';
                         }
                         elseif($shipment->status == 7){
-                            echo 'Assign Agent to Delivery';
+                            echo 'In the Van for Delivery';
                         }
                         elseif($shipment->status == 8){
                             echo 'Shipment delivered';

@@ -431,7 +431,7 @@
 
                 <div class="col-md-5">
                     <div class="w-75">
-                        <img loading="lazy" class="mb-4" src="assets/images/logo.png" alt="" width="98" height="94">
+                        <img loading="lazy" class="mb-4" src="assets/images/white-logo-wellwell.png" alt="" width="98" height="94">
 
                         <p>نؤمن أن نجاح عملائنا هو سر نجاحنا
                         </p>

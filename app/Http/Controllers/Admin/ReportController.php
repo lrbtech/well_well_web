@@ -19,6 +19,7 @@ use App\Models\add_rate;
 use App\Models\add_rate_item;
 use App\Models\agent;
 use App\Models\station;
+use App\Models\language;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -38,7 +39,8 @@ class ReportController extends Controller
 
     public function ShipmentReport(){
         $agent=agent::all();
-        return view('admin.shipment_report',compact('agent'));
+        $language = language::all();
+        return view('admin.shipment_report',compact('agent','language'));
     }
 
 
@@ -172,7 +174,8 @@ class ReportController extends Controller
 
     public function RevenueReport(){
         $agent=agent::all();
-        return view('admin.revenue_report',compact('agent'));
+        $language=language::all();
+        return view('admin.revenue_report',compact('agent','language'));
     }
 
 

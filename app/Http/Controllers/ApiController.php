@@ -210,7 +210,10 @@ class ApiController extends Controller
                 'width' => $value->width,
                 'height' => $value->height,
                 'price' => $value->chargeable_weight,
-                'barcode_package' => $value->barcode_package,
+                'barcode_package' => $value->sku_value,
+                'exception' => $value->exception,
+                'exception_category' => $value->exception_category,
+                'exception_remark' => $value->exception_remark,
             );
             $datas[] = $data;
         }   
@@ -403,6 +406,24 @@ class ApiController extends Controller
         return response()->json($data); 
     }
 
+
+    public function updatePackageException(Request $request){
+        try{
+            $shipment = shipment_package::find($request->shipment_id);
+            $shipment->exception = 1;
+            $shipment->exception_category = $request->category;
+            $shipment->exception_remark = $request->remark;
+            $shipment->save();
+            
+           // return response()->json($shipment);
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
 
     public function updatePickup(Request $request){
         try{
@@ -647,11 +668,31 @@ class ApiController extends Controller
         }
     }
 
+    public function scanPackageSku(Request $request){ 
+        //return response()->json($request);
+        try{
+            $check1 = shipment_package::where('sku_value',$request->barcode)->get();
+
+            if(count($check1)>0){
+                $data = array('shipment_id' => (int)$check1[0]->shipment_id,
+                'package_id' => $check1[0]->id);
+                $datas[]=$data;
+                return response()->json($datas, 200);
+            }else{
+                return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
+            }
+        
+        }catch (\Exception $e) {
+            return response()->json($e);
+            return response()->json(['message' => 'Shipment Not Available','status'=>400], 400);
+        }
+    }
+
 
     public function barcodeScan(Request $request){ 
         //return response()->json($request);
         try{
-            $check1 = shipment_package::where('barcode_package',$request->barcode)->first();
+            $check1 = shipment_package::where('sku_value',$request->barcode)->first();
             $check2 = shipment::where('order_id',$request->barcode)->first();
             $shipment_id='';
             if(!empty($check1)){
@@ -662,13 +703,20 @@ class ApiController extends Controller
             }
             
             $shipment = shipment::find($shipment_id);
-            
-            return response()->json([
-            'no_of_packages'=>$shipment->no_of_packages,
+            $data = array(
+            'no_of_packages'=> (int)$shipment->no_of_packages,
             'shipment_id'=>$shipment->order_id,
             'id'=>$shipment->id,
             'status'=>$shipment->status,
-            ], 200);
+            );
+            $datas[]=$data;
+            // return response()->json([
+            // 'no_of_packages'=>$shipment->no_of_packages,
+            // 'shipment_id'=>$shipment->order_id,
+            // 'id'=>$shipment->id,
+            // 'status'=>$shipment->status,
+            // ], 200);
+            return response()->json($datas);
         
         }catch (\Exception $e) {
             return response()->json($e);
@@ -687,17 +735,19 @@ class ApiController extends Controller
         ->where("sp.shipment_id",$id)
         ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
         ->join('stations as st', 'st.id', '=', 's.to_station_id')
-        ->select('s.*','sp.barcode_package','sp.length','sp.width','sp.height','st.station')
+        ->select('s.*','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station')
         //->groupBy("users.id")
         ->get();
 
         $country = country::all();
+        $user = User::find($shipment->sender_id);
+        $package_category = package_category::all();
         $city = city::where('parent_id',0)->get();
         $area = city::where('parent_id','!=',0)->get();
         $from_address = manage_address::find($shipment->from_address);
         $to_address = manage_address::find($shipment->to_address);
 
-        $pdf = PDF::loadView('print.mobile_print_label',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments'));
+        $pdf = PDF::loadView('print.mobile_print_label',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','user','package_category'));
         $pdf->setPaper('A4');
         return $pdf->stream('report.pdf');
 

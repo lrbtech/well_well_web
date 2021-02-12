@@ -10,7 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>View <span>Shipment  </span></h2> 
+                  <h2>{{$language[3][Auth::user()->lang]}} <span>{{$language[18][Auth::user()->lang]}}  </span></h2> 
                   <!-- <h6 class="mb-0">View Shipment</h6>-->
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -42,13 +42,13 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Shipment Date</th>
-                            <th>Shipment Type</th>
-                            <th>Shipment Mode</th>
-                            <th>From Address</th>
-                            <th>To Address</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>{{$language[59][Auth::user()->lang]}}</th>
+                            <th>{{$language[145][Auth::user()->lang]}}</th>
+                            <th>{{$language[32][Auth::user()->lang]}}</th>
+                            <th>{{$language[24][Auth::user()->lang]}}</th>
+                            <th>{{$language[28][Auth::user()->lang]}}</th>
+                            <th>{{$language[15][Auth::user()->lang]}}</th>
+                            <th>{{$language[16][Auth::user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -66,6 +66,38 @@
           </div>
           <!-- Container-fluid Ends-->
         </div>
+
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="cancel_modal" tabindex="-1" role="dialog" aria-labelledby="cancel_modal" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-grey-dark-5">
+                <h6 class="modal-title " id="modal-title">Add New</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="cancel_form" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <input type="hidden" name="shipment_id" id="shipment_id">
+
+                    <div class="form-group">
+                        <label>Remark</label>
+                        <textarea id="cancel_remark" name="cancel_remark" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button onclick="SaveCancelRequest()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Bootstrap Modal --> 
 
 
 @endsection
@@ -128,6 +160,38 @@ function PrintLabel(id){
         
     }
   });
+}
+
+
+function CancelRequest(id){
+    $('#modal-title').text('Add Remark');
+    $('#save').text('Save Change');
+    $('input[name=shipment_id]').val(id);
+    $('#cancel_modal').modal('show');
+}
+
+function SaveCancelRequest(){
+  var formData = new FormData($('#cancel_form')[0]);
+    $.ajax({
+        url : '/user/save-cancel-request',
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function(data)
+        {                
+            $("#cancel_form")[0].reset();
+            $('#cancel_modal').modal('hide');
+            location.reload();
+            toastr.success(data, 'Successfully Save');
+        },error: function (data) {
+            var errorData = data.responseJSON.errors;
+            $.each(errorData, function(i, obj) {
+            toastr.error(obj[0]);
+      });
+    }
+    });
 }
 
 </script>

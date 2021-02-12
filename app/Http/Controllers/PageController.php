@@ -19,6 +19,7 @@ use App\Models\add_rate_item;
 use App\Models\common_price;
 use App\Models\settings;
 use App\Models\station;
+use App\Models\language;
 use App\Models\ship_now_mobile_verify;
 use Mail;
 use Hash;
@@ -90,7 +91,7 @@ class PageController extends Controller
 
     public function Track($id)
     {
-        $check1 = shipment_package::where('barcode_package',$id)->first();
+        $check1 = shipment_package::where('sku_value',$id)->first();
         $check2 = shipment::where('order_id',$id)->first();
         $shipment_id='';
         if(!empty($check1)){
@@ -124,9 +125,9 @@ class PageController extends Controller
 
     public function userRegister()
     {
-        $country = country::all();
-        $city = city::where('parent_id',0)->get();
-        $area = city::where('parent_id','!=',0)->get();
+        $country = country::where('status',0)->get();
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
         return view('page.user_register',compact('country','city','area'));
     }
 
@@ -157,10 +158,18 @@ class PageController extends Controller
 
         date_default_timezone_set("Asia/Dubai");
         date_default_timezone_get();
-        
+
+        $config = [
+            'table' => 'users',
+            'field' => 'customer_id',
+            'length' => 9,
+            'prefix' => 'WELL-'
+        ];
+        $customer_id = IdGenerator::generate($config);
         
         $user = new User;
         $user->date = date('Y-m-d');
+        $user->customer_id = $customer_id;
         $user->user_type = $request->user_type;
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
@@ -262,12 +271,13 @@ class PageController extends Controller
 
     public function shipNow()
     {
-        $country = country::all();
+        $language = language::all();
+        $country = country::where('status',0)->get();
         $settings = settings::find(1);
-        $city = city::where('parent_id',0)->get();
-        $area = city::where('parent_id','!=',0)->get();
-        $package_category = package_category::all();
-        return view('page.ship_now',compact('country','city','area','package_category','settings'));
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
+        $package_category = package_category::where('status',0)->get();
+        return view('page.ship_now',compact('country','city','area','package_category','settings','language'));
     }
 
 
@@ -340,11 +350,6 @@ class PageController extends Controller
         ];
         $order_id = IdGenerator::generate($config);
 
-        do {
-            $barcode_shipment = mt_rand( 1000000000, 9999999999 );
-        } 
-        while ( DB::table( 'shipments' )->where( 'barcode_shipment', $barcode_shipment )->exists() );
-
         
         $from_address = new manage_address;
         $from_address->user_id = 0;
@@ -381,7 +386,6 @@ class PageController extends Controller
 
         $shipment = new shipment;
         $shipment->order_id = $order_id;
-        $shipment->barcode_shipment = $barcode_shipment;
         $shipment->date = date('Y-m-d');
         $shipment->sender_id = 0;
         $shipment->shipment_type = 1;
@@ -411,11 +415,11 @@ class PageController extends Controller
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
                 do {
-                    $barcode_package = mt_rand( 1000000000, 9999999999 );
+                    $sku_value = mt_rand( 1000000000, 9999999999 );
                 } 
-                while ( DB::table( 'shipment_packages' )->where( 'barcode_package', $barcode_package )->exists() );
+                while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
                 $shipment_package = new shipment_package;
-                $shipment_package->barcode_package = $barcode_package;
+                $shipment_package->sku_value = $sku_value;
                 $shipment_package->shipment_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
                 $shipment_package->description = $_POST['description'][$x];
@@ -435,11 +439,11 @@ class PageController extends Controller
                 for ($x=0; $x<count($_POST['weight']); $x++) 
                 {
                     do {
-                        $barcode_package = mt_rand( 1000000000, 9999999999 );
+                        $sku_value = mt_rand( 1000000000, 9999999999 );
                     } 
-                    while ( DB::table( 'shipment_packages' )->where( 'barcode_package', $barcode_package )->exists() );
+                    while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
                     $shipment_package = new shipment_package;
-                    $shipment_package->barcode_package = $barcode_package;
+                    $shipment_package->sku_value = $sku_value;
                     $shipment_package->shipment_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
                     $shipment_package->description = $_POST['description'][$x];

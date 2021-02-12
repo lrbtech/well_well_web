@@ -43,7 +43,7 @@ Route::get('/view-clear', function() {
 
 Auth::routes(['register' => false]);
 
-Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
+// Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home-arabic', [App\Http\Controllers\PageController::class, 'HomeArabic']);
 Route::get('/track/{id}', [App\Http\Controllers\PageController::class, 'Track']);
@@ -118,21 +118,21 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/save-country', [App\Http\Controllers\Admin\CityController::class, 'saveCountry']);
     Route::POST('/update-country', [App\Http\Controllers\Admin\CityController::class, 'updateCountry']);
     Route::get('/country/{id}', [App\Http\Controllers\Admin\CityController::class, 'editCountry']);
-    Route::get('/country-delete/{id}', [App\Http\Controllers\Admin\CityController::class, 'deleteCountry']);
+    Route::get('/country-delete/{id}/{status}', [App\Http\Controllers\Admin\CityController::class, 'deleteCountry']);
 
     //city
 	Route::get('/city/{id}', [App\Http\Controllers\Admin\CityController::class, 'City']);
     Route::POST('/save-city', [App\Http\Controllers\Admin\CityController::class, 'saveCity']);
     Route::POST('/update-city', [App\Http\Controllers\Admin\CityController::class, 'updateCity']);
     Route::get('/edit-city/{id}', [App\Http\Controllers\Admin\CityController::class, 'editCity']);
-    Route::get('/city-delete/{id}', [App\Http\Controllers\Admin\CityController::class, 'deleteCity']);
+    Route::get('/city-delete/{id}/{status}', [App\Http\Controllers\Admin\CityController::class, 'deleteCity']);
 
     //area
 	Route::get('/area/{id}/{country}', [App\Http\Controllers\Admin\CityController::class, 'Area']);
     Route::POST('/save-area', [App\Http\Controllers\Admin\CityController::class, 'saveArea']);
     Route::POST('/update-area', [App\Http\Controllers\Admin\CityController::class, 'updateArea']);
     Route::get('/edit-area/{id}', [App\Http\Controllers\Admin\CityController::class, 'editArea']);
-    Route::get('/area-delete/{id}', [App\Http\Controllers\Admin\CityController::class, 'deleteArea']);
+    Route::get('/area-delete/{id}/{status}', [App\Http\Controllers\Admin\CityController::class, 'deleteArea']);
 
 
     //drop-point
@@ -147,14 +147,14 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/save-package-category', [App\Http\Controllers\Admin\SettingsController::class, 'savepackageCategory']);
     Route::POST('/update-package-category', [App\Http\Controllers\Admin\SettingsController::class, 'updatepackageCategory']);
     Route::get('/edit-package-category/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'editpackageCategory']);
-    Route::get('/package-category-delete/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'deletepackageCategory']);
+    Route::get('/package-category-delete/{id}/{status}', [App\Http\Controllers\Admin\SettingsController::class, 'deletepackageCategory']);
 
     //station
 	Route::get('/station', [App\Http\Controllers\Admin\SettingsController::class, 'Station']);
     Route::POST('/save-station', [App\Http\Controllers\Admin\SettingsController::class, 'saveStation']);
     Route::POST('/update-station', [App\Http\Controllers\Admin\SettingsController::class, 'updateStation']);
     Route::get('/edit-station/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'editStation']);
-    Route::get('/station-delete/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'deleteStation']);
+    Route::get('/station-delete/{id}/{status}', [App\Http\Controllers\Admin\SettingsController::class, 'deleteStation']);
 
 
     //agent
@@ -170,7 +170,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/save-exception-category', [App\Http\Controllers\Admin\SettingsController::class, 'saveExceptionCategory']);
     Route::POST('/update-exception-category', [App\Http\Controllers\Admin\SettingsController::class, 'updateExceptionCategory']);
     Route::get('/edit-exception-category/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'editExceptionCategory']);
-    Route::get('/exception-category-delete/{id}', [App\Http\Controllers\Admin\SettingsController::class, 'deleteExceptionCategory']);
+    Route::get('/exception-category-delete/{id}/{status}', [App\Http\Controllers\Admin\SettingsController::class, 'deleteExceptionCategory']);
 
 
     //notification
@@ -238,13 +238,53 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/change-password', [App\Http\Controllers\Admin\SettingsController::class, 'updateChangePassword']);
 
 
+    Route::get('/schedule-for-pickup', [App\Http\Controllers\Admin\AllShipment::class, 'ScheduleForPickup']);
+    Route::POST('/get-schedule-for-pickup', [App\Http\Controllers\Admin\AllShipment::class, 'getScheduleForPickup']);
+
+    Route::get('/new-shipment-request', [App\Http\Controllers\Admin\AllShipment::class, 'NewShipmentRequest']);
+    Route::POST('/get-new-shipment-request', [App\Http\Controllers\Admin\AllShipment::class, 'getNewShipmentRequest']);
+
+    Route::get('/checkbox-assign-agent', [App\Http\Controllers\Admin\AllShipment::class, 'checkboxAssignAgent']);
+
+    Route::get('/pickup-exception', [App\Http\Controllers\Admin\AllShipment::class, 'PickupException']);
+    Route::POST('/get-pickup-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getPickupException']);
+
+    Route::get('/package-collected', [App\Http\Controllers\Admin\AllShipment::class, 'PackageCollected']);
+    Route::POST('/get-package-collected', [App\Http\Controllers\Admin\AllShipment::class, 'getPackageCollected']);
+
+    Route::get('/transit-in', [App\Http\Controllers\Admin\AllShipment::class, 'TransitIn']);
+    Route::POST('/get-transit-in', [App\Http\Controllers\Admin\AllShipment::class, 'getTransitIn']);
+
+    Route::get('/transit-out', [App\Http\Controllers\Admin\AllShipment::class, 'TransitOut']);
+    Route::POST('/get-transit-out', [App\Http\Controllers\Admin\AllShipment::class, 'getTransitOut']);
+
+    Route::get('/ready-for-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'ReadyForDelivery']);
+    Route::POST('/get-ready-for-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'getReadyForDelivery']);
+
+    Route::get('/delivery-exception', [App\Http\Controllers\Admin\AllShipment::class, 'DeliveryException']);
+    Route::POST('/get-delivery-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getDeliveryException']);
+
+    Route::get('/shipment-delivered', [App\Http\Controllers\Admin\AllShipment::class, 'ShipmentDelivered']);
+    Route::POST('/get-shipment-delivered', [App\Http\Controllers\Admin\AllShipment::class, 'getShipmentDelivered']);
+
+    Route::get('/cancel-request', [App\Http\Controllers\Admin\AllShipment::class, 'CancelRequest']);
+    Route::POST('/get-cancel-request', [App\Http\Controllers\Admin\AllShipment::class, 'getCancelRequest']);
+
+    Route::get('/update-cancel-request/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'updateCancelRequest']);
+
     //report
     Route::get('/shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'ShipmentReport']);
     Route::POST('/get-shipment-report/{status}/{user_type}', [App\Http\Controllers\Admin\ReportController::class, 'getShipmentReport']);
 
     Route::get('/revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'RevenueReport']);
     Route::POST('/get-revenue-report/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getRevenueReport']);
-
+    
+    //languages modules
+    Route::get('/languages', [App\Http\Controllers\Admin\SettingsController::class, 'languageTable']);
+    Route::get('/fetch_language', [App\Http\Controllers\Admin\SettingsController::class, 'fetchLanguage']);
+    Route::POST('/insert_language', [App\Http\Controllers\Admin\SettingsController::class, 'insertLanguage']);
+    Route::POST('/update_language', [App\Http\Controllers\Admin\SettingsController::class, 'updateLanguage']);
+    Route::POST('/delete_language', [App\Http\Controllers\Admin\SettingsController::class, 'deleteLanguage']);
 });
 
 
@@ -258,6 +298,12 @@ Route::group(['prefix' => 'user'],function(){
     Route::POST('/save-new-shipment', [App\Http\Controllers\User\ShipmentController::class, 'saveNewShipment']);
     Route::get('/shipment', [App\Http\Controllers\User\ShipmentController::class, 'Shipment']);
     Route::POST('/get-shipment', [App\Http\Controllers\User\ShipmentController::class, 'getShipment']);
+
+    Route::POST('/save-cancel-request', [App\Http\Controllers\User\ShipmentController::class, 'SaveCancelRequest']);
+
+    Route::get('/pending-shipment', [App\Http\Controllers\User\PendingController::class, 'PendingShipment']);
+    Route::POST('/get-pending-shipment', [App\Http\Controllers\User\PendingController::class, 'getPendingShipment']);
+    Route::get('/schedule-shipment', [App\Http\Controllers\User\PendingController::class, 'scheduleShipment']);
 
     Route::get('/print-label/{id}', [App\Http\Controllers\User\ShipmentController::class, 'printLabel']);
     Route::get('/print-invoice/{id}', [App\Http\Controllers\User\ShipmentController::class, 'printInvoice']);

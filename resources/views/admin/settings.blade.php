@@ -9,8 +9,8 @@
     <div class="page-header">
       <div class="row">
         <div class="col-lg-6 main-header">
-          <h2>View<span>Settings</span></h2>
-          <h6 class="mb-0">admin panel</h6>
+          <h2>{{$language[3][Auth::guard('admin')->user()->lang]}}<span>{{$language[132][Auth::guard('admin')->user()->lang]}}</span></h2>
+          <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
         </div>
         <!-- <div class="col-lg-6 breadcrumb-right">     
           <ol class="breadcrumb">
@@ -40,27 +40,27 @@
 
                 <div class="col-sm-6 col-md-6">
                   <div class="form-group">
-                    <label class="form-label">Insurance Percentage (%)</label>
+                    <label class="form-label">{{$language[133][Auth::guard('admin')->user()->lang]}} (%)</label>
                     <input class="form-control" type="number" id="insurance_percentage" name="insurance_percentage" value="{{$settings->insurance_percentage}}">
                   </div>
                 </div>
 
                 <div class="col-sm-6 col-md-6">
                   <div class="form-group">
-                    <label class="form-label">Vat Percentage (%)</label>
+                    <label class="form-label">{{$language[134][Auth::guard('admin')->user()->lang]}} (%)</label>
                     <input class="form-control" type="number" id="vat_percentage" name="vat_percentage" value="{{$settings->vat_percentage}}">
                   </div>
                 </div>
 
                 <div class="col-sm-6 col-md-6">
                   <div class="form-group">
-                    <label class="form-label">0 to 30 Kgs Postal Charge (%)</label>
+                    <label class="form-label">0 to 30 Kgs {{$language[66][Auth::guard('admin')->user()->lang]}} (%)</label>
                     <input class="form-control" type="number" id="postal_charge_percentage" name="postal_charge_percentage" value="{{$settings->postal_charge_percentage}}">
                   </div>
                 </div>
 
                 <div class="col-md-12 text-right">
-                  <button onclick="Update()" class="btn btn-primary btn-pill" type="button">Update Settings</button>
+                  <button onclick="Update()" class="btn btn-primary btn-pill" type="button">{{$language[135][Auth::guard('admin')->user()->lang]}}</button>
                 </div>
               </div>
             </div>

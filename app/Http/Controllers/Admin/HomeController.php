@@ -16,6 +16,8 @@ use App\Models\shipment_notification;
 use App\Models\User;
 use App\Models\add_rate;
 use App\Models\add_rate_item;
+use App\Models\role;
+use App\Models\language;
 use Auth;
 
 
@@ -27,6 +29,7 @@ class HomeController extends Controller
     }
 
     public function dashboard(){
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
         $total_shipment = shipment::count();
         $total_individual = User::where('user_type','0')->count();
         $total_business = User::where('user_type','1')->count();
@@ -36,6 +39,7 @@ class HomeController extends Controller
 
         $shipment = shipment::orderBy('id', 'desc')->take('5')->get();
         $current_month_value = shipment::whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
-        return view('admin.dashboard',compact('total_shipment','shipment','current_month_value','total_individual','total_business'));
+        $language = language::all();
+        return view('admin.dashboard',compact('total_shipment','shipment','current_month_value','total_individual','total_business','role_get','language'));
     }
 }

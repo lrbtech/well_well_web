@@ -49,6 +49,7 @@
     <div class="loader-wrapper">
       <div class="typewriter">
         <h1>Welcome to WellWell..</h1>
+         
       </div>
     </div>
     <!-- Loader ends-->
@@ -329,37 +330,105 @@
                 </ul>
               </li> --}}
 
-              @if($role_get->id == 2 || $role_get->id == 3 || $role_get->id == 4)
+              <!-- @if($role_get->id == 2 || $role_get->id == 3 || $role_get->id == 4)
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Customer</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Customer Status</li>
-                  <li><a href="/admin/view-customer">View Customer</a></li>
+                  <li class="view-customer"><a class="view-customer" href="/admin/view-customer">View Customer</a></li>
                 </ul>
               </li>
-              @else 
+              @elseif($role_get->id == 5)
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Dashboard</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Shipment</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Dashboard</li>
-                  <li><a class="dashboard" href="/admin/dashboard">Dashboard</a></li>
+                  <li class="iconbar-header">Shipments</li>
+                  <li class="new-shipment-request"><a class="new-shipment-request" href="/admin/new-shipment-request">New Shipment Request</a></li>
+                  <li class="schedule-for-pickup"><a class="schedule-for-pickup" href="/admin/schedule-for-pickup">Schedule for Pickup</a></li>
+                  <li class="pickup-exception"><a class="pickup-exception" href="/admin/pickup-exception">Pickup Exception</a></li>
+                  <li class="package-collected"><a class="package-collected" href="/admin/package-collected">Package Collected</a></li>
+                  <li class="transit-in"><a class="transit-in" href="/admin/transit-in">Transit In</a></li>
+                  <li class="transit-out"><a class="transit-out" href="/admin/transit-out">Transit Out</a></li>
+                  <li class="ready-for-delivery"><a class="ready-for-delivery" href="/admin/ready-for-delivery">Ready for Delivery</a></li>
+                  <li class="delivery-exception"><a class="delivery-exception" href="/admin/delivery-exception">Delivery Exception</a></li>
+                  <li class="shipment-delivered"><a class="shipment-delivered" href="/admin/shipment-delivered">Shipment Delivered</a></li>
+                  <li class="cancel-request"><a class="cancel-request" href="/admin/cancel-request">Cancel Request</a></li>
+                  <li class="shipment"><a class="shipment" href="/admin/shipment">All Shipment List</a></li>
                 </ul>
+              </li>
+              @else  
+              @endif-->
+
+              
+              <li>
+                <a class="bar-icons" href="/admin/dashboard"><i class="pe-7s-id"></i><span>Dashboard</span></a>
+                <!-- <ul class="iconbar-mainmenu custom-scrollbar">
+                  <li class="iconbar-header">Dashboard</li>
+                  <li class="dashboard"><a class="dashboard" href="/admin/dashboard">Dashboard</a></li>
+                </ul> -->
               </li>
 
+              @if(Auth::guard('admin')->user()->view_customer == 'on')
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Customer</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Customer</li>
-                  <li><a class="view-customer" href="/admin/view-customer">View Customer</a></li>
+                  <li class="view-customer"><a class="view-customer" href="/admin/view-customer">View Customer</a></li>
                 </ul>
               </li>
+              @endif
 
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Shipment</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Shipments</li>
-                  <li><a class="new-shipment" href="/admin/new-shipment">New Shipment</a></li>
-                  <li><a class="shipment" href="/admin/shipment">Shipment List</a></li>
+                  @if(Auth::guard('admin')->user()->new_shipment == 'on')
+                  <li class="new-shipment"><a class="new-shipment" href="/admin/new-shipment">New Shipment</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->new_shipment_request == 'on')
+                  <li class="new-shipment-request"><a class="new-shipment-request" href="/admin/new-shipment-request">New Shipment Request</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->schedule_for_pickup == 'on')
+                  <li class="schedule-for-pickup"><a class="schedule-for-pickup" href="/admin/schedule-for-pickup">Schedule for Pickup</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->pickup_exception == 'on')
+                  <li class="pickup-exception"><a class="pickup-exception" href="/admin/pickup-exception">Pickup Exception</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->package_collected == 'on')
+                  <li class="package-collected"><a class="package-collected" href="/admin/package-collected">Package Collected</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->transit_in == 'on')
+                  <li class="transit-in"><a class="transit-in" href="/admin/transit-in">Transit In</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->transit_out == 'on')
+                  <li class="transit-out"><a class="transit-out" href="/admin/transit-out">Transit Out</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->ready_for_delivery == 'on')
+                  <li class="ready-for-delivery"><a class="ready-for-delivery" href="/admin/ready-for-delivery">Ready for Delivery</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->delivery_exception == 'on')
+                  <li class="delivery-exception"><a class="delivery-exception" href="/admin/delivery-exception">Delivery Exception</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->shipment_delivered == 'on')
+                  <li class="shipment-delivered"><a class="shipment-delivered" href="/admin/shipment-delivered">Shipment Delivered</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->cancel_request == 'on')
+                  <li class="cancel-request"><a class="cancel-request" href="/admin/cancel-request">Cancel Request</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->all_shipment == 'on')
+                  <li class="shipment"><a class="shipment" href="/admin/shipment">All Shipment List</a></li>
+                  @endif
                 </ul>
               </li>
 
@@ -367,9 +436,13 @@
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Employees</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Employees</li>
-                  <li><a class="agent" href="/admin/agent">Agent List</a></li>
-                  <li><a class="user" href="/admin/user">Employee List</a></li>
-                  <li><a class="role" href="/admin/role">Department</a></li>
+                  @if(Auth::guard('admin')->user()->agent == 'on')
+                  <li class="agent"><a class="agent" href="/admin/agent">Agent List</a></li>
+                  @endif
+                  @if(Auth::guard('admin')->user()->employee == 'on')
+                  <li class="user"><a class="user" href="/admin/user">Employee List</a></li>
+                  @endif
+                  <!-- <li class="role"><a class="role" href="/admin/role">Department</a></li> -->
                 </ul>
               </li>
 
@@ -377,8 +450,12 @@
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Report</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Report</li>
-                  <li><a class="shipment-report" href="/admin/shipment-report">Shipment Report</a></li>
-                  <li><a class="revenue-report" href="/admin/revenue-report">Revenue Report</a></li>
+                  @if(Auth::guard('admin')->user()->shipment_report == 'on')
+                  <li class="shipment-report"><a class="shipment-report" href="/admin/shipment-report">Shipment Report</a></li>
+                  @endif
+                  @if(Auth::guard('admin')->user()->revenue_report == 'on')
+                  <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">Revenue Report</a></li>
+                  @endif
                 </ul>
               </li>
 
@@ -386,17 +463,37 @@
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Settings</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Settings</li>
-                  <li><a class="country" href="/admin/country">Country List</a></li>
-                  <li><a class="drop-point" href="/admin/drop-point">Drop Point List</a></li>
-                  <li><a class="package-category" href="/admin/package-category">Package Category List</a></li>
-                  <li><a class="exception-category" href="/admin/exception-category">Exception Category List</a></li>
-                  <!-- <li><a class="push-notification" href="/admin/push-notification">Push Notification</a></li> -->
-                  <li><a class="station" href="/admin/station">Station List</a></li>
-                  <li><a class="settings" href="/admin/settings">Settings</a></li>
-                  <li><a class="common-price" href="/admin/common-price">Common Price</a></li>
+                  @if(Auth::guard('admin')->user()->country == 'on')
+                  <li class="country"><a class="country" href="/admin/country">Country List</a></li>
+                  @endif
+
+                  <!-- <li class="drop-point"><a class="drop-point" href="/admin/drop-point">Drop Point List</a></li> -->
+                  @if(Auth::guard('admin')->user()->package_category == 'on')
+                  <li class="package-category"><a class="package-category" href="/admin/package-category">Package Category List</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->exception_category == 'on')
+                  <li class="exception-category"><a class="exception-category" href="/admin/exception-category">Exception Category List</a></li>
+                  @endif
+
+                  <!-- <li class="push-notification"><a class="push-notification" href="/admin/push-notification">Push Notification</a></li> -->
+                  @if(Auth::guard('admin')->user()->station == 'on')
+                  <li class="station"><a class="station" href="/admin/station">Station List</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->financial_settings == 'on')
+                  <li class="settings"><a class="settings" href="/admin/settings">Financial Settings</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->common_price == 'on')
+                  <li class="common-price"><a class="common-price" href="/admin/common-price">Common Price</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->language == 'on')
+                  <li class="languages"><a class="languages" href="/admin/languages">Languages</a></li>
+                  @endif
                 </ul>
               </li>
-              @endif
 
               
               

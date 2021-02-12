@@ -45,6 +45,7 @@
                                 <th>#</th>
                                 <th>Area Name</th>
                                 <th>Remote Area</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -61,10 +62,23 @@
                                 @endif
                             </td>
                             <td>
+                            @if($row->status == 0)
+                            Active
+                            @else 
+                            DeActive
+                            @endif
+                            </td>
+                            <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
-                                    <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#">Delete</a>
+                                    @if(Auth::guard('admin')->user()->role_id == '0')
+                                    @if($row->status == 0)
+                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
+                                    @else 
+                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">Active</a>
+                                    @endif
+                                    @endif
                                 </div>
                             </td>
                             </tr>
@@ -205,11 +219,11 @@ function Edit(id){
     }
   });
 }
-function Delete(id){
+function Delete(id,status){
     var r = confirm("Are you sure");
     if (r == true) {
       $.ajax({
-        url : '/admin/area-delete/'+id,
+        url : '/admin/area-delete/'+id+'/'+status,
         type: "GET",
         dataType: "JSON",
         success: function(data)

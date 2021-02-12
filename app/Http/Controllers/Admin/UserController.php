@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\admin;
 use App\Models\role;
+use App\Models\language;
 use App\Models\station;
 use Hash;
 
@@ -48,6 +49,34 @@ class UserController extends Controller
             }
         }
 
+        $admin->language = $request->language;
+        $admin->common_price = $request->common_price;
+        $admin->financial_settings = $request->financial_settings;
+        $admin->station = $request->station;
+        $admin->exception_category = $request->exception_category;
+        $admin->package_category = $request->package_category;
+        $admin->country = $request->country;
+        $admin->user_report = $request->user_report;
+        $admin->agent_report = $request->agent_report;
+        $admin->revenue_report = $request->revenue_report;
+        $admin->shipment_report = $request->shipment_report;
+        $admin->employee = $request->employee;
+        $admin->agent = $request->agent;
+        $admin->all_shipment = $request->all_shipment;
+        $admin->cancel_request = $request->cancel_request;
+        $admin->shipment_delivered = $request->shipment_delivered;
+        $admin->delivery_exception = $request->delivery_exception;
+        $admin->ready_for_delivery = $request->ready_for_delivery;
+        $admin->transit_out = $request->transit_out;
+        $admin->transit_in = $request->transit_in;
+        $admin->package_collected = $request->package_collected;
+        $admin->pickup_exception = $request->pickup_exception;
+        $admin->schedule_for_pickup = $request->schedule_for_pickup;
+        $admin->new_shipment_request = $request->new_shipment_request;
+        $admin->new_shipment = $request->new_shipment;
+        $admin->view_customer = $request->view_customer;
+        //$admin->dashboard = $request->dashboard;
+
         $admin->save();
         return response()->json('successfully save'); 
     }
@@ -87,6 +116,35 @@ class UserController extends Controller
             $admin->profile_image = $upload_image;
             }
         }
+
+        $admin->language = $request->language;
+        $admin->common_price = $request->common_price;
+        $admin->financial_settings = $request->financial_settings;
+        $admin->station = $request->station;
+        $admin->exception_category = $request->exception_category;
+        $admin->package_category = $request->package_category;
+        $admin->country = $request->country;
+        $admin->user_report = $request->user_report;
+        $admin->agent_report = $request->agent_report;
+        $admin->revenue_report = $request->revenue_report;
+        $admin->shipment_report = $request->shipment_report;
+        $admin->employee = $request->employee;
+        $admin->agent = $request->agent;
+        $admin->all_shipment = $request->all_shipment;
+        $admin->cancel_request = $request->cancel_request;
+        $admin->shipment_delivered = $request->shipment_delivered;
+        $admin->delivery_exception = $request->delivery_exception;
+        $admin->ready_for_delivery = $request->ready_for_delivery;
+        $admin->transit_out = $request->transit_out;
+        $admin->transit_in = $request->transit_in;
+        $admin->package_collected = $request->package_collected;
+        $admin->pickup_exception = $request->pickup_exception;
+        $admin->schedule_for_pickup = $request->schedule_for_pickup;
+        $admin->new_shipment_request = $request->new_shipment_request;
+        $admin->new_shipment = $request->new_shipment;
+        $admin->view_customer = $request->view_customer;
+        //$admin->dashboard = $request->dashboard;
+
         $admin->save();
         return response()->json('successfully update'); 
     }
@@ -95,7 +153,8 @@ class UserController extends Controller
         $user = admin::all();
         $role = role::all();
         $station = station::all();
-        return view('admin.user',compact('user','role','station'));
+        $language = language::all();
+        return view('admin.user',compact('user','role','station','language'));
     }
 
     public function editUser($id){
@@ -137,7 +196,8 @@ class UserController extends Controller
 
     public function Role(){
         $role = role::all();
-        return view('admin.role',compact('role'));
+        $language = language::all();
+        return view('admin.role',compact('role','language'));
     }
 
     public function editRole($id){

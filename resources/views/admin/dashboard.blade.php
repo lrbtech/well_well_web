@@ -15,13 +15,15 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>Admin <span>Dashboard  </span></h2>
-               
+             
+                  <h2>{{$language[0][Auth::guard('admin')->user()->lang]}} <span>{{$language[1][Auth::guard('admin')->user()->lang]}}  </span></h2>
+
+               {{-- {{Auth::guard('admin')->user()->lang}} --}}
                 </div>
                 <div class="col-lg-6 breadcrumb-right">
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html"><i class="pe-7s-home"></i></a></li>
-                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item"><a href="#"><i class="pe-7s-home"></i></a></li>
+                    <li class="breadcrumb-item">{{$language[1][Auth::guard('admin')->user()->lang]}}</li>
                     <li class="breadcrumb-item active"> </li>
                   </ol>
                 </div>
@@ -31,7 +33,11 @@
           <!-- Container-fluid starts-->
           <div class="container-fluid">
             <div class="row">
-          <div class="col-lg-12">
+          
+            @if($role_get->id == 2 || $role_get->id == 3 || $role_get->id == 4)
+            @elseif($role_get->id == 5)
+            @else 
+              <div class="col-lg-12">
                 <div class="row ecommerce-chart-card">
                   
                   <div class="col-xl-3 xl-50 col-md-6 box-col-6">
@@ -45,7 +51,7 @@
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
                                 <h6 class="f-w-100 m-l-10">{{$total_individual}}</h6>
-                                <h4 class="mb-0 f-w-700 m-l-10">Total Individual Users</h4>
+                                <h4 class="mb-0 f-w-700 m-l-10">{{$language[2][Auth::guard('admin')->user()->lang]}}</h4>
                               </div>
                             </div>
                           </div>
@@ -65,7 +71,7 @@
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
                                 <h6 class="f-w-100 m-l-10">{{$total_business}}</h6>
-                                <h4 class="mb-0 f-w-700 m-l-10">Total Business Users</h4>
+                                <h4 class="mb-0 f-w-700 m-l-10">{{$language[4][Auth::guard('admin')->user()->lang]}}</h4>
                               </div>
                             </div>
                           </div>
@@ -85,7 +91,7 @@
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
                                 <h6 class="f-w-100 m-l-10">{{$total_shipment}}</h6>
-                                <h4 class="mb-0 f-w-700 m-l-10">Total Shipment</h4>
+                                <h4 class="mb-0 f-w-700 m-l-10">{{$language[5][Auth::guard('admin')->user()->lang]}}</h4>
                               </div>
                             </div>
                           </div>
@@ -165,7 +171,7 @@
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
                                 <h6 class="f-w-100 m-l-10">AED {{$current_month_value}}</h6>
-                                <h4 class="mb-0 f-w-700 m-l-10">Current Month Transaction</h4>
+                                <h4 class="mb-0 f-w-700 m-l-10">{{$language[6][Auth::guard('admin')->user()->lang]}}</h4>
                               </div>
                             </div>
                           </div>
@@ -176,10 +182,10 @@
 
                 </div>
               </div>
-           <div class="col-xl-8 xl-100 box-col-12">
+              <div class="col-xl-8 xl-100 box-col-12">
                 <div class="card">
                   <div class="card-header no-border">
-                    <h5>Last Shipment Details</h5>
+                    <h5>{{$language[7][Auth::guard('admin')->user()->lang]}}</h5>
                     <ul class="creative-dots">
                       <li class="bg-primary big-dot"></li>
                       <li class="bg-secondary semi-big-dot"></li>
@@ -259,6 +265,7 @@
                   </div>
                 </div>
               </div>
+            @endif
             
             </div>
           </div>

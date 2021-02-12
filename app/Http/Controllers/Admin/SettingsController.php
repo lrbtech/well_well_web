@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\Models\drop_point;
 use App\Models\country;
@@ -14,10 +14,11 @@ use App\Models\settings;
 use App\Models\station;
 use App\Models\admin;
 use App\Models\common_price;
+use App\Models\language;
 use App\Models\exception_category;
 use Hash;
 use Auth;
-
+use DB;
 
 class SettingsController extends Controller
 {
@@ -28,7 +29,8 @@ class SettingsController extends Controller
 
     public function Settings(){
         $settings = settings::find(1);
-        return view('admin.settings',compact('settings'));
+        $language = language::all();
+        return view('admin.settings',compact('settings','language'));
     }
 
     public function updateSettings(Request $request){
@@ -50,7 +52,8 @@ class SettingsController extends Controller
 
     public function getCommonPrice(){
         $common_price = common_price::all();
-        return view('admin.common_price',compact('common_price'));
+        $language = language::all();
+        return view('admin.common_price',compact('common_price','language'));
     }
 
     public function saveCommonPrice(Request $request){
@@ -160,7 +163,8 @@ class SettingsController extends Controller
 
     public function packageCategory(){
         $package_category = package_category::all();
-        return view('admin.package_category',compact('package_category'));
+        $language = language::all();
+        return view('admin.package_category',compact('package_category','language'));
     }
 
     public function editpackageCategory($id){
@@ -168,9 +172,10 @@ class SettingsController extends Controller
         return response()->json($package_category); 
     }
     
-    public function deletepackageCategory($id){
+    public function deletepackageCategory($id,$status){
         $package_category = package_category::find($id);
-        $package_category->delete();
+        $package_category->status = $status;
+        $package_category->save();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -204,7 +209,8 @@ class SettingsController extends Controller
 
     public function ExceptionCategory(){
         $exception_category = exception_category::all();
-        return view('admin.exception_category',compact('exception_category'));
+        $language = language::all();
+        return view('admin.exception_category',compact('exception_category','language'));
     }
 
     public function editExceptionCategory($id){
@@ -212,9 +218,10 @@ class SettingsController extends Controller
         return response()->json($exception_category); 
     }
     
-    public function deleteExceptionCategory($id){
+    public function deleteExceptionCategory($id,$status){
         $exception_category = exception_category::find($id);
-        $exception_category->delete();
+        $exception_category->status = $status;
+        $exception_category->save();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -248,7 +255,8 @@ class SettingsController extends Controller
 
     public function Station(){
         $station = station::all();
-        return view('admin.station',compact('station'));
+        $language = language::all();
+        return view('admin.station',compact('station','language'));
     }
 
     public function editStation($id){
@@ -256,9 +264,10 @@ class SettingsController extends Controller
         return response()->json($station); 
     }
     
-    public function deleteStation($id){
+    public function deleteStation($id,$status){
         $station = station::find($id);
-        $station->delete();
+        $station->status = $status;
+        $station->save();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -299,6 +308,81 @@ class SettingsController extends Controller
             return response()->json(['message' => 'old password doesnt matched!' , 'status' => 0]);
         }
     }
+
+    public function languageTable(){
+        $language = language::all();
+        return view('admin.languages',compact('language'));
+    }
+    
+    public function fetchLanguage(Request $request){
+       $language = array();
+      // return response()->json();
+        if($request['english'] !=null){
+            $language = language::where('english', 'like', '%' . $request['english'].'%')->get();
+        }else if($request['arabic'] !=null){
+            $language = language::where('arabic', 'like', '%' . $request['arabic']. '%')->get();
+        }else{
+            $language = language::all();
+        }
+       
+         $languages = array();
+        if(count($language) >0){
+            foreach ($language as $key => $value) {
+               $lang=array(
+                   'arabic'=>$value->arabic,
+                   'english'=>$value->english,
+                   'id'=>$value->id,
+                   'index'=>$key,
+               ); 
+              // $language[] = $lang;
+               $languages[]=$lang;
+            }
+            return response()->json($languages);
+        }
+        return response()->json($language);
+    }
+
+    public function insertLanguage(Request $request){
+        $language = new language;
+        $language->english = $request->english;
+        $language->arabic = $request->arabic;
+        $language->save();
+    }
+    public function updateLanguage(Request $request){
+        $language =  language::find($request->id);
+        $language->english = $request->english;
+        $language->arabic = $request->arabic;
+        $language->save();
+    }
+    // public function deleteLanguage(Request $request){
+    //     $language =  language::find($request->id)->delete();
+    // }
+
+    
+    //            $languages[]=$lang;
+    //         }
+    //         return response()->json($languages);
+    //     }
+    //     return response()->json($language);
+    // }
+
+    // public function insertLanguage(Request $request){
+    //     $language = new language;
+    //     $language->english = $request->english;
+    //     $language->arabic = $request->arabic;
+    //     $language->save();
+    // }
+    // public function updateLanguage(Request $request){
+    //     $language =  language::find($request->id);
+    //     $language->english = $request->english;
+    //     $language->arabic = $request->arabic;
+    //     $language->save();
+    // }
+    public function deleteLanguage(Request $request){
+        $language =  language::find($request->id)->delete();
+    }
+
+    
 
 
 }

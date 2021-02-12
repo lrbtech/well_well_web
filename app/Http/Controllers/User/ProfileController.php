@@ -14,6 +14,7 @@ use App\Models\shipment;
 use App\Models\shipment_package;
 use App\Models\shipment_notification;
 use App\Models\User;
+use App\Models\language;
 use App\Models\add_rate;
 use App\Models\add_rate_item;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -33,8 +34,8 @@ class ProfileController extends Controller
 
     public function editProfile(){
         $customer = User::find(Auth::user()->id);
-
-        return view('user.edit_profile',compact('customer'));
+        $language = language::all();
+        return view('user.edit_profile',compact('customer','language'));
     }
 
     public function updateProfile(Request $request){        

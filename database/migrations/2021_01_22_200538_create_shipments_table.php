@@ -29,7 +29,6 @@ class CreateShipmentsTable extends Migration
             $table->string('from_station_id')->default('0'); 
             $table->string('to_station_id')->default('0'); 
             $table->string('notification_enable')->nullable();  
-            $table->string('return_package_cost_enable')->nullable();
             $table->string('special_cod_enable')->nullable();
             $table->string('special_cod')->nullable();
             $table->string('collect_cod_amount')->nullable();
@@ -52,8 +51,6 @@ class CreateShipmentsTable extends Migration
             $table->string('cod_amount')->nullable();
             $table->string('total')->nullable();
             $table->string('status')->default('0'); 
-            $table->string('barcode_shipment')->nullable();
-            $table->string('barcode_shipment_image')->nullable();
             $table->string('pickup_agent_id')->nullable();
             $table->string('station_agent_id')->nullable();
             $table->string('delivery_agent_id')->nullable();
@@ -85,6 +82,11 @@ class CreateShipmentsTable extends Migration
             $table->string('delivery_exception_solved_date')->nullable();
             $table->string('delivery_exception_solved_time')->nullable();
             $table->string('receiver_id_copy')->nullable();
+            $table->TEXT('cancel_remark')->nullable();
+            $table->string('cancel_request_date')->nullable();
+            $table->string('cancel_request_time')->nullable();
+            $table->string('canceled_date')->nullable();
+            $table->string('canceled_time')->nullable();
             $table->TEXT('receiver_signature')->nullable();
             $table->string('pdf_print')->nullable();
             $table->timestamps();

@@ -115,7 +115,8 @@
 
 <div class="wizard-header">
     <h3 class="wizard-title">
-        Ship Now
+       
+      
     </h3>
     <h5>This information will let us know more about you.</h5>
 </div>

@@ -9,8 +9,8 @@
     <div class="page-header">
       <div class="row">
         <div class="col-lg-6 main-header">
-          <h2>Edit<span>Profile</span></h2>
-          <h6 class="mb-0">admin panel</h6>
+          <h2>{{$language[146][Auth::user()->lang]}}<span>{{$language[147][Auth::user()->lang]}}</span></h2>
+          <h6 class="mb-0">{{$language[9][Auth::user()->lang]}}</h6>
         </div>
         <!-- <div class="col-lg-6 breadcrumb-right">     
           <ol class="breadcrumb">
@@ -33,7 +33,7 @@
         <div class="col-lg-4">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title mb-0">My Profile</h4>
+              <h4 class="card-title mb-0">{{$language[148][Auth::user()->lang]}}</h4>
               <div class="card-options"><a class="card-options-collapse" href="#" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-toggle="card-remove"><i class="fe fe-x"></i></a></div>
             </div>
             <div class="card-body">
@@ -46,15 +46,15 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Email-Address</label>
+                  <label class="form-label">{{$language[150][Auth::user()->lang]}}</label>
                   <input readonly class="form-control" type="email" name="email" id="email" value="{{$customer->email}}">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Mobile</label>
+                  <label class="form-label">{{$language[14][Auth::user()->lang]}}</label>
                   <input class="form-control" type="text" name="mobile" id="mobile" value="{{$customer->mobile}}">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Website</label>
+                  <label class="form-label">{{$language[151][Auth::user()->lang]}}</label>
                   <input class="form-control" type="text" id="website" name="website" value="{{$customer->website}}">
                 </div>
                 <!-- <div class="form-footer">
@@ -67,44 +67,44 @@
         <div class="col-lg-8">
           <form class="card theme-form">
             <div class="card-header">
-              <h4 class="card-title mb-0">View Profile</h4>
+              <h4 class="card-title mb-0">{{$language[149][Auth::user()->lang]}}</h4>
               <div class="card-options"><a class="card-options-collapse" href="#" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-toggle="card-remove"><i class="fe fe-x"></i></a></div>
             </div>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="form-label">Busisness Name</label>
+                    <label class="form-label">{{$language[152][Auth::user()->lang]}}</label>
                     <input class="form-control" type="text" name="business_name" id="business_name" value="{{$customer->business_name}}">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="form-label">land Line</label>
+                    <label class="form-label">{{$language[153][Auth::user()->lang]}}</label>
                     <input class="form-control" type="text" value="{{$customer->landline}}" id="landline" name="landline">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="form-label">Emirates ID</label>
+                    <label class="form-label">{{$language[154][Auth::user()->lang]}}</label>
                     <input class="form-control" type="text" value="{{$customer->emirates_id}}" id="emirates_id" name="emirates_id">
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
                   <div class="form-group">
-                    <label class="form-label">Trade License Number</label>
+                    <label class="form-label">{{$language[155][Auth::user()->lang]}}</label>
                     <input class="form-control" type="text" value="{{$customer->trade_license}}" id="trade_license" name="trade_license">
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
                   <div class="form-group">
-                    <label class="form-label">Vat Certficate No</label>
+                    <label class="form-label">{{$language[156][Auth::user()->lang]}}</label>
                     <input class="form-control" type="text" value="{{$customer->vat_certificate_no}}" name="vat_certificate_no" id="vat_certificate_no">
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label class="form-label">About Me</label>
+                    <label class="form-label">{{$language[157][Auth::user()->lang]}}</label>
                     <textarea name="description" id="description" class="form-control" rows="5" placeholder="Enter About your description">{{$customer->description}}</textarea>
                   </div>
                 </div>
@@ -113,19 +113,19 @@
                 </div> -->
                 <div class="col-sm-6 col-md-4">
                   <div class="form-group">
-                    <label class="form-label">Emirates ID File</label>
+                    <label class="form-label">{{$language[158][Auth::user()->lang]}}</label>
                     <input class="form-control" type="file" name="emirates_id_file" id="emirates_id_file">
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                   <div class="form-group">
-                    <label class="form-label">Vat Certificate File</label>
+                    <label class="form-label">{{$language[159][Auth::user()->lang]}}</label>
                     <input class="form-control" type="file" name="vat_certificate_file" id="vat_certificate_file">
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                   <div class="form-group">
-                    <label class="form-label">Trade License File</label>
+                    <label class="form-label">{{$language[160][Auth::user()->lang]}}</label>
                     <input class="form-control" type="file" name="trade_license_file" id="trade_license_file">
                   </div>
                 </div>
@@ -136,26 +136,26 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <h5 class="card-title mb-0">Add projects And Upload</h5>
+              <h5 class="card-title mb-0">{{$language[161][Auth::user()->lang]}}</h5>
               <div class="card-options"><a class="card-options-collapse" href="#" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-toggle="card-remove"><i class="fe fe-x"></i></a></div>
                       <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                          <label class="form-label">Emirates ID File</label>
+                          <label class="form-label">{{$language[158][Auth::user()->lang]}}</label>
                           <a target="_blank" href="/upload_files/{{$customer->emirates_id_file}}"><img src="/assets/images/folder.png" class="picture-src" id="wizardPicturePreview" style="padding: 20px" title=""></a>
                           </div>
                         </div>
 
                         <div class="col-md-4">
                           <div class="form-group">
-                          <label class="form-label">Vat Certificate File</label>
+                          <label class="form-label">{{$language[159][Auth::user()->lang]}}</label>
                           <a target="_blank" href="/upload_files/{{$customer->vat_certificate_file}}"><img src="/assets/images/folder.png" class="picture-src" id="wizardPicturePreview" style="padding: 20px" title=""></a>
                           </div>
                         </div>
 
                         <div class="col-md-4">
                           <div class="form-group">
-                          <label class="form-label">Trade License File</label>
+                          <label class="form-label">{{$language[160][Auth::user()->lang]}}</label>
                           <a target="_blank" href="/upload_files/{{$customer->trade_license_file}}"><img src="/assets/images/folder.png" class="picture-src" id="wizardPicturePreview" style="padding: 20px" title=""></a>
                           </div>
                         </div>
@@ -167,8 +167,8 @@
             <div class="col-sm-12">
                 <div class="card">
                   <div class="card-footer text-right">
-                    <button onclick="Save()" class="btn btn-primary m-r-15" type="button">Update Profile</button>
-                    <button class="btn btn-light" type="button">Cancel</button>
+                    <button onclick="Save()" class="btn btn-primary m-r-15" type="button">{{$language[162][Auth::user()->lang]}}</button>
+                    <button class="btn btn-light" type="button">{{$language[72][Auth::user()->lang]}}</button>
                   </div>
                 </div>
             </div>

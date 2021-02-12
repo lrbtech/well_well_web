@@ -18,6 +18,10 @@ use App\Models\add_rate;
 use App\Models\add_rate_item;
 use App\Models\station;
 use App\Models\agent;
+use App\Models\settings;
+use App\Models\language;
+use App\Models\temp_shipment;
+use App\Models\temp_shipment_package;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -34,16 +38,18 @@ class ShipmentController extends Controller
     }
 
     public function newShipment(){
+        $settings = settings::find(1);
         $drop_point = drop_point::all();
-        $country = country::all();
-        $package_category = package_category::all();
-        $city = city::where('parent_id',0)->get();
-        $area = city::where('parent_id','!=',0)->get();
+        $country = country::where('status',0)->get();
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
         $address = manage_address::where('user_id',Auth::user()->id)->get();
         $user = User::find(Auth::user()->id);
         $add_rate = add_rate::where('user_id',Auth::user()->id)->first();
+        $language = language::all();
 
-        return view('user.new_shipment',compact('drop_point','country','city','area','address','user','package_category','add_rate'));
+        return view('user.new_shipment',compact('drop_point','country','city','area','address','user','package_category','add_rate','settings','language'));
     }
 
     public function saveNewAddress(Request $request){
@@ -77,15 +83,13 @@ class ShipmentController extends Controller
         $manage_address->address3 = $request->address3;
         $manage_address->save();
 
-        return response()->json('successfully save'); 
+        return response()->json($manage_address); 
     }
 
     public function saveNewShipment(Request $request){
         $this->validate($request, [
             'from_address'=>'required',
             'to_address'=>'required',
-            'shipment_date'=>'required',
-            'shipment_from_time'=>'required',
             'shipment_type'=>'required',
             'shipment_mode'=> 'required',
             //'price.*'=> 'required',
@@ -96,40 +100,22 @@ class ShipmentController extends Controller
             //'price.*.required' => 'Price Field is Required',
         ]);
 
-        $config = [
-            'table' => 'shipments',
-            'field' => 'order_id',
-            'length' => 6,
-            'prefix' => '0'
-        ];
-        $order_id = IdGenerator::generate($config);
-
-        do {
-            $barcode_shipment = mt_rand( 1000000000, 9999999999 );
-        } 
-        while ( DB::table( 'shipments' )->where( 'barcode_shipment', $barcode_shipment )->exists() );
-
         $from_address = manage_address::find($request->from_address);
         $from_station = city::find($from_address->city_id);
 
         $to_address = manage_address::find($request->to_address);
         $to_station = city::find($to_address->city_id);
 
-        $shipment = new shipment;
-        $shipment->order_id = $order_id;
-        $shipment->barcode_shipment = $barcode_shipment;
+        $shipment = new temp_shipment;
         $shipment->date = date('Y-m-d');
         $shipment->sender_id = Auth::user()->id;
         $shipment->shipment_type = $request->shipment_type;
-        $shipment->shipment_date = date('Y-m-d',strtotime($request->shipment_date));
-        $shipment->shipment_from_time = $request->shipment_from_time;
-        $shipment->shipment_to_time = $request->shipment_to_time;
         $shipment->from_address = $request->from_address;
         $shipment->to_address = $request->to_address;
         $shipment->from_station_id = $from_station->station_id;
         $shipment->to_station_id = $to_station->station_id;
         $shipment->shipment_mode = $request->shipment_mode;
-        $shipment->return_package_cost_enable = $request->return_package_cost_enable;
+        $shipment->return_package_cost = $request->return_package_cost;
         $shipment->special_cod_enable = $request->special_cod_enable;
         $shipment->special_cod = $request->special_cod;
         $shipment->no_of_packages = $request->no_of_packages;
@@ -151,13 +137,8 @@ class ShipmentController extends Controller
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
-                do {
-                    $barcode_package = mt_rand( 1000000000, 9999999999 );
-                } 
-                while ( DB::table( 'shipment_packages' )->where( 'barcode_package', $barcode_package )->exists() );
-                $shipment_package = new shipment_package;
-                $shipment_package->barcode_package = $barcode_package;
-                $shipment_package->shipment_id = $shipment->id;
+                $shipment_package = new temp_shipment_package;
+                $shipment_package->temp_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
                 $shipment_package->description = $_POST['description'][$x];
                 $shipment_package->weight = $_POST['weight'][$x];
@@ -175,13 +156,8 @@ class ShipmentController extends Controller
             for ($y=1; $y<=$request->no_of_packages; $y++){
                 for ($x=0; $x<count($_POST['weight']); $x++) 
                 {
-                    do {
-                        $barcode_package = mt_rand( 1000000000, 9999999999 );
-                    } 
-                    while ( DB::table( 'shipment_packages' )->where( 'barcode_package', $barcode_package )->exists() );
-                    $shipment_package = new shipment_package;
-                    $shipment_package->barcode_package = $barcode_package;
-                    $shipment_package->shipment_id = $shipment->id;
+                    $shipment_package = new temp_shipment_package;
+                    $shipment_package->temp_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
                     $shipment_package->description = $_POST['description'][$x];
                     $shipment_package->weight = $_POST['weight'][$x];
@@ -196,16 +172,18 @@ class ShipmentController extends Controller
                 }
             }
         }
-        //return response()->json('successfully save'); 
-        return $this->printLabel($shipment->id);
+        
+        return response()->json('successfully save'); 
+        //return $this->printLabel($shipment->id);
     }
 
     public function Shipment(){
-        return view('user.shipment');
+        $language = language::all();
+        return view('user.shipment',compact('language'));
     }
 
     public function getShipment(){
-        $shipment = shipment::where('sender_id',Auth::user()->id)->get();
+        $shipment = shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
@@ -264,23 +242,17 @@ class ShipmentController extends Controller
                     return 'Shipment Created';
                 }
                 elseif($shipment->status == 1){
-                    $agent = agent::find($shipment->pickup_agent_id);
-                    if(!empty($agent)){
-                        return 'Schedule for Pickup '.$agent->name;
-                    }
-                    else{
-                        return 'Schedule for Pickup';
-                    }
+                    return 'Schedule for Pickup';
                 }
                 elseif($shipment->status == 2){
                     return 'Package Collected';
                 }
                 elseif($shipment->status == 3){
-                    return 'Exception';
-                    return '<td>
-                    <p>Exception</p>
+                    return '
+                    <p>Pickup Exception</p>
+                    <p>' . $shipment->exception_category . '</p>
                     <p>' . $shipment->exception_remark . '</p>
-                    </td>';
+                    ';
                 }
                 elseif($shipment->status == 4){
                     $from_station = station::find($shipment->from_station_id);
@@ -299,11 +271,35 @@ class ShipmentController extends Controller
                 elseif($shipment->status == 8){
                     return 'Shipment delivered';
                 }
+                elseif($shipment->status == 9){
+                    return '
+                    <p>Delivery Exception</p>
+                    <p>' . $shipment->delivery_exception_category . '</p>
+                    <p>' . $shipment->delivery_exception_remark . '</p>
+                    ';
+                }
+                elseif($shipment->status == 10){
+                    return '
+                    <p>Cancel Request</p>
+                    <p>' . $shipment->cancel_remark . '</p>
+                    ';
+                }
+                elseif($shipment->status == 11){
+                    return '
+                    <p>Canceled</p>
+                    ';
+                }
             })
             ->addColumn('action', function ($shipment) {
                 if($shipment->status == 8){
                     return '<td>
                     <p><a target="_blank" href="/user/print-invoice/'.$shipment->id.'" >Print</a></p>
+                    </td>';
+                }
+                elseif($shipment->status == 0){
+                    return '<td>
+                    <p><a onclick="PrintLabel('.$shipment->id.')" href="#">Print</a></p>
+                    <p><a onclick="CancelRequest('.$shipment->id.')" href="#">Cancel Request</a></p>
                     </td>';
                 }
                 else{
@@ -317,6 +313,16 @@ class ShipmentController extends Controller
         ->make(true);
 
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+    public function SaveCancelRequest(Request $request){
+        $shipment = shipment::find($request->shipment_id);
+        $shipment->cancel_remark = $request->cancel_remark;
+        $shipment->cancel_request_date = date('Y-m-d');
+        $shipment->cancel_request_time = date('H:i:s');
+        $shipment->status = 10;
+        $shipment->save();
+        return response()->json('successfully update'); 
     }
 
     public function getAreaPrice($weight,$to_address,$shipment_mode){
@@ -391,11 +397,13 @@ class ShipmentController extends Controller
         ->get();
 
         $country = country::all();
+        $package_category = package_category::all();
+        $user = User::find($shipment->sender_id);
         $city = city::where('parent_id',0)->get();
         $area = city::where('parent_id','!=',0)->get();
         $from_address = manage_address::find($shipment->from_address);
         $to_address = manage_address::find($shipment->to_address);
-        $view = view('print.printlabel',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments'))->render();
+        $view = view('print.printlabel',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','package_category','user'))->render();
 
         // $pdf = PDF::loadView('print.printlabel',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments'));
         // //$path = public_path('pdfprint/');
@@ -423,12 +431,13 @@ class ShipmentController extends Controller
 
         $country = country::all();
         $package_category = package_category::all();
+        $user = User::find($shipment->sender_id);
         $city = city::where('parent_id',0)->get();
         $area = city::where('parent_id','!=',0)->get();
         $from_address = manage_address::find($shipment->from_address);
         $to_address = manage_address::find($shipment->to_address);
 
-        $pdf = PDF::loadView('print.printinvoice',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','customer','package_category'));
+        $pdf = PDF::loadView('print.printinvoice',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','customer','package_category','user'));
         $pdf->setPaper('A4');
         return $pdf->stream('report.pdf');
     }

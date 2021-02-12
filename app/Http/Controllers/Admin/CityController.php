@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\country;
 use App\Models\city;
+use App\Models\language;
 use App\Models\station;
 
 class CityController extends Controller
@@ -46,7 +47,8 @@ class CityController extends Controller
         $city = city::where('country_id',$id)->where('parent_id',0)->get();
         $country_id = $id;
         $station = station::all();
-        return view('admin.city',compact('city','country_id','station'));
+        $language = language::all();
+        return view('admin.city',compact('city','country_id','station','language'));
     }
 
     public function editCity($id){
@@ -54,9 +56,10 @@ class CityController extends Controller
         return response()->json($city); 
     }
     
-    public function deleteCity($id){
+    public function deleteCity($id,$status){
         $city = city::find($id);
-        $city->delete();
+        $city->status = $status;
+        $city->save();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -95,7 +98,8 @@ class CityController extends Controller
         $area = city::where('country_id',$country_id)->where('parent_id',$id)->get();
         $country_id = $country_id;
         $parent_id = $id;
-        return view('admin.area',compact('area','country_id','parent_id'));
+        $language = language::all();
+        return view('admin.area',compact('area','country_id','parent_id','language'));
     }
 
     public function editArea($id){
@@ -103,9 +107,10 @@ class CityController extends Controller
         return response()->json($city); 
     }
     
-    public function deleteArea($id){
+    public function deleteArea($id,$status){
         $city = city::find($id);
-        $city->delete();
+        $city->status = $status;
+        $city->save();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -178,7 +183,8 @@ class CityController extends Controller
 
     public function Country(){
         $country = country::all();
-        return view('admin.country',compact('country'));
+        $language = language::all();
+        return view('admin.country',compact('country','language'));
     }
 
     public function editCountry($id){
@@ -186,9 +192,10 @@ class CityController extends Controller
         return response()->json($country); 
     }
     
-    public function deleteCountry($id){
+    public function deleteCountry($id,$status){
         $country = country::find($id);
-        $country->delete();
+        $country->status = $status;
+        $country->save();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 }

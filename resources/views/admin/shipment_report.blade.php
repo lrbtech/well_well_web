@@ -10,8 +10,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>Shipment <span>Report  </span></h2> 
-                  <h6 class="mb-0">Admin Panel</h6>
+                  <h2>{{$language[18][Auth::guard('admin')->user()->lang]}} <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
+                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -33,33 +33,34 @@
                   <div class="card-header">
                     <div class="row">
                         <div class="form-group col-md-4">
-                            <label>Shipment Status</label>
+                            <label>{{$language[100][Auth::guard('admin')->user()->lang]}}</label>
                             <select id="shipment_status" name="shipment_status" class="form-control">
-                              <option value="9">All Data</option>
-                              <option value="0">New Request</option>
-                              <option value="1">Approved</option>
-                              <option value="2">Package Collected</option>
-                              <option value="3">Exception</option>
-                              <option value="4">Received Station Hub</option>
-                              <option value="5">Assign Agent to Transit Out (Hub)</option>
-                              <option value="6">Other Transit in Received (Hub)</option>
-                              <option value="7">Assign Agent to Delivery</option>
-                              <option value="8">Shipment delivered</option>
+                              <option value="9">{{$language[101][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="0">{{$language[102][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="1">{{$language[103][Auth::guard('admin')->user()->lang]}}/option>
+                              <option value="2">{{$language[104][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="3">{{$language[81][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="4">{{$language[105][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="5">{{$language[106][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="6">{{$language[107][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="7">{{$language[108][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="8">{{$language[109][Auth::guard('admin')->user()->lang]}}</option>
                             </select>
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label>User Type</label>
+                            <label>{{$language[110][Auth::guard('admin')->user()->lang]}}</label>
                             <select id="user_type" name="user_type" class="form-control">
-                              <option value="3">All Data</option>
-                              <option value="0">Individual</option>
-                              <option value="1">Commercial</option>
-                              <option value="2">Guest</option>
+                              <option value="3">{{$language[101][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="0">{{$language[111][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="1">{{$language[112][Auth::guard('admin')->user()->lang]}}</option>
+                              <option value="2">{{$language[113][Auth::guard('admin')->user()->lang]}}</option>
                             </select>
                         </div>
 
                         <div class="form-group col-md-4">
-                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">Search</button>
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
+                            </button>
                         </div>
                     </div>
                     
@@ -70,13 +71,13 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Shipment Date</th>
-                            <th>Shipment Mode</th>
-                            <th>Ship From</th>
-                            <th>Ship To</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>{{$language[114][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[115][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[116][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[70][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
