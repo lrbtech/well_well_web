@@ -1011,18 +1011,20 @@ class ApiController extends Controller
             $q->select('s.status','sp.*');
             $check1 = $q->get();
 
-        if($check1[0]->status == '10'){
-            if(count($check1)>0){
+        
+        if(count($check1)>0){
+            if($check1[0]->status != '10'){
                 $data = array('shipment_id' => (int)$check1[0]->shipment_id,
                 'package_id' => $check1[0]->id);
                 $datas[]=$data;
                 return response()->json($datas, 200);
             }else{
-                return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
+                return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
             }
         }else{
-            return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
+            return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
         }
+        
         
         }catch (\Exception $e) {
             return response()->json($e);
@@ -1041,9 +1043,9 @@ class ApiController extends Controller
         $q->select('s.status','sp.*');
         $check1 = $q->get();
 
-        if($check1[0]->status == '10'){
 
-            if(count($check1)>0){
+        if(count($check1)>0){
+            if($check1[0]->status != '10'){
                 $data = array(
                 'id'=>$check1[0]->id,
                 'barcode_package'=>$check1[0]->sku_value,
@@ -1055,11 +1057,12 @@ class ApiController extends Controller
                 $datas[]=$data;
                 return response()->json($datas, 200);
             }else{
-                return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
+                return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
             }
         }else{
-            return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
+            return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
         }
+        
         
         }catch (\Exception $e) {
             return response()->json($e);
@@ -1071,16 +1074,30 @@ class ApiController extends Controller
     public function barcodeScan(Request $request){ 
         //return response()->json($request);
         try{
-            $check1 = shipment_package::where('sku_value',$request->barcode)->first();
+           // $check1 = shipment_package::where('sku_value',$request->barcode)->first();
+            $q =DB::table('shipment_packages as sp');
+            $q->where('sp.sku_value', $request->barcode);
+            $q->join('shipments as s','s.id','=','sp.shipment_id');
+            $q->select('s.status','sp.*');
+            $check1 = $q->first();
             $check2 = shipment::where('order_id',$request->barcode)->first();
             $shipment_id='';
             if(!empty($check1)){
-                $shipment_id = $check1->shipment_id;
+                if($check1->status != '10'){
+                    $shipment_id = $check1->shipment_id;
+                }
+                else{
+                    return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
+                }
             }
             elseif(!empty($check2)){
-                $shipment_id = $check2->id;
+                if($check2->status != '10'){
+                    $shipment_id = $check2->id;
+                }
+                else{
+                    return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
+                }
             }
-            
             $shipment = shipment::find($shipment_id);
             $data = array(
             'no_of_packages'=> (int)$shipment->no_of_packages,

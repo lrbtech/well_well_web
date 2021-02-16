@@ -166,7 +166,7 @@ class AllShipment extends Controller
             $shipment_log->save();
 
 
-            $agent=agent::find($request->pickup_agent_id);
+            $agent=agent::find($request->agent_id);
             $system_logs = new system_logs;
             $system_logs->_id = $row->id;
             $system_logs->category = 'shipment';
@@ -205,7 +205,7 @@ class AllShipment extends Controller
             $shipment_log->time = date('H:i:s');
             $shipment_log->save();
 
-            $agent=agent::find($request->pickup_agent_id);
+            $agent=agent::find($request->agent_id);
             $system_logs = new system_logs;
             $system_logs->_id = $row->id;
             $system_logs->category = 'shipment';
