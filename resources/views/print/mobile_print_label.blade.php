@@ -180,7 +180,9 @@ th {
         <div class="text-center"> 
             <!-- <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($row->order_id, 'C39',1,60)}}" alt="barcode"   /> -->
 
-            <p class="m-0 pt-2"><strong>
+            <p class="m-0 pt-2">
+            <strong>REF ID : {{$row->reference_no}}</strong><br>
+            <strong>
             @foreach($package_category as $cat)
             @if($cat->id == $row->category)
             {{$cat->category}}
@@ -188,8 +190,8 @@ th {
             @endforeach
             </strong>
             <br>
-            <strong>{{$row->description}}
-            </strong></p>
+            <strong>{{$row->description}}</strong>
+            </p>
     
             </div>
             <div class="">

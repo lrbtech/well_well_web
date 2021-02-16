@@ -52,12 +52,48 @@ class AgentController extends Controller
         //$agent->area_ids = $request->area_ids;
         $agent->password = Hash::make($request->password);
 
-        $agent->pickup = $request->pickup;
-        $agent->delivery = $request->delivery;
-        $agent->van_scan = $request->van_scan;
-        $agent->hub = $request->hub;
-        $agent->revenue_exception = $request->revenue_exception;
-        $agent->cash_report = $request->cash_report;
+        if($request->pickup == '1'){
+            $agent->pickup = $request->pickup;
+        }
+        else{
+            $agent->pickup = 0;
+        }
+
+        if($request->delivery == '1'){
+            $agent->delivery = $request->delivery;
+        }
+        else{
+            $agent->delivery = 0;
+        }
+
+        if($request->van_scan == '1'){
+            $agent->van_scan = $request->van_scan;
+        }
+        else{
+            $agent->van_scan = 0;
+        }
+
+        if($request->hub == '1'){
+            $agent->hub = $request->hub;
+        }
+        else{
+            $agent->hub = 0;
+        }
+
+        if($request->revenue_exception == '1'){
+            $agent->revenue_exception = $request->revenue_exception;
+        }
+        else{
+            $agent->revenue_exception = 0;
+        }
+
+        if($request->cash_report == '1'){
+            $agent->cash_report = $request->cash_report;
+        }
+        else{
+            $agent->cash_report = 0;
+        }
+        
 
         if($request->driving_license_file!=""){
             if($request->file('driving_license_file')!=""){
@@ -113,12 +149,47 @@ class AgentController extends Controller
         $agent->city_id = $request->city_id;
         //$agent->area_ids = $request->area_ids;
 
-        $agent->pickup = $request->pickup;
-        $agent->delivery = $request->delivery;
-        $agent->van_scan = $request->van_scan;
-        $agent->hub = $request->hub;
-        $agent->revenue_exception = $request->revenue_exception;
-        $agent->cash_report = $request->cash_report;
+        if($request->pickup == '1'){
+            $agent->pickup = $request->pickup;
+        }
+        else{
+            $agent->pickup = 0;
+        }
+
+        if($request->delivery == '1'){
+            $agent->delivery = $request->delivery;
+        }
+        else{
+            $agent->delivery = 0;
+        }
+
+        if($request->van_scan == '1'){
+            $agent->van_scan = $request->van_scan;
+        }
+        else{
+            $agent->van_scan = 0;
+        }
+
+        if($request->hub == '1'){
+            $agent->hub = $request->hub;
+        }
+        else{
+            $agent->hub = 0;
+        }
+
+        if($request->revenue_exception == '1'){
+            $agent->revenue_exception = $request->revenue_exception;
+        }
+        else{
+            $agent->revenue_exception = 0;
+        }
+
+        if($request->cash_report == '1'){
+            $agent->cash_report = $request->cash_report;
+        }
+        else{
+            $agent->cash_report = 0;
+        }
 
         if($request->password != ''){
             $agent->password = Hash::make($request->password);
@@ -167,9 +238,10 @@ class AgentController extends Controller
         return response()->json($agent); 
     }
     
-    public function deleteAgent($id){
+    public function deleteAgent($id,$status){
         $agent = agent::find($id);
-        $agent->delete();
+        $agent->status = $status;
+        $agent->save();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 }

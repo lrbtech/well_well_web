@@ -50,6 +50,7 @@ class CreateShipmentsTable extends Migration
             $table->string('before_total')->nullable();
             $table->string('cod_amount')->nullable();
             $table->string('total')->nullable();
+            $table->string('cancel_fees')->nullable();
             $table->string('status')->default('0'); 
             $table->string('pickup_agent_id')->nullable();
             $table->string('station_agent_id')->nullable();
@@ -88,6 +89,7 @@ class CreateShipmentsTable extends Migration
             $table->string('canceled_date')->nullable();
             $table->string('canceled_time')->nullable();
             $table->TEXT('receiver_signature')->nullable();
+            $table->string('receiver_signature_name')->nullable();
             $table->string('pdf_print')->nullable();
             $table->timestamps();
         });

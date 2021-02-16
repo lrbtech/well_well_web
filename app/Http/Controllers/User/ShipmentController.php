@@ -22,6 +22,7 @@ use App\Models\settings;
 use App\Models\language;
 use App\Models\temp_shipment;
 use App\Models\temp_shipment_package;
+use App\Models\system_logs;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -82,6 +83,14 @@ class ShipmentController extends Controller
         $manage_address->address2 = $request->address2;
         $manage_address->address3 = $request->address3;
         $manage_address->save();
+        
+        $system_logs = new system_logs;
+        $system_logs->_id = $manage_address->id;
+        $system_logs->category = 'address';
+        $system_logs->to_id = Auth::user()->email;
+        $system_logs->remark = $manage_address->from_to == 1 ?'From Address':'To Address'.'Created By Customer';
+        $system_logs->save();
+
 
         return response()->json($manage_address); 
     }
@@ -134,12 +143,21 @@ class ShipmentController extends Controller
         $shipment->total = $request->total;
         $shipment->save();
 
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::user()->email;
+        $system_logs->remark = 'New Shipment Created by Customer';
+        $system_logs->save();
+        
+
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
                 $shipment_package = new temp_shipment_package;
                 $shipment_package->temp_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
+                $shipment_package->reference_no = $_POST['reference_no'][$x];
                 $shipment_package->description = $_POST['description'][$x];
                 $shipment_package->weight = $_POST['weight'][$x];
                 $shipment_package->length = $_POST['length'][$x];
@@ -159,6 +177,7 @@ class ShipmentController extends Controller
                     $shipment_package = new temp_shipment_package;
                     $shipment_package->temp_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
+                    $shipment_package->reference_no = $_POST['reference_no'][$x];
                     $shipment_package->description = $_POST['description'][$x];
                     $shipment_package->weight = $_POST['weight'][$x];
                     $shipment_package->length = $_POST['length'][$x];
@@ -187,7 +206,8 @@ class ShipmentController extends Controller
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
-                return '<td>#'.$shipment->order_id.'</td>';
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
             })
             ->addColumn('shipment_type', function ($shipment) {
                 if ($shipment->shipment_type == 1) {
@@ -206,6 +226,7 @@ class ShipmentController extends Controller
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
                 <p>' . date("d-m-Y",strtotime($shipment->shipment_date)) . '</p>
+                <p>'.date('h:i a',strtotime($shipment->shipment_from_time)).' to '.$shipment->shipment_to_time.'</p>
                 </td>';
             })
             ->addColumn('from_address', function ($shipment) {
@@ -239,10 +260,10 @@ class ShipmentController extends Controller
             })
             ->addColumn('status', function ($shipment) {
                 if($shipment->status == 0){
-                    return 'Shipment Created';
+                    return 'Scheduled for Pickup';
                 }
                 elseif($shipment->status == 1){
-                    return 'Schedule for Pickup';
+                    return 'Pickup Assigned';
                 }
                 elseif($shipment->status == 2){
                     return 'Package Collected';
@@ -280,36 +301,32 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 10){
                     return '
-                    <p>Cancel Request</p>
-                    <p>' . $shipment->cancel_remark . '</p>
-                    ';
-                }
-                elseif($shipment->status == 11){
-                    return '
                     <p>Canceled</p>
+                    <p>' . $shipment->cancel_remark . '</p>
                     ';
                 }
             })
             ->addColumn('action', function ($shipment) {
+                $output='';
                 if($shipment->status == 8){
-                    return '<td>
-                    <p><a target="_blank" href="/user/print-invoice/'.$shipment->id.'" >Print</a></p>
-                    </td>';
-                }
-                elseif($shipment->status == 0){
-                    return '<td>
-                    <p><a onclick="PrintLabel('.$shipment->id.')" href="#">Print</a></p>
-                    <p><a onclick="CancelRequest('.$shipment->id.')" href="#">Cancel Request</a></p>
-                    </td>';
+                    $output.='<a target="_blank" href="/user/print-invoice/'.$shipment->id.'" class="dropdown-item">Print</a>';
                 }
                 else{
-                    return '<td>
-                    <p><a onclick="PrintLabel('.$shipment->id.')" href="#">Print</a></p>
-                    </td>';
+                    $output.='
+                    <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
+                    <a onclick="CancelRequest('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>
+                    ';
                 }
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        '.$output.'    
+                    </div>
+                </td>';
             })
             
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_type', 'shipment_mode','action','status'])
+        ->addIndexColumn()
         ->make(true);
 
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
@@ -322,6 +339,14 @@ class ShipmentController extends Controller
         $shipment->cancel_request_time = date('H:i:s');
         $shipment->status = 10;
         $shipment->save();
+
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::user()->email;
+        $system_logs->remark = 'Cancel Shipment Created by Customer';
+        $system_logs->save();
+
         return response()->json('successfully update'); 
     }
 
@@ -440,6 +465,34 @@ class ShipmentController extends Controller
         $pdf = PDF::loadView('print.printinvoice',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','customer','package_category','user'));
         $pdf->setPaper('A4');
         return $pdf->stream('report.pdf');
+    }
+
+
+    public function shipmentTrack(Request $request){
+        $language = language::all();
+        $id = $request->search_input;
+
+        // $check1 = shipment_package::where('sku_value',$request->search_input)->first();
+        $q =DB::table('shipment_packages as sp');
+        $q->where('sp.sku_value', $request->search_input);
+        $q->join('shipments as s','s.id','=','sp.shipment_id');
+        $q->where('s.sender_id', Auth::user()->id);
+        $q->select('s.*');
+        $check1 = $q->get();
+
+        $check2 = shipment::where('order_id',$request->search_input)->where('sender_id',Auth::user()->id)->first();
+        $shipment_id='';
+        if(!empty($check1)){
+            $shipment_id = $check1[0]->id;
+        }
+        elseif(!empty($check2)){
+            $shipment_id = $check2->id;
+        }
+
+        //$shipment = shipment::where('order_id',$request->search_input)->first();
+        $shipment_logs = system_logs::where('_id',$shipment_id)->orderBy('id', 'DESC')->get();
+        //return response()->json($shipment_logs);
+      return view('user.shipment_track',compact('language','shipment_logs','id'));
     }
 
 

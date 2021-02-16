@@ -124,6 +124,7 @@ visibility: visible;
                         elseif($shipment->status == 3){
                             echo '<td>
                             <p>Exception</p>
+                            <p>' . $shipment->exception_category. '</p>
                             <p>' . $shipment->exception_remark . '</p>
                             </td>';
                         }
@@ -292,7 +293,7 @@ visibility: visible;
                                 <b>Weight:</b> {{$row->weight}} kg<br>
                                 <b>Dimensions:</b> {{$row->length}} cm x {{$row->width}} cm x {{$row->height}} cm
                               </td>
-                              <td>{{$row->chargeable_weight}}</td>
+                              <td>{{$row->chargeable_weight}} Kg</td>
                             </tr>
                             @endforeach
                           </tbody>
@@ -313,27 +314,6 @@ visibility: visible;
                           </div>
 
                           <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Postal Charge <span id="postal_charge_percentage_label">{{$shipment->postal_charge_percentage}}</span>%</label>
-                            <div class="col-sm-6">
-                            <input value="{{$shipment->postal_charge_percentage}}" readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
-                              <input value="{{$shipment->postal_charge}}" readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
-                            </div>
-                          </div>
-
-                          <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">Sub Total </label>
-                            <div class="col-sm-6">
-                              <input value="{{$shipment->sub_total}}" readonly class="form-control" name="sub_total" id="sub_total" type="text">
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">VAT <span id="vat_percentage_label">{{$shipment->vat_percentage}}</span>%</label>
-                            <div class="col-sm-6">
-                            <input value="{{$shipment->vat_percentage}}" readonly name="vat_percentage" id="vat_percentage" type="hidden">
-                              <input value="{{$shipment->vat_amount}}" readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
-                            </div>
-                          </div>
-                          <div class="form-group row">
                             <label class="col-sm-6 col-form-label">Insurance <span id="insurance_percentage_lbel">{{$shipment->insurance_percentage}}</span>%</label>
                             <div class="col-sm-6">
                             <input value="{{$shipment->insurance_percentage}}" readonly name="insurance_percentage" id="insurance_percentage" type="hidden">
@@ -346,6 +326,29 @@ visibility: visible;
                               <input value="{{$shipment->cod_price}}" readonly name="cod_price" id="cod_price" type="hidden">
                               <input readonly name="before_total" id="before_total" type="hidden">
                               <input value="{{$shipment->cod_amount}}" readonly class="form-control" name="cod_amount" id="cod_amount" type="text">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label class="col-sm-6 col-form-label">Sub Total </label>
+                            <div class="col-sm-6">
+                              <input value="{{$shipment->sub_total}}" readonly class="form-control" name="sub_total" id="sub_total" type="text">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label class="col-sm-6 col-form-label">VAT <span id="vat_percentage_label">{{$shipment->vat_percentage}}</span>%</label>
+                            <div class="col-sm-6">
+                            <input value="{{$shipment->vat_percentage}}" readonly name="vat_percentage" id="vat_percentage" type="hidden">
+                              <input value="{{$shipment->vat_amount}}" readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label class="col-sm-6 col-form-label">Postal Charge <span id="postal_charge_percentage_label">{{$shipment->postal_charge_percentage}}</span>%</label>
+                            <div class="col-sm-6">
+                            <input value="{{$shipment->postal_charge_percentage}}" readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
+                              <input value="{{$shipment->postal_charge}}" readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
                             </div>
                           </div>
 
@@ -367,16 +370,16 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">
-                    <h5>Notes</h5>
+                    <h5>Shipment Logs</h5>
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label class="col-form-label">Notes </label>
                       <textarea class="form-control" name="notes" id="notes"></textarea>
-                    </div>
+                    </div> -->
                     <br>
-                        @foreach($shipment_notes as $row)
+                        @foreach($system_logs as $row)
                         <div class="col-sm-12 show_from_address">
                             <div class="media-body">
                               <h6 class="mt-0 mega-title-badge">
@@ -384,7 +387,7 @@ visibility: visible;
                                   {{$row->created_at}}
                                 </span>
                               </h6>
-                              <p>{{$row->notes}}</p>
+                              <p>{{$row->remark}}</p>
                             </div>
                         </div>
                         @endforeach

@@ -533,26 +533,7 @@
                         <input readonly class="form-control" name="shipment_price" id="shipment_price" type="text">
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Postal Charge <span id="postal_charge_percentage_label">{{$settings->postal_charge_percentage}}</span>%</label>
-                        <input value="{{$settings->postal_charge_percentage}}" readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
-                        <input readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Sub Total</label>
-                        <input readonly id="sub_total" name="sub_total" class="form-control"></input>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>VAT <span id="vat_percentage_label">{{$settings->vat_percentage}}</span>%</label>
-                        <input value="{{$settings->vat_percentage}}" readonly name="vat_percentage" id="vat_percentage" type="hidden">
-                        <input readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
-                    </div>
-                </div>
+
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Insurance <span id="insurance_percentage_label">{{$settings->insurance_percentage}}</span>%</label>
@@ -560,6 +541,30 @@
                         <input readonly class="form-control" name="insurance_amount" id="insurance_amount" type="text">
                     </div>
                 </div>
+                
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Sub Total</label>
+                        <input readonly id="sub_total" name="sub_total" class="form-control"></input>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>VAT <span id="vat_percentage_label">{{$settings->vat_percentage}}</span>%</label>
+                        <input value="{{$settings->vat_percentage}}" readonly name="vat_percentage" id="vat_percentage" type="hidden">
+                        <input readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Postal Charge <span id="postal_charge_percentage_label">{{$settings->postal_charge_percentage}}</span>%</label>
+                        <input value="{{$settings->postal_charge_percentage}}" readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
+                        <input readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
+                    </div>
+                </div>
+
                 <!-- <div class="col-sm-6">
                     <div class="form-group">
                         <label>Cash on Delivery</label>
@@ -1207,18 +1212,14 @@ function subAmount(total_price1,total_weight1) {
     var postal_charge_percentage =Number($('#postal_charge_percentage').val());
     var insurance_percentage = Number($('#insurance_percentage').val());
     var vat_percentage = Number($('#vat_percentage').val());
+    var declared_value = Number($('#declared_value').val());
 
-    if(total_weight >= 30){
-      postal_charge = 0;
-      $("#postal_charge").val('0');
-    }
-    else{
-      postal_charge = (postal_charge_percentage/100) * total_price;
-      postal_charge =  Number(postal_charge.toFixed(2));
-      $("#postal_charge").val(postal_charge);
-    }
+    insurance_amount = Number((insurance_percentage/100) * declared_value);
+    insurance_amount =  Number(insurance_amount.toFixed(2));
+    $("#insurance_amount").val(insurance_amount);
 
-    sub_total = Number(postal_charge + total_price);
+
+    sub_total = Number(insurance_amount + total_price);
     sub_total =  Number(sub_total.toFixed(2));
 
     $("#sub_total").val(sub_total);
@@ -1227,11 +1228,22 @@ function subAmount(total_price1,total_weight1) {
     vat_amount =  Number(vat_amount.toFixed(2));
     $("#vat_amount").val(vat_amount);
 
-    insurance_amount = Number((insurance_percentage/100) * sub_total);
-    insurance_amount =  Number(insurance_amount.toFixed(2));
-    $("#insurance_amount").val(insurance_amount);
+    
 
-    before_total = Number(sub_total + vat_amount + insurance_amount);
+    if(total_weight >= 30){
+      postal_charge = 0;
+      $("#postal_charge").val('0');
+    }
+    else{
+      postal_charge = (postal_charge_percentage/100) * total_price;
+      postal_charge =  Number(postal_charge.toFixed(2));
+      if(postal_charge < 2){
+        postal_charge = 2;
+      }
+      $("#postal_charge").val(postal_charge);
+    }
+
+    before_total = Number(sub_total + vat_amount + postal_charge);
 
     total = Number(before_total);
     total =  Number(total.toFixed(2));

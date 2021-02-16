@@ -42,6 +42,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>Tracking ID</th>
                             <th>{{$language[59][Auth::user()->lang]}}</th>
                             <th>{{$language[145][Auth::user()->lang]}}</th>
                             <th>{{$language[32][Auth::user()->lang]}}</th>
@@ -120,6 +121,7 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_type', name: 'shipment_type' },

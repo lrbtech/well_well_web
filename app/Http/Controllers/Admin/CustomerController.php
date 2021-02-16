@@ -25,7 +25,7 @@ class CustomerController extends Controller
     }
 
     public function viewCustomer(){
-        $customer = User::all();
+        $customer = User::orderBy('id','DESC')->get();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
         $settings = settings::find(1);
         $language = language::all();
@@ -33,15 +33,53 @@ class CustomerController extends Controller
         if(Auth::guard('admin')->user()->role_id == 1){
             return view('admin.admin_customer',compact('customer','role_get','settings', 'language' ));
         }
-        elseif(Auth::guard('admin')->user()->role_id == 2){
+        else if(Auth::guard('admin')->user()->role_id == 2){
             return view('admin.registration_customer',compact('customer','role_get','settings', 'language'));
         }
-        elseif(Auth::guard('admin')->user()->role_id == 3){
+        else if(Auth::guard('admin')->user()->role_id == 3){
             return view('admin.sales_customer',compact('customer','role_get','settings','language'));
         }
-        elseif(Auth::guard('admin')->user()->role_id == 4){
+        else if(Auth::guard('admin')->user()->role_id == 4){
             return view('admin.accounts_customer',compact('customer','role_get','settings','language'));
+        }else{
+           return view('admin.admin_customer',compact('customer','role_get','settings', 'language' ));
         }
+    }
+
+    public function registrationCustomer(){
+      $customer = User::orderBy('id','DESC')->get();
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $settings = settings::find(1);
+      $language = language::all();
+
+      return view('admin.registration_customer',compact('customer','role_get','settings', 'language'));
+    }
+
+    public function salesCustomer(){
+      $customer = User::orderBy('id','DESC')->get();
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $settings = settings::find(1);
+      $language = language::all();
+
+      return view('admin.sales_customer',compact('customer','role_get','settings', 'language'));
+    }
+
+    public function accountsCustomer(){
+      $customer = User::orderBy('id','DESC')->get();
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $settings = settings::find(1);
+      $language = language::all();
+
+      return view('admin.accounts_customer',compact('customer','role_get','settings', 'language'));
+    }
+
+    public function activeCustomer(){
+      $customer = User::orderBy('id','DESC')->get();
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $settings = settings::find(1);
+      $language = language::all();
+
+      return view('admin.active_customer',compact('customer','role_get','settings', 'language'));
     }
 
     public function editCustomer($id){
@@ -121,6 +159,17 @@ class CustomerController extends Controller
 	        }
         }
                 
+        $all = User::find($request->customer_id);
+        $rate = add_rate::where('user_id',$request->customer_id)->first();
+        $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
+        $customer = User::find($request->customer_id);
+        $settings = settings::find(1);
+        
+        Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
+            $message->to($all->email)->subject('Well Well Express - Your Account Price');
+            $message->from('info@lrbtech.com','Well Well Express');
+        });
+
         return response()->json('successfully save'); 
     }
 
@@ -171,6 +220,17 @@ class CustomerController extends Controller
           $add_rate_item->save();
         }
       }
+
+        $all = User::find($request->customer_id);
+        $rate = add_rate::where('user_id',$request->customer_id)->first();
+        $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
+        $customer = User::find($request->customer_id);
+        $settings = settings::find(1);
+        
+        Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
+            $message->to($all->email)->subject('Well Well Express - Your Account Price');
+            $message->from('info@lrbtech.com','Well Well Express');
+        });
               
       return response()->json('successfully save'); 
   }
@@ -209,10 +269,12 @@ class CustomerController extends Controller
         $rate = add_rate::where('user_id',$id)->first();
         $rate_item = add_rate_item::where('user_id',$id)->get();
 
+        $language = language::all();
+
         $customer = User::find($id);
         $settings = settings::find(1);
         
-        return view('admin.profile',compact('rate','rate_item','customer','country','city','area','settings'));
+        return view('admin.profile',compact('rate','rate_item','customer','country','city','area','settings','language'));
     }
 
 

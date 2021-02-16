@@ -21,6 +21,7 @@ use App\Models\settings;
 use App\Models\station;
 use App\Models\language;
 use App\Models\ship_now_mobile_verify;
+use App\Models\system_logs;
 use Mail;
 use Hash;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -162,8 +163,8 @@ class PageController extends Controller
         $config = [
             'table' => 'users',
             'field' => 'customer_id',
-            'length' => 9,
-            'prefix' => 'WELL-'
+            'length' => 6,
+            'prefix' => '1'
         ];
         $customer_id = IdGenerator::generate($config);
         
@@ -410,6 +411,13 @@ class PageController extends Controller
         $shipment->before_total = $request->before_total;
         $shipment->total = $request->total;
         $shipment->save();
+
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = $request->from_name .'/'. $request->from_mobile;
+        $system_logs->remark = 'New Shipment Created by Guest';
+        $system_logs->save();
 
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 

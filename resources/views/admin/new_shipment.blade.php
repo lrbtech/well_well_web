@@ -60,7 +60,7 @@ visibility: visible;
                 <div class="col-lg-6 breadcrumb-right">
                   <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin/dashboard"><i class="pe-7s-home"></i></a></li>
-                    <li class="breadcrumb-item">Shipment</li>
+                    <li class="breadcrumb-item">{{$language[18][Auth::guard('admin')->user()->lang]}}</li>
                     <li class="breadcrumb-item active"> </li>
                   </ol>
                 </div>
@@ -247,10 +247,15 @@ visibility: visible;
                                 </select>
                               </div>
 
-                              <div class="form-group col-md-8">
+                              <div class="form-group col-md-4">
                                 <label class="col-form-label">{{$language[41][Auth::guard('admin')->user()->lang]}}
                                 </label>
                                 <input class="form-control" id="description1" name="description[]" type="text" >
+                              </div>
+
+                              <div class="form-group col-md-4">
+                                <label class="col-form-label">Reference No</label>
+                                <input class="form-control" id="reference_no1" name="reference_no[]" type="text" >
                               </div>
 
                               <div class="form-group col-md-2">
@@ -334,13 +339,13 @@ visibility: visible;
 
 <div class="col-sm-12 col-xl-12 xl-100">
     <div class="card">
-      <div class="card-header">
+      <!-- <div class="card-header">
         <h5>{{$language[49][Auth::guard('admin')->user()->lang]}}</h5>
-      </div>
+      </div> -->
       <div class="card-body">
 
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label">{{$language[50][Auth::guard('admin')->user()->lang]}}</label>
+            <label class="col-sm-3 col-form-label">{{$language[204][Auth::guard('admin')->user()->lang]}}</label>
             <div class="col-sm-9">
               <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml">
                 <div class="radio radio-primary">
@@ -498,31 +503,7 @@ visibility: visible;
                             </div>
                           </div>
 
-                          <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">{{$language[66][Auth::guard('admin')->user()->lang]}} <span id="postal_charge_percentage_label">0</span>%</label>
-                            <div class="col-sm-6">
-                            <input readonly name="postal_charge_enable" id="postal_charge_enable" type="hidden">
-                            <input readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
-                              <input readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
-                              <input readonly class="form-control" name="sub_total" id="sub_total" type="hidden">
-                            </div>
-                          </div>
 
-                          <!-- <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">{{$language[67][Auth::guard('admin')->user()->lang]}} </label>
-                            <div class="col-sm-6">
-                              <input readonly class="form-control" name="sub_total" id="sub_total" type="text">
-                            </div>
-                          </div> -->
-
-                          <div class="form-group row">
-                            <label class="col-sm-6 col-form-label">{{$language[68][Auth::guard('admin')->user()->lang]}} <span id="vat_percentage_label">0</span>%</label>
-                            <div class="col-sm-6">
-                            <input readonly name="vat_enable" id="vat_enable" type="hidden">
-                            <input readonly name="vat_percentage" id="vat_percentage" type="hidden">
-                              <input readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
-                            </div>
-                          </div>
                           <div class="form-group row">
                             <label class="col-sm-6 col-form-label">{{$language[69][Auth::guard('admin')->user()->lang]}} <span id="insurance_percentage_label">0</span>%</label>
                             <div class="col-sm-6">
@@ -538,6 +519,31 @@ visibility: visible;
                               <input readonly name="cod_price" id="cod_price" type="hidden">
                               <input readonly name="before_total" id="before_total" type="hidden">
                               <input readonly class="form-control" name="cod_amount" id="cod_amount" type="text">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label class="col-sm-6 col-form-label">{{$language[67][Auth::guard('admin')->user()->lang]}} </label>
+                            <div class="col-sm-6">
+                              <input readonly class="form-control" name="sub_total" id="sub_total" type="text">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label class="col-sm-6 col-form-label">{{$language[68][Auth::guard('admin')->user()->lang]}} <span id="vat_percentage_label">0</span>%</label>
+                            <div class="col-sm-6">
+                            <input readonly name="vat_enable" id="vat_enable" type="hidden">
+                            <input readonly name="vat_percentage" id="vat_percentage" type="hidden">
+                              <input readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label class="col-sm-6 col-form-label">{{$language[66][Auth::guard('admin')->user()->lang]}} <span id="postal_charge_percentage_label">0</span>%</label>
+                            <div class="col-sm-6">
+                            <input readonly name="postal_charge_enable" id="postal_charge_enable" type="hidden">
+                            <input readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
+                              <input readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
                             </div>
                           </div>
 
@@ -1121,6 +1127,34 @@ function subAmount(total_price1,total_weight1) {
   var cod_price = Number($('#cod_price').val());
   var vat_enable = Number($('#vat_enable').val());
   var vat_percentage = Number($('#vat_percentage').val());
+  var declared_value = Number($('#declared_value').val());
+
+
+  if(insurance_enable == 1){
+    insurance_amount = Number((insurance_percentage/100) * declared_value);
+    insurance_amount =  Number(insurance_amount.toFixed(2));
+    $("#insurance_amount").val(insurance_amount);
+  }
+
+  //before_total = Number( + postal_charge);
+
+  if(cod_enable == 1){
+    cod_amount = cod_price;
+    $("#cod_amount").val(cod_amount);
+  }
+
+
+  sub_total = Number(total_price + insurance_amount + cod_amount);
+  sub_total =  Number(sub_total.toFixed(2));
+
+  $("#sub_total").val(sub_total);
+
+  if(vat_enable == 1){
+    vat_amount = Number((vat_percentage/100) * sub_total);
+    vat_amount =  Number(vat_amount.toFixed(2));
+    $("#vat_amount").val(vat_amount);
+  }
+
 
   if(postal_charge_enable == 1){
     if(total_weight >= 30){
@@ -1130,35 +1164,14 @@ function subAmount(total_price1,total_weight1) {
     else{
       postal_charge = (postal_charge_percentage/100) * total_price;
       postal_charge =  Number(postal_charge.toFixed(2));
+      if(postal_charge < 2){
+        postal_charge = 2;
+      }
       $("#postal_charge").val(postal_charge);
     }
   }
 
-  // sub_total = Number(postal_charge + total_price);
-  // sub_total =  Number(sub_total.toFixed(2));
-
-  $("#sub_total").val('0');
-
-  if(vat_enable == 1){
-    vat_amount = Number((vat_percentage/100) * total_price);
-    vat_amount =  Number(vat_amount.toFixed(2));
-    $("#vat_amount").val(vat_amount);
-  }
-
-  if(insurance_enable == 1){
-    insurance_amount = Number((insurance_percentage/100) * total_price);
-    insurance_amount =  Number(insurance_amount.toFixed(2));
-    $("#insurance_amount").val(insurance_amount);
-  }
-
-  before_total = Number(total_price + vat_amount + insurance_amount + postal_charge);
-
-  if(cod_enable == 1){
-    cod_amount = cod_price;
-    $("#cod_amount").val(cod_amount);
-  }
-
-  total = Number(before_total + cod_amount);
+  total = Number(sub_total + vat_amount + postal_charge);
   total =  Number(total.toFixed(2));
 
   $("#total").val(total);
@@ -1224,9 +1237,13 @@ function addpackage(no_of_packages){
             <?php } ?>
           '</select>'+
         '</div>'+
-        '<div class="form-group col-md-8">'+
+        '<div class="form-group col-md-4">'+
           '<label class="col-form-label">Description</label>'+
           '<input class="form-control" id="description'+count+'" name="description[]" type="text" >'+
+        '</div>'+
+        '<div class="form-group col-md-4">'+
+          '<label class="col-form-label">Reference No</label>'+
+          '<input class="form-control" id="reference_no'+count+'" name="reference_no[]" type="text" >'+
         '</div>'+
         '<div class="form-group col-md-2">'+
           '<label class="col-form-label">Actual Weight</label>'+

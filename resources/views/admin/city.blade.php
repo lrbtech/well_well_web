@@ -32,10 +32,10 @@
                 <div class="card">
                   <div class="card-header">
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
-                    <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
+                    <!-- <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
                     <span>New City</span>
-                    </button>
+                    </button> -->
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -53,7 +53,11 @@
                         <tr>
                             <td>{{$key + 1}}</td>
                             <td>
+                            @if(Auth::guard('admin')->user()->area == 'on')
                             <a href="/admin/area/{{$row->id}}/{{$country_id}}">{{$row->city}}</a>
+                            @else 
+                            {{$row->city}}
+                            @endif
                             </td>
                             <td>
                             @if($row->status == 0)
@@ -65,8 +69,10 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                @if(Auth::guard('admin')->user()->city_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
-                                    @if(Auth::guard('admin')->user()->role_id == '0')
+                                    @endif
+                                    @if(Auth::guard('admin')->user()->city_delete == '0')
                                     @if($row->status == 0)
                                       <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
                                     @else 
@@ -119,6 +125,16 @@
               <option value="{{$row->id}}">{{$row->station}}</option>
               @endforeach
             </select>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label">Latitude</label>
+            <input autocomplete="off" type="text" id="lat" name="lat" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label">Longitude</label>
+            <input autocomplete="off" type="text" id="lng" name="lng" class="form-control">
         </div>
 
         </form>
@@ -208,6 +224,8 @@ function Edit(id){
       $('input[name=city]').val(data.city);
       $('input[name=id]').val(id);
       $('input[name=country_id]').val(data.country_id);
+      $('input[name=lat]').val(data.lat);
+      $('input[name=lng]').val(data.lng);
       $('select[name=station_id]').val(data.station_id);
       $('#popup_modal').modal('show');
       action_type = 2;

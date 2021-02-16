@@ -42,7 +42,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>User ID</th>
+                            <th>User Id</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
@@ -84,9 +84,9 @@
                 <input type="hidden" name="shipment_id" id="shipment_id">
 
                     <div class="form-group">
-                        <label>Assign Employee</label>
+                        <label>Assign Agent</label>
                         <select id="pickup_agent_id" name="pickup_agent_id" class="form-control">
-                          <option value="">Select Agent</option>
+                          <option value="">Select</option>
                           @foreach($agent as $row)
                           <option value="{{$row->id}}">{{$row->name}}</option>
                           @endforeach
@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button onclick="updateAssignAgent()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Update</button>
+                        <button onclick="updateAssignAgent()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Save</button>
                     </div>
                 </form>
             </div>
@@ -119,9 +119,9 @@
                 <input type="hidden" name="shipment_id1" id="shipment_id1">
 
                     <div class="form-group">
-                        <label>Assign Employee</label>
+                        <label>Assign Agent</label>
                         <select id="station_agent_id" name="station_agent_id" class="form-control">
-                          <option value="">Select Agent</option>
+                          <option value="">Selcte</option>
                           @foreach($agent as $row)
                           <option value="{{$row->id}}">{{$row->name}}</option>
                           @endforeach
@@ -129,7 +129,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button onclick="updateAssignAgentStation()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Update</button>
+                        <button onclick="updateAssignAgentStation()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Save</button>
                     </div>
                 </form>
             </div>
@@ -175,13 +175,13 @@
 
 @endsection
 @section('extra-js')
+ 
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
-  <script type="text/javascript">
+  <script>
 $('.shipment').addClass('active');
-
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
     "serverSide": true,
@@ -331,6 +331,7 @@ function updateAssignAgentDelivery(){
     }
     });
 }
-
 </script>
+
+
 @endsection

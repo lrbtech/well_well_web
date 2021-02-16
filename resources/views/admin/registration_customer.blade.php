@@ -10,8 +10,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>View <span>Customer  </span></h2>
-                  <h6 class="mb-0">admin panel</h6>
+                  <h2>{{$language[3][Auth::guard('admin')->user()->lang]}} <span>{{$language[8][Auth::guard('admin')->user()->lang]}}  </span></h2>
+                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -38,20 +38,24 @@
                       <table class="display" id="basic-1">
                         <thead>
                           <tr>
-                          <th>ID</th>
-                            <th>Business Type</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Mobile</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>#</th>
+                            <th>{{$language[203][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[202][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[12][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[13][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[14][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
+                        <?php $x = 0; ?>
                         @foreach($customer as $key => $row)
-                        @if($row->status == 1)
+                        @if($row->status == 0 || $row->status == 1)
+                        <?php $x++; ?>
                           <tr>
-                          <td>{{$row->customer_id}}</td>
+                            <td>{{$x}}</td>
+                            <td>{{$row->customer_id}}</td>
                             <td>
                               @if($row->user_type == 0)
                               Individual Business

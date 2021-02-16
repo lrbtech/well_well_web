@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
 
+
 class LoginController extends Controller
 {
     public function __construct()
@@ -15,6 +16,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
+     
       return view('admin-login.login');
     }
 
@@ -25,7 +27,7 @@ class LoginController extends Controller
         'email'   => 'required|email',
         'password' => 'required|min:6'
       ]);
-
+        
       // Attempt to log the user in
       if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
         // if successful, then redirect to their intended location

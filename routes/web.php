@@ -81,6 +81,13 @@ Route::group(['prefix' => 'admin'],function(){
 	Route::get('/dashboard', [App\Http\Controllers\Admin\HomeController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/view-customer', [App\Http\Controllers\Admin\CustomerController::class, 'viewCustomer']);
+
+    Route::get('/registration-customer', [App\Http\Controllers\Admin\CustomerController::class, 'registrationCustomer']);
+    Route::get('/sales-customer', [App\Http\Controllers\Admin\CustomerController::class, 'salesCustomer']);
+    Route::get('/accounts-customer', [App\Http\Controllers\Admin\CustomerController::class, 'accountsCustomer']);
+    Route::get('/active-customer', [App\Http\Controllers\Admin\CustomerController::class, 'activeCustomer']);
+    // Route::get('/view-customer', [App\Http\Controllers\Admin\CustomerController::class, 'viewCustomer']);
+    // Route::get('/view-customer', [App\Http\Controllers\Admin\CustomerController::class, 'viewCustomer']);
     
     Route::get('/view-profile/{id}', [App\Http\Controllers\Admin\CustomerController::class, 'viewProfile']);
 
@@ -162,7 +169,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/save-agent', [App\Http\Controllers\Admin\AgentController::class, 'saveAgent']);
     Route::POST('/update-agent', [App\Http\Controllers\Admin\AgentController::class, 'updateAgent']);
     Route::get('/edit-agent/{id}', [App\Http\Controllers\Admin\AgentController::class, 'editAgent']);
-    Route::get('/agent-delete/{id}', [App\Http\Controllers\Admin\AgentController::class, 'deleteAgent']);
+    Route::get('/delete-agent/{id}/{status}', [App\Http\Controllers\Admin\AgentController::class, 'deleteAgent']);
 
 
     //exception-category
@@ -245,6 +252,13 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-new-shipment-request', [App\Http\Controllers\Admin\AllShipment::class, 'getNewShipmentRequest']);
 
     Route::get('/checkbox-assign-agent', [App\Http\Controllers\Admin\AllShipment::class, 'checkboxAssignAgent']);
+    Route::get('/bulk-checkbox-assign-agent', [App\Http\Controllers\Admin\AllShipment::class, 'BulkCheckboxAssignAgent']);
+
+    Route::get('/today-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'TodayPickupRequest']);
+    Route::POST('/get-today-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'getTodayPickupRequest']);
+
+    Route::get('/future-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'FuturePickupRequest']);
+    Route::POST('/get-future-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'getFuturePickupRequest']);
 
     Route::get('/pickup-exception', [App\Http\Controllers\Admin\AllShipment::class, 'PickupException']);
     Route::POST('/get-pickup-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getPickupException']);
@@ -272,6 +286,8 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/update-cancel-request/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'updateCancelRequest']);
 
+    Route::get('/revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'revenueException']);
+
     //report
     Route::get('/shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'ShipmentReport']);
     Route::POST('/get-shipment-report/{status}/{user_type}', [App\Http\Controllers\Admin\ReportController::class, 'getShipmentReport']);
@@ -285,6 +301,16 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/insert_language', [App\Http\Controllers\Admin\SettingsController::class, 'insertLanguage']);
     Route::POST('/update_language', [App\Http\Controllers\Admin\SettingsController::class, 'updateLanguage']);
     Route::POST('/delete_language', [App\Http\Controllers\Admin\SettingsController::class, 'deleteLanguage']);
+
+    Route::get('/system-logs', [App\Http\Controllers\Admin\SettingsController::class, 'systemLogs']);
+    // Route::get('/shipment-track/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'shipmentTrack']);
+
+    Route::POST('/shipment-track', [App\Http\Controllers\Admin\ShipmentController::class, 'shipmentTrack']);
+
+    Route::get('/change-language/{language}', [App\Http\Controllers\Admin\SettingsController::class, 'changelanguage']);
+
+
+    //System Logs
 });
 
 
@@ -326,6 +352,10 @@ Route::group(['prefix' => 'user'],function(){
 
     Route::get('/change-password', [App\Http\Controllers\User\ProfileController::class, 'changePassword']);
     Route::POST('/change-password', [App\Http\Controllers\User\ProfileController::class, 'updateChangePassword']);
+
+    Route::get('/change-language/{language}', [App\Http\Controllers\User\ProfileController::class, 'changelanguage']);
+
+    Route::POST('/shipment-track', [App\Http\Controllers\User\ShipmentController::class, 'shipmentTrack']);
 
 });
 

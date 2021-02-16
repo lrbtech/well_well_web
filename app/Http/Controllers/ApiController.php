@@ -13,6 +13,13 @@ use App\Models\manage_address;
 use App\Models\package_category;
 use App\Models\exception_category;
 use App\Models\country;
+use App\Models\add_rate;
+use App\Models\add_rate_item;
+use App\Models\settings;
+use App\Models\common_price;
+use App\Models\revenue_exception_log;
+use App\Models\shipment_log;
+use App\Models\system_logs;
 use Hash;
 use Mail;
 use PDF;
@@ -26,7 +33,7 @@ class ApiController extends Controller
         date_default_timezone_get();
     }
     public function agentLogin(Request $request){
-        $exist = agent::where('email',$request->email)->get();
+        $exist = agent::where('email',$request->email)->where('status',0)->get();
         if(count($exist)>0){
             //if($exist[0]->status == 1){
                 if(Hash::check($request->password,$exist[0]->password)){
@@ -406,6 +413,212 @@ class ApiController extends Controller
         return response()->json($data); 
     }
 
+    public function updatePackageDetails(Request $request){
+        try{
+            $shipment_package = shipment_package::find($request->id);
+
+            $revenue_exception_log = new revenue_exception_log;
+            $revenue_exception_log->package_id = $shipment_package->id;
+            $revenue_exception_log->shipment_id = $shipment_package->shipment_id;
+            $revenue_exception_log->old_weight = $shipment_package->weight;
+            $revenue_exception_log->old_length = $shipment_package->length;
+            $revenue_exception_log->old_width = $shipment_package->width;
+            $revenue_exception_log->old_height = $shipment_package->height;
+            $revenue_exception_log->old_chargeable_weight = $shipment_package->chargeable_weight;
+
+            $shipment_package->weight = $request->weight;
+            $shipment_package->length = $request->length;
+            $shipment_package->width = $request->width;
+            $shipment_package->height = $request->height;
+            $chargeable_weight = 0;
+            $dimension = ($request->length * $request->width * $request->height) / 5000;
+            if($dimension > $request->weight)
+            {
+                $chargeable_weight = $dimension;
+            }
+            else{
+                $chargeable_weight = $request->weight;
+            }
+            $shipment_package->chargeable_weight = $chargeable_weight;
+
+            
+            $revenue_exception_log->weight = $request->weight;
+            $revenue_exception_log->length = $request->length;
+            $revenue_exception_log->width = $request->width;
+            $revenue_exception_log->height = $request->height;
+            $revenue_exception_log->chargeable_weight = $chargeable_weight;
+            $revenue_exception_log->save();
+
+            $shipment_package->save();
+
+            $total_weight = shipment_package::where('shipment_id',$shipment_package->shipment_id)->sum('chargeable_weight');
+
+            $shipment = shipment::find($shipment_package->shipment_id);
+            $shipment->total_weight = $total_weight;
+
+        $price=0;
+        
+    if($shipment->sender_id != '0'){
+        $rate = add_rate::where('user_id',$shipment->sender_id)->first();
+        $address = manage_address::find($shipment->to_address);
+        $area = city::find($address->area_id);
+        $data =array();
+
+        $rate_item = add_rate_item::where('user_id',$shipment->sender_id)->where('status',$shipment->shipment_mode)->get();
+        
+        if($area->remote_area == '0'){
+            if(!empty($rate_item)){
+                foreach($rate_item as $row){
+                    if($row->weight_from <= $total_weight && $row->weight_to >= $total_weight ){
+                        $price = $row->price;
+                    }
+                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '1'){
+                        $price = $total_weight * $rate->service_area_20_to_1000_kg_price;
+                    }
+                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '2'){
+                        $price = $total_weight * $rate->same_day_delivery_20_to_1000_kg_price;
+                    }
+                }
+            }
+        }
+        else{
+            if(!empty($rate_item)){
+                foreach($rate_item as $row){
+                    if($row->weight_from <= $total_weight && $row->weight_to >= $total_weight ){
+                        $price = $row->price;
+                    }
+                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '1'){
+                        $price = $total_weight * $rate->service_area_20_to_1000_kg_price;
+                    }
+                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '2'){
+                        $price = $total_weight * $rate->same_day_delivery_20_to_1000_kg_price;
+                    }
+                }
+            }
+            else{
+                if('0' <= $total_weight && '5' >= $total_weight){
+                    $price = $rate->before_5_kg_price;
+                }
+                else{
+                    $price = $total_weight * $rate->above_5_kg_price;
+                }
+            }
+        }
+
+        $insurance_amount = 0;
+        $cod_amount = 0;
+        $vat_amount = 0;
+        $postal_charge = 0;
+        
+        $shipment->shipment_price = $price;
+        $settings = settings::find('1');
+        if($rate->insurance_enable == 1){
+            $insurance_amount = ($settings->insurance_percentage/100) * $shipment->declared_value;
+        }
+
+        if($rate->cod_enable == 1){
+            $cod_amount = $rate->cod_price;
+        }
+
+        $sub_total = $price + $insurance_amount + $cod_amount;
+
+        if($rate->vat_enable == 1){
+            $vat_amount = ($settings->vat_percentage/100) * $sub_total;
+        }
+        
+        if($rate->postal_charge_enable == 1){
+            if($total_weight >= 30){
+              $postal_charge = 0;
+            }
+            else{
+              $postal_charge = ($settings->postal_charge_percentage/100) * $price;
+              if($postal_charge < 2){
+                $postal_charge = 2;
+              }
+            }
+        }
+
+        $total = $sub_total + $vat_amount + $postal_charge;
+
+        $shipment->postal_charge_percentage = $settings->postal_charge_percentage;
+        $shipment->postal_charge = $postal_charge;
+        $shipment->sub_total = $sub_total;
+        $shipment->vat_percentage = $settings->vat_percentage;
+        $shipment->vat_amount = $vat_amount;
+        $shipment->insurance_percentage = $settings->insurance_percentage;
+        $shipment->insurance_amount = $insurance_amount;
+        $shipment->cod_amount = $request->cod_amount;
+        $shipment->total = $total;
+        $shipment->save();
+
+    }else{
+        $common_price = common_price::all();
+        if(!empty($common_price)){
+            foreach($common_price as $row){
+                if($row->weight_from <= $total_weight && $row->weight_to >= $total_weight ){
+                    $price = $row->price;
+                }
+            }
+        }
+
+
+        $shipment->shipment_price = $price;
+        $settings = settings::find('1');
+        $insurance_amount = ($settings->insurance_percentage/100) * $shipment->declared_value;
+
+
+        $sub_total = $price + $insurance_amount;
+
+        $vat_amount = ($settings->vat_percentage/100) * $sub_total;
+    
+        if($total_weight >= 30){
+            $postal_charge = 0;
+        }
+        else{
+            $postal_charge = ($settings->postal_charge_percentage/100) * $price;
+            if($postal_charge < 2){
+                $postal_charge = 2;
+            }
+        }
+
+        $total = $sub_total + $vat_amount + $postal_charge;
+
+        $shipment->postal_charge_percentage = $settings->postal_charge_percentage;
+        $shipment->postal_charge = $postal_charge;
+        $shipment->sub_total = $sub_total;
+        $shipment->vat_percentage = $settings->vat_percentage;
+        $shipment->vat_amount = $vat_amount;
+        $shipment->insurance_percentage = $settings->insurance_percentage;
+        $shipment->insurance_amount = $insurance_amount;
+        $shipment->total = $total;
+        $shipment->save();
+    }
+        
+            $shipment_log = new shipment_log;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 11;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
+
+            $agent = agent::find($request->agent_id);
+            $system_logs = new system_logs;
+            $system_logs->_id = $request->package_id;
+            $system_logs->category = 'package';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Revenue Exception by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+      
+           // return response()->json($shipment);
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                'package_id'=>$shipment_package->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
 
     public function updatePackageException(Request $request){
         try{
@@ -432,6 +645,14 @@ class ApiController extends Controller
                 $shipment->status = 2;
                 $shipment->package_collect_date = date('Y-m-d');
                 $shipment->package_collect_time = date('H:i:s');
+
+                $agent = agent::find($request->agent_id);
+                $system_logs = new system_logs;
+                $system_logs->_id = $request->shipment_id;
+                $system_logs->category = 'shipment';
+                $system_logs->to_id = $agent->email;
+                $system_logs->remark = 'Pacakge Collected by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+                $system_logs->save();
                 
             }
             else{
@@ -440,9 +661,23 @@ class ApiController extends Controller
                 $shipment->exception_remark = $request->remark;
                 $shipment->exception_assign_date = date('Y-m-d');
                 $shipment->exception_assign_time = date('H:i:s');
+
+                $agent = agent::find($request->agent_id);
+                $system_logs = new system_logs;
+                $system_logs->_id = $request->shipment_id;
+                $system_logs->category = 'shipment';
+                $system_logs->to_id = $agent->email;
+                $system_logs->remark = 'Pickup Exception by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+                $system_logs->save();
             }
             $shipment->save();
-            
+
+            $shipment_log = new shipment_log;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 3;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
 
            // return response()->json($shipment);
             return response()->json(
@@ -464,6 +699,22 @@ class ApiController extends Controller
             $shipment->pickup_received_time = date('H:i:s');
             $shipment->save();
 
+
+            $shipment_log = new shipment_log;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 4;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
+
+            $agent = agent::find($request->agent_id);
+            $system_logs = new system_logs;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Transit In by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+
            // return response()->json($shipment);
             return response()->json(
                 ['message' => 'Update Successfully',
@@ -479,9 +730,26 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             
             $shipment->status = 6;
+            $shipment->station_agent_id = $request->agent_id;
             $shipment->station_received_date = date('Y-m-d');
             $shipment->station_received_time = date('H:i:s');
             $shipment->save();
+
+            $shipment_log = new shipment_log;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 6;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
+
+            $agent = agent::find($request->agent_id);
+            $system_logs = new system_logs;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Transit Out by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+
 
            // return response()->json($shipment);
             return response()->json(
@@ -497,9 +765,25 @@ class ApiController extends Controller
     public function packageAtStation(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
-            
+            //$shipment->station_agent_id = $request->agent_id;
             $shipment->status = 6;
             $shipment->save();
+
+
+            $shipment_log = new shipment_log;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 6;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
+
+            $agent = agent::find($request->agent_id);
+            $system_logs = new system_logs;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Pakcage At Station by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
 
            // return response()->json($shipment);
             return response()->json(
@@ -522,6 +806,22 @@ class ApiController extends Controller
             $shipment->delivery_assign_time = date('H:i:s');
             $shipment->save();
 
+            $shipment_log = new shipment_log;
+            $shipment_log->agent_id = $request->agent_id;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 7;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
+
+            $agent = agent::find($request->agent_id);
+            $system_logs = new system_logs;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Van Scan by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+
            // return response()->json($shipment);
             return response()->json(
                 ['message' => 'Update Successfully',
@@ -540,6 +840,14 @@ class ApiController extends Controller
             $shipment->delivery_date = date('Y-m-d');
             $shipment->delivery_time = date('H:i:s');
 
+            $agent = agent::find($request->agent_id);
+            $system_logs = new system_logs;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Shipment Delivered by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+
             $shipment->cod_type = $request->cod_type;
             if($request->cod_type == 'Credit Card'){
             $shipment->credit_verification_code = $request->credit_verification_code;
@@ -549,6 +857,7 @@ class ApiController extends Controller
             $shipment->delivery_notes = $request->delivery_notes;
 
             $shipment->receiver_signature = 'data:image/png;base64,'.$request->receiver_signature;
+            $shipment->receiver_signature_name = $request->signature_name;
             
             // if(isset($request->receiver_id_copy)){
             //     if($request->receiver_id_copy!=""){                
@@ -569,6 +878,14 @@ class ApiController extends Controller
 
 
             $shipment->save();
+
+
+            $shipment_log = new shipment_log;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 8;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
 
 
             $all = shipment::find($request->shipment_id);
@@ -603,6 +920,21 @@ class ApiController extends Controller
             $shipment->delivery_exception_assign_date = date('Y-m-d');
             $shipment->delivery_exception_assign_time = date('H:i:s');
             $shipment->save();
+
+            $agent = agent::find($request->agent_id);
+            $system_logs = new system_logs;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Delivery Exception by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+
+            $shipment_log = new shipment_log;
+            $shipment_log->shipment_id = $request->shipment_id;
+            $shipment_log->shipment_status = 9;
+            $shipment_log->date = date('Y-m-d');
+            $shipment_log->time = date('H:i:s');
+            $shipment_log->save();
             
            // return response()->json($shipment);
             return response()->json(
@@ -671,8 +1003,15 @@ class ApiController extends Controller
     public function scanPackageSku(Request $request){ 
         //return response()->json($request);
         try{
-            $check1 = shipment_package::where('sku_value',$request->barcode)->get();
+            //$check1 = shipment_package::where('sku_value',$request->barcode)->get();
 
+            $q =DB::table('shipment_packages as sp');
+            $q->where('sp.sku_value', $request->barcode);
+            $q->join('shipments as s','s.id','=','sp.shipment_id');
+            $q->select('s.status','sp.*');
+            $check1 = $q->get();
+
+        if($check1[0]->status == '10'){
             if(count($check1)>0){
                 $data = array('shipment_id' => (int)$check1[0]->shipment_id,
                 'package_id' => $check1[0]->id);
@@ -681,6 +1020,46 @@ class ApiController extends Controller
             }else{
                 return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
             }
+        }else{
+            return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
+        }
+        
+        }catch (\Exception $e) {
+            return response()->json($e);
+            return response()->json(['message' => 'Shipment Not Available','status'=>400], 400);
+        }
+    }
+
+
+    public function barcodePackage(Request $request){ 
+        //return response()->json($request);
+        try{
+            //$check1 = shipment_package::where('sku_value',$request->barcode)->get();
+        $q =DB::table('shipment_packages as sp');
+        $q->where('sp.sku_value', $request->barcode);
+        $q->join('shipments as s','s.id','=','sp.shipment_id');
+        $q->select('s.status','sp.*');
+        $check1 = $q->get();
+
+        if($check1[0]->status == '10'){
+
+            if(count($check1)>0){
+                $data = array(
+                'id'=>$check1[0]->id,
+                'barcode_package'=>$check1[0]->sku_value,
+                'weight'=>$check1[0]->weight,
+                'length'=>$check1[0]->length,
+                'width'=>$check1[0]->width,
+                'height'=>$check1[0]->height,
+                );
+                $datas[]=$data;
+                return response()->json($datas, 200);
+            }else{
+                return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
+            }
+        }else{
+            return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
+        }
         
         }catch (\Exception $e) {
             return response()->json($e);
@@ -735,7 +1114,7 @@ class ApiController extends Controller
         ->where("sp.shipment_id",$id)
         ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
         ->join('stations as st', 'st.id', '=', 's.to_station_id')
-        ->select('s.*','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station')
+        ->select('s.*','sp.sku_value','sp.reference_no','sp.length','sp.width','sp.height','sp.category','sp.description','st.station')
         //->groupBy("users.id")
         ->get();
 
@@ -784,10 +1163,10 @@ class ApiController extends Controller
                 'status' => '',
             );
             if($value->status == 0){
-                $data['status'] = 'New Request';
+                $data['status'] = 'Shipment Created';
             }
             elseif($value->status == 1){
-                $data['status'] = 'Approved';
+                $data['status'] = 'Pickup Assigned';
             }
             elseif($value->status == 2){
                 $data['status'] = 'Package Collected';
@@ -796,13 +1175,13 @@ class ApiController extends Controller
                 $data['status'] = 'Exception';
             }
             elseif($value->status == 4){
-                $data['status'] = 'Received Station Hub';
+                $data['status'] = 'Transit In';
             }
             elseif($value->status == 5){
                 $data['status'] = 'Assign Agent to Transit Out (Hub)';
             }
             elseif($value->status == 6){
-                $data['status'] = 'Other Transit in Received (Hub)';
+                $data['status'] = 'Transit Out';
             }
             elseif($value->status == 7){
                 $data['status'] = 'Assign Agent to Delivery';
@@ -816,28 +1195,28 @@ class ApiController extends Controller
     }
 
 
-    public function getTodayData(){
+    public function getTodayData($id){
         $today = date('Y-m-d');
-        $total_shipment = shipment::where('date',$today)->count();
+        $total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
 
         $total_shipment_value = shipment::where('date', $today)->get()->sum("total");
 
-        $collected_value = shipment::where('date', $today)->where('status',8)->get()->sum("special_cod");
+        $collected_value = shipment::where('date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
 
-        $on_pickup = shipment::where('pickup_assign_date',$today)->where('status',1)->count();
+        $on_pickup = shipment::where('pickup_assign_date',$today)->where('pickup_agent_id',$id)->where('status',1)->count();
 
-        $pickup = shipment::where('package_collect_date',$today)->where('status',2)->count();
+        $pickup = shipment::where('package_collect_date',$today)->where('pickup_agent_id',$id)->where('status',2)->count();
 
-        $exception = shipment::where('exception_assign_date',$today)->where('status',3)->count();
+        $exception = shipment::where('exception_assign_date',$today)->where('pickup_agent_id',$id)->where('status',3)->count();
 
-        $hub = shipment::where('station_assign_date',$today)->where('status',4)->count();
+        $hub = shipment::where('station_assign_date',$today)->where('station_agent_id',$id)->where('status',4)->count();
 
-        $delivery = shipment::where('delivery_assign_date',$today)->where('status',7)->count();
-        $completed = shipment::where('delivery_date',$today)->where('status',8)->count();
+        $delivery = shipment::where('delivery_assign_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
+        $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();
 
         $data = array(
             'total_shipment' => $total_shipment,
-            'total_shipment_value' => $total_shipment_value,
+            'total_shipment_value' => (int)$total_shipment_value,
             'collected_value' => $collected_value,
             'on_pickup' => $on_pickup,
             'pickup' => $pickup,
@@ -898,24 +1277,25 @@ class ApiController extends Controller
 
 
 
-    public function printTodayData(){
+    public function printTodayData($id){
+
         $today = date('Y-m-d');
-        $total_shipment = shipment::where('date',$today)->count();
+        $total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
 
         $total_shipment_value = shipment::where('date', $today)->get()->sum("total");
 
-        $collected_value = shipment::where('date', $today)->where('status',8)->get()->sum("special_cod");
+        $collected_value = shipment::where('date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
 
-        $on_pickup = shipment::where('pickup_assign_date',$today)->where('status',1)->count();
+        $on_pickup = shipment::where('pickup_assign_date',$today)->where('pickup_agent_id',$id)->where('status',1)->count();
 
-        $pickup = shipment::where('package_collect_date',$today)->where('status',2)->count();
+        $pickup = shipment::where('package_collect_date',$today)->where('pickup_agent_id',$id)->where('status',2)->count();
 
-        $exception = shipment::where('exception_assign_date',$today)->where('status',3)->count();
+        $exception = shipment::where('exception_assign_date',$today)->where('pickup_agent_id',$id)->where('status',3)->count();
 
-        $hub = shipment::where('station_assign_date',$today)->where('status',4)->count();
+        $hub = shipment::where('station_assign_date',$today)->where('station_agent_id',$id)->where('status',4)->count();
 
-        $delivery = shipment::where('delivery_assign_date',$today)->where('status',7)->count();
-        $completed = shipment::where('delivery_date',$today)->where('status',8)->count();
+        $delivery = shipment::where('delivery_assign_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
+        $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();
 
         $shipment_new = shipment::where('date','=',$today)->get();
         

@@ -168,6 +168,7 @@ class PendingController extends Controller
                 $shipment_package->sku_value = $sku_value;
                 $shipment_package->shipment_id = $shipment->id;
                 $shipment_package->category = $temp->category;
+                $shipment_package->reference_no = $temp->reference_no;
                 $shipment_package->description = $temp->description;
                 $shipment_package->weight = $temp->weight;
                 $shipment_package->length = $temp->length;

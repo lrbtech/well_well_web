@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+
+  @if(Auth::guard('admin')->user()->lang == 'english')
+  <html lang="en" dir="ltr">
+  @else
+  <html lang="en" dir="rtl">
+  @endif
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,12 +49,16 @@
       }
     </style>
   </head>
-  <body>
+  @if(Auth::guard('admin')->user()->lang == 'english')
+  <body main-theme-layout="ltr">
+  @else
+  <body main-theme-layout="rtl">
+  @endif
     <!-- Loader starts-->
     <div class="loader-wrapper">
       <div class="typewriter">
-        <h1>Welcome to WellWell..</h1>
-         
+        {{-- <h1>{{$language[243][Auth::guard('admin')->user()->lang]}} {{$language[244][Auth::guard('admin')->user()->lang]}}..</h1>
+          --}}
       </div>
     </div>
     <!-- Loader ends-->
@@ -69,19 +78,43 @@
           <div class="vertical-mobile-sidebar"><i class="fa fa-bars sidebar-bar">               </i></div>
           <div class="nav-right col pull-right right-menu">
             <ul class="nav-menus">
+
               <li>
-                <form class="form-inline search-form" action="#" method="get">
+                <form class="form-inline search-form" action="/admin/shipment-track" method="POST">
+                {{ csrf_field() }}
                   <div class="form-group">
                     <div class="Typeahead Typeahead--twitterUsers">
                       <div class="u-posRelative">
-                        <input autocomplete="off" class="Typeahead-input form-control-plaintext" id="demo-input" type="text" name="q" placeholder="Search Your Product...">
-                        <div class="spinner-border Typeahead-spinner" role="status"><span class="sr-only">Loading...</span></div><span class="d-sm-none mobile-search"><i data-feather="search"></i></span>
+                        <input autocomplete="off" class="Typeahead-input form-control-plaintext" id="search_input" type="text" name="search_input" placeholder="Track your Shipment...">
+                        <div class="spinner-border Typeahead-spinner" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                        <a onclick="searchShipment()">
+                          <span class="d-sm-none mobile-search" >
+                          <i data-feather="search1" ></i>
+                          </span>
+                        </a>
                       </div>
                       <div class="Typeahead-menu"></div>
                     </div>
                   </div>
                 </form>
               </li>
+
+              <li>
+                  <div class="form-group">
+                    <div class="Typeahead Typeahead--twitterUsers">
+                      <div class="u-posRelative">
+                        <select style="top:10px !important;" class="form-control" id="languages" name="languages">
+                        <option value="english" <?php if(Auth::guard('admin')->user()->lang == 'english') { ?> selected="selected"<?php } ?>>En</option>
+                        <option value="arabic" <?php if(Auth::guard('admin')->user()->lang == 'arabic') { ?> selected="selected"<?php } ?>>Ar</option>
+                        </select>
+                      </div>
+                      <div class="Typeahead-menu"></div>
+                    </div>
+                  </div>
+              </li>
+
               <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
 
               <!-- <li class="onhover-dropdown"><img class="img-fluid img-shadow-warning" src="/assets/app-assets/images/dashboard/bookmark.png" alt="">
@@ -185,13 +218,14 @@
                   <li>
                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
                   document.getElementById('logout-form').submit();">
-                    <i data-feather="settings"> </i>LogOut</li>
+                    <i data-feather="settings"> </i>Log Out</li> 
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                   </form>
                 </ul>
               </li>
+
             </ul>
             <div class="d-lg-none mobile-toggle pull-right"><i data-feather="more-horizontal"></i></div>
           </div>
@@ -361,140 +395,206 @@
 
               
               <li>
-                <a class="bar-icons" href="/admin/dashboard"><i class="pe-7s-id"></i><span>Dashboard</span></a>
+                <a class="bar-icons" href="/admin/dashboard"><i class="pe-7s-id"></i><span>{{$language[1][Auth::guard('admin')->user()->lang]}}</span></a>
                 <!-- <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Dashboard</li>
                   <li class="dashboard"><a class="dashboard" href="/admin/dashboard">Dashboard</a></li>
                 </ul> -->
               </li>
 
-              @if(Auth::guard('admin')->user()->view_customer == 'on')
+              @if(Auth::guard('admin')->user()->view_customer == 'on' || Auth::guard('admin')->user()->new_customer == 'on' || Auth::guard('admin')->user()->sales_team == 'on' || Auth::guard('admin')->user()->accounts_team == 'on')
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Customer</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[8][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Customer</li>
-                  <li class="view-customer"><a class="view-customer" href="/admin/view-customer">View Customer</a></li>
+                  <li class="iconbar-header">{{$language[8][Auth::guard('admin')->user()->lang]}}</li>
+
+                  @if(Auth::guard('admin')->user()->view_customer == 'on')
+                  <li class="view-customer"><a class="view-customer" href="/admin/view-customer">{{$language[172][Auth::guard('admin')->user()->lang]}} {{$language[8][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+                  @if(Auth::guard('admin')->user()->new_customer == 'on')
+                  <li class="registration-customer"><a class="registration-customer" href="/admin/registration-customer">{{$language[169][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+                  @if(Auth::guard('admin')->user()->sales_team == 'on')
+                  <li class="sales-customer"><a class="sales-customer" href="/admin/sales-customer">{{$language[170][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+                  @if(Auth::guard('admin')->user()->accounts_team == 'on')
+                  <li class="accounts-customer"><a class="accounts-customer" href="/admin/accounts-customer">{{$language[171][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+
                 </ul>
               </li>
               @endif
 
+              @if(Auth::guard('admin')->user()->new_shipment == 'on' || Auth::guard('admin')->user()->all_shipment == 'on' || Auth::guard('admin')->user()->cancel_request == 'on' || Auth::guard('admin')->user()->revenue_exception == 'on')
+
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Shipment</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[18][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Shipments</li>
+                  <li class="iconbar-header">{{$language[18][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->new_shipment == 'on')
-                  <li class="new-shipment"><a class="new-shipment" href="/admin/new-shipment">New Shipment</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->new_shipment_request == 'on')
-                  <li class="new-shipment-request"><a class="new-shipment-request" href="/admin/new-shipment-request">New Shipment Request</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->schedule_for_pickup == 'on')
-                  <li class="schedule-for-pickup"><a class="schedule-for-pickup" href="/admin/schedule-for-pickup">Schedule for Pickup</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->pickup_exception == 'on')
-                  <li class="pickup-exception"><a class="pickup-exception" href="/admin/pickup-exception">Pickup Exception</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->package_collected == 'on')
-                  <li class="package-collected"><a class="package-collected" href="/admin/package-collected">Package Collected</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->transit_in == 'on')
-                  <li class="transit-in"><a class="transit-in" href="/admin/transit-in">Transit In</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->transit_out == 'on')
-                  <li class="transit-out"><a class="transit-out" href="/admin/transit-out">Transit Out</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->ready_for_delivery == 'on')
-                  <li class="ready-for-delivery"><a class="ready-for-delivery" href="/admin/ready-for-delivery">Ready for Delivery</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->delivery_exception == 'on')
-                  <li class="delivery-exception"><a class="delivery-exception" href="/admin/delivery-exception">Delivery Exception</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->shipment_delivered == 'on')
-                  <li class="shipment-delivered"><a class="shipment-delivered" href="/admin/shipment-delivered">Shipment Delivered</a></li>
-                  @endif
-
-                  @if(Auth::guard('admin')->user()->cancel_request == 'on')
-                  <li class="cancel-request"><a class="cancel-request" href="/admin/cancel-request">Cancel Request</a></li>
+                  <li class="new-shipment"><a class="new-shipment" href="/admin/new-shipment">{{$language[173][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
                   @if(Auth::guard('admin')->user()->all_shipment == 'on')
-                  <li class="shipment"><a class="shipment" href="/admin/shipment">All Shipment List</a></li>
+                  <li class="shipment"><a class="shipment" href="/admin/shipment">{{$language[174][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->revenue_exception == 'on')
+                  <li class="revenue-exception"><a class="revenue-exception" href="/admin/revenue-exception">{{$language[175][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->cancel_request == 'on')
+                  <li class="cancel-request"><a class="cancel-request" href="/admin/cancel-request">{{$language[176][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
                 </ul>
               </li>
+              @endif
+
+              @if(Auth::guard('admin')->user()->new_shipment_request == 'on' || Auth::guard('admin')->user()->today_pickup_request == 'on' || Auth::guard('admin')->user()->future_pickup_request == 'on' || Auth::guard('admin')->user()->schedule_for_pickup == 'on' || Auth::guard('admin')->user()->pickup_exception == 'on' || Auth::guard('admin')->user()->package_collected == 'on')
+              <li>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[57][Auth::guard('admin')->user()->lang]}}</span></a>
+                <ul class="iconbar-mainmenu custom-scrollbar">
+                  <li class="iconbar-header">{{$language[57][Auth::guard('admin')->user()->lang]}}</li>
+                  @if(Auth::guard('admin')->user()->new_shipment_request == 'on')
+                  <li class="new-shipment-request"><a class="new-shipment-request" href="/admin/new-shipment-request">{{$language[177][Auth::guard('admin')->user()->lang]}}
+                  </a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->today_pickup_request == 'on')
+                  <li class="today-pickup-request"><a class="today-pickup-request" href="/admin/today-pickup-request">{{$language[178][Auth::guard('admin')->user()->lang]}}
+                  </a></li> 
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->future_pickup_request == 'on')
+                  <li class="future-pickup-request"><a class="future-pickup-request" href="/admin/future-pickup-request">{{$language[179][Auth::guard('admin')->user()->lang]}}
+                  </a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->schedule_for_pickup == 'on')
+                  <li class="schedule-for-pickup"><a class="schedule-for-pickup" href="/admin/schedule-for-pickup">{{$language[180][Auth::guard('admin')->user()->lang]}}
+                  </a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->pickup_exception == 'on')
+                  <li class="pickup-exception"><a class="pickup-exception" href="/admin/pickup-exception">{{$language[181][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->package_collected == 'on')
+                  <li class="package-collected"><a class="package-collected" href="/admin/package-collected">{{$language[182][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+                </ul>
+              </li>
+              @endif
+
+              @if(Auth::guard('admin')->user()->transit_in == 'on' || Auth::guard('admin')->user()->transit_out == 'on' )
 
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Employees</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[183][Auth::guard('admin')->user()->lang]}}</span></a> 
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Employees</li>
+                  <li class="iconbar-header">{{$language[183][Auth::guard('admin')->user()->lang]}}</li> 
+                  @if(Auth::guard('admin')->user()->transit_in == 'on')
+                  <li class="transit-in"><a class="transit-in" href="/admin/transit-in">{{$language[184][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->transit_out == 'on')
+                  <li class="transit-out"><a class="transit-out" href="/admin/transit-out">{{$language[185][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+                </ul>
+              </li>
+              @endif
+
+              @if(Auth::guard('admin')->user()->ready_for_delivery == 'on' || Auth::guard('admin')->user()->delivery_exception == 'on' || Auth::guard('admin')->user()->shipment_delivered == 'on' )
+              <li>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[89][Auth::guard('admin')->user()->lang]}}</span></a>
+                <ul class="iconbar-mainmenu custom-scrollbar">
+                  <li class="iconbar-header">{{$language[89][Auth::guard('admin')->user()->lang]}}</li>
+                  @if(Auth::guard('admin')->user()->ready_for_delivery == 'on')
+                  <li class="ready-for-delivery"><a class="ready-for-delivery" href="/admin/ready-for-delivery">{{$language[186][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->delivery_exception == 'on')
+                   <li class="delivery-exception"><a class="delivery-exception" href="/admin/delivery-exception">{{$language[187][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+
+                  @if(Auth::guard('admin')->user()->shipment_delivered == 'on')
+                  <li class="shipment-delivered"><a class="shipment-delivered" href="/admin/shipment-delivered">{{$language[188][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+                </ul>
+              </li>
+              @endif
+
+              @if(Auth::guard('admin')->user()->agent == 'on' || Auth::guard('admin')->user()->employee == 'on')
+              <li>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[189][Auth::guard('admin')->user()->lang]}}</span></a>
+                <ul class="iconbar-mainmenu custom-scrollbar">
+                  <li class="iconbar-header">{{$language[189][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->agent == 'on')
-                  <li class="agent"><a class="agent" href="/admin/agent">Agent List</a></li>
+                  <li class="agent"><a class="agent" href="/admin/agent">{{$language[190][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
                   @if(Auth::guard('admin')->user()->employee == 'on')
-                  <li class="user"><a class="user" href="/admin/user">Employee List</a></li>
+                  <li class="user"><a class="user" href="/admin/user">{{$language[191][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
                   <!-- <li class="role"><a class="role" href="/admin/role">Department</a></li> -->
                 </ul>
               </li>
+              @endif
 
+              @if(Auth::guard('admin')->user()->shipment_report == 'on' || Auth::guard('admin')->user()->revenue_report == 'on' || Auth::guard('admin')->user()->agent_report == 'on' || Auth::guard('admin')->user()->user_report == 'on')
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Report</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[99][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Report</li>
+                  <li class="iconbar-header">{{$language[99][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->shipment_report == 'on')
-                  <li class="shipment-report"><a class="shipment-report" href="/admin/shipment-report">Shipment Report</a></li>
+                  <li class="shipment-report"><a class="shipment-report" href="/admin/shipment-report">{{$language[192][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
                   @if(Auth::guard('admin')->user()->revenue_report == 'on')
-                  <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">Revenue Report</a></li>
+                   <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">{{$language[193][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
                 </ul>
               </li>
+              @endif
+
+              @if(Auth::guard('admin')->user()->country == 'on' || Auth::guard('admin')->user()->area == 'on' || Auth::guard('admin')->user()->city == 'on' || Auth::guard('admin')->user()->package_category == 'on' || Auth::guard('admin')->user()->exception_category == 'on' || Auth::guard('admin')->user()->station == 'on' || Auth::guard('admin')->user()->financial_settings == 'on' || Auth::guard('admin')->user()->common_price == 'on' || Auth::guard('admin')->user()->languages == 'on' || Auth::guard('admin')->user()->system_logs == 'on')
 
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>Settings</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[132][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Settings</li>
+                  <li class="iconbar-header">{{$language[132][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->country == 'on')
-                  <li class="country"><a class="country" href="/admin/country">Country List</a></li>
+                  <li class="country"><a class="country" href="/admin/country">{{$language[194][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
 
                   <!-- <li class="drop-point"><a class="drop-point" href="/admin/drop-point">Drop Point List</a></li> -->
                   @if(Auth::guard('admin')->user()->package_category == 'on')
-                  <li class="package-category"><a class="package-category" href="/admin/package-category">Package Category List</a></li>
+                  <li class="package-category"><a class="package-category" href="/admin/package-category">{{$language[195][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
 
                   @if(Auth::guard('admin')->user()->exception_category == 'on')
-                  <li class="exception-category"><a class="exception-category" href="/admin/exception-category">Exception Category List</a></li>
+                  <li class="exception-category"><a class="exception-category" href="/admin/exception-category">{{$language[196][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
                   <!-- <li class="push-notification"><a class="push-notification" href="/admin/push-notification">Push Notification</a></li> -->
                   @if(Auth::guard('admin')->user()->station == 'on')
-                  <li class="station"><a class="station" href="/admin/station">Station List</a></li>
+                  <li class="station"><a class="station" href="/admin/station">{{$language[197][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
                   @if(Auth::guard('admin')->user()->financial_settings == 'on')
-                  <li class="settings"><a class="settings" href="/admin/settings">Financial Settings</a></li>
+                  <li class="settings"><a class="settings" href="/admin/settings">{{$language[198][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
                   @if(Auth::guard('admin')->user()->common_price == 'on')
-                  <li class="common-price"><a class="common-price" href="/admin/common-price">Common Price</a></li>
+                  <li class="common-price"><a class="common-price" href="/admin/common-price">{{$language[199][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->language == 'on')
-                  <li class="languages"><a class="languages" href="/admin/languages">Languages</a></li>
+                  @if(Auth::guard('admin')->user()->languages == 'on')
+                  <li class="languages"><a class="languages" href="/admin/languages">{{$language[200][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+                  @if(Auth::guard('admin')->user()->system_logs == 'on')
+                  <li class="system-logs"><a class="system-logs" href="/admin/system-logs">{{$language[201][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
                 </ul>
               </li>
-
+              @endif
               
               
             </ul>
@@ -502,7 +602,7 @@
         </div>
         <!-- Page Sidebar Ends-->
         <!-- Right sidebar Start-->
-        <div class="right-sidebar" id="right_side_bar">
+        <!-- <div class="right-sidebar" id="right_side_bar">
           <div>
             <div class="container p-0">
               <div class="modal-header p-l-20 p-r-20">
@@ -573,17 +673,17 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         @yield('section')
         <!-- footer start-->
         <footer class="footer">
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-6 footer-copyright">
-                <p class="mb-0">Copyright © 2021 LRB INFO TECH. All rights reserved.</p>
+                {{-- <p class="mb-0">{{$language[273][Auth::guard('admin')->user()->lang]}} © 2021 LRB INFO TECH. {{$language[274][Auth::guard('admin')->user()->lang]}}.</p> --}}
               </div>
               <div class="col-md-6">
-                <p class="pull-right mb-0">Hand-crafted & made with<i class="fa fa-heart"></i></p>
+                {{-- <p class="pull-right mb-0">{{$language[275][Auth::guard('admin')->user()->lang]}} & {{$language[276][Auth::guard('admin')->user()->lang]}}<i class="fa fa-heart"></i></p> --}}
               </div>
             </div>
           </div>
@@ -606,16 +706,41 @@
 
     <script src="{{ asset('sweetalert2/sweetalert2.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
-    @yield('extra-js')
+   
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="/assets/app-assets/js/script.js"></script>
-    <script src="/assets/app-assets/js/theme-customizer/customizer.js"></script>
+    <!-- <script src="/assets/app-assets/js/theme-customizer/customizer.js"></script> -->
     <script src="{{ asset('assets/toastr/toastr.min.js')}}" type="text/javascript"></script>
-
+ @yield('extra-js')
     
     <!-- login js-->
     <!-- Plugin used-->
-    
+    <script>
+  $('#languages').change(function(){
+    var language = $('#languages').val();
+    $.ajax({
+      url : '/admin/change-language/'+language,
+      type: "GET",
+      success: function(data)
+      {
+          location.reload();
+      }
+    });
+  });
+  function searchShipment(){
+    alert("ok")
+    var search_input = $('#search_input').val();
+    window.location.href="/admin/shipment-track/"+search_input;
+    // $.ajax({
+    //   url : '/admin/change-language/'+language,
+    //   type: "GET",
+    //   success: function(data)
+    //   {
+    //       location.reload();
+    //   }
+    // });
+  }
+    </script>
   </body>
 </html>

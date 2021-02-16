@@ -38,7 +38,8 @@
                       <table class="display" id="basic-1">
                         <thead>
                           <tr>
-                            <th>{{$language[10][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>#</th>
+                            <th>Account ID</th> 
                             <th>{{$language[11][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[12][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[13][Auth::guard('admin')->user()->lang]}}</th>
@@ -50,6 +51,7 @@
                         <tbody>
                         @foreach($customer as $key => $row)
                           <tr>
+                          <td>{{$key + 1}}</td>
                             <td>{{$row->customer_id}}</td>
                             <td>
                               @if($row->user_type == 0)

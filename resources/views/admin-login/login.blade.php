@@ -41,7 +41,7 @@
 					</span>
 
 					<span class="login100-form-title p-b-34 p-t-27">
-						Log in
+						Log In
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Enter username">
@@ -67,7 +67,7 @@
 					<div class="contact100-form-checkbox">
 						<input class="input-checkbox100" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 						<label class="label-checkbox100" for="remember">
-							Remember me
+							Remember Me
 						</label>
 
 					</div>

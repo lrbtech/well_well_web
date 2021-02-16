@@ -163,7 +163,7 @@
                     <tr>
                       <td>
                       @if($rate->insurance_enable == '1')
-                        {{$rate->insurance_percentage}} %
+                        {{$settings->insurance_percentage}} %
                       @endif
                       </td>
                       <td>
@@ -173,12 +173,12 @@
                     </td>
                       <td>
                       @if($rate->vat_enable == '1')
-                        {{$rate->vat_percentage}} %
+                        {{$settings->vat_percentage}} %
                       @endif
                       </td>
                       <td>
                       @if($rate->postal_charge_enable == '1')
-                        {{$rate->postal_charge_percentage}} %
+                        {{$settings->postal_charge_percentage}} %
                       @endif
                       </td>
                     </tr>

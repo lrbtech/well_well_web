@@ -32,6 +32,14 @@ class ProfileController extends Controller
         date_default_timezone_get();
     }
 
+    public function changelanguage($language)
+    {
+        $user = User::find(Auth::user()->id);
+        $user->lang = $language;
+        $user->save();
+        return response()->json(['message'=>'Successfully Update'],200); 
+    }
+
     public function editProfile(){
         $customer = User::find(Auth::user()->id);
         $language = language::all();

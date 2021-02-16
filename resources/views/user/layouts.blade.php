@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+  @if(Auth::user()->lang == 'english')
+  <html lang="en" dir="ltr">
+  @else
+  <html lang="en" dir="rtl">
+  @endif
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,7 +44,11 @@
 
     
   </head>
-  <body>
+  @if(Auth::user()->lang == 'english')
+  <body main-theme-layout="ltr">
+  @else
+  <body main-theme-layout="rtl">
+  @endif
     <!-- Loader starts-->
     <div class="loader-wrapper">
       <div class="typewriter">
@@ -65,18 +73,41 @@
           <div class="nav-right col pull-right right-menu">
             <ul class="nav-menus">
               <li>
-                <form class="form-inline search-form" action="#" method="get">
+              <form class="form-inline search-form" action="/user/shipment-track" method="POST">
+                {{ csrf_field() }}
                   <div class="form-group">
                     <div class="Typeahead Typeahead--twitterUsers">
                       <div class="u-posRelative">
-                        <input autocomplete="off" class="Typeahead-input form-control-plaintext" id="demo-input" type="text" name="q" placeholder="Search Your Logistics">
-                        <div class="spinner-border Typeahead-spinner" role="status"><span class="sr-only">Loading...</span></div><span class="d-sm-none mobile-search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+                        <input autocomplete="off" class="Typeahead-input form-control-plaintext" id="search_input" type="text" name="search_input" placeholder="Track your Shipment...">
+                        <div class="spinner-border Typeahead-spinner" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                        <a onclick="searchShipment()">
+                          <span class="d-sm-none mobile-search" >
+                          <i data-feather="search1" ></i>
+                          </span>
+                        </a>
                       </div>
                       <div class="Typeahead-menu"></div>
                     </div>
                   </div>
                 </form>
               </li>
+
+               <li>
+                  <div class="form-group">
+                    <div class="Typeahead Typeahead--twitterUsers">
+                      <div class="u-posRelative">
+                        <select style="top:10px !important;width:70px !important;" class="form-control" id="language" name="language">
+                        <option value="english" <?php if(Auth::user()->lang == 'english') { ?> selected="selected"<?php } ?>>En</option>
+                        <option value="arabic" <?php if(Auth::user()->lang == 'arabic') { ?> selected="selected"<?php } ?>>Ar</option>
+                        </select>
+                      </div>
+                      <div class="Typeahead-menu"></div>
+                    </div>
+                  </div>
+              </li>
+
               <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a></li>
 
               <!-- <li class="onhover-dropdown"><img class="img-fluid img-shadow-warning" src="/assets/app-assets/images/dashboard/bookmark.png" alt="">
@@ -346,6 +377,7 @@
                     </div>
 
     <script src="/assets/app-assets/js/jquery-3.5.1.min.js"></script>
+    <script src="/assets/app-assets/js/bootstrap/popper.min.js"></script>
     <script src="/assets/app-assets/js/bootstrap/bootstrap.js"></script>
     <!-- feather icon js-->
     <script src="/assets/app-assets/js/icons/feather-icon/feather.min.js"></script>
@@ -362,7 +394,7 @@
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="/assets/app-assets/js/script.js"></script>
-    <script src="/assets/app-assets/js/theme-customizer/customizer.js"></script>
+    <!-- <script src="/assets/app-assets/js/theme-customizer/customizer.js"></script> -->
     <script src="/assets/app-assets/js/jquery.drilldown.js"></script>
     <script src="/assets/app-assets/js/vertical-menu.js"></script>
     <script src="/assets/app-assets/js/megamenu.js"></script>
@@ -370,6 +402,19 @@
     <!-- Plugin used-->
     <script src="{{ asset('assets/toastr/toastr.min.js')}}" type="text/javascript"></script>
 
+    <script>
+  $('#language').change(function(){
+    var language = $('#language').val();
+    $.ajax({
+      url : '/user/change-language/'+language,
+      type: "GET",
+      success: function(data)
+      {
+          location.reload();
+      }
+    });
+  });
+    </script>
     
   </body>
 </html>

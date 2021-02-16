@@ -42,6 +42,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>Tracking ID</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
@@ -67,6 +68,77 @@
           <!-- Container-fluid Ends-->
         </div>
 
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="assign-agent-station-modal" tabindex="-1" role="dialog" aria-labelledby="assign-agent-station-modal" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-grey-dark-5">
+                <h6 class="modal-title " id="modal-title">Add New</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form1" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <input type="hidden" name="shipment_id1" id="shipment_id1">
+
+                    <div class="form-group">
+                        <label>Assign Agent</label>
+                        <select id="station_agent_id" name="station_agent_id" class="form-control">
+                          <option value="">Select</option>
+                          @foreach($agent as $row)
+                          <option value="{{$row->id}}">{{$row->name}}</option>
+                          @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button onclick="updateAssignAgentStation()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Bootstrap Modal --> 
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="assign-agent-delivery-modal" tabindex="-1" role="dialog" aria-labelledby="assign-agent-delivery-modal" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-grey-dark-5">
+                <h6 class="modal-title " id="modal-title">Add New</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form2" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <input type="hidden" name="shipment_id2" id="shipment_id2">
+
+                    <div class="form-group">
+                        <label>Assign Agent</label>
+                        <select id="delivery_agent_id" name="delivery_agent_id" class="form-control">
+                          <option value="">Select</option>
+                          @foreach($agent as $row)
+                          <option value="{{$row->id}}">{{$row->name}}</option>
+                          @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button onclick="updateAssignAgentDelivery()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Bootstrap Modal --> 
 @endsection
 @section('extra-js')
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
@@ -87,6 +159,7 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_time', name: 'shipment_time' },
@@ -127,6 +200,71 @@ function PrintLabel(id){
         
     }
   });
+}
+
+
+function AssignAgentStation(id){
+    var r = confirm("Are you sure");
+    if (r == true) {
+      $('#shipment_id1').val(id);
+      $('#assign-agent-station-modal').modal('show');
+    } 
+}
+
+function AssignAgentDelivery(id){
+    var r = confirm("Are you sure");
+    if (r == true) {
+      $('#shipment_id2').val(id);
+      $('#assign-agent-delivery-modal').modal('show');
+    } 
+}
+
+function updateAssignAgentStation(){
+  var formData = new FormData($('#form1')[0]);
+    $.ajax({
+        url : '/admin/assign-agent-station',
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function(data)
+        {                
+            $("#form1")[0].reset();
+            $('#assign-agent-station-modal').modal('hide');
+            location.reload();
+            toastr.success(data, 'Successfully Save');
+        },error: function (data) {
+            var errorData = data.responseJSON.errors;
+            $.each(errorData, function(i, obj) {
+            toastr.error(obj[0]);
+      });
+    }
+    });
+}
+
+function updateAssignAgentDelivery(){
+  var formData = new FormData($('#form2')[0]);
+    $.ajax({
+        url : '/admin/assign-agent-delivery',
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function(data)
+        {                
+            $("#form2")[0].reset();
+            $('#assign-agent-delivery-modal').modal('hide');
+            location.reload();
+            toastr.success(data, 'Successfully Save');
+        },error: function (data) {
+            var errorData = data.responseJSON.errors;
+            $.each(errorData, function(i, obj) {
+            toastr.error(obj[0]);
+      });
+    }
+    });
 }
 
 </script>

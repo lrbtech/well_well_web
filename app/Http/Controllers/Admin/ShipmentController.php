@@ -21,6 +21,7 @@ use App\Models\agent;
 use App\Models\station;
 use App\Models\role;
 use App\Models\language;
+use App\Models\system_logs;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -60,11 +61,13 @@ class ShipmentController extends Controller
         $shipment_package = shipment_package::where('shipment_id',$id)->get();
         $shipment_notes = shipment_notes::where('shipment_id',$id)->get();
 
+        $system_logs = system_logs::where('_id',$id)->where('category','shipment')->get();
+
         $from_address =manage_address::find($shipment->from_address);
         $to_address =manage_address::find($shipment->to_address);
-        
+        $language = language::all();
 
-        return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user'));
+        return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs'));
     }
 
     public function saveShipmentNotes(Request $request){
@@ -107,7 +110,12 @@ class ShipmentController extends Controller
         $manage_address->address2 = $request->address2;
         $manage_address->address3 = $request->address3;
         $manage_address->save();
-
+        $system_logs = new system_logs;
+        $system_logs->_id = $manage_address->id;
+        $system_logs->category = 'address';
+        $system_logs->to_id = Auth::guard('admin')->user()->email;
+        $system_logs->remark = $manage_address->from_to == 1 ?'From Address':'To Address'.'Created By Employee';
+        $system_logs->save();
         return response()->json($manage_address); 
     }
 
@@ -173,7 +181,12 @@ class ShipmentController extends Controller
         $shipment->cod_amount = $request->cod_amount;
         $shipment->total = $request->total;
         $shipment->save();
-
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::guard('admin')->user()->email;
+        $system_logs->remark = 'New Shipment Created by Employee';
+        $system_logs->save();
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
@@ -186,6 +199,7 @@ class ShipmentController extends Controller
                 $shipment_package->sku_value = $sku_value;
                 $shipment_package->shipment_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
+                $shipment_package->reference_no = $_POST['reference_no'][$x];
                 $shipment_package->description = $_POST['description'][$x];
                 $shipment_package->weight = $_POST['weight'][$x];
                 $shipment_package->length = $_POST['length'][$x];
@@ -210,6 +224,7 @@ class ShipmentController extends Controller
                     $shipment_package->sku_value = $sku_value;
                     $shipment_package->shipment_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
+                    $shipment_package->reference_no = $_POST['reference_no'][$x];
                     $shipment_package->description = $_POST['description'][$x];
                     $shipment_package->weight = $_POST['weight'][$x];
                     $shipment_package->length = $_POST['length'][$x];
@@ -235,12 +250,27 @@ class ShipmentController extends Controller
     }
 
     public function assignAgent(Request $request){
+        $agent=agent::find($request->pickup_agent_id);
         $shipment = shipment::find($request->shipment_id);
         $shipment->pickup_agent_id = $request->pickup_agent_id;
         $shipment->pickup_assign_date = date('Y-m-d');
         $shipment->pickup_assign_time = date('H:i:s');
         $shipment->status = 1;
         $shipment->save();
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::guard('admin')->user()->email;
+        $system_logs->remark = 'Pickup Assigned by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+        $system_logs->save();
+        $shipment_log = new shipment_log;
+        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
+        $shipment_log->shipment_id = $request->shipment_id;
+        $shipment_log->agent_id = $request->pickup_agent_id;
+        $shipment_log->shipment_status = 1;
+        $shipment_log->date = date('Y-m-d');
+        $shipment_log->time = date('H:i:s');
+        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -258,8 +288,9 @@ class ShipmentController extends Controller
 
         $from_address =manage_address::find($shipment->from_address);
         $to_address =manage_address::find($shipment->to_address);
+        $language = language::all();
 
-        return view('admin.pickup_station',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user'));
+        return view('admin.pickup_station',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language'));
     }
 
     public function updatePickupStation(Request $request){
@@ -268,6 +299,14 @@ class ShipmentController extends Controller
         $shipment->package_collect_time = date('H:i:s');
         $shipment->status = 4;
         $shipment->save();
+
+        $shipment_log = new shipment_log;
+        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
+        $shipment_log->shipment_id = $request->shipment_id;
+        $shipment_log->shipment_status = 4;
+        $shipment_log->date = date('Y-m-d');
+        $shipment_log->time = date('H:i:s');
+        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -278,6 +317,15 @@ class ShipmentController extends Controller
         $shipment->station_assign_time = date('H:i:s');
         $shipment->status = 5;
         $shipment->save();
+
+        $shipment_log = new shipment_log;
+        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
+        $shipment_log->shipment_id = $request->shipment_id;
+        $shipment_log->agent_id = $request->station_agent_id;
+        $shipment_log->shipment_status = 5;
+        $shipment_log->date = date('Y-m-d');
+        $shipment_log->time = date('H:i:s');
+        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -296,7 +344,9 @@ class ShipmentController extends Controller
         $from_address =manage_address::find($shipment->from_address);
         $to_address =manage_address::find($shipment->to_address);
 
-        return view('admin.received_station',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user'));
+        $language = language::all();
+
+        return view('admin.received_station',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language'));
     }
 
     public function updateReceivedStation(Request $request){
@@ -305,6 +355,14 @@ class ShipmentController extends Controller
         $shipment->station_received_time = date('H:i:s');
         $shipment->status = 6;
         $shipment->save();
+
+        $shipment_log = new shipment_log;
+        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
+        $shipment_log->shipment_id = $request->shipment_id;
+        $shipment_log->shipment_status = 6;
+        $shipment_log->date = date('Y-m-d');
+        $shipment_log->time = date('H:i:s');
+        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -315,6 +373,14 @@ class ShipmentController extends Controller
         $shipment->delivery_assign_time = date('H:i:s');
         $shipment->status = 7;
         $shipment->save();
+
+        $shipment_log = new shipment_log;
+        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
+        $shipment_log->shipment_id = $request->shipment_id;
+        $shipment_log->shipment_status = 7;
+        $shipment_log->date = date('Y-m-d');
+        $shipment_log->time = date('H:i:s');
+        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -343,7 +409,9 @@ class ShipmentController extends Controller
         $from_address =manage_address::find($shipment->from_address);
         $to_address =manage_address::find($shipment->to_address);
 
-        return view('admin.shipment_delivery',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user'));
+        $language = language::all();
+
+        return view('admin.shipment_delivery',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language'));
     }
 
     public function updateShipmentDelivery(Request $request){
@@ -371,6 +439,14 @@ class ShipmentController extends Controller
 
         $shipment->save();
 
+        $shipment_log = new shipment_log;
+        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
+        $shipment_log->shipment_id = $request->shipment_id;
+        $shipment_log->shipment_status = 8;
+        $shipment_log->date = date('Y-m-d');
+        $shipment_log->time = date('H:i:s');
+        $shipment_log->save();
+
         $all = shipment::find($request->shipment_id);
         $user = User::find($all->sender_id);
         $package_category = package_category::all();
@@ -391,7 +467,7 @@ class ShipmentController extends Controller
             $shipment = shipment::orderBy('id','DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orderBy('id','DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->orderBy('id','DESC')->get();
         }
         
         return Datatables::of($shipment)
@@ -468,19 +544,25 @@ class ShipmentController extends Controller
             })
             ->addColumn('status', function ($shipment) {
                 if($shipment->status == 0){
-                    return 'Shipment Created';
+                    return 'Ready for Pickup';
                 }
                 elseif($shipment->status == 1){
                     $agent = agent::find($shipment->pickup_agent_id);
                     if(!empty($agent)){
-                        return 'Schedule for Pickup '.$agent->name;
+                        return 'Schedule for Pickup '.$agent->agent_id;
                     }
                     else{
                         return 'Schedule for Pickup';
                     }
                 }
                 elseif($shipment->status == 2){
-                    return 'Package Collected';
+                    $agent = agent::find($shipment->pickup_agent_id);
+                    if(!empty($agent)){
+                        return 'Package Collected '.$agent->agent_id;
+                    }
+                    else{
+                        return 'Package Collected';
+                    }
                 }
                 elseif($shipment->status == 3){
                     return '<td>
@@ -491,20 +573,64 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 4){
                     $from_station = station::find($shipment->from_station_id);
-                    return 'Transit In '.$from_station->station;
+                    $agent = agent::find($shipment->pickup_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Transit In '.$from_station->station.'</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Transit In '.$from_station->station.'</p>'
+                       ;
+                    }
                 }
                 elseif($shipment->status == 5){
                     return 'Assign Agent to Transit Out (Hub)';
                 }
                 elseif($shipment->status == 6){
                     $to_station = station::find($shipment->to_station_id);
-                    return 'Transit Out '.$to_station->station;
+                    $agent = agent::find($shipment->station_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Transit Out '.$to_station->station.'</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Transit Out '.$to_station->station.'</p>'
+                       ;
+                    }
                 }
                 elseif($shipment->status == 7){
-                    return 'In the Van for Delivery';
+                    $agent = agent::find($shipment->delivery_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>In the Van for Delivery</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>In the Van for Delivery</p>'
+                       ;
+                    }
                 }
                 elseif($shipment->status == 8){
-                    return 'Shipment delivered';
+                    $agent = agent::find($shipment->delivery_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Shipment delivered</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Shipment delivered</p>'
+                       ;
+                    }
                 }
                 elseif($shipment->status == 9){
                     return '<td>
@@ -529,42 +655,39 @@ class ShipmentController extends Controller
                 $output='';
                 $output1='';
                 $role_get = role::find(Auth::guard('admin')->user()->role_id);
-                if($role_get->id == 5){
-                    if($shipment->status == 0){
-                        $output.='<a onclick="AssignAgent('.$shipment->id.')" class="dropdown-item" href="#">Assign Agent</a>';
-                    }
-                }
-                else{
                 if($shipment->status == 0){
-                    $output.='<a onclick="AssignAgent('.$shipment->id.')" class="dropdown-item" href="#">Assign Agent</a>';
+                    $output.='<a onclick="AssignAgent('.$shipment->id.')" class="dropdown-item" href="#">Assign Agent</a>
+                    <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
                 }
-                elseif($shipment->status == 2){
-                    $output.='<a class="dropdown-item" href="/admin/pickup-station/'.$shipment->id.'">Received Station Hub</a>';
+                elseif($shipment->status == 1){
+                    $output.='<a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
                 }
-                elseif($shipment->status == 4){
-                    if($shipment->from_station_id == $shipment->to_station_id){
-                        $output.='<a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>';
-                    }
-                    else{
-                        $output.='<a onclick="AssignAgentStation('.$shipment->id.')" class="dropdown-item">Assign Agent to Transit out (Hub)</a>';
-                    }
+                elseif($shipment->status == 3){
+                    $output.='<a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
                 }
-                elseif($shipment->status == 5){
-                    $output.='<a href="/admin/received-station/'.$shipment->id.'" class="dropdown-item">Other Transit in Received (Hub)</a>';
-                }
-                elseif($shipment->status == 6){
-                    $output.='<a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>';
-                }
-                elseif($shipment->status == 7){
-                    $output.='<a href="/admin/shipment-delivery/'.$shipment->id.'" class="dropdown-item">Shipment Delivery</a>';
-                }
+                // elseif($shipment->status == 2){
+                //     $output.='<a class="dropdown-item" href="/admin/pickup-station/'.$shipment->id.'">Received Station Hub</a>';
+                // }
+                // elseif($shipment->status == 4){
+                //     if($shipment->from_station_id == $shipment->to_station_id){
+                //         $output.='<a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>';
+                //     }
+                //     else{
+                //         $output.='<a onclick="AssignAgentStation('.$shipment->id.')" class="dropdown-item">Assign Agent to Transit out (Hub)</a>';
+                //     }
+                // }
+                // elseif($shipment->status == 5){
+                //     $output.='<a href="/admin/received-station/'.$shipment->id.'" class="dropdown-item">Other Transit in Received (Hub)</a>';
+                // }
+                // elseif($shipment->status == 6){
+                //     $output.='<a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>';
+                // }
+                // elseif($shipment->status == 7){
+                //     $output.='<a href="/admin/shipment-delivery/'.$shipment->id.'" class="dropdown-item">Shipment Delivery</a>';
+                // }
 
                 if($shipment->status == 8){
                     $output1.='<a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" class="dropdown-item">Print</a>';
-                }
-                else{
-                    $output1.='<a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
-                }
                 }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
@@ -719,6 +842,27 @@ class ShipmentController extends Controller
         $pdf = PDF::loadView('print.printinvoice',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','customer','package_category','user'));
         $pdf->setPaper('A4');
         return $pdf->stream('report.pdf');
+    }
+
+    public function shipmentTrack(Request $request){
+        $language = language::all();
+        $id = $request->search_input;
+
+        $check1 = shipment_package::where('sku_value',$request->search_input)->first();
+        $check2 = shipment::where('order_id',$request->search_input)->first();
+        $shipment_id='';
+        if(!empty($check1)){
+            $shipment_id = $check1->shipment_id;
+        }
+        elseif(!empty($check2)){
+            $shipment_id = $check2->id;
+        }
+
+
+        //$shipment = shipment::where('order_id',$request->search_input)->first();
+        $shipment_logs = system_logs::where('_id',$shipment_id)->orderBy('id', 'DESC')->get();
+        //return response()->json($shipment_logs);
+      return view('admin.shipment_track',compact('language','shipment_logs','id'));
     }
 
 }

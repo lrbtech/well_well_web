@@ -10,8 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>{{$language[3][Auth::guard('admin')->user()->lang]}}
-                    <span>{{$language[93][Auth::guard('admin')->user()->lang]}}  </span></h2>
+                  <h2>{{$language[234][Auth::guard('admin')->user()->lang]}}</h2>
                   <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -33,10 +32,12 @@
                 <div class="card">
                   <div class="card-header">
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
+                    @if(Auth::guard('admin')->user()->courier_create == 'on')
                     <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
-                    <span>{{$language[94][Auth::guard('admin')->user()->lang]}}</span>
+                    <span>{{$language[235][Auth::guard('admin')->user()->lang]}}</span>
                     </button>
+                    @endif
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -47,6 +48,7 @@
                             <th>{{$language[12][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[13][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[14][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
@@ -58,11 +60,24 @@
                             <td>{{$row->email}}</td>
                             <td>{{$row->mobile}}</td>
                             <td>
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                            @if($row->status == 0)
+                            {{$language[227][Auth::guard('admin')->user()->lang]}}
+                            @else 
+                            {{$language[226][Auth::guard('admin')->user()->lang]}}
+                            @endif
+                            </td>
+                            <td>
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$language[16][Auth::guard('admin')->user()->lang]}}</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                @if(Auth::guard('admin')->user()->courier_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
-                                    @if(Auth::guard('admin')->user()->role_id == '0')
-                                    <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#">Delete</a>
+                                    @endif
+                                    @if(Auth::guard('admin')->user()->courier_delete == '0')
+                                    @if($row->status == 0)
+                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">{{$language[226][Auth::guard('admin')->user()->lang]}}</a>
+                                    @else 
+                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">{{$language[227][Auth::guard('admin')->user()->lang]}}</a>
+                                    @endif
                                     @endif
                                 </div>
                             </td>
@@ -87,7 +102,7 @@
     <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-        <h5 class="modal-title">Add New</h5>
+        <h5 class="modal-title">{{$language[221][Auth::guard('admin')->user()->lang]}}</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         </div>
         <div class="modal-body">
@@ -97,44 +112,44 @@
 
         <div class="row">
           <div class="form-group col-md-6">
-              <label class="col-form-label">Agent ID</label>
+              <label class="col-form-label">{{$language[236][Auth::guard('admin')->user()->lang]}}</label>
               <input autocomplete="off" type="text" id="agent_id" name="agent_id" class="form-control">
           </div>
 
           <div class="form-group col-md-6">
-              <label class="col-form-label">Name</label>
+              <label class="col-form-label">{{$language[12][Auth::guard('admin')->user()->lang]}}</label>
               <input autocomplete="off" type="text" id="name" name="name" class="form-control">
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-md-6">
-              <label class="col-form-label">Email ID</label>
+              <label class="col-form-label">{{$language[237][Auth::guard('admin')->user()->lang]}}</label>
               <input autocomplete="off" type="email" id="email" name="email" class="form-control">
           </div>
 
           <div class="form-group col-md-6">
-              <label class="col-form-label">Mobile Number</label>
+              <label class="col-form-label">{{$language[238][Auth::guard('admin')->user()->lang]}}</label>
               <input autocomplete="off" type="text" id="mobile" name="mobile" class="form-control">
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-md-6">
-              <label class="col-form-label">Date of Birth</label>
+              <label class="col-form-label">{{$language[239][Auth::guard('admin')->user()->lang]}}</label>
               <input autocomplete="off" type="date" id="dob" name="dob" class="form-control">
           </div>
 
           <div class="form-group col-md-6">
-              <label class="col-form-label">Gender</label>
+              <label class="col-form-label">{{$language[240][Auth::guard('admin')->user()->lang]}}</label>
               <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml">
                   <div class="radio radio-primary">
                   <input value="male" id="gender1" type="radio" name="gender" >
-                  <label class="mb-0" for="gender1">Male</label>
+                  <label class="mb-0" for="gender1">{{$language[241][Auth::guard('admin')->user()->lang]}}</label>
                   </div>
                   <div class="radio radio-primary">
                   <input value="female" id="gender2" type="radio" name="gender">
-                  <label class="mb-0" for="gender2">Female</label>
+                  <label class="mb-0" for="gender2">{{$language[242][Auth::guard('admin')->user()->lang]}}</label>
                   </div>
               </div>
           </div>
@@ -142,21 +157,21 @@
 
         <div class="row">
           <div class="form-group col-md-6">
-              <label class="col-form-label">Password</label>
+              <label class="col-form-label">{{$language[243][Auth::guard('admin')->user()->lang]}}</label>
               <input type="password" id="password" name="password" class="form-control">
           </div>
 
           <div class="form-group col-md-6">
-              <label class="col-form-label">Confirm Password</label>
+              <label class="col-form-label">{{$language[244][Auth::guard('admin')->user()->lang]}}</label>
               <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
           </div>
          </div>
         
          <div class="row">
           <div class="form-group col-md-6">
-              <label class="col-form-label">Select City</label>
+              <label class="col-form-label">{{$language[245][Auth::guard('admin')->user()->lang]}}</label>
               <select id="city_id" name="city_id" class="form-control">
-                  <option value="">SELECT</option>
+                  <option value="">{{$language[246][Auth::guard('admin')->user()->lang]}}</option>
                   @foreach($city as $row)
                   <option value="{{$row->id}}">{{$row->city}}</option>
                   @endforeach
@@ -176,36 +191,36 @@
 
          <div class="row">
             <div class="form-group col-md-6">
-              <label class="col-form-label">Driving License Number</label>
+              <label class="col-form-label">{{$language[247][Auth::guard('admin')->user()->lang]}}</label>
               <input type="text" id="driving_license" name="driving_license" class="form-control">
             </div>
 
             <div class="form-group col-md-6">
-              <label class="col-form-label">Driving License File</label>
+              <label class="col-form-label">{{$language[248][Auth::guard('admin')->user()->lang]}}</label>
               <input type="file" id="driving_license_file" name="driving_license_file" class="form-control">
             </div>
          </div>
 
          <div class="row">
             <div class="form-group col-md-6">
-              <label class="col-form-label">Emirates ID Number</label>
+              <label class="col-form-label">{{$language[249][Auth::guard('admin')->user()->lang]}}</label>
               <input type="text" id="emirates_id" name="emirates_id" class="form-control">
             </div>
 
             <div class="form-group col-md-6">
-              <label class="col-form-label">Emirates ID File</label>
+              <label class="col-form-label">{{$language[250][Auth::guard('admin')->user()->lang]}}</label>
               <input type="file" id="emirates_id_file" name="emirates_id_file" class="form-control">
             </div>
          </div>
 
          <div class="row">
             <div class="form-group col-md-6">
-              <label class="col-form-label">Vehicle Number</label>
+              <label class="col-form-label">{{$language[251][Auth::guard('admin')->user()->lang]}}</label>
               <input type="text" id="vehicle_number" name="vehicle_number" class="form-control">
             </div>
 
             <div class="form-group col-md-6">
-              <label class="col-form-label">Vehicle Details</label>
+              <label class="col-form-label">{{$language[252][Auth::guard('admin')->user()->lang]}}</label>
               <textarea class="form-control" name="vehicle_details" id="vehicle_details"></textarea>
             </div>
          </div>
@@ -215,21 +230,21 @@
           <div class="form-group col-md-4">
             <div class="checkbox checkbox-primary">
               <input value="1" id="pickup" name="pickup" type="checkbox">
-              <label for="pickup">Pickup</label>
+              <label for="pickup">{{$language[253][Auth::guard('admin')->user()->lang]}}</label>
             </div>
           </div>
 
           <div class="form-group col-md-4">
             <div class="checkbox checkbox-primary">
               <input value="1" id="delivery" name="delivery" type="checkbox">
-              <label for="delivery">Delivery</label>
+              <label for="delivery">{{$language[254][Auth::guard('admin')->user()->lang]}}</label>
             </div>
           </div>
 
           <div class="form-group col-md-4">
             <div class="checkbox checkbox-primary">
               <input value="1" id="revenue_exception" name="revenue_exception" type="checkbox">
-              <label for="revenue_exception">Revenue Exception</label>
+              <label for="revenue_exception">{{$language[255][Auth::guard('admin')->user()->lang]}}</label>
             </div>
           </div>
 
@@ -240,21 +255,21 @@
           <div class="form-group col-md-4">
             <div class="checkbox checkbox-primary">
               <input value="1" id="cash_report" name="cash_report" type="checkbox">
-              <label for="cash_report">Cash Report</label>
+              <label for="cash_report">{{$language[256][Auth::guard('admin')->user()->lang]}}</label>
             </div>
           </div>
 
           <div class="form-group col-md-4">
             <div class="checkbox checkbox-primary">
               <input value="1" id="hub" name="hub" type="checkbox">
-              <label for="hub">Hub</label>
+              <label for="hub">{{$language[257][Auth::guard('admin')->user()->lang]}}</label>
             </div>
           </div>
 
           <div class="form-group col-md-4">
             <div class="checkbox checkbox-primary">
               <input value="1" id="van_scan" name="van_scan" type="checkbox">
-              <label for="van_scan">Van Scan</label>
+              <label for="van_scan">{{$language[258][Auth::guard('admin')->user()->lang]}}</label>
             </div>
           </div>
 
@@ -265,8 +280,8 @@
         </form>
         </div>
         <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-        <button onclick="Save()" class="btn btn-primary" type="button">Save</button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">{{$language[223][Auth::guard('admin')->user()->lang]}}</button>
+        <button onclick="Save()" class="btn btn-primary" type="button">{{$language[224][Auth::guard('admin')->user()->lang]}}</button>
         </div>
     </div>
     </div>
@@ -417,11 +432,11 @@ function Edit(id){
   });
 }
 
-function Delete(id){
+function Delete(id,status){
     var r = confirm("Are you sure");
     if (r == true) {
       $.ajax({
-        url : '/admin/delete-agent/'+id,
+        url : '/admin/delete-agent/'+id+'/'+status,
         type: "GET",
         dataType: "JSON",
         success: function(data)

@@ -49,7 +49,7 @@ class UserController extends Controller
             }
         }
 
-        $admin->language = $request->language;
+        $admin->languages = $request->languages;
         $admin->common_price = $request->common_price;
         $admin->financial_settings = $request->financial_settings;
         $admin->station = $request->station;
@@ -75,6 +75,40 @@ class UserController extends Controller
         $admin->new_shipment_request = $request->new_shipment_request;
         $admin->new_shipment = $request->new_shipment;
         $admin->view_customer = $request->view_customer;
+
+        $admin->new_customer = $request->new_customer;
+        $admin->sales_team = $request->sales_team;
+        $admin->accounts_team = $request->accounts_team;
+        $admin->today_pickup_request = $request->today_pickup_request;
+        $admin->future_pickup_request = $request->future_pickup_request;
+        $admin->station_create = $request->station_create;
+        $admin->station_edit = $request->station_edit;
+        $admin->station_delete = $request->station_delete;
+        $admin->exception_category_create = $request->exception_category_create;
+        $admin->exception_category_edit = $request->exception_category_edit;
+        $admin->exception_category_delete = $request->exception_category_delete;
+        $admin->package_category_create = $request->package_category_create;
+        $admin->package_category_edit = $request->package_category_edit;
+        $admin->package_category_delete = $request->package_category_delete;
+        $admin->country_create = $request->country_create;
+        $admin->country_edit = $request->country_edit;
+        $admin->country_delete = $request->country_delete;
+        $admin->city = $request->city;
+        $admin->city_create = $request->city_create;
+        $admin->city_edit = $request->city_edit;
+        $admin->city_delete = $request->city_delete;
+        $admin->area = $request->area;
+        $admin->area_create = $request->area_create;
+        $admin->area_edit = $request->area_edit;
+        $admin->area_delete = $request->area_delete;
+        $admin->courier_create = $request->courier_create;
+        $admin->courier_edit = $request->courier_edit;
+        $admin->courier_delete = $request->courier_delete;
+        $admin->employee_create = $request->employee_create;
+        $admin->employee_edit = $request->employee_edit;
+        $admin->employee_delete = $request->employee_delete;
+        $admin->system_logs = $request->system_logs;
+        $admin->revenue_exception = $request->revenue_exception;
         //$admin->dashboard = $request->dashboard;
 
         $admin->save();
@@ -117,7 +151,7 @@ class UserController extends Controller
             }
         }
 
-        $admin->language = $request->language;
+        $admin->languages = $request->languages;
         $admin->common_price = $request->common_price;
         $admin->financial_settings = $request->financial_settings;
         $admin->station = $request->station;
@@ -143,6 +177,40 @@ class UserController extends Controller
         $admin->new_shipment_request = $request->new_shipment_request;
         $admin->new_shipment = $request->new_shipment;
         $admin->view_customer = $request->view_customer;
+
+        $admin->new_customer = $request->new_customer;
+        $admin->sales_team = $request->sales_team;
+        $admin->accounts_team = $request->accounts_team;
+        $admin->today_pickup_request = $request->today_pickup_request;
+        $admin->future_pickup_request = $request->future_pickup_request;
+        $admin->station_create = $request->station_create;
+        $admin->station_edit = $request->station_edit;
+        $admin->station_delete = $request->station_delete;
+        $admin->exception_category_create = $request->exception_category_create;
+        $admin->exception_category_edit = $request->exception_category_edit;
+        $admin->exception_category_delete = $request->exception_category_delete;
+        $admin->package_category_create = $request->package_category_create;
+        $admin->package_category_edit = $request->package_category_edit;
+        $admin->package_category_delete = $request->package_category_delete;
+        $admin->country_create = $request->country_create;
+        $admin->country_edit = $request->country_edit;
+        $admin->country_delete = $request->country_delete;
+        $admin->city = $request->city;
+        $admin->city_create = $request->city_create;
+        $admin->city_edit = $request->city_edit;
+        $admin->city_delete = $request->city_delete;
+        $admin->area = $request->area;
+        $admin->area_create = $request->area_create;
+        $admin->area_edit = $request->area_edit;
+        $admin->area_delete = $request->area_delete;
+        $admin->courier_create = $request->courier_create;
+        $admin->courier_edit = $request->courier_edit;
+        $admin->courier_delete = $request->courier_delete;
+        $admin->employee_create = $request->employee_create;
+        $admin->employee_edit = $request->employee_edit;
+        $admin->employee_delete = $request->employee_delete;
+        $admin->system_logs = $request->system_logs;
+        $admin->revenue_exception = $request->revenue_exception;
         //$admin->dashboard = $request->dashboard;
 
         $admin->save();
@@ -154,7 +222,7 @@ class UserController extends Controller
         $role = role::all();
         $station = station::all();
         $language = language::all();
-        return view('admin.user',compact('user','role','station','language'));
+        return view('admin.view_users',compact('user','role','station','language'));
     }
 
     public function editUser($id){

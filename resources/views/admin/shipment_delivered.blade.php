@@ -45,8 +45,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>{{$language[59][Auth::guard('admin')->user()->lang]}}
-                            </th>
+                            <th>Tracking ID</th>
                             <th>{{$language[78][Auth::guard('admin')->user()->lang]}}
                             </th>
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}
@@ -97,8 +96,8 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'order_id', name: 'order_id' },
-        { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_time', name: 'shipment_time' },
         { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },

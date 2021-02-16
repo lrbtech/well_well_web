@@ -127,7 +127,8 @@ class NotificationController extends Controller
     public function Notification(){
         $push_notification = push_notification::all();
         $agent = agent::all();
-        return view('admin.push_notification',compact('push_notification','agent'));
+        $language = language::all();
+        return view('admin.push_notification',compact('push_notification','agent','language'));
     }
 
     public function editNotification($id){

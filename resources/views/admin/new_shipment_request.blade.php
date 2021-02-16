@@ -10,7 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>{{$language[73][Auth::guard('admin')->user()->lang]}} <span>{{$language[74][Auth::guard('admin')->user()->lang]}}</span></h2> 
+                  <h2>{{$language[73][Auth::guard('admin')->user()->lang]}} <span>Pickup Request</span></h2> 
                   <!-- <h6 class="mb-0">View Shipment</h6>-->
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -151,5 +151,36 @@ $(document).on('click','#save', function(){
     toastr.error("Please select Agent");
   }
 });
+
+
+function PrintLabel(id){
+  $.ajax({
+    url : '/admin/print-label/'+id,
+    type: "GET",
+    dataType: "JSON",
+    success: function(data)
+    {
+        var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
+        var is_chrome = Boolean(mywindow.chrome);
+        mywindow.document.write(data.html);
+        mywindow.document.close(); 
+        if (is_chrome) {
+            setTimeout(function() {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/admin/new-shipment-request";
+            }, 250);
+        } else {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/admin/new-shipment-request";
+        }
+        //PrintDiv(data);
+        
+    }
+  });
+}
 </script>
 @endsection

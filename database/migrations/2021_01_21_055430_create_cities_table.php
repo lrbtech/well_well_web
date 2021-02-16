@@ -20,6 +20,8 @@ class CreateCitiesTable extends Migration
             $table->string('country_id')->nullable();
             $table->string('city')->nullable();
             $table->string('station_id')->nullable();
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
             $table->string('remote_area')->default('0');
             $table->string('status')->default('0');
             $table->timestamps();

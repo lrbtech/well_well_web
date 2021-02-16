@@ -111,7 +111,7 @@
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
                                 <h6 class="f-w-100 m-l-10">AED {{$current_month_value}}</h6>
-                                <h4 class="mb-0 f-w-700 m-l-10">Current Month <br>Transaction</h4>
+                                <h4 class="mb-0 f-w-700 m-l-10">{{$language[6][Auth::guard('admin')->user()->lang]}}</h4>
                               </div>
                             </div>
                           </div>

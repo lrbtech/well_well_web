@@ -71,7 +71,7 @@
 
                   <div class="card-footer text-right">
                     <button onclick="SavePrice()" class="btn btn-primary m-r-15" type="button">{{$language[140][Auth::guard('admin')->user()->lang]}}</button>
-                    <button class="btn btn-light" type="button">Cancel</button>
+                    <button class="btn btn-light" type="button">{{$language[72][Auth::guard('admin')->user()->lang]}}</button>
                   </div>
 
                 </div>

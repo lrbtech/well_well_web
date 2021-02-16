@@ -39,7 +39,7 @@
 
                         <div class="col-md-3">
                           <label>{{$language[60][Auth::user()->lang]}}</label>
-                            <input class="form-control" id="shipment_from_time" name="shipment_from_time" type="time">
+                            <input  min="08:00 AM" max="04:00 PM" class="form-control" id="shipment_from_time" name="shipment_from_time" type="time">
                         </div>
 
                         <div class="col-md-3">
@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="form-group col-md-3">
-                            <button id="save" class="btn btn-primary btn-block mr-10" type="button">{{$language[18][Auth::user()->lang]}}</button>
+                            <button id="save" class="btn btn-primary btn-block mr-10" type="button">Ready for Pickup</button>
                         </div>
                     </div>
                   </div>
@@ -134,7 +134,8 @@ $(document).on('click','#save', function(){
     var shipment_date = $('#shipment_date').val();
     var shipment_from_time = $('#shipment_from_time').val();
     var shipment_to_time = $('#shipment_to_time').val();
-  if(shipment_date != '' && shipment_from_time){
+if(shipment_date != '' && shipment_from_time){
+  // if(shipment_from_time >= '08:00 AM' && '06:00 PM' >= shipment_to_time){
     $(".order_checkbox:checked").each(function(){
         order_id.push($(this).val());
     });
@@ -151,9 +152,13 @@ $(document).on('click','#save', function(){
     }else{
         toastr.error("Please select atleast one Checkbox");
     }
-  }else{
-    toastr.error("Please select Date & Time");
-  }
+  // }else{
+  //   toastr.error("Kindly contact our customer service for alternative solution. +971569949409");
+  // }
+}else{
+  toastr.error("Please select Date & Time");
+}
+
 });
 </script>
 @endsection

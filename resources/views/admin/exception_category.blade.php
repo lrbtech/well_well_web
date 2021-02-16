@@ -33,10 +33,12 @@
                 <div class="card">
                   <div class="card-header">
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
+                    @if(Auth::guard('admin')->user()->exception_category_create == 'on')
                     <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
                     <span>{{$language[128][Auth::guard('admin')->user()->lang]}}</span>
                     </button>
+                    @endif
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -56,20 +58,22 @@
                             <td>{{$row->category}}</td>
                             <td>
                             @if($row->status == 0)
-                            Active
+                            {{$language[227][Auth::guard('admin')->user()->lang]}}
                             @else 
-                            DeActive
+                            {{$language[226][Auth::guard('admin')->user()->lang]}}
                             @endif
                             </td>
                             <td>
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$language[16][Auth::guard('admin')->user()->lang]}}</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
-                                    @if(Auth::guard('admin')->user()->role_id == '0')
+                                @if(Auth::guard('admin')->user()->exception_category_edit == 'on')
+                                    <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">{{$language[225][Auth::guard('admin')->user()->lang]}}</a>
+                                    @endif
+                                    @if(Auth::guard('admin')->user()->exception_category_delete == '0')
                                     @if($row->status == 0)
-                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
+                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">{{$language[226][Auth::guard('admin')->user()->lang]}}</a>
                                     @else 
-                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">Active</a>
+                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">{{$language[227][Auth::guard('admin')->user()->lang]}}</a>
                                     @endif
                                     @endif
                                 </div>
@@ -95,7 +99,7 @@
     <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-        <h5 class="modal-title">Add New</h5>
+        <h5 class="modal-title">{{$language[221][Auth::guard('admin')->user()->lang]}}</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         </div>
         <div class="modal-body">
@@ -105,7 +109,7 @@
 
         <div class="row">
             <div class="form-group col-md-12">
-              <label class="col-form-label">Exception Category</label>
+              <label class="col-form-label">{{$language[228][Auth::guard('admin')->user()->lang]}}</label>
               <input autocomplete="off" type="text" id="category" name="category" class="form-control">
             </div>
         </div>
@@ -113,8 +117,8 @@
         </form>
         </div>
         <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-        <button onclick="Save()" class="btn btn-primary" type="button">Save</button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">{{$language[223][Auth::guard('admin')->user()->lang]}}</button>
+        <button onclick="Save()" class="btn btn-primary" type="button">{{$language[224][Auth::guard('admin')->user()->lang]}}</button>
         </div>
     </div>
     </div>

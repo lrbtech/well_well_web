@@ -109,7 +109,9 @@
                         <span>Schedule for Pickup</span>
                     @elseif($shipment->status == 2)
                         <span>Packaege Collected</span>
-                    @elseif($shipment->status >= 4)
+                    @elseif($shipment->status == 3)
+                        <span>Pickup Exception</span>
+                    @elseif($shipment->status == 4)
                         <span>Transit In <b>{{$from_station->station}}</b></span>
                     @elseif($shipment->status == 6)
                         <span>Transit Out <b>{{$to_station->station}}</b></span>
@@ -219,9 +221,9 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Status history</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Shipment Details</a>
-                </li>
+                </li> -->
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -230,22 +232,37 @@
                         <table class="table">
 
                             <tbody>
-                                @if($shipment->status > 0)
+                                @if($shipment->status == 9)
                                 <tr>
-                                    <td>{{date('d-m-Y H:m a',strtotime($shipment->created_at))}}</td>
-                                    <td>Shipment Created</td>
+                                    <td>{{date('d-m-Y',strtotime($shipment->delivery_exception_assign_date))}} {{date('H:m a',strtotime($shipment->delivery_exception_assign_time))}}</td>
+                                    <td>
+                                    {{$shipment->delivery_eception_category}}<br>
+                                    {{$shipment->delivery_eception_remark}}
+                                    </td>
                                 </tr>
                                 @endif
-                                @if($shipment->status > 1)
+                                @if($shipment->status >= 8)
                                 <tr>
-                                    <td>{{date('d-m-Y',strtotime($shipment->pickup_assign_date))}} {{date('H:m a',strtotime($shipment->pickup_assign_time))}}</td>
-                                    <td>Schedule for Pickup</td>
+                                    <td>{{date('d-m-Y',strtotime($shipment->delivery_date))}} {{date('H:m a',strtotime($shipment->delivery_time))}}</td>
+                                    <td>Shipment Delivered</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 2)
+                                @if($shipment->status >= 7)
                                 <tr>
-                                    <td>{{date('d-m-Y',strtotime($shipment->package_collect_date))}} {{date('H:m a',strtotime($shipment->package_collect_time))}}</td>
-                                    <td>Packaege Collected</td>
+                                    <td>{{date('d-m-Y',strtotime($shipment->delivery_assign_date))}} {{date('H:m a',strtotime($shipment->delivery_assign_time))}}</td>
+                                    <td>In the Van for Delivery</td>
+                                </tr>
+                                @endif
+                                @if($shipment->status >= 6)
+                                <tr>
+                                    <td>{{date('d-m-Y',strtotime($shipment->station_received_date))}} {{date('H:m a',strtotime($shipment->station_received_time))}}</td>
+                                    <td>Transit Out <b>{{$to_station->station}}</b></td>
+                                </tr>
+                                @endif
+                                @if($shipment->status >= 4)
+                                <tr>
+                                    <td>{{date('d-m-Y',strtotime($shipment->pickup_received_date))}} {{date('H:m a',strtotime($shipment->pickup_received_time))}}</td>
+                                    <td>Transit In <b>{{$from_station->station}}</b></td>
                                 </tr>
                                 @endif
                                 @if($shipment->status == 3)
@@ -257,28 +274,22 @@
                                     </td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 4)
+                                @if($shipment->status >= 2)
                                 <tr>
-                                    <td>{{date('d-m-Y',strtotime($shipment->pickup_received_date))}} {{date('H:m a',strtotime($shipment->pickup_received_time))}}</td>
-                                    <td>Transit In <b>{{$from_station->station}}</b></td>
+                                    <td>{{date('d-m-Y',strtotime($shipment->package_collect_date))}} {{date('H:m a',strtotime($shipment->package_collect_time))}}</td>
+                                    <td>Packaege Collected</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 6)
+                                @if($shipment->status > 1)
                                 <tr>
-                                    <td>{{date('d-m-Y',strtotime($shipment->station_received_date))}} {{date('H:m a',strtotime($shipment->station_received_time))}}</td>
-                                    <td>Transit Out <b>{{$to_station->station}}</b></td>
+                                    <td>{{date('d-m-Y',strtotime($shipment->pickup_assign_date))}} {{date('H:m a',strtotime($shipment->pickup_assign_time))}}</td>
+                                    <td>Schedule for Pickup</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 7)
+                                @if($shipment->status > 0)
                                 <tr>
-                                    <td>{{date('d-m-Y',strtotime($shipment->delivery_assign_date))}} {{date('H:m a',strtotime($shipment->delivery_assign_time))}}</td>
-                                    <td>In the Van for Delivery</td>
-                                </tr>
-                                @endif
-                                @if($shipment->status >= 8)
-                                <tr>
-                                    <td>{{date('d-m-Y',strtotime($shipment->delivery_date))}} {{date('H:m a',strtotime($shipment->delivery_time))}}</td>
-                                    <td>Shipment Delivered</td>
+                                    <td>{{date('d-m-Y H:m a',strtotime($shipment->created_at))}}</td>
+                                    <td>Shipment Created</td>
                                 </tr>
                                 @endif
                             </tbody>

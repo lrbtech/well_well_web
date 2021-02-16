@@ -25,6 +25,8 @@ class CityController extends Controller
         $city->city = $request->city;
         $city->country_id = $request->country_id;
         $city->station_id = $request->station_id;
+        $city->lat = $request->lat;
+        $city->lng = $request->lng;
         $city->parent_id = 0;
         $city->save();
         return response()->json('successfully save'); 
@@ -38,6 +40,8 @@ class CityController extends Controller
         $city->city = $request->city;
         $city->country_id = $request->country_id;
         $city->station_id = $request->station_id;
+        $city->lat = $request->lat;
+        $city->lng = $request->lng;
         $city->parent_id = 0;
         $city->save();
         return response()->json('successfully update'); 

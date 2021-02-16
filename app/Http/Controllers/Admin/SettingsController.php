@@ -16,6 +16,9 @@ use App\Models\admin;
 use App\Models\common_price;
 use App\Models\language;
 use App\Models\exception_category;
+use App\Models\system_logs;
+use App\Models\shipment_package;
+use App\Models\shipment;
 use Hash;
 use Auth;
 use DB;
@@ -120,7 +123,8 @@ class SettingsController extends Controller
         $country = country::all();
         $city = city::where('parent_id',0)->get();
         $area = city::where('parent_id','!=',0)->get();
-        return view('admin.drop_point',compact('drop_point','country','city','area'));
+        $language = language::all();
+        return view('admin.drop_point',compact('drop_point','country','city','area','language'));
     }
 
     public function editDropPoint($id){
@@ -278,6 +282,14 @@ class SettingsController extends Controller
         return view('admin.change_password',compact('user'));
     }
 
+    public function changelanguage($language)
+    {
+        $user = admin::find(Auth::guard('admin')->user()->id);
+        $user->lang = $language;
+        $user->save();
+        return response()->json(['message'=>'Successfully Update'],200); 
+    }
+
     public function updateChangePassword(Request $request){
         $request->validate([
             'oldpassword' => 'required',
@@ -378,11 +390,17 @@ class SettingsController extends Controller
     //     $language->arabic = $request->arabic;
     //     $language->save();
     // }
-    public function deleteLanguage(Request $request){
-        $language =  language::find($request->id)->delete();
-    }
+    // public function deleteLanguage(Request $request){
+    //     $language =  language::find($request->id)->delete();
+    // }
 
-    
+    public function systemLogs(){
+        $systemLogs = system_logs::orderBy('id','DESC')->get();
+        $shipment_package = shipment_package::all();
+        $shipment = shipment::all();
+        $language = language::all();
+         return view('admin.system_logs',compact('systemLogs','language','shipment_package','shipment'));
+    }
 
 
 }

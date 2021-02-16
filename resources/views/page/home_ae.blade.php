@@ -29,7 +29,7 @@
                 <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
                 <li><a href="/ship-now" class="nav-link">الشحن</a></li>
 
-                <li><a href="#service-solution" class="nav-link">الحلول والمساعدة</a></li>
+                <li><a href="#service-solution" class="nav-link">الحلول والخدمات</a></li>
                 <li><a href="#service-advance" class="nav-link">المساعدة والدعم</a></li>
                 <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
 
@@ -55,7 +55,7 @@
                                     <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
                                     <li><a href="/ship-now" class="nav-link">الشحن</a></li>
 
-                                    <li><a href="#service-solution" class="nav-link">الحلول والمساعدة</a></li>
+                                    <li><a href="#service-solution" class="nav-link">الحلول والخدمات</a></li>
                                     <li><a href="#service-advance" class="nav-link">المساعدة والدعم</a></li>
                                     <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
 
