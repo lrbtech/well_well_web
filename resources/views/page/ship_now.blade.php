@@ -519,7 +519,7 @@
 
                 <div class="col-md-4">
                     <label>Pickup Time</label>
-                    <input readonly="" class="form-control" id="shipment_to_time" name="shipment_to_time" type="time">
+                    <input readonly="" class="form-control" id="shipment_to_time" name="shipment_to_time" type="text">
                 </div>
             </div>
         </div>
@@ -1376,13 +1376,22 @@ function addpackage(no_of_packages){
 }
 
 
-$('#shipment_from_time').blur(function(){
-    $("#shipment_to_time").val('');
-  var shipment_from_time = $("#shipment_from_time").val();
-  //alert(shipment_from_time);
-  <?php //echo date('H:m a',strtotime($_POST['shipment_from_time']."+2 hour")); ?>
+// $('#shipment_from_time').blur(function(){
+//     $("#shipment_to_time").val('');
+//   var shipment_from_time = $("#shipment_from_time").val();
+//   //alert(shipment_from_time);
+//   <?php //echo date('H:m a',strtotime($_POST['shipment_from_time']."+2 hour")); ?>
 
-  var to_time = moment.utc(shipment_from_time,'hh:mm').add(2,'hour').format('hh:mm');
+//   var to_time = moment.utc(shipment_from_time,'hh:mm').add(2,'hour').format('hh:mm');
+//   $("#shipment_to_time").val(to_time);
+// });
+
+
+$('#shipment_from_time').blur(function(){
+  var shipment_from_time = $("#shipment_from_time").val();
+  // //alert(shipment_from_time);
+
+  var to_time = moment.utc(shipment_from_time,'hh:mm A').add(2,'hour').format('hh:mm A');
   $("#shipment_to_time").val(to_time);
 });
 
