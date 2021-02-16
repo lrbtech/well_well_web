@@ -58,7 +58,7 @@
                             <td>{{$row->country_code}}</td>
                             <td>
                             @if(Auth::guard('admin')->user()->city == 'on')
-                            <a href="admin/city/{{$row->id}}">{{$row->country_name_english}}</a>
+                            <a href="/admin/city/{{$row->id}}">{{$row->country_name_english}}</a>
                             @else 
                             {{$row->country_name_english}}
                             @endif
