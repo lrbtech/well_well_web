@@ -143,12 +143,12 @@ class ShipmentController extends Controller
         $shipment->total = $request->total;
         $shipment->save();
 
-        $system_logs = new system_logs;
-        $system_logs->_id = $shipment->id;
-        $system_logs->category = 'shipment';
-        $system_logs->to_id = Auth::user()->email;
-        $system_logs->remark = 'New Shipment Created by Customer';
-        $system_logs->save();
+        // $system_logs = new system_logs;
+        // $system_logs->_id = $shipment->id;
+        // $system_logs->category = 'shipment';
+        // $system_logs->to_id = Auth::user()->email;
+        // $system_logs->remark = 'New Shipment Created by Customer';
+        // $system_logs->save();
         
 
         if($request->same_data == '0'){
