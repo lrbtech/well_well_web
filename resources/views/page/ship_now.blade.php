@@ -79,6 +79,11 @@
             visibility: visible;
         }
     </style>
+<style>
+    .pac-container {
+        z-index: 10000 !important;
+    }
+</style>
 </head>
 
 <body>
@@ -435,9 +440,13 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-4">
                     <label class="col-form-label">Description</label>
                     <input type="text" class="form-control" id="description1" name="description[]">
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="col-form-label">Reference No</label>
+                    <input type="text" class="form-control" id="reference_no1" name="reference_no[]">
                 </div>
                 <div class="form-group col-md-2">
                     <label class="col-form-label">Actual Weight</label>
@@ -541,6 +550,13 @@
                         <input readonly class="form-control" name="insurance_amount" id="insurance_amount" type="text">
                     </div>
                 </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Cash on Delivery</label>
+                        <input readonly class="form-control" value="{{$settings->cod_amount}}" name="cod_amount" id="cod_amount" type="text">
+                    </div>
+                </div>
                 
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -634,8 +650,67 @@
 
 <script>
     /* script */
-    function initialize() {
-        var latlng = new google.maps.LatLng(24.453884, 54.3773438);
+    var from_lat='24.453884';
+    var from_lng='54.3773438';
+    var to_lat='24.453884';
+    var to_lng='54.3773438';
+
+
+$('#from_city_id').change(function(){
+  var id = $('#from_city_id').val();
+  $.ajax({
+    url : '/get-area/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#from_area_id').html(data);
+        get_from_latlng(id);
+    }
+  });
+});
+
+function get_from_latlng(id){
+    window.from_lat;
+    window.from_lng;
+    $.ajax({
+        url : '/get-city-data/'+id,
+        type: "GET",
+        success: function(data)
+        {
+            initialize(data.lat, data.lng);
+        }
+    });
+}
+
+$('#to_city_id').change(function(){
+  var id = $('#to_city_id').val();
+  $.ajax({
+    url : '/get-area/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#to_area_id').html(data);
+        get_to_latlng(id);
+    }
+  });
+});
+
+function get_to_latlng(id){
+    $.ajax({
+        url : '/get-city-data/'+id,
+        type: "GET",
+        success: function(data)
+        {
+           to_lat = data.lat;
+           to_lng = data.lng;
+        }
+    });
+}
+
+    google.maps.event.addDomListener(window, 'load', initialize(from_lat, from_lng));
+    google.maps.event.addDomListener(window, 'load', initialize1);
+    function initialize(from_lat, from_lng) {
+        var latlng = new google.maps.LatLng(from_lat, from_lng);
         var map = new google.maps.Map(document.getElementById('map'), {
             center: latlng,
             zoom: 13
@@ -694,7 +769,8 @@
     }
 
     function initialize1() {
-        var latlng = new google.maps.LatLng(24.453884, 54.3773438);
+        var latlng = new google.maps.LatLng(to_lat, to_lng);
+
         var map = new google.maps.Map(document.getElementById('map1'), {
             center: latlng,
             zoom: 13
@@ -762,13 +838,9 @@
         document.getElementById('to_latitude').value = lat;
         document.getElementById('to_longitude').value = lng;
     }
-    google.maps.event.addDomListener(window, 'load', initialize);
-    google.maps.event.addDomListener(window, 'load', initialize1);
-</script>
+    
 
 
-
-<script type="text/javascript">
     //wizard function
 
     var searchVisible = 0;
@@ -790,7 +862,8 @@
                 },
                 from_mobile: {
                     required: true,
-                    minlength: 9,
+                    minlength:9,
+                    maxlength:9,
                 },
                 from_country_id: {
                     required: true,
@@ -807,7 +880,8 @@
                 },
                 to_mobile: {
                     required: true,
-                    minlength: 9,
+                    minlength:9,
+                    maxlength:9,
                 },
                 to_country_id: {
                     required: true,
@@ -827,10 +901,22 @@
                 "chargeable_weight[]": {
                     required: true,
                 },
-                searchInput: {
+                from_address: {
                     required: true,
                 },
-                searchInput1: {
+                to_address: {
+                    required: true,
+                },
+                from_latitude: {
+                    required: true,
+                },
+                to_latitude: {
+                    required: true,
+                },
+                from_longitude: {
+                    required: true,
+                },
+                to_longitude: {
                     required: true,
                 },
                 shipment_date: {
@@ -874,10 +960,22 @@
                 else if (element.attr("name") == "to_country_id") {
                     errorName = "Country";
                 } 
-                else if (element.attr("name") == "searchInput") {
+                else if (element.attr("name") == "from_address") {
                     errorName = "Pick From Address";
                 } 
-                else if (element.attr("name") == "searchInput1") {
+                else if (element.attr("name") == "to_address") {
+                    errorName = "Pick To Address";
+                } 
+                else if (element.attr("name") == "from_latitude") {
+                    errorName = "Pick To Address";
+                } 
+                else if (element.attr("name") == "to_latitude") {
+                    errorName = "Pick To Address";
+                } 
+                else if (element.attr("name") == "from_longitude") {
+                    errorName = "Pick To Address";
+                } 
+                else if (element.attr("name") == "to_longitude") {
                     errorName = "Pick To Address";
                 } 
                 else if (element.attr("name") == "shipment_date") {
@@ -1213,13 +1311,14 @@ function subAmount(total_price1,total_weight1) {
     var insurance_percentage = Number($('#insurance_percentage').val());
     var vat_percentage = Number($('#vat_percentage').val());
     var declared_value = Number($('#declared_value').val());
+    var cod_amount = Number($('#cod_amount').val());
 
     insurance_amount = Number((insurance_percentage/100) * declared_value);
     insurance_amount =  Number(insurance_amount.toFixed(2));
     $("#insurance_amount").val(insurance_amount);
 
 
-    sub_total = Number(insurance_amount + total_price);
+    sub_total = Number(insurance_amount + cod_amount + total_price);
     sub_total =  Number(sub_total.toFixed(2));
 
     $("#sub_total").val(sub_total);
@@ -1251,31 +1350,6 @@ function subAmount(total_price1,total_weight1) {
     $("#total").val(total);
 }
 
-
-
-$('#from_city_id').change(function(){
-  var id = $('#from_city_id').val();
-  $.ajax({
-    url : '/get-area/'+id,
-    type: "GET",
-    success: function(data)
-    {
-        $('#from_area_id').html(data);
-    }
-  });
-});
-
-$('#to_city_id').change(function(){
-  var id = $('#to_city_id').val();
-  $.ajax({
-    url : '/get-area/'+id,
-    type: "GET",
-    success: function(data)
-    {
-        $('#to_area_id').html(data);
-    }
-  });
-});
 
 $( "#no_of_packages" ).blur(function() {
   var no_of_packages = $('#no_of_packages').val();
@@ -1333,9 +1407,13 @@ function addpackage(no_of_packages){
             <?php } ?>
           '</select>'+
         '</div>'+
-        '<div class="form-group col-md-8">'+
+        '<div class="form-group col-md-4">'+
           '<label class="col-form-label">Description</label>'+
           '<input class="form-control" id="description'+count+'" name="description[]" type="text" >'+
+        '</div>'+
+        '<div class="form-group col-md-4">'+
+          '<label class="col-form-label">Reference No</label>'+
+          '<input class="form-control" id="reference_no'+count+'" name="reference_no[]" type="text" >'+
         '</div>'+
         '<div class="form-group col-md-2">'+
           '<label class="col-form-label">Actual Weight</label>'+

@@ -39,7 +39,10 @@
 
                         <div class="col-md-3">
                           <label>{{$language[60][Auth::user()->lang]}}</label>
-                            <input  min="08:00 AM" max="04:00 PM" class="form-control" id="shipment_from_time" name="shipment_from_time" type="time">
+                            <!-- <input  min="08:00 AM" max="04:00 PM" class="form-control" id="shipment_from_time" name="shipment_from_time" type="time"> -->
+                            <select class="form-control" id="shipment_from_time" name="shipment_from_time">
+                              <option value="">Select Time</option>
+                            </select>
                         </div>
 
                         <div class="col-md-3">
@@ -98,6 +101,19 @@ $('#shipment_from_time').blur(function(){
 
   var to_time = moment.utc(shipment_from_time,'hh:mm A').add(2,'hour').format('hh:mm A');
   $("#shipment_to_time").val(to_time);
+});
+
+
+$('#shipment_date').change(function(){
+  var shipment_date = $('#shipment_date').val();
+  $.ajax({
+    url : '/user/get-available-time/'+shipment_date,
+    type: "GET",
+    success: function(data)
+    {
+        $('#shipment_from_time').html(data);
+    }
+  });
 });
 
 var orderPageTable = $('#datatable').DataTable({

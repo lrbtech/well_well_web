@@ -69,15 +69,17 @@ class PageController extends Controller
     }
 
     public function getArea($id){ 
-    
         $data = city::where('parent_id',$id)->orderBy('city','ASC')->get();
-    
-            $output ='<option value="">SELECT Area</option>';
-            foreach ($data as $key => $value) {
-                
+        $output ='<option value="">SELECT Area</option>';
+        foreach ($data as $key => $value) {
             $output .= '<option value="'.$value->id.'">'.$value->city.'</option>';
-            }
+        }
         echo $output;
+    }
+
+    public function getCityData($id){ 
+        $data = city::find($id);
+        return response()->json($data); 
     }
 
     public function Home()
@@ -129,7 +131,8 @@ class PageController extends Controller
         $country = country::where('status',0)->get();
         $city = city::where('parent_id',0)->where('status',0)->get();
         $area = city::where('parent_id','!=',0)->where('status',0)->get();
-        return view('page.user_register',compact('country','city','area'));
+        $settings = settings::find(1);
+        return view('page.user_register',compact('country','city','area','settings'));
     }
 
 
@@ -431,6 +434,7 @@ class PageController extends Controller
                 $shipment_package->shipment_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
                 $shipment_package->description = $_POST['description'][$x];
+                $shipment_package->reference_no = $_POST['reference_no'][$x];
                 $shipment_package->weight = $_POST['weight'][$x];
                 $shipment_package->length = $_POST['length'][$x];
                 $shipment_package->width = $_POST['width'][$x];
@@ -455,6 +459,7 @@ class PageController extends Controller
                     $shipment_package->shipment_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
                     $shipment_package->description = $_POST['description'][$x];
+                    $shipment_package->reference_no = $_POST['reference_no'][$x];
                     $shipment_package->weight = $_POST['weight'][$x];
                     $shipment_package->length = $_POST['length'][$x];
                     $shipment_package->width = $_POST['width'][$x];

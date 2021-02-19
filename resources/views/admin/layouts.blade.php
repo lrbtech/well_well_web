@@ -431,6 +431,7 @@
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[18][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[18][Auth::guard('admin')->user()->lang]}}</li>
+                  
                   @if(Auth::guard('admin')->user()->new_shipment == 'on')
                   <li class="new-shipment"><a class="new-shipment" href="/admin/new-shipment">{{$language[173][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
@@ -460,13 +461,16 @@
                   </a></li>
                   @endif
 
+                  <li class="guest-pickup-request"><a class="guest-pickup-request" href="/admin/guest-pickup-request">Guest Pickup Request
+                  </a></li>
+
                   @if(Auth::guard('admin')->user()->today_pickup_request == 'on')
-                  <li class="today-pickup-request"><a class="today-pickup-request" href="/admin/today-pickup-request">{{$language[178][Auth::guard('admin')->user()->lang]}}
+                  <li class="today-pickup-request"><a class="today-pickup-request" href="/admin/today-pickup-request">Today Bulk Pickup Request
                   </a></li> 
                   @endif
 
                   @if(Auth::guard('admin')->user()->future_pickup_request == 'on')
-                  <li class="future-pickup-request"><a class="future-pickup-request" href="/admin/future-pickup-request">{{$language[179][Auth::guard('admin')->user()->lang]}}
+                  <li class="future-pickup-request"><a class="future-pickup-request" href="/admin/future-pickup-request">Future Bulk Pickup Request
                   </a></li>
                   @endif
 
@@ -585,6 +589,10 @@
                   @if(Auth::guard('admin')->user()->common_price == 'on')
                   <li class="common-price"><a class="common-price" href="/admin/common-price">{{$language[199][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
+
+                  <li class="terms-and-conditions"><a class="terms-and-conditions" href="/admin/terms-and-conditions">Terms and Conditions</a></li>
+
+                  <li class="weeks"><a class="weeks" href="/admin/weeks">Working Hours</a></li>
 
                   @if(Auth::guard('admin')->user()->languages == 'on')
                   <li class="languages"><a class="languages" href="/admin/languages">{{$language[200][Auth::guard('admin')->user()->lang]}}</a></li>

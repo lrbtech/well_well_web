@@ -18,7 +18,6 @@ use App\Models\add_rate_item;
 use App\Models\settings;
 use App\Models\common_price;
 use App\Models\revenue_exception_log;
-use App\Models\shipment_log;
 use App\Models\system_logs;
 use Hash;
 use Mail;
@@ -181,7 +180,7 @@ class ApiController extends Controller
 
 
     public function getStation($agent_id){
-        $shipment = shipment::where('station_agent_id',$agent_id)->where('status',5)->get();
+        $shipment = shipment::where('transit_in_id',$agent_id)->where('status',5)->get();
 
         $data =array();
         $datas =array();
@@ -193,7 +192,7 @@ class ApiController extends Controller
                 'order_id' => $value->order_id,
                 'from_station' => $from_station->station,
                 'to_station' => $to_station->station,
-                'date_time' => $value->station_assign_date_time,
+                //'date_time' => $value->station_assign_date,
             );
             $datas[] = $data;
         }   
@@ -549,6 +548,11 @@ class ApiController extends Controller
         $shipment->insurance_amount = $insurance_amount;
         $shipment->cod_amount = $request->cod_amount;
         $shipment->total = $total;
+        
+        $shipment->revenue_exception_id = $request->agent_id;
+        $shipment->revenue_exception_date = date('Y-m-d');
+        $shipment->revenue_exception_time = date('H:i:s');
+
         $shipment->save();
 
     }else{
@@ -591,15 +595,14 @@ class ApiController extends Controller
         $shipment->insurance_percentage = $settings->insurance_percentage;
         $shipment->insurance_amount = $insurance_amount;
         $shipment->total = $total;
-        $shipment->save();
-    }
         
-            $shipment_log = new shipment_log;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 11;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
+        $shipment->revenue_exception_id = $request->agent_id;
+        $shipment->revenue_exception_date = date('Y-m-d');
+        $shipment->revenue_exception_time = date('H:i:s');
+
+        $shipment->save();
+}
+
 
             $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
@@ -643,6 +646,7 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             if($request->status == 0){
                 $shipment->status = 2;
+                $shipment->package_collect_agent_id = $request->agent_id;
                 $shipment->package_collect_date = date('Y-m-d');
                 $shipment->package_collect_time = date('H:i:s');
 
@@ -659,6 +663,7 @@ class ApiController extends Controller
                 $shipment->status = 3;
                 $shipment->exception_category = $request->category;
                 $shipment->exception_remark = $request->remark;
+                $shipment->pickup_exception_id = $request->agent_id;
                 $shipment->exception_assign_date = date('Y-m-d');
                 $shipment->exception_assign_time = date('H:i:s');
 
@@ -671,13 +676,6 @@ class ApiController extends Controller
                 $system_logs->save();
             }
             $shipment->save();
-
-            $shipment_log = new shipment_log;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 3;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
 
            // return response()->json($shipment);
             return response()->json(
@@ -695,17 +693,10 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             
             $shipment->status = 4;
-            $shipment->pickup_received_date = date('Y-m-d');
-            $shipment->pickup_received_time = date('H:i:s');
+            $shipment->transit_in_agent_id = $request->agent_id;
+            $shipment->transit_in_date = date('Y-m-d');
+            $shipment->transit_in_time = date('H:i:s');
             $shipment->save();
-
-
-            $shipment_log = new shipment_log;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 4;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
 
             $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
@@ -730,17 +721,10 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             
             $shipment->status = 6;
-            $shipment->station_agent_id = $request->agent_id;
-            $shipment->station_received_date = date('Y-m-d');
-            $shipment->station_received_time = date('H:i:s');
+            $shipment->transit_out_agent_id = $request->agent_id;
+            $shipment->transit_out_date = date('Y-m-d');
+            $shipment->transit_out_time = date('H:i:s');
             $shipment->save();
-
-            $shipment_log = new shipment_log;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 6;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
 
             $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
@@ -765,24 +749,18 @@ class ApiController extends Controller
     public function packageAtStation(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
-            //$shipment->station_agent_id = $request->agent_id;
+            $shipment->package_at_station_id = $request->agent_id;
+            $shipment->package_at_station_date = date('Y-m-d');
+            $shipment->package_at_station_time = date('H:i:s');
             $shipment->status = 6;
             $shipment->save();
-
-
-            $shipment_log = new shipment_log;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 6;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
 
             $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
-            $system_logs->remark = 'Pakcage At Station by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->remark = 'Package At Station by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
             $system_logs->save();
 
            // return response()->json($shipment);
@@ -801,18 +779,10 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             
             $shipment->status = 7;
-            $shipment->delivery_agent_id = $request->agent_id;
-            $shipment->delivery_assign_date = date('Y-m-d');
-            $shipment->delivery_assign_time = date('H:i:s');
+            $shipment->van_scan_id = $request->agent_id;
+            $shipment->van_scan_date = date('Y-m-d');
+            $shipment->van_scan_time = date('H:i:s');
             $shipment->save();
-
-            $shipment_log = new shipment_log;
-            $shipment_log->agent_id = $request->agent_id;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 7;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
 
             $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
@@ -837,6 +807,7 @@ class ApiController extends Controller
         try{
             $shipment = shipment::find($request->shipment_id);
             $shipment->status = 8;
+            $shipment->delivery_agent_id = $request->agent_id;
             $shipment->delivery_date = date('Y-m-d');
             $shipment->delivery_time = date('H:i:s');
 
@@ -880,14 +851,6 @@ class ApiController extends Controller
             $shipment->save();
 
 
-            $shipment_log = new shipment_log;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 8;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
-
-
             $all = shipment::find($request->shipment_id);
             $user = User::find($all->sender_id);
             $package_category = package_category::all();
@@ -915,6 +878,7 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             
             $shipment->status = 9;
+            $shipment->delivery_exception_id = $request->agent_id;
             $shipment->delivery_exception_category = $request->category;
             $shipment->delivery_exception_remark = $request->remark;
             $shipment->delivery_exception_assign_date = date('Y-m-d');
@@ -928,13 +892,6 @@ class ApiController extends Controller
             $system_logs->to_id = $agent->email;
             $system_logs->remark = 'Delivery Exception by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
             $system_logs->save();
-
-            $shipment_log = new shipment_log;
-            $shipment_log->shipment_id = $request->shipment_id;
-            $shipment_log->shipment_status = 9;
-            $shipment_log->date = date('Y-m-d');
-            $shipment_log->time = date('H:i:s');
-            $shipment_log->save();
             
            // return response()->json($shipment);
             return response()->json(
@@ -1226,7 +1183,7 @@ class ApiController extends Controller
 
         $exception = shipment::where('exception_assign_date',$today)->where('pickup_agent_id',$id)->where('status',3)->count();
 
-        $hub = shipment::where('station_assign_date',$today)->where('station_agent_id',$id)->where('status',4)->count();
+        $hub = shipment::where('transit_in_date',$today)->where('transit_in_id',$id)->where('status',4)->count();
 
         $delivery = shipment::where('delivery_assign_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
         $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();
@@ -1309,7 +1266,7 @@ class ApiController extends Controller
 
         $exception = shipment::where('exception_assign_date',$today)->where('pickup_agent_id',$id)->where('status',3)->count();
 
-        $hub = shipment::where('station_assign_date',$today)->where('station_agent_id',$id)->where('status',4)->count();
+        $hub = shipment::where('transit_in_date',$today)->where('transit_in_id',$id)->where('status',4)->count();
 
         $delivery = shipment::where('delivery_assign_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
         $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();

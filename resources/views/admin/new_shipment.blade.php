@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/date-picker.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/sweetalert2.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/timepicker.css">
+<link rel="stylesheet" type="text/css" href="/assets/app-assets/css/select2.css">
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCanHknp355-rJzwBPbz1FZDWs9t9ym_lY&sensor=false&libraries=places"></script>
 
 <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMTNFnPj4AizpevEiZcG77II6MptFemd4&sensor=false&libraries=places"></script> -->
@@ -125,7 +126,10 @@ visibility: visible;
 
                         <div class="col-md-12">
                           <label>{{$language[27][Auth::guard('admin')->user()->lang]}}</label>
-                          <input class="form-control" id="search_from_address" name="search_from_address" type="text">
+                          <!-- <input class="form-control" id="search_from_address" name="search_from_address" type="text"> -->
+                          <select id="search_from_address" name="search_from_address" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                            <option value="">SELECT</option>
+                          </select>
                         </div>
 
                         <div class="col-sm-12 show_from_address">
@@ -148,7 +152,10 @@ visibility: visible;
                     <div class="row">
                         <div class="col-md-12">
                           <label>{{$language[31][Auth::guard('admin')->user()->lang]}}</label>
-                          <input autocomplete="off" class="form-control" id="search_to_address" name="search_to_address" type="text">
+                          <!-- <input autocomplete="off" class="form-control" id="search_to_address" name="search_to_address" type="text"> -->
+                          <select id="search_to_address" name="search_to_address" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                            <option value="">SELECT</option>
+                          </select>
                         </div>
                         <br>
                         <div class="col-sm-12 show_to_address">
@@ -708,6 +715,9 @@ visibility: visible;
 
 <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
 
+<script src="/assets/app-assets/js/select2/select2.full.min.js"></script>
+<script src="/assets/app-assets/js/select2/select2-custom.js"></script>
+
 <script src="{{ asset('sweetalert2/sweetalert2.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
 
@@ -869,75 +879,136 @@ $( "#user_search" ).autocomplete({
               $("#vat_percentage_label").html(data.settings.vat_percentage);
               $("#postal_charge_enable").val(data.data.postal_charge_enable);
               $("#postal_charge_percentage").val(data.settings.postal_charge_percentage);  
-              $("#postal_charge_percentage_label").html(data.settings.postal_charge_percentage);    
+              $("#postal_charge_percentage_label").html(data.settings.postal_charge_percentage);  
+              get_from_address(contact_id);
+              get_to_address(contact_id);
             }
         });
     }       
 });
 
 
-$( "#search_from_address" ).autocomplete({
-    source: function( request, response ) {
-    var user_id = $("#user_id").val();
-      // Fetch data
-      $.ajax({
-        url:"/admin/get-from-address",
-        dataType: "json",
-        type: "GET",
-        data: {term: request.term, user_id: user_id},
-        success: function( data ) {
-            if(data.response == 'true') 
-            {
-                response(data.message);
-            }
-        }
-      });
-    },
-    select: function (event, ui) {
-        $(this).val(ui.item.label); 
-        var contact_id = ui.item.id; 
-        $.ajax({
-            url : '/admin/get-from-address-id/'+contact_id,
-            type: "GET",
-            //dataType: "JSON",
-            success:function(response) {
-              // $("#address").val(response.address);    
-              $('.show_from_address').html(response);
-            }
-        });
-    }       
+// $( "#search_from_address" ).autocomplete({
+//     source: function( request, response ) {
+//     var user_id = $("#user_id").val();
+//       // Fetch data
+//       $.ajax({
+//         url:"/admin/get-from-address",
+//         dataType: "json",
+//         type: "GET",
+//         data: {term: request.term, user_id: user_id},
+//         success: function( data ) {
+//             if(data.response == 'true') 
+//             {
+//                 response(data.message);
+//             }
+//         }
+//       });
+//     },
+//     select: function (event, ui) {
+//         $(this).val(ui.item.label); 
+//         var contact_id = ui.item.id; 
+//         $.ajax({
+//             url : '/admin/get-from-address-id/'+contact_id,
+//             type: "GET",
+//             //dataType: "JSON",
+//             success:function(response) {
+//               // $("#address").val(response.address);    
+//               $('.show_from_address').html(response);
+//             }
+//         });
+//     }       
+// });
+
+// $( "#search_to_address" ).autocomplete({
+//     source: function( request, response ) {
+//     var user_id = $("#user_id").val();
+//     var term = request.term;
+//       // Fetch data
+//       $.ajax({
+//         url:"/admin/get-to-address",
+//         dataType: "json",
+//         data: {term: term, user_id: user_id},
+//         success: function( data ) {
+//             if(data.response == 'true') 
+//             {
+//                 response(data.message);
+//             }
+//         }
+//       });
+//     },
+//     select: function (event, ui) {
+//         $(this).val(ui.item.label); 
+//         var contact_id = ui.item.id; 
+//         $.ajax({
+//             url : '/admin/get-to-address-id/'+contact_id,
+//             type: "GET",
+//             //dataType: "JSON",
+//             success:function(response) {
+//               // $("#address").val(response.address);    
+//               $('.show_to_address').html(response);
+//             }
+//         });
+//     }       
+// });
+
+
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
 });
 
-$( "#search_to_address" ).autocomplete({
-    source: function( request, response ) {
-    var user_id = $("#user_id").val();
-    var term = request.term;
-      // Fetch data
-      $.ajax({
-        url:"/admin/get-to-address",
-        dataType: "json",
-        data: {term: term, user_id: user_id},
-        success: function( data ) {
-            if(data.response == 'true') 
-            {
-                response(data.message);
-            }
-        }
-      });
-    },
-    select: function (event, ui) {
-        $(this).val(ui.item.label); 
-        var contact_id = ui.item.id; 
-        $.ajax({
-            url : '/admin/get-to-address-id/'+contact_id,
-            type: "GET",
-            //dataType: "JSON",
-            success:function(response) {
-              // $("#address").val(response.address);    
-              $('.show_to_address').html(response);
-            }
-        });
-    }       
+
+
+function get_from_address(id){
+  $.ajax({
+      url : '/admin/search-from-address/'+id,
+      type: "GET",
+      //dataType: "JSON",
+      success:function(response) {
+        // $("#address").val(response.address);    
+        $('#search_from_address').html(response);
+      }
+  });
+}
+
+$( "#search_from_address" ).change(function() {
+  var search_from_address = $('#search_from_address').val();
+  $.ajax({
+      url : '/admin/get-from-address-id/'+search_from_address,
+      type: "GET",
+      //dataType: "JSON",
+      success:function(response) {
+        // $("#address").val(response.address);    
+        $('.show_from_address').html(response);
+      }
+  });
+});
+
+
+
+function get_to_address(id){
+  $.ajax({
+      url : '/admin/search-to-address/'+id,
+      type: "GET",
+      //dataType: "JSON",
+      success:function(response) {
+        // $("#address").val(response.address);    
+        $('#search_to_address').html(response);
+      }
+  });
+}
+
+$( "#search_to_address" ).change(function() {
+  var search_to_address = $('#search_to_address').val();
+  $.ajax({
+      url : '/admin/get-to-address-id/'+search_to_address,
+      type: "GET",
+      //dataType: "JSON",
+      success:function(response) {
+        // $("#address").val(response.address);    
+        $('.show_to_address').html(response);
+      }
+  });
 });
 
 

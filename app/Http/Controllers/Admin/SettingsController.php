@@ -19,6 +19,7 @@ use App\Models\exception_category;
 use App\Models\system_logs;
 use App\Models\shipment_package;
 use App\Models\shipment;
+use App\Models\weeks;
 use Hash;
 use Auth;
 use DB;
@@ -28,6 +29,27 @@ class SettingsController extends Controller
     public function __construct()
     {
         $this->middleware('auth:admin');
+    }
+
+    public function Weeks(){
+        $weeks = weeks::all();
+        $language = language::all();
+        return view('admin.weeks',compact('weeks','language'));
+    }
+
+
+    public function updateWeeks(Request $request){
+
+        for ($x=0; $x<count($_POST['timing_id']); $x++) 
+        {
+            $weeks = weeks::find($_POST['timing_id'][$x]);
+            $weeks->open_time = $_POST['open_time'][$x];
+            $weeks->close_time = $_POST['close_time'][$x];
+            $weeks->status = $_POST['status'][$x];
+            $weeks->save();
+        }
+
+        return response()->json('Successfully Update'); 
     }
 
     public function Settings(){
@@ -41,6 +63,7 @@ class SettingsController extends Controller
             'insurance_percentage'=>'required',
             'vat_percentage'=> 'required',
             'postal_charge_percentage'=> 'required',
+            'cod_amount'=> 'required',
           ],[
             'vat_percentage.required' => 'Vat Percentage Field is Required',
         ]);
@@ -48,9 +71,25 @@ class SettingsController extends Controller
         $settings->insurance_percentage = $request->insurance_percentage;
         $settings->vat_percentage = $request->vat_percentage;
         $settings->postal_charge_percentage = $request->postal_charge_percentage;
+        $settings->cod_amount = $request->cod_amount;
         $settings->save();
 
         return response()->json('successfully update'); 
+    }
+
+    public function TermsAndConditions(){
+        $settings = settings::find(1);
+        $language = language::all();
+        return view('admin.terms_and_conditions',compact('settings','language'));
+    }
+
+    public function updateTermsAndConditions(Request $request){
+        $settings = settings::find($request->id);
+        $settings->terms_and_conditions = $request->editor1;
+        $settings->save();
+
+        return back();
+        //return response()->json('successfully update'); 
     }
 
     public function getCommonPrice(){

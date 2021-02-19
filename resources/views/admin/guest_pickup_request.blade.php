@@ -10,7 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>Future Bulk <span>Pickup Request</span></h2> 
+                  <h2>Guest <span>Pickup Request</span></h2> 
                   <!-- <h6 class="mb-0">View Shipment</h6>-->
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -52,15 +52,16 @@
                     <div class="table-responsive">
                       <table class="display" id="datatable">
                         <thead>
-              <tr>
+                          <tr>
                             <th><input type="checkbox" name="order_master_checkbox" class="order_master_checkbox" value=""/></th>
-                            <th>User Id</th>
-                            <th>Shipment Date</th>
-                            <th>No of Shipments</th>
-                            <th>No of Packages</th>
-                            <th>Pickup Location</th>
+                            <th>User ID</th>
+                            <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[24][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[28][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
-                            <!-- <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th> -->
+                            <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -88,7 +89,7 @@
   <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
 
 <script type="text/javascript">
-$('.future-pickup-request').addClass('active');
+$('.guest-pickup-request').addClass('active');
 
 
 var orderPageTable = $('#datatable').DataTable({
@@ -96,7 +97,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-future-pickup-request",
+        "url": "/admin/get-guest-pickup-request",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -105,11 +106,12 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'checkbox', name: 'checkbox' , orderable:false, searchable:false },
         { data: 'user_id', name: 'user_id' },
         { data: 'shipment_date', name: 'shipment_date' },
-        { data: 'no_of_shipments', name: 'no_of_shipments' },
-        { data: 'no_of_packages', name: 'no_of_packages' },
+        { data: 'shipment_time', name: 'shipment_time' },
+        { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },
+        { data: 'to_address', name: 'to_address' },
         { data: 'status', name: 'status' },
-        // { data: 'action', name: 'action' },
+        { data: 'action', name: 'action' },
     ]
 });
 
@@ -132,13 +134,13 @@ $(document).on('click','#save', function(){
     });
     if(order_id.length > 0){
         $.ajax({
-            url:"/admin/bulk-checkbox-assign-agent",
+            url:"/admin/checkbox-assign-agent",
             method:"GET",
             data:{id:order_id,agent_id:agent_id},
             success:function(data){
               toastr.success(data);
               //window.location.href="/admin/new-shipment-request";
-              var new_url = '/admin/get-future-pickup-request';
+              var new_url = '/admin/get-guest-pickup-request';
               orderPageTable.ajax.url(new_url).load();
             }
         })
@@ -149,5 +151,36 @@ $(document).on('click','#save', function(){
     toastr.error("Please select Agent");
   }
 });
+
+
+function PrintLabel(id){
+  $.ajax({
+    url : '/admin/print-label/'+id,
+    type: "GET",
+    dataType: "JSON",
+    success: function(data)
+    {
+        var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
+        var is_chrome = Boolean(mywindow.chrome);
+        mywindow.document.write(data.html);
+        mywindow.document.close(); 
+        if (is_chrome) {
+            setTimeout(function() {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/admin/guest-pickup-request";
+            }, 250);
+        } else {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/admin/guest-pickup-request";
+        }
+        //PrintDiv(data);
+        
+    }
+  });
+}
 </script>
 @endsection

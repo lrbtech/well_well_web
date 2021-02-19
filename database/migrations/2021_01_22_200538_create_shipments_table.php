@@ -52,36 +52,70 @@ class CreateShipmentsTable extends Migration
             $table->string('total')->nullable();
             $table->string('cancel_fees')->nullable();
             $table->string('status')->default('0'); 
+
             $table->string('pickup_agent_id')->nullable();
-            $table->string('station_agent_id')->nullable();
-            $table->string('delivery_agent_id')->nullable();
             $table->string('pickup_assign_date')->nullable();
             $table->string('pickup_assign_time')->nullable();
+            
+            $table->string('package_collect_agent_id')->nullable();
             $table->string('package_collect_date')->nullable();
             $table->string('package_collect_time')->nullable();
-            $table->string('pickup_received_date')->nullable();
-            $table->string('pickup_received_time')->nullable();
+            
+            //$table->string('pickup_received_date')->nullable();
+            //$table->string('pickup_received_time')->nullable();
+            
+            $table->string('pickup_exception_id')->nullable();
             $table->string('exception_category')->nullable();
             $table->TEXT('exception_remark')->nullable();
             $table->string('exception_assign_date')->nullable();
             $table->string('exception_assign_time')->nullable();
+            
             $table->string('exception_solved_date')->nullable();
             $table->string('exception_solved_time')->nullable();
-            $table->string('station_assign_date')->nullable();
-            $table->string('station_assign_time')->nullable();
-            $table->string('station_received_date')->nullable();
-            $table->string('station_received_time')->nullable();
-            $table->string('delivery_assign_date')->nullable();
-            $table->string('delivery_assign_time')->nullable();
+            
+            //$table->string('station_assign_date')->nullable();
+            //$table->string('station_assign_time')->nullable();
+
+            //$table->string('station_agent_id')->nullable();
+            //$table->string('station_received_date')->nullable();
+            //$table->string('station_received_time')->nullable();
+            
+            $table->string('transit_in_id')->nullable();
+            $table->string('transit_in_date')->nullable();
+            $table->string('transit_in_time')->nullable();
+
+            $table->string('revenue_exception_id')->nullable();
+            $table->string('revenue_exception_date')->nullable();
+            $table->string('revenue_exception_time')->nullable();
+
+            $table->string('transit_out_id')->nullable();
+            $table->string('transit_out_date')->nullable();
+            $table->string('transit_out_time')->nullable();
+
+            $table->string('package_at_station_id')->nullable();
+            $table->string('package_at_station_date')->nullable();
+            $table->string('package_at_station_time')->nullable();
+
+            $table->string('van_scan_id')->nullable();
+            $table->string('van_scan_date')->nullable();
+            $table->string('van_scan_time')->nullable();
+
+            $table->string('delivery_agent_id')->nullable();
+            //$table->string('delivery_assign_date')->nullable();
+            //$table->string('delivery_assign_time')->nullable();
             $table->string('delivery_date')->nullable();
             $table->string('delivery_time')->nullable();
             $table->TEXT('delivery_notes')->nullable();
+
+            $table->string('delivery_exception_id')->nullable();
             $table->string('delivery_exception_category')->nullable();
             $table->TEXT('delivery_exception_remark')->nullable();
             $table->string('delivery_exception_assign_date')->nullable();
             $table->string('delivery_exception_assign_time')->nullable();
+
             $table->string('delivery_exception_solved_date')->nullable();
             $table->string('delivery_exception_solved_time')->nullable();
+
             $table->string('receiver_id_copy')->nullable();
             $table->TEXT('cancel_remark')->nullable();
             $table->string('cancel_request_date')->nullable();

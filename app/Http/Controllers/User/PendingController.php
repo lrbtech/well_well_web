@@ -22,6 +22,7 @@ use App\Models\settings;
 use App\Models\language;
 use App\Models\temp_shipment;
 use App\Models\temp_shipment_package;
+use App\Models\system_logs;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;

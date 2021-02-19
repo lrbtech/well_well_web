@@ -90,6 +90,7 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a onclick="viewRemark({{$row->id}})" class="dropdown-item" href="#">View Remark</a>
                                     <a onclick="addRate({{$row->id}})" class="dropdown-item" href="#">Add RateCard</a>
+                                    <a onclick="sendMail({{$row->id}})" class="dropdown-item" href="#">Send Mail</a>
                                     <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Approved</a>
                                     <a class="dropdown-item" href="/admin/view-profile/{{$row->id}}">View Profile</a>
                                 </div>
@@ -392,6 +393,23 @@ function updateSalesStatus(id,status){
         success: function(data)
         {
           toastr.success(data, 'Successfully Update');
+          location.reload();
+        }
+      });
+    } 
+}
+
+
+function sendMail(id){
+    var r = confirm("Are you sure");
+    if (r == true) {
+      $.ajax({
+        url : '/admin/send-mail-sales-team/'+id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          toastr.success(data, 'Successfully Send');
           location.reload();
         }
       });

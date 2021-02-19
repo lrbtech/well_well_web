@@ -91,12 +91,16 @@
                                 @elseif($row->status == 2)
                                     <a onclick="viewRemark({{$row->id}})" class="dropdown-item" href="#">View Remark</a>
                                     <a onclick="addRate({{$row->id}})" class="dropdown-item" href="#">Add RateCard</a>
+                                    
                                     <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Approved</a>
                                 @elseif($row->status == 3)
                                   <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
                                 @elseif($row->status == 4)
                                   <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Block User</a>
                                 @endif
+                                    @if($row->status >= 2)
+                                    <a onclick="sendMail({{$row->id}})" class="dropdown-item" href="#">Send Mail Rate Card</a>
+                                    @endif
                                     <a class="dropdown-item" href="/admin/view-profile/{{$row->id}}">View Profile</a>
                                 </div>
                             </td>
@@ -483,6 +487,22 @@ function viewRemark(id){
   });
 }
 
+
+function sendMail(id){
+    var r = confirm("Are you sure");
+    if (r == true) {
+      $.ajax({
+        url : '/admin/send-mail-sales-team/'+id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          toastr.success(data, 'Successfully Send');
+          location.reload();
+        }
+      });
+    } 
+}
 
 
 function addRow() {

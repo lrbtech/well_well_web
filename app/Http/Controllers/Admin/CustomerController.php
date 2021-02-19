@@ -159,16 +159,16 @@ class CustomerController extends Controller
 	        }
         }
                 
-        $all = User::find($request->customer_id);
-        $rate = add_rate::where('user_id',$request->customer_id)->first();
-        $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
-        $customer = User::find($request->customer_id);
-        $settings = settings::find(1);
+        // $all = User::find($request->customer_id);
+        // $rate = add_rate::where('user_id',$request->customer_id)->first();
+        // $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
+        // $customer = User::find($request->customer_id);
+        // $settings = settings::find(1);
         
-        Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
-            $message->to($all->email)->subject('Well Well Express - Your Account Price');
-            $message->from('info@lrbtech.com','Well Well Express');
-        });
+        // Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
+        //     $message->to($all->email)->subject('Well Well Express - Your Account Price');
+        //     $message->from('info@lrbtech.com','Well Well Express');
+        // });
 
         return response()->json('successfully save'); 
     }
@@ -221,18 +221,33 @@ class CustomerController extends Controller
         }
       }
 
-        $all = User::find($request->customer_id);
-        $rate = add_rate::where('user_id',$request->customer_id)->first();
-        $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
-        $customer = User::find($request->customer_id);
-        $settings = settings::find(1);
+        // $all = User::find($request->customer_id);
+        // $rate = add_rate::where('user_id',$request->customer_id)->first();
+        // $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
+        // $customer = User::find($request->customer_id);
+        // $settings = settings::find(1);
         
-        Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
-            $message->to($all->email)->subject('Well Well Express - Your Account Price');
-            $message->from('info@lrbtech.com','Well Well Express');
-        });
+        // Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
+        //     $message->to($all->email)->subject('Well Well Express - Your Account Price');
+        //     $message->from('info@lrbtech.com','Well Well Express');
+        // });
               
       return response()->json('successfully save'); 
+  }
+
+  public function sendMailSalesTeam($id){
+    $all = User::find($id);
+    $rate = add_rate::where('user_id',$id)->first();
+    $rate_item = add_rate_item::where('user_id',$id)->get();
+    $customer = User::find($id);
+    $settings = settings::find(1);
+    
+    Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
+        $message->to($all->email)->subject('Well Well Express - Your Account Price');
+        $message->from('info@lrbtech.com','Well Well Express');
+    });
+              
+    return response()->json('successfully send'); 
   }
 
     public function updateAccountStatus($id,$status){

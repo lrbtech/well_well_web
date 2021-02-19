@@ -22,6 +22,7 @@ use App\Models\station;
 use App\Models\role;
 use App\Models\language;
 use App\Models\system_logs;
+use App\Models\weeks;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -87,6 +88,8 @@ class ShipmentController extends Controller
             'area_id'=>'required',
             'address_type'=>'required',
             'address1'=> 'required',
+            'contact_name'=> 'required',
+            'contact_mobile'=> 'required|digits:9',
           ],[
             'city_id.required' => 'City Field is Required',
             'country_id.required' => 'Country Field is Required',
@@ -121,16 +124,25 @@ class ShipmentController extends Controller
 
     public function saveNewShipment(Request $request){
         $this->validate($request, [
-            'from_address'=>'required',
-            'to_address'=>'required',
+            //'from_address'=>'required',
+            //'to_address'=>'required',
             'shipment_date'=>'required',
             'shipment_from_time'=>'required',
             'shipment_type'=>'required',
             'shipment_mode'=> 'required',
-            //'price.*'=> 'required',
+            'no_of_packages'=> 'required',
+            'declared_value'=> 'required',
+            'category.*'=> 'required',
+            'description.*'=> 'required',
+            'reference_no.*'=> 'required',
+            'weight.*'=> 'required',
+            'length.*'=> 'required',
+            'width.*'=> 'required',
+            'height.*'=> 'required',
+            'chargeable_weight.*'=> 'required',
           ],[
-            'from_address.required' => 'Choose From Address Field is Required',
-            'to_address.required' => 'Choose To Address Field is Required',
+            //'from_address.required' => 'Choose From Address Field is Required',
+            //'to_address.required' => 'Choose To Address Field is Required',
             'shipment_type.required' => 'Pickup/Drop-Off Field is Required',
             //'price.*.required' => 'Price Field is Required',
         ]);
@@ -263,14 +275,7 @@ class ShipmentController extends Controller
         $system_logs->to_id = Auth::guard('admin')->user()->email;
         $system_logs->remark = 'Pickup Assigned by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
         $system_logs->save();
-        $shipment_log = new shipment_log;
-        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
-        $shipment_log->shipment_id = $request->shipment_id;
-        $shipment_log->agent_id = $request->pickup_agent_id;
-        $shipment_log->shipment_status = 1;
-        $shipment_log->date = date('Y-m-d');
-        $shipment_log->time = date('H:i:s');
-        $shipment_log->save();
+
         return response()->json('successfully update'); 
     }
 
@@ -300,13 +305,6 @@ class ShipmentController extends Controller
         $shipment->status = 4;
         $shipment->save();
 
-        $shipment_log = new shipment_log;
-        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
-        $shipment_log->shipment_id = $request->shipment_id;
-        $shipment_log->shipment_status = 4;
-        $shipment_log->date = date('Y-m-d');
-        $shipment_log->time = date('H:i:s');
-        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -317,15 +315,6 @@ class ShipmentController extends Controller
         $shipment->station_assign_time = date('H:i:s');
         $shipment->status = 5;
         $shipment->save();
-
-        $shipment_log = new shipment_log;
-        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
-        $shipment_log->shipment_id = $request->shipment_id;
-        $shipment_log->agent_id = $request->station_agent_id;
-        $shipment_log->shipment_status = 5;
-        $shipment_log->date = date('Y-m-d');
-        $shipment_log->time = date('H:i:s');
-        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -355,32 +344,16 @@ class ShipmentController extends Controller
         $shipment->station_received_time = date('H:i:s');
         $shipment->status = 6;
         $shipment->save();
-
-        $shipment_log = new shipment_log;
-        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
-        $shipment_log->shipment_id = $request->shipment_id;
-        $shipment_log->shipment_status = 6;
-        $shipment_log->date = date('Y-m-d');
-        $shipment_log->time = date('H:i:s');
-        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
     public function AssignAgentDelivery(Request $request){
         $shipment = shipment::find($request->shipment_id2);
-        $shipment->delivery_agent_id = $request->delivery_agent_id;
-        $shipment->delivery_assign_date = date('Y-m-d');
-        $shipment->delivery_assign_time = date('H:i:s');
+        $shipment->van_scan_id = $request->delivery_agent_id;
+        $shipment->van_scan_date = date('Y-m-d');
+        $shipment->van_scan_time = date('H:i:s');
         $shipment->status = 7;
         $shipment->save();
-
-        $shipment_log = new shipment_log;
-        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
-        $shipment_log->shipment_id = $request->shipment_id;
-        $shipment_log->shipment_status = 7;
-        $shipment_log->date = date('Y-m-d');
-        $shipment_log->time = date('H:i:s');
-        $shipment_log->save();
         return response()->json('successfully update'); 
     }
 
@@ -438,14 +411,6 @@ class ShipmentController extends Controller
         $shipment->receiver_signature = $request->signature_data;
 
         $shipment->save();
-
-        $shipment_log = new shipment_log;
-        $shipment_log->admin_id = Auth::guard('admin')->user()->id;
-        $shipment_log->shipment_id = $request->shipment_id;
-        $shipment_log->shipment_status = 8;
-        $shipment_log->date = date('Y-m-d');
-        $shipment_log->time = date('H:i:s');
-        $shipment_log->save();
 
         $all = shipment::find($request->shipment_id);
         $user = User::find($all->sender_id);
@@ -573,7 +538,7 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 4){
                     $from_station = station::find($shipment->from_station_id);
-                    $agent = agent::find($shipment->pickup_agent_id);
+                    $agent = agent::find($shipment->transit_in_id);
                     if(!empty($agent)){
                         return '
                         <p>Transit In '.$from_station->station.'</p>
@@ -591,7 +556,7 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 6){
                     $to_station = station::find($shipment->to_station_id);
-                    $agent = agent::find($shipment->station_agent_id);
+                    $agent = agent::find($shipment->transit_out_id);
                     if(!empty($agent)){
                         return '
                         <p>Transit Out '.$to_station->station.'</p>
@@ -864,5 +829,72 @@ class ShipmentController extends Controller
         //return response()->json($shipment_logs);
       return view('admin.shipment_track',compact('language','shipment_logs','id'));
     }
+
+
+
+    public function searchFromAddress($id){ 
+        $data = manage_address::where('user_id',$id)->where('from_to',1)->get();
+        $output ='<option value="">SELECT Address</option>';
+        foreach ($data as $key => $value) {
+            $output .= '<option value="'.$value->id.'">'.$value->contact_name.'-'.$value->contact_mobile.'-'.$value->address1.'</option>';
+        }
+        echo $output;
+    }
+
+    public function searchToAddress($id){ 
+        $data = manage_address::where('user_id',$id)->where('from_to',2)->get();
+        $output ='<option value="">SELECT Address</option>';
+        foreach ($data as $key => $value) {
+            $output .= '<option value="'.$value->id.'">'.$value->contact_name.'-'.$value->contact_mobile.'-'.$value->address1.'</option>';
+        }
+        echo $output;
+    }
+
+    public function getAvailableTime($date){
+        $date1 = date("l" , strtotime($date));
+        $value = weeks::where('days',$date1)->first();
+        date_default_timezone_set("Asia/Dubai");
+        date_default_timezone_get();
+        $today = date("l");
+        $time = date("h:i A"); 
+        $data = array();
+        $output ='<option value="">SELECT Time</option>';
+ 
+        $times = array('12:00 AM','01:00 AM','02:00 AM','03:00 AM','04:00 AM','05:00 AM','06:00 AM','07:00 AM','08:00 AM','09:00 AM','10:00 AM','11:00 AM','12:00 PM','01:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM','08:00 PM','09:00 PM','10:00 PM','11:00 PM');
+
+        foreach($times as $row){
+            if($value->status == '1'){
+                if(strtotime($value->open_time) < strtotime($row)){
+                    if($today == $value->days){
+                        if(strtotime($time) < strtotime($row)){
+                            if(strtotime($row) < strtotime($value->close_time)){
+                                $output .= '<option value="'.$row.'">'.$row.'</option>';
+                            }
+                            // else{
+                            //     $output .= '<option value="">Please Choose Other Date Or Kindly contact our customer service for alternative solution. +971569949409</option>';
+                            //     break;
+                            // }
+                        }
+                    }
+                    else{
+                        if(strtotime($row) < strtotime($value->close_time)){
+                            $output .= '<option value="'.$row.'">'.$row.'</option>';
+                        }
+                    }
+                }
+            }
+            else{
+                $output .= '<option value="">'.$date1.' is Holiday Or Kindly contact our customer service for alternative solution. +971569949409</option>';
+                break;
+            }
+        }
+
+        if($output == '<option value="">SELECT Time</option>'){
+            $output .= '<option value="">Please Choose Other Date Or Kindly contact our customer service for alternative solution. +971569949409</option>';
+        }
+
+        echo $output;
+    }
+
 
 }

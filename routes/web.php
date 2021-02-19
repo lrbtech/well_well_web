@@ -62,6 +62,7 @@ Route::get('/send-mail/{id}', [App\Http\Controllers\PageController::class, 'send
 Route::get('/verify-account/{id}', [App\Http\Controllers\PageController::class, 'verifyAccount']);
 
 Route::get('/get-area/{id}', [App\Http\Controllers\PageController::class, 'getArea']);
+Route::get('/get-city-data/{id}', [App\Http\Controllers\PageController::class, 'getCityData']);
 
 Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
 
@@ -97,6 +98,8 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::post('/save-sales-team-process', [App\Http\Controllers\Admin\CustomerController::class, 'saveSalesTeamProcess']);
     Route::post('/update-sales-team-process', [App\Http\Controllers\Admin\CustomerController::class, 'updateSalesTeamProcess']);
+
+    Route::get('/send-mail-sales-team/{id}', [App\Http\Controllers\Admin\CustomerController::class, 'sendMailSalesTeam']);
 
     Route::get('/update-account-status/{id}/{status}', [App\Http\Controllers\Admin\CustomerController::class, 'updateAccountStatus']);
 
@@ -195,6 +198,13 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'Settings']);
     Route::POST('/update-settings', [App\Http\Controllers\Admin\SettingsController::class, 'updateSettings']);
 
+    //settings
+    Route::get('/terms-and-conditions', [App\Http\Controllers\Admin\SettingsController::class, 'TermsAndConditions']);
+    Route::POST('/update-terms-and-conditions', [App\Http\Controllers\Admin\SettingsController::class, 'updateTermsAndConditions']);
+
+    Route::get('/weeks', [App\Http\Controllers\Admin\SettingsController::class, 'Weeks']);
+    Route::POST('/update-weeks', [App\Http\Controllers\Admin\SettingsController::class, 'updateWeeks']);
+
     //shipment
     Route::get('/shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'Shipment']);
     Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
@@ -254,6 +264,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/checkbox-assign-agent', [App\Http\Controllers\Admin\AllShipment::class, 'checkboxAssignAgent']);
     Route::get('/bulk-checkbox-assign-agent', [App\Http\Controllers\Admin\AllShipment::class, 'BulkCheckboxAssignAgent']);
 
+    Route::get('/guest-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'GuestPickupRequest']);
+    Route::POST('/get-guest-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'getGuestPickupRequest']);
+
     Route::get('/today-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'TodayPickupRequest']);
     Route::POST('/get-today-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'getTodayPickupRequest']);
 
@@ -309,6 +322,8 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/change-language/{language}', [App\Http\Controllers\Admin\SettingsController::class, 'changelanguage']);
 
+    Route::get('/search-from-address/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'searchFromAddress']);
+    Route::get('/search-to-address/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'searchToAddress']);
 
     //System Logs
 });
@@ -346,6 +361,8 @@ Route::group(['prefix' => 'user'],function(){
     Route::get('/get-from-address', [App\Http\Controllers\User\AutoCompleteController::class, 'getFromAddress']);
     Route::get('/get-from-address-id/{id}', [App\Http\Controllers\User\AutoCompleteController::class, 'getFromAddressID']);
 
+    Route::get('/search-from-address', [App\Http\Controllers\User\ShipmentController::class, 'searchFromAddress']);
+    Route::get('/search-to-address', [App\Http\Controllers\User\ShipmentController::class, 'searchToAddress']);
 
     Route::get('/edit-profile', [App\Http\Controllers\User\ProfileController::class, 'editProfile']);
     Route::POST('/update-profile', [App\Http\Controllers\User\ProfileController::class, 'updateProfile']);
@@ -356,6 +373,8 @@ Route::group(['prefix' => 'user'],function(){
     Route::get('/change-language/{language}', [App\Http\Controllers\User\ProfileController::class, 'changelanguage']);
 
     Route::POST('/shipment-track', [App\Http\Controllers\User\ShipmentController::class, 'shipmentTrack']);
+
+    Route::get('/get-available-time/{date}', [App\Http\Controllers\User\ShipmentController::class, 'getAvailableTime']);
 
 });
 

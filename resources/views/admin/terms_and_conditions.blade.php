@@ -9,7 +9,7 @@
     <div class="page-header">
       <div class="row">
         <div class="col-lg-6 main-header">
-          <h2>{{$language[3][Auth::guard('admin')->user()->lang]}}<span>{{$language[132][Auth::guard('admin')->user()->lang]}}</span></h2>
+          <h2>Terms <span>and Conditions</span></h2>
           <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
         </div>
         <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -28,7 +28,7 @@
     <div class="edit-profile">
       <div class="row">
         <div class="col-lg-12">
-          <form id="form" method="POST" class="card theme-form">
+          <form action="/admin/update-terms-and-conditions" id="form" method="POST" class="card theme-form">
           {{ csrf_field() }}
           <input type="hidden" name="id" id="id" value="{{$settings->id}}">
             <!-- <div class="card-header">
@@ -38,36 +38,19 @@
             <div class="card-body">
               <div class="row">
 
-                <div class="col-sm-6 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">{{$language[133][Auth::guard('admin')->user()->lang]}} (%)</label>
-                    <input class="form-control" type="number" id="insurance_percentage" name="insurance_percentage" value="{{$settings->insurance_percentage}}">
-                  </div>
+                <div class="col-sm-12 col-md-12">
+                <textarea id="editor1" name="editor1" cols="30" rows="50">
+
+                <?php echo $settings->terms_and_conditions; ?>
+
+                </textarea>
                 </div>
 
-                <div class="col-sm-6 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">{{$language[134][Auth::guard('admin')->user()->lang]}} (%)</label>
-                    <input class="form-control" type="number" id="vat_percentage" name="vat_percentage" value="{{$settings->vat_percentage}}">
-                  </div>
-                </div>
-
-                <div class="col-sm-6 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">0 to 30 Kgs {{$language[66][Auth::guard('admin')->user()->lang]}} (%)</label>
-                    <input class="form-control" type="number" id="postal_charge_percentage" name="postal_charge_percentage" value="{{$settings->postal_charge_percentage}}">
-                  </div>
-                </div>
-
-                <div class="col-sm-6 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Gust User COD Price</label>
-                    <input class="form-control" type="number" id="cod_amount" name="cod_amount" value="{{$settings->cod_amount}}">
-                  </div>
-                </div>
+                
 
                 <div class="col-md-12 text-right">
-                  <button onclick="Update()" class="btn btn-primary btn-pill" type="button">{{$language[135][Auth::guard('admin')->user()->lang]}}</button>
+                  <br><br><br>
+                  <button class="btn btn-primary btn-pill" type="submit">{{$language[135][Auth::guard('admin')->user()->lang]}}</button>
                 </div>
               </div>
             </div>
@@ -84,12 +67,17 @@
 @section('extra-js')
 <script src="/assets/app-assets/js/chat-menu.js"></script>
 
+<script src="/assets/app-assets/js/editor/ckeditor/ckeditor.js"></script>
+<script src="/assets/app-assets/js/editor/ckeditor/styles.js"></script>
+<script src="/assets/app-assets/js/editor/ckeditor/adapters/jquery.js"></script>
+<script src="/assets/app-assets/js/editor/ckeditor/ckeditor.custom.js"></script>
+
 <script>
-$('.settings').addClass('active');
+$('.terms-and-conditions').addClass('active');
 function Update(){
   var formData = new FormData($('#form')[0]);
   $.ajax({
-      url : '/admin/update-settings',
+      url : '/admin/update-terms-and-conditions',
       type: "POST",
       data: formData,
       contentType: false,
