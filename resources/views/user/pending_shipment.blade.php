@@ -107,7 +107,7 @@ $('#shipment_from_time').blur(function(){
 $('#shipment_date').change(function(){
   var shipment_date = $('#shipment_date').val();
   $.ajax({
-    url : '/user/get-available-time/'+shipment_date,
+    url : '/get-available-time/'+shipment_date,
     type: "GET",
     success: function(data)
     {

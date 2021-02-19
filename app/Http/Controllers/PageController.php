@@ -22,6 +22,7 @@ use App\Models\station;
 use App\Models\language;
 use App\Models\ship_now_mobile_verify;
 use App\Models\system_logs;
+use App\Models\weeks;
 use Mail;
 use Hash;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -476,6 +477,55 @@ class PageController extends Controller
         ship_now_mobile_verify::where('mobile',$request->from_mobile)->delete();
         return response()->json('successfully save'); 
         //return $this->printLabel($shipment->id);
+    }
+
+
+
+
+    public function getAvailableTime($date){
+        $date1 = date("l" , strtotime($date));
+        $value = weeks::where('days',$date1)->first();
+        date_default_timezone_set("Asia/Dubai");
+        date_default_timezone_get();
+        $today = date("l");
+        $time = date("h:i A"); 
+        $data = array();
+        $output ='<option value="">SELECT Time</option>';
+ 
+        $times = array('12:00 AM','01:00 AM','02:00 AM','03:00 AM','04:00 AM','05:00 AM','06:00 AM','07:00 AM','08:00 AM','09:00 AM','10:00 AM','11:00 AM','12:00 PM','01:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM','08:00 PM','09:00 PM','10:00 PM','11:00 PM');
+
+        foreach($times as $row){
+            if($value->status == '1'){
+                if(strtotime($value->open_time) < strtotime($row)){
+                    if($today == $value->days){
+                        if(strtotime($time) < strtotime($row)){
+                            if(strtotime($row) < strtotime($value->close_time)){
+                                $output .= '<option value="'.$row.'">'.$row.'</option>';
+                            }
+                            // else{
+                            //     $output .= '<option value="">Please Choose Other Date Or Kindly contact our customer service for alternative solution. +971569949409</option>';
+                            //     break;
+                            // }
+                        }
+                    }
+                    else{
+                        if(strtotime($row) < strtotime($value->close_time)){
+                            $output .= '<option value="'.$row.'">'.$row.'</option>';
+                        }
+                    }
+                }
+            }
+            else{
+                $output .= '<option value="">'.$date1.' is Holiday Or Kindly contact our customer service for alternative solution. +971569949409</option>';
+                break;
+            }
+        }
+
+        if($output == '<option value="">SELECT Time</option>'){
+            $output .= '<option value="">Please Choose Other Date Or Kindly contact our customer service for alternative solution. +971569949409</option>';
+        }
+
+        echo $output;
     }
 
 

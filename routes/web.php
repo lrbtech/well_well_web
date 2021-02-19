@@ -66,6 +66,8 @@ Route::get('/get-city-data/{id}', [App\Http\Controllers\PageController::class, '
 
 Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
 
+Route::get('/get-available-time/{date}', [App\Http\Controllers\PageController::class, 'getAvailableTime']);
+
 
 Route::group(['prefix' => 'admin'],function(){
 
@@ -373,8 +375,6 @@ Route::group(['prefix' => 'user'],function(){
     Route::get('/change-language/{language}', [App\Http\Controllers\User\ProfileController::class, 'changelanguage']);
 
     Route::POST('/shipment-track', [App\Http\Controllers\User\ShipmentController::class, 'shipmentTrack']);
-
-    Route::get('/get-available-time/{date}', [App\Http\Controllers\User\ShipmentController::class, 'getAvailableTime']);
 
 });
 
