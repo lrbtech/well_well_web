@@ -1,6 +1,6 @@
 @extends('admin.layouts')
 @section('extra-css')
-<link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
+<link rsel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
 @endsection
 @section('section')        

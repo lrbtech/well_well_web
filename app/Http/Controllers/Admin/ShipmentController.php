@@ -687,10 +687,10 @@ class ShipmentController extends Controller
                     if($row->weight_from <= $weight && $row->weight_to >= $weight ){
                         $price = $row->price;
                     }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '1'){
+                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '1'){
                         $price = $weight * $rate->service_area_20_to_1000_kg_price;
                     }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '2'){
+                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '2'){
                         $price = $weight * $rate->same_day_delivery_20_to_1000_kg_price;
                     }
                 }
@@ -702,10 +702,10 @@ class ShipmentController extends Controller
                     if($row->weight_from <= $weight && $row->weight_to >= $weight ){
                         $price = $row->price;
                     }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '1'){
+                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '1'){
                         $price = $weight * $rate->service_area_20_to_1000_kg_price;
                     }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '2'){
+                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '2'){
                         $price = $weight * $rate->same_day_delivery_20_to_1000_kg_price;
                     }
                 }

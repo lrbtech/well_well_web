@@ -302,6 +302,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/update-cancel-request/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'updateCancelRequest']);
 
     Route::get('/revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'revenueException']);
+    Route::get('/get-revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getRevenueException']);
 
     //report
     Route::get('/shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'ShipmentReport']);

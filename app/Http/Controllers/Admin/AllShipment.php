@@ -45,12 +45,6 @@ class AllShipment extends Controller
         return view('admin.schedule_for_pickup',compact('agent','language'));
     }
 
-    public function revenueException(){
-        $revenue_exception = revenue_exception_log::all();
-        $language = language::all();
-        return view('admin.revenue_exception',compact('revenue_exception','language'));
-    }
-
     public function NewShipmentRequest(){
         if(Auth::guard('admin')->user()->station_id == '0'){
             $agent = agent::all();
@@ -83,7 +77,16 @@ class AllShipment extends Controller
     }
 
     public function PickupException(){
-        $agent = agent::all();
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $agent = agent::all();
+        }
+        else{
+            $q =DB::table('agents as a');
+            $q->join('cities as c','a.city_id','=','c.id');
+            $q->where('c.station_id', Auth::guard('admin')->user()->station_id);
+            $q->select('a.*');
+            $agent = $q->get();
+        }
         $language = language::all();
         return view('admin.pickup_exception',compact('agent','language'));
     }
@@ -113,7 +116,16 @@ class AllShipment extends Controller
     }
 
     public function DeliveryException(){
-        $agent = agent::all();
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $agent = agent::all();
+        }
+        else{
+            $q =DB::table('agents as a');
+            $q->join('cities as c','a.city_id','=','c.id');
+            $q->where('c.station_id', Auth::guard('admin')->user()->station_id);
+            $q->select('a.*');
+            $agent = $q->get();
+        }
         $language = language::all();
         return view('admin.delivery_exception',compact('agent','language'));
     }
@@ -425,12 +437,12 @@ class AllShipment extends Controller
         return Datatables::of($shipment)
             ->addColumn('checkbox', function ($shipment) {
                 $today = date('Y-m-d');
-                if($today >= $shipment->shipment_date){
+                //if($today >= $shipment->shipment_date){
                     return '<td><input type="checkbox" name="order_checkbox[]" class="order_checkbox" value="' . $shipment->id . '"></td>';
-                }
-                else{
-                    return '<td></td>';
-                }
+                //}
+                // else{
+                //     return '<td></td>';
+                // }
             })
             ->addColumn('user_id', function ($shipment) {
                 if($shipment->sender_id == '0'){
@@ -507,6 +519,7 @@ class AllShipment extends Controller
            
             
         ->rawColumns(['checkbox','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','status','action','user_id'])
+        ->addIndexColumn()
         ->make(true);
 
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
@@ -525,12 +538,12 @@ class AllShipment extends Controller
         return Datatables::of($shipment)
             ->addColumn('checkbox', function ($shipment) {
                 $today = date('Y-m-d');
-                if($today >= $shipment->shipment_date){
+                //if($today >= $shipment->shipment_date){
                     return '<td><input type="checkbox" name="order_checkbox[]" class="order_checkbox" value="' . $shipment->id . '"></td>';
-                }
-                else{
-                    return '<td></td>';
-                }
+                // }
+                // else{
+                //     return '<td></td>';
+                // }
             })
             ->addColumn('user_id', function ($shipment) {
                 if($shipment->sender_id == '0'){
@@ -607,6 +620,7 @@ class AllShipment extends Controller
            
             
         ->rawColumns(['checkbox','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','status','action','user_id'])
+        ->addIndexColumn()
         ->make(true);
 
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
@@ -728,6 +742,15 @@ class AllShipment extends Controller
         }
 
         return Datatables::of($shipment)
+            ->addColumn('checkbox', function ($shipment) {
+                $today = date('Y-m-d');
+                //if($today >= $shipment->shipment_date){
+                    return '<td><input type="checkbox" name="order_checkbox[]" class="order_checkbox" value="' . $shipment->id . '"></td>';
+                //}
+                // else{
+                //     return '<td></td>';
+                // }
+            })
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
@@ -811,7 +834,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','agent','action','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','agent','action','status','checkbox'])
         ->addIndexColumn()
         ->make(true);
 
@@ -1571,6 +1594,57 @@ class AllShipment extends Controller
             })
             
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->addIndexColumn()
+        ->make(true);
+
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+
+    public function revenueException(){
+        $revenue_exception = revenue_exception_log::all();
+        $language = language::all();
+        return view('admin.revenue_exception',compact('revenue_exception','language'));
+    }
+
+    public function getRevenueException(){
+        //if(Auth::guard('admin')->user()->station_id == '0'){
+            $shipment = revenue_exception_log::orderBy('id', 'DESC')->get();
+        // }
+        // else{
+        //     $revenue_exception_log = revenue_exception_log::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',10)->orderBy('id', 'DESC')->get();
+        // }
+
+        return Datatables::of($shipment)
+            ->addColumn('track_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->shipment_id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('old_weight', function ($shipment) {
+                return '<td>'.$shipment->old_weight.'</td>';
+            })
+            ->addColumn('old_dimension', function ($shipment) {
+                return '<td>'.$shipment->old_length.' * '.$shipment->old_width.' * '.$shipment->old_height.'</td>';
+            })
+            ->addColumn('weight', function ($shipment) {
+                return '<td>'.$shipment->weight.'</td>';
+            })
+            ->addColumn('dimension', function ($shipment) {
+                return '<td>'.$shipment->length.' * '.$shipment->width.' * '.$shipment->height.'</td>';
+            })
+           
+            ->addColumn('action', function ($shipment) {
+                $output='';
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        '.$output.'
+                   </div>
+                </td>';
+            })
+            
+        ->rawColumns(['track_id','old_weight','old_dimension','weight','dimension','action'])
         ->addIndexColumn()
         ->make(true);
 

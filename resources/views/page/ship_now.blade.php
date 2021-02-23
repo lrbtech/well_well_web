@@ -534,6 +534,23 @@
                 </div>
             </div>
         </div>
+
+        <div class="parent">
+            <h4><strong>Cash on Delivery</strong></h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Cash on Delivery</label>
+                    <input id="special_cod_enable1" type="checkbox" name="special_cod_enable" value="1">
+                </div>
+
+                <div class="col-md-6 show_special_cod">
+                    <label>How Much Amount to Be Collected?</label>
+                    <input class="form-control" id="special_cod" name="special_cod" type="text">
+                </div>
+
+            </div>
+        </div>
+
         <div class="parent">
             <h4><strong>Billing Details</strong></h4>
             <div class="row">
@@ -556,7 +573,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Cash on Delivery</label>
-                        <input readonly class="form-control" value="{{$settings->cod_amount}}" name="cod_amount" id="cod_amount" type="text">
+                        <input value="{{$settings->cod_amount}}" name="cod_price" id="cod_price" type="hidden">
+                        <input readonly class="form-control" value="0" name="cod_amount" id="cod_amount" type="text">
                     </div>
                 </div>
                 
@@ -595,6 +613,13 @@
                         <input readonly id="total" name="total" class="form-control"></input>
                     </div>
                 </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -649,6 +674,8 @@
 
 <script src="{{ asset('assets/toastr/toastr.min.js')}}" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/toastr/toastr.css')}}">
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <script>
     /* script */
@@ -1266,6 +1293,21 @@ function getPrice(count){
   
 }
 
+$('.show_special_cod').hide();
+$('#special_cod_enable1').click(function(){
+  if ($(this).is(':checked')) {
+    //$(this).prop('checked',false);
+    //alert("is checked");
+    $('.show_special_cod').show();
+    getvalue();
+  } else {
+    //$(this).prop('checked',true);
+    //alert("not checked");
+    $('.show_special_cod').hide();
+    getvalue();
+  }
+});
+
 function getvalue() {
   var no_of_packages = Number($('#no_of_packages').val());
   var total_weight=0;
@@ -1313,7 +1355,15 @@ function subAmount(total_price1,total_weight1) {
     var insurance_percentage = Number($('#insurance_percentage').val());
     var vat_percentage = Number($('#vat_percentage').val());
     var declared_value = Number($('#declared_value').val());
-    var cod_amount = Number($('#cod_amount').val());
+    var cod_price = Number($('#cod_price').val());
+
+if($("#special_cod_enable1").is(':checked')){
+    cod_amount = cod_price;
+    $("#cod_amount").val(cod_amount);
+}
+else{
+  $("#cod_amount").val('0');
+}
 
     insurance_amount = Number((insurance_percentage/100) * declared_value);
     insurance_amount =  Number(insurance_amount.toFixed(2));

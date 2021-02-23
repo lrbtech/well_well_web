@@ -53,6 +53,7 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
+                            <th>#</th>
                             <th><input type="checkbox" name="order_master_checkbox" class="order_master_checkbox" value=""/></th>
                             <th>User ID</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
@@ -103,6 +104,7 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'checkbox', name: 'checkbox' , orderable:false, searchable:false },
         { data: 'user_id', name: 'user_id' },
         { data: 'shipment_date', name: 'shipment_date' },

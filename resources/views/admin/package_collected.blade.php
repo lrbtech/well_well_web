@@ -74,7 +74,7 @@
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
-  <script type="text/javascript">
+<script type="text/javascript">
 $('.package-collected').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({

@@ -693,7 +693,7 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             
             $shipment->status = 4;
-            $shipment->transit_in_agent_id = $request->agent_id;
+            $shipment->transit_in_id = $request->agent_id;
             $shipment->transit_in_date = date('Y-m-d');
             $shipment->transit_in_time = date('H:i:s');
             $shipment->save();
@@ -721,7 +721,7 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             
             $shipment->status = 6;
-            $shipment->transit_out_agent_id = $request->agent_id;
+            $shipment->transit_out_id = $request->agent_id;
             $shipment->transit_out_date = date('Y-m-d');
             $shipment->transit_out_time = date('H:i:s');
             $shipment->save();
@@ -749,6 +749,9 @@ class ApiController extends Controller
     public function packageAtStation(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
+            $shipment->transit_out_id = $request->agent_id;
+            $shipment->transit_out_date = date('Y-m-d');
+            $shipment->transit_out_time = date('H:i:s');
             $shipment->package_at_station_id = $request->agent_id;
             $shipment->package_at_station_date = date('Y-m-d');
             $shipment->package_at_station_time = date('H:i:s');

@@ -30,6 +30,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Auth;
 use DB;
 use PDF;
+use App\Rules\Captcha;
 
 class PageController extends Controller
 {
@@ -304,6 +305,13 @@ class PageController extends Controller
     }
 
     public function saveMobileVerify(Request $request){
+
+        $this->validate($request, [
+            'g-captcha-response'=> new Captcha(),
+          ],[
+            //'emirates_id_file.max' => 'Sorry! Maximum allowed size for an image is 1MB',
+        ]);
+
         $randomid = mt_rand(1000,9999); 
         $exist = ship_now_mobile_verify::where('mobile',$request->from_mobile)->first();
         if(!empty($exist)){
@@ -401,6 +409,8 @@ class PageController extends Controller
         $shipment->to_address = $to_address->id;
         $shipment->from_station_id = $from_station->station_id;
         $shipment->to_station_id = $to_station->station_id;
+        $shipment->special_cod_enable = $request->special_cod_enable;
+        $shipment->special_cod = $request->special_cod;
         $shipment->no_of_packages = $request->no_of_packages;
         $shipment->declared_value = $request->declared_value;
         $shipment->total_weight = $request->total_weight;
@@ -473,6 +483,15 @@ class PageController extends Controller
                 }
             }
         }
+
+        $from_msg= "Hi ('.$request->from_name.') your package has been scheduled for delivery from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). 
+        Please visit our site www.wellwell.ae/track";
+
+        $to_msg= "Hi ('.$request->to_name.') your package has been scheduled for delivery from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). 
+        Please visit our site www.wellwell.ae/track";
+
+        //$this->send_sms($request->from_mobile,$from_msg);
+        //$this->send_sms($request->to_mobile,$to_msg);
         
         ship_now_mobile_verify::where('mobile',$request->from_mobile)->delete();
         return response()->json('successfully save'); 

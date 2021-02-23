@@ -1144,6 +1144,21 @@ function getPrice(count){
   }
 }
 
+
+$('#special_cod_enable1').click(function(){
+  if ($(this).is(':checked')) {
+    //$(this).prop('checked',false);
+    //alert("is checked");
+    $('.show_special_cod').show();
+    getvalue();
+  } else {
+    //$(this).prop('checked',true);
+    //alert("not checked");
+    $('.show_special_cod').hide();
+    getvalue();
+  }
+});
+
 function getvalue() {
   var no_of_packages = Number($('#no_of_packages').val());
   var to_address = $('#to_address').val();
@@ -1188,7 +1203,8 @@ function subAmount(total_price1,total_weight1) {
   var cod_amount = 0;
   var total = 0;
     
-  $("#shipment_price").val(total_price);
+  var shipment_price =  Number(total_price.toFixed(2));
+  $("#shipment_price").val(shipment_price);
   
   var postal_charge_enable = Number($('#postal_charge_enable').val());
   var postal_charge_percentage =Number($('#postal_charge_percentage').val());
@@ -1207,12 +1223,16 @@ function subAmount(total_price1,total_weight1) {
     $("#insurance_amount").val(insurance_amount);
   }
 
-  //before_total = Number( + postal_charge);
-
+//before_total = Number( + postal_charge);
+if($("#special_cod_enable1").is(':checked')){
   if(cod_enable == 1){
     cod_amount = cod_price;
     $("#cod_amount").val(cod_amount);
   }
+}
+else{
+  $("#cod_amount").val('0');
+}
 
 
   sub_total = Number(total_price + insurance_amount + cod_amount);

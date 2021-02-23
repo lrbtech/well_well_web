@@ -457,20 +457,20 @@
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[57][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->new_shipment_request == 'on')
-                  <li class="new-shipment-request"><a class="new-shipment-request" href="/admin/new-shipment-request">{{$language[177][Auth::guard('admin')->user()->lang]}}
+                  <li class="new-shipment-request"><a class="new-shipment-request" href="/admin/new-shipment-request">{{$language[177][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$new_shipment_request}}</span>
                   </a></li>
                   @endif
 
-                  <li class="guest-pickup-request"><a class="guest-pickup-request" href="/admin/guest-pickup-request">Guest Pickup Request
+                  <li class="guest-pickup-request"><a class="guest-pickup-request" href="/admin/guest-pickup-request">Guest Pickup Request <span class="badge-pill badge-danger">{{$guest_pickup_request}}</span>
                   </a></li>
 
                   @if(Auth::guard('admin')->user()->today_pickup_request == 'on')
-                  <li class="today-pickup-request"><a class="today-pickup-request" href="/admin/today-pickup-request">Today Bulk Pickup Request
+                  <li class="today-pickup-request"><a class="today-pickup-request" href="/admin/today-pickup-request">Today Bulk Pickup Request <span class="badge-pill badge-danger">{{$today_pickup_request}}</span>
                   </a></li> 
                   @endif
 
                   @if(Auth::guard('admin')->user()->future_pickup_request == 'on')
-                  <li class="future-pickup-request"><a class="future-pickup-request" href="/admin/future-pickup-request">Future Bulk Pickup Request
+                  <li class="future-pickup-request"><a class="future-pickup-request" href="/admin/future-pickup-request">Future Bulk Pickup Request <span class="badge-pill badge-danger">{{$future_pickup_request}}</span>
                   </a></li>
                   @endif
 
@@ -578,6 +578,7 @@
                   @endif
 
                   <!-- <li class="push-notification"><a class="push-notification" href="/admin/push-notification">Push Notification</a></li> -->
+
                   @if(Auth::guard('admin')->user()->station == 'on')
                   <li class="station"><a class="station" href="/admin/station">{{$language[197][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif

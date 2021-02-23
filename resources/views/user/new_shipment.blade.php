@@ -794,18 +794,6 @@ $('#shipment_from_time').blur(function(){
 
 $('.show_special_cod').hide();
 
-$('#special_cod_enable1').click(function(){
-  if ($(this).is(':checked')) {
-    //$(this).prop('checked',false);
-    //alert("is checked");
-    $('.show_special_cod').show();
-  } else {
-    //$(this).prop('checked',true);
-    //alert("not checked");
-    $('.show_special_cod').hide();
-  }
-});
-
 $('#city_id').change(function(){
   var id = $('#city_id').val();
   $.ajax({
@@ -1059,6 +1047,20 @@ function getPrice(count){
   }
 }
 
+$('#special_cod_enable1').click(function(){
+  if ($(this).is(':checked')) {
+    //$(this).prop('checked',false);
+    //alert("is checked");
+    $('.show_special_cod').show();
+    getvalue();
+  } else {
+    //$(this).prop('checked',true);
+    //alert("not checked");
+    $('.show_special_cod').hide();
+    getvalue();
+  }
+});
+
 function getvalue() {
   var no_of_packages = Number($('#no_of_packages').val());
   var to_address = $('#to_address').val();
@@ -1162,10 +1164,15 @@ function subAmount(total_price1,total_weight1) {
 
   //before_total = Number( + postal_charge);
 
+if($("#special_cod_enable1").is(':checked')){
   if(cod_enable == 1){
     cod_amount = cod_price;
     $("#cod_amount").val(cod_amount);
   }
+}
+else{
+  $("#cod_amount").val('0');
+}
 
 
   sub_total = Number(total_price + insurance_amount + cod_amount);

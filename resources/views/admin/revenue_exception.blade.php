@@ -36,7 +36,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>{{$language[207][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>Tracking ID</th>
                             <th>{{$language[208][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[209][Auth::guard('admin')->user()->lang]}} * {{$language[210][Auth::guard('admin')->user()->lang]}} * {{$language[211][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[212][Auth::guard('admin')->user()->lang]}}</th>
@@ -45,22 +45,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                        @foreach($revenue_exception as $key => $row)
-                          <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$row->shipment_id}}</td>
-                            <td>{{$row->old_weight}} Kg</td>
-                            <td>{{$row->old_length}} * {{$row->old_width}} * {{$row->old_height}} CM</td>
-                            <td>{{$row->weight}} Kg</td>
-                            <td>{{$row->length}} * {{$row->width}} * {{$row->height}} CM</td>
-                            <td>
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="/admin/view-shipment/{{$row->shipment_id}}">View Shipment</a>
-                                </div>
-                            </td>
-                          </tr>
-                        @endforeach
+                        
                         </tbody>
                       </table>
                     </div>
@@ -85,5 +70,25 @@
   <script type="text/javascript">
 $('.revenue-exception').addClass('active');
 
+var orderPageTable = $('#datatable').DataTable({
+    "processing": true,
+    "serverSide": true,
+    //"pageLength": 50,
+    "ajax":{
+        "url": "/admin/get-revenue-exception",
+        "dataType": "json",
+        "type": "POST",
+        "data":{ _token: "{{csrf_token()}}"}
+    },
+    "columns": [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'track_id', name: 'track_id' },
+        { data: 'old_weight', name: 'old_weight' },
+        { data: 'old_dimension', name: 'old_dimension' },
+        { data: 'weight', name: 'weight' },
+        { data: 'dimension', name: 'dimension' },
+        { data: 'action', name: 'action' },
+    ]
+});
 </script>
 @endsection
