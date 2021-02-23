@@ -616,7 +616,7 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                    {!! NoCaptcha::display() !!}
+                    <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
                     </div>
                 </div>
 

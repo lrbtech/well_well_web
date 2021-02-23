@@ -31,7 +31,6 @@ use Auth;
 use DB;
 use PDF;
 use App\Rules\Captcha;
-use NoCaptcha;
 
 class PageController extends Controller
 {
@@ -308,9 +307,9 @@ class PageController extends Controller
     public function saveMobileVerify(Request $request){
 
         $this->validate($request, [
-            'g-recaptcha-response' => 'required|captcha',
+            'g-captcha-response'=> new Captcha(),
           ],[
-            'g-recaptcha-response.captcha' => 'Captcha error! try again later or contact site admin.',
+            //'emirates_id_file.max' => 'Sorry! Maximum allowed size for an image is 1MB',
         ]);
 
         $randomid = mt_rand(1000,9999); 
