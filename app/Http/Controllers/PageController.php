@@ -307,9 +307,9 @@ class PageController extends Controller
     public function saveMobileVerify(Request $request){
 
         $this->validate($request, [
-            'g-captcha-response'=> new Captcha(),
+            'g-recaptcha-response' => 'required|captcha',
           ],[
-            //'emirates_id_file.max' => 'Sorry! Maximum allowed size for an image is 1MB',
+            'g-recaptcha-response.captcha' => 'Captcha error! try again later or contact site admin.',
         ]);
 
         $randomid = mt_rand(1000,9999); 
