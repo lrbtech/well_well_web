@@ -31,7 +31,7 @@ use Auth;
 use DB;
 use PDF;
 use App\Rules\Captcha;
-use Anhskohbo\NoCaptcha\NoCaptchaServiceProvider;
+use NoCaptcha;
 
 class PageController extends Controller
 {
