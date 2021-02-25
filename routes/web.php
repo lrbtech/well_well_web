@@ -213,6 +213,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
 
     Route::get('/new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'newShipment']);
+    Route::get('/special-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'specialShipment']);
     Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
     
     Route::POST('/save-new-address', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewAddress']);
@@ -223,7 +224,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/print-invoice/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'printInvoice']);
 
 
-    Route::get('/get-area-price/{weight}/{to_address}/{shipment_mode}/{user_id}', [App\Http\Controllers\Admin\ShipmentController::class, 'getAreaPrice']);
+    Route::get('/get-area-price/{weight}/{to_address}/{shipment_mode}/{user_id}/{special_service}', [App\Http\Controllers\Admin\ShipmentController::class, 'getAreaPrice']);
 
     Route::get('/get-price-details/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'getPriceDetails']);
 
@@ -299,6 +300,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/cancel-request', [App\Http\Controllers\Admin\AllShipment::class, 'CancelRequest']);
     Route::POST('/get-cancel-request', [App\Http\Controllers\Admin\AllShipment::class, 'getCancelRequest']);
 
+    Route::get('/hold-request', [App\Http\Controllers\Admin\AllShipment::class, 'HoldRequest']);
+    Route::POST('/get-hold-request', [App\Http\Controllers\Admin\AllShipment::class, 'getHoldRequest']);
+
     Route::get('/update-cancel-request/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'updateCancelRequest']);
 
     Route::get('/revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'revenueException']);
@@ -306,7 +310,17 @@ Route::group(['prefix' => 'admin'],function(){
 
     //report
     Route::get('/shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'ShipmentReport']);
-    Route::POST('/get-shipment-report/{status}/{user_type}', [App\Http\Controllers\Admin\ReportController::class, 'getShipmentReport']);
+    Route::POST('/get-shipment-report/{status}/{user_type}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getShipmentReport']);
+
+    //report
+    Route::get('/agent-report', [App\Http\Controllers\Admin\ReportController::class, 'AgentReport']);
+    Route::POST('/get-agent-report/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getAgentReport']);
+
+    Route::POST('/excel-agent-report', [App\Http\Controllers\Admin\ReportController::class, 'excelAgentReport']);
+
+    Route::POST('/excel-shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'excelShipmentReport']);
+
+    Route::POST('/excel-revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'excelRevenueReport']);
 
     Route::get('/revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'RevenueReport']);
     Route::POST('/get-revenue-report/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getRevenueReport']);
@@ -345,6 +359,10 @@ Route::group(['prefix' => 'user'],function(){
 
     Route::POST('/save-cancel-request', [App\Http\Controllers\User\ShipmentController::class, 'SaveCancelRequest']);
 
+    Route::get('/active-hold-shipment/{id}', [App\Http\Controllers\User\ShipmentController::class, 'activeHoldShipment']);
+
+    Route::get('/cancel-hold-shipment/{id}', [App\Http\Controllers\User\ShipmentController::class, 'cancelHoldShipment']);
+
     Route::get('/pending-shipment', [App\Http\Controllers\User\PendingController::class, 'PendingShipment']);
     Route::POST('/get-pending-shipment', [App\Http\Controllers\User\PendingController::class, 'getPendingShipment']);
     Route::get('/schedule-shipment', [App\Http\Controllers\User\PendingController::class, 'scheduleShipment']);
@@ -353,7 +371,7 @@ Route::group(['prefix' => 'user'],function(){
     Route::get('/print-invoice/{id}', [App\Http\Controllers\User\ShipmentController::class, 'printInvoice']);
 
 
-    Route::get('/get-area-price/{weight}/{to_address}/{shipment_mode}', [App\Http\Controllers\User\ShipmentController::class, 'getAreaPrice']);
+    Route::get('/get-area-price/{weight}/{to_address}/{shipment_mode}/{special_service}', [App\Http\Controllers\User\ShipmentController::class, 'getAreaPrice']);
 
     Route::get('/get-price-details/{id}', [App\Http\Controllers\User\ShipmentController::class, 'getPriceDetails']);
 

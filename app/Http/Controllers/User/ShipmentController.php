@@ -138,6 +138,8 @@ class ShipmentController extends Controller
         $shipment->from_station_id = $from_station->station_id;
         $shipment->to_station_id = $to_station->station_id;
         $shipment->shipment_mode = $request->shipment_mode;
+        //$shipment->special_service = $request->special_service;
+        //$shipment->special_service_description = $request->special_service_description;
         $shipment->return_package_cost = $request->return_package_cost;
         $shipment->special_cod_enable = $request->special_cod_enable;
         $shipment->special_cod = $request->special_cod;
@@ -319,10 +321,21 @@ class ShipmentController extends Controller
                     <p>' . $shipment->cancel_remark . '</p>
                     ';
                 }
+                elseif($shipment->status == 11){
+                    return '
+                    <p>Shipment Hold</p>
+                    ';
+                }
             })
             ->addColumn('action', function ($shipment) {
                 $output='';
-                if($shipment->status == 8){
+                if($shipment->status == 0){
+                    $output.='<a onclick="activeholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Active Hold Shipment</a>';
+                }
+                elseif($shipment->status == 11){
+                    $output.='<a onclick="cancelholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Cancel Hold Shipment</a>';
+                }
+                elseif($shipment->status == 8){
                     $output.='<a target="_blank" href="/user/print-invoice/'.$shipment->id.'" class="dropdown-item">Print</a>';
                 }
                 else{
@@ -364,50 +377,101 @@ class ShipmentController extends Controller
         return response()->json('successfully update'); 
     }
 
-    public function getAreaPrice($weight,$to_address,$shipment_mode){
+    public function activeHoldShipment($id){
+        $shipment = shipment::find($id);
+        $shipment->status = 11;
+        $shipment->save();
+
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::user()->email;
+        $system_logs->remark = 'Active Hold Shipment Created by Customer';
+        $system_logs->save();
+
+        return response()->json('successfully update'); 
+    }
+
+    public function cancelHoldShipment($id){
+        $shipment = shipment::find($id);
+        $shipment->status = 0;
+        $shipment->save();
+
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::user()->email;
+        $system_logs->remark = 'Cancel Hold Shipment Created by Customer';
+        $system_logs->save();
+
+        return response()->json('successfully update'); 
+    }
+
+    public function getAreaPrice($weight,$to_address,$shipment_mode,$special_service){
         $rate = add_rate::where('user_id',Auth::user()->id)->first();
         $address = manage_address::find($to_address);
         $area = city::find($address->area_id);
         $data =array();
 
-        $rate_item = add_rate_item::where('user_id',Auth::user()->id)->where('status',$shipment_mode)->get();
+        //$rate_item = add_rate_item::where('user_id',Auth::user()->id)->where('status',$shipment_mode)->get();
         $price=0;
         if($area->remote_area == '0'){
-            if(!empty($rate_item)){
-                foreach($rate_item as $row){
-                    if($row->weight_from <= $weight && $row->weight_to >= $weight ){
-                        $price = $row->price;
-                    }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '1'){
-                        $price = $weight * $rate->service_area_20_to_1000_kg_price;
-                    }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '2'){
-                        $price = $weight * $rate->same_day_delivery_20_to_1000_kg_price;
-                    }
+            if($special_service == '1'){
+                if('0' <= $weight && '5' >= $weight){
+                    $price = $rate->special_service_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $weight && '10' >= $weight){
+                    $price = $rate->special_service_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $weight && '15' >= $weight){
+                    $price = $rate->special_service_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $weight && '20' >= $weight){
+                    $price = $rate->special_service_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $weight && '99999' >= $weight){
+                    $price = (($weight - 20) * $rate->special_service_20_to_1000_kg_price) + $rate->special_service_15_to_20_kg_price; 
+                }
+            }
+            else{
+                if('0' <= $weight && '5' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $weight && '10' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $weight && '15' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $weight && '20' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $weight && '99999' >= $weight && $shipment_mode == '1'){
+                    $price = (($weight - 20) * $rate->service_area_20_to_1000_kg_price) + $rate->service_area_15_to_20_kg_price; 
+                }
+                elseif('0' <= $weight && '5' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $weight && '10' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $weight && '15' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $weight && '10' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $weight && '999999' >= $weight && $shipment_mode == '2'){
+                    $price = (($weight - 20) * $rate->same_day_delivery_20_to_1000_kg_price) + $rate->same_day_delivery_15_to_20_kg_price;
                 }
             }
         }
         else{
-            if(!empty($rate_item)){
-                foreach($rate_item as $row){
-                    if($row->weight_from <= $weight && $row->weight_to >= $weight ){
-                        $price = $row->price;
-                    }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '1'){
-                        $price = $weight * $rate->service_area_20_to_1000_kg_price;
-                    }
-                    elseif('20.1' <= $weight && '1000' >= $weight && $shipment_mode == '2'){
-                        $price = $weight * $rate->same_day_delivery_20_to_1000_kg_price;
-                    }
-                }
+            if('0' <= $weight && '5' >= $weight){
+                $price = $rate->before_5_kg_price;
             }
             else{
-                if('0' <= $weight && '5' >= $weight){
-                    $price = $rate->before_5_kg_price;
-                }
-                else{
-                    $price = $weight * $rate->above_5_kg_price;
-                }
+                $price = (($weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price;
             }
         }
 

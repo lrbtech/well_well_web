@@ -127,48 +127,22 @@ class CustomerController extends Controller
         $add_rate->postal_charge_percentage = $request->postal_charge_percentage;
         $add_rate->before_5_kg_price = $request->before_5_kg_price;
         $add_rate->above_5_kg_price = $request->above_5_kg_price;
+        $add_rate->service_area_0_to_5_kg_price = $request->service_area_0_to_5_kg_price;
+        $add_rate->service_area_5_to_10_kg_price = $request->service_area_5_to_10_kg_price;
+        $add_rate->service_area_10_to_15_kg_price = $request->service_area_10_to_15_kg_price;
+        $add_rate->service_area_15_to_20_kg_price = $request->service_area_15_to_20_kg_price;
         $add_rate->service_area_20_to_1000_kg_price = $request->service_area_20_to_1000_kg_price;
+        $add_rate->same_day_delivery_0_to_5_kg_price = $request->same_day_delivery_0_to_5_kg_price;
+        $add_rate->same_day_delivery_5_to_10_kg_price = $request->same_day_delivery_5_to_10_kg_price;
+        $add_rate->same_day_delivery_10_to_15_kg_price = $request->same_day_delivery_10_to_15_kg_price;
+        $add_rate->same_day_delivery_15_to_20_kg_price = $request->same_day_delivery_15_to_20_kg_price;
         $add_rate->same_day_delivery_20_to_1000_kg_price = $request->same_day_delivery_20_to_1000_kg_price;
+        $add_rate->special_service_0_to_5_kg_price = $request->special_service_0_to_5_kg_price;
+        $add_rate->special_service_5_to_10_kg_price = $request->special_service_5_to_10_kg_price;
+        $add_rate->special_service_10_to_15_kg_price = $request->special_service_10_to_15_kg_price;
+        $add_rate->special_service_15_to_20_kg_price = $request->special_service_15_to_20_kg_price;
+        $add_rate->special_service_20_to_1000_kg_price = $request->special_service_20_to_1000_kg_price;
         $add_rate->save();
-
-        for ($x=0; $x<count($_POST['weight_from']); $x++) 
-    	  {
-          $add_rate_item = new add_rate_item;
-          $add_rate_item->user_id = $request->customer_id;
-	        $add_rate_item->weight_from = $_POST['weight_from'][$x];
-	        $add_rate_item->weight_to = $_POST['weight_to'][$x];
-          $add_rate_item->price = $_POST['price'][$x];
-          $add_rate_item->status = 1;
-
-	        if($_POST['weight_from'][$x]!=""){
-				    $add_rate_item->save();
-	    	  }
-        }
-
-        for ($x=0; $x<count($_POST['weight_from1']); $x++) 
-    	  {
-          $add_rate_item = new add_rate_item;
-          $add_rate_item->user_id = $request->customer_id;
-	        $add_rate_item->weight_from = $_POST['weight_from1'][$x];
-	        $add_rate_item->weight_to = $_POST['weight_to1'][$x];
-          $add_rate_item->price = $_POST['price1'][$x];
-          $add_rate_item->status = 2;
-
-	        if($_POST['weight_from1'][$x]!=""){
-				    $add_rate_item->save();
-	        }
-        }
-                
-        // $all = User::find($request->customer_id);
-        // $rate = add_rate::where('user_id',$request->customer_id)->first();
-        // $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
-        // $customer = User::find($request->customer_id);
-        // $settings = settings::find(1);
-        
-        // Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
-        //     $message->to($all->email)->subject('Well Well Express - Your Account Price');
-        //     $message->from('info@lrbtech.com','Well Well Express');
-        // });
 
         return response()->json('successfully save'); 
     }
@@ -187,50 +161,23 @@ class CustomerController extends Controller
       $add_rate->postal_charge_percentage = $request->postal_charge_percentage;
       $add_rate->before_5_kg_price = $request->before_5_kg_price;
       $add_rate->above_5_kg_price = $request->above_5_kg_price;
+      $add_rate->service_area_0_to_5_kg_price = $request->service_area_0_to_5_kg_price;
+      $add_rate->service_area_5_to_10_kg_price = $request->service_area_5_to_10_kg_price;
+      $add_rate->service_area_10_to_15_kg_price = $request->service_area_10_to_15_kg_price;
+      $add_rate->service_area_15_to_20_kg_price = $request->service_area_15_to_20_kg_price;
       $add_rate->service_area_20_to_1000_kg_price = $request->service_area_20_to_1000_kg_price;
+      $add_rate->same_day_delivery_0_to_5_kg_price = $request->same_day_delivery_0_to_5_kg_price;
+      $add_rate->same_day_delivery_5_to_10_kg_price = $request->same_day_delivery_5_to_10_kg_price;
+      $add_rate->same_day_delivery_10_to_15_kg_price = $request->same_day_delivery_10_to_15_kg_price;
+      $add_rate->same_day_delivery_15_to_20_kg_price = $request->same_day_delivery_15_to_20_kg_price;
       $add_rate->same_day_delivery_20_to_1000_kg_price = $request->same_day_delivery_20_to_1000_kg_price;
+      $add_rate->special_service_0_to_5_kg_price = $request->special_service_0_to_5_kg_price;
+      $add_rate->special_service_5_to_10_kg_price = $request->special_service_5_to_10_kg_price;
+      $add_rate->special_service_10_to_15_kg_price = $request->special_service_10_to_15_kg_price;
+      $add_rate->special_service_15_to_20_kg_price = $request->special_service_15_to_20_kg_price;
+      $add_rate->special_service_20_to_1000_kg_price = $request->special_service_20_to_1000_kg_price;
       $add_rate->save();
 
-      $add_rate_item = add_rate_item::where('user_id',$request->customer_id)->delete();
-
-      for ($x=0; $x<count($_POST['weight_from']); $x++) 
-      {
-        $add_rate_item = new add_rate_item;
-        $add_rate_item->user_id = $request->customer_id;
-        $add_rate_item->weight_from = $_POST['weight_from'][$x];
-        $add_rate_item->weight_to = $_POST['weight_to'][$x];
-        $add_rate_item->price = $_POST['price'][$x];
-        $add_rate_item->status = 1;
-
-        if($_POST['weight_from'][$x]!=""){
-          $add_rate_item->save();
-        }
-      }
-
-      for ($x=0; $x<count($_POST['weight_from1']); $x++) 
-      {
-        $add_rate_item = new add_rate_item;
-        $add_rate_item->user_id = $request->customer_id;
-        $add_rate_item->weight_from = $_POST['weight_from1'][$x];
-        $add_rate_item->weight_to = $_POST['weight_to1'][$x];
-        $add_rate_item->price = $_POST['price1'][$x];
-        $add_rate_item->status = 2;
-
-        if($_POST['weight_from1'][$x]!=""){
-          $add_rate_item->save();
-        }
-      }
-
-        // $all = User::find($request->customer_id);
-        // $rate = add_rate::where('user_id',$request->customer_id)->first();
-        // $rate_item = add_rate_item::where('user_id',$request->customer_id)->get();
-        // $customer = User::find($request->customer_id);
-        // $settings = settings::find(1);
-        
-        // Mail::send('mail.sales_table',compact('rate','rate_item','settings','customer'),function($message) use($all){
-        //     $message->to($all->email)->subject('Well Well Express - Your Account Price');
-        //     $message->from('info@lrbtech.com','Well Well Express');
-        // });
               
       return response()->json('successfully save'); 
   }
@@ -298,7 +245,7 @@ public function editRateCard($id)
 {
 $data = add_rate::where('user_id',$id)->first();
 $settings = settings::find(1);
-$output='<div class="row service_area">
+$output='<div class="row" id="service_area_show">
 <div class="form-group col-md-3">
   <div class="checkbox checkbox-primary">';
   if($data->insurance_enable == '1'){
@@ -349,7 +296,7 @@ $output='<div class="row service_area">
 </div>
 </div>
 
-<div class="row non_service_area hide">
+<div class="row" id="non_service_area_table">
 <div class="form-group col-md-6">
   <label>0 to 5 kg Price</label>
   <input value="'.$data->before_5_kg_price.'" autocomplete="off" type="text" id="before_5_kg_price" name="before_5_kg_price" class="form-control">
@@ -360,75 +307,161 @@ $output='<div class="row service_area">
 </div>
 </div>
 
-<div class="row services_area_table">
+<div class="row" id="service_area_table">
 <table id="productTable" class="table">
 <thead class="thead-primary">
     <tr style="text-align: center;">
       <th colspan="2">
-          <label>20 to 1000 kg Price (Per kg)</label>
+          <label>0 to 5 kg Price</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->service_area_0_to_5_kg_price.'" autocomplete="off" type="text" id="service_area_0_to_5_kg_price" name="service_area_0_to_5_kg_price" class="form-control">
+      </th>
+    </tr>
+
+    <tr style="text-align: center;">
+      <th colspan="2">
+          <label>5.1 to 10 kg Price</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->service_area_5_to_10_kg_price.'" autocomplete="off" type="text" id="service_area_5_to_10_kg_price" name="service_area_5_to_10_kg_price" class="form-control">
+      </th>
+    </tr>
+
+    <tr style="text-align: center;">
+      <th colspan="2">
+          <label>10.1 to 15 kg Price</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->service_area_10_to_15_kg_price.'" autocomplete="off" type="text" id="service_area_10_to_15_kg_price" name="service_area_10_to_15_kg_price" class="form-control">
+      </th>
+    </tr>
+
+    <tr style="text-align: center;">
+      <th colspan="2">
+          <label>15.1 to 20 kg Price</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->service_area_15_to_20_kg_price.'" autocomplete="off" type="text" id="service_area_15_to_20_kg_price" name="service_area_15_to_20_kg_price" class="form-control">
+      </th>
+    </tr>
+
+    <tr style="text-align: center;">
+      <th colspan="2">
+          <label>20.1 to 1000 kg Price (Per kg)</label>
       </th>
       <th colspan="2">
           <input value="'.$data->service_area_20_to_1000_kg_price.'" autocomplete="off" type="text" id="service_area_20_to_1000_kg_price" name="service_area_20_to_1000_kg_price" class="form-control">
       </th>
     </tr>
-    <tr style="text-align: center;">
-        <th>Weight from</th>
-        <th>Weight to</th>
-        <th>Service Area Price</th>
-        <th style="width: 3%;padding: .0rem !important;">
-            <button type="button" class="btn btn-default" onclick="addRow()" id="addRowBtn" data-loading-text="Loading..."> <i class="fa fa-plus" aria-hidden="true"></i></button>
-        </th>
-    </tr>
+
 </thead>
-<tbody id="productTabletbody">';
-$add_rate_item = add_rate_item::where('user_id',$id)->where('status',1)->get();
-$x=0;
-foreach ($add_rate_item as $value) {
-  $x++;
-  $output.='<tr value="'.$x.'" id="rows'.$x.'">
-      <td><input value="'.$value->weight_from.'" style="text-align:right;" type="text" name="weight_from[]" id="weight_from'.$x.'" autocomplete="off" class="form-control" /></td>
-      <td><input value="'.$value->weight_to.'" style="text-align:right;" type="text" name="weight_to[]" id="weight_to'.$x.'" autocomplete="off" class="form-control" /></td>
-      <td><input value="'.$value->price.'" style="text-align:right;" type="text" name="price[]" id="price'.$x.'" autocomplete="off" class="form-control" /></td>
-      <td align="center"><button id="removeProductRowBtnn'.$x.'" class="btn btn-default removeProductRowBtnn" type="button" onclick="removeProductRows('.$x.')"><i class="fa fa-minus" aria-hidden="true"></i></button></td>
-  </tr>';
- }
- $output.='</tbody>
 </table>
 </div>
 
-<div class="row same_day_delivery_table hide">
-<table id="productTable1" class="table">
+
+
+<div class="row" id="special_service_table">
+<table id="productTable" class="table">
 <thead class="thead-primary">
     <tr style="text-align: center;">
       <th colspan="2">
-          <label>20 to 1000 kg Price (Per kg)</label>
+          <label>0 to 5 kg Price</label>
       </th>
       <th colspan="2">
-          <input value="'.$data->same_day_delivery_20_to_1000_kg_price.'" autocomplete="off" type="text" id="same_day_delivery_20_to_1000_kg_price" name="same_day_delivery_20_to_1000_kg_price" class="form-control">
+          <input value="'.$data->special_service_0_to_5_kg_price.'" autocomplete="off" type="text" id="special_service_0_to_5_kg_price" name="special_service_0_to_5_kg_price" class="form-control">
       </th>
     </tr>
+
     <tr style="text-align: center;">
-        <th>Weight from</th>
-        <th>Weight to</th>
-        <th>Same Day Delivery Price</th>
-        <th style="width: 3%;padding: .0rem !important;">
-            <button type="button" class="btn btn-default" onclick="addRow1()" id="addRowBtn" data-loading-text="Loading..."> <i class="fa fa-plus" aria-hidden="true"></i></button>
-        </th>
+      <th colspan="2">
+          <label>5.1 to 10 kg Price</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->special_service_5_to_10_kg_price.'" autocomplete="off" type="text" id="special_service_5_to_10_kg_price" name="special_service_5_to_10_kg_price" class="form-control">
+      </th>
     </tr>
+
+    <tr style="text-align: center;">
+      <th colspan="2">
+          <label>10.1 to 15 kg Price</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->special_service_10_to_15_kg_price.'" autocomplete="off" type="text" id="special_service_10_to_15_kg_price" name="special_service_10_to_15_kg_price" class="form-control">
+      </th>
+    </tr>
+
+    <tr style="text-align: center;">
+      <th colspan="2">
+          <label>15.1 to 20 kg Price</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->special_service_15_to_20_kg_price.'" autocomplete="off" type="text" id="special_service_15_to_20_kg_price" name="special_service_15_to_20_kg_price" class="form-control">
+      </th>
+    </tr>
+
+    <tr style="text-align: center;">
+      <th colspan="2">
+          <label>20.1 to 1000 kg Price (Per kg)</label>
+      </th>
+      <th colspan="2">
+          <input value="'.$data->special_service_20_to_1000_kg_price.'" autocomplete="off" type="text" id="special_service_20_to_1000_kg_price" name="special_service_20_to_1000_kg_price" class="form-control">
+      </th>
+    </tr>
+
 </thead>
-<tbody id="productTabletbody1">';
-$add_rate_item = add_rate_item::where('user_id',$id)->where('status',2)->get();
-$y=0;
-foreach ($add_rate_item as $value) {     
-  $y++;      
-  $output.='<tr value="'.$y.'" id="rows'.$y.'">
-      <td><input value="'.$value->weight_from.'" style="text-align:right;" type="text" name="weight_from1[]" id="weight_from1'.$y.'" autocomplete="off" class="form-control" /></td>
-      <td><input value="'.$value->weight_to.'" style="text-align:right;" type="text" name="weight_to1[]" id="weight_to1'.$y.'" autocomplete="off" class="form-control" /></td>
-      <td><input value="'.$value->price.'" style="text-align:right;" type="text" name="price1[]" id="price1'.$y.'" autocomplete="off" class="form-control" /></td>
-      <td align="center"><button id="removeProductRowBtnn'.$y.'" class="btn btn-default removeProductRowBtnn" type="button" onclick="removeProductRows('.$y.')"><i class="fa fa-minus" aria-hidden="true"></i></button></td>
-  </tr>';
-}
-$output.='</tbody>
+</table>
+</div>
+
+<div class="row" id="same_day_delivery_table">
+<table id="productTable1" class="table">
+<thead class="thead-primary">
+  <tr style="text-align: center;">
+  <th colspan="2">
+      <label>0 to 5 kg Price</label>
+  </th>
+  <th colspan="2">
+      <input value="'.$data->same_day_delivery_0_to_5_kg_price.'" autocomplete="off" type="text" id="same_day_delivery_0_to_5_kg_price" name="same_day_delivery_0_to_5_kg_price" class="form-control">
+  </th>
+  </tr>
+
+  <tr style="text-align: center;">
+  <th colspan="2">
+      <label>5.1 to 10 kg Price</label>
+  </th>
+  <th colspan="2">
+      <input value="'.$data->same_day_delivery_5_to_10_kg_price.'" autocomplete="off" type="text" id="same_day_delivery_5_to_10_kg_price" name="same_day_delivery_5_to_10_kg_price" class="form-control">
+  </th>
+  </tr>
+
+  <tr style="text-align: center;">
+  <th colspan="2">
+      <label>10.1 to 15 kg Price</label>
+  </th>
+  <th colspan="2">
+      <input value="'.$data->same_day_delivery_10_to_15_kg_price.'" autocomplete="off" type="text" id="same_day_delivery_10_to_15_kg_price" name="same_day_delivery_10_to_15_kg_price" class="form-control">
+  </th>
+  </tr>
+
+  <tr style="text-align: center;">
+  <th colspan="2">
+      <label>15.1 to 20 kg Price</label>
+  </th>
+  <th colspan="2">
+      <input value="'.$data->same_day_delivery_15_to_20_kg_price.'" autocomplete="off" type="text" id="same_day_delivery_15_to_20_kg_price" name="same_day_delivery_15_to_20_kg_price" class="form-control">
+  </th>
+  </tr>
+
+  <tr style="text-align: center;">
+  <th colspan="2">
+      <label>20.1 to 1000 kg Price (Per kg)</label>
+  </th>
+  <th colspan="2">
+      <input value="'.$data->same_day_delivery_20_to_1000_kg_price.'" autocomplete="off" type="text" id="same_day_delivery_20_to_1000_kg_price" name="same_day_delivery_20_to_1000_kg_price" class="form-control">
+  </th>
+  </tr>
+    
+</thead>
 </table>
 </div>';
 

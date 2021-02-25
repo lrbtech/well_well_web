@@ -139,6 +139,8 @@ class PendingController extends Controller
             $shipment->from_station_id = $from_station->station_id;
             $shipment->to_station_id = $to_station->station_id;
             $shipment->shipment_mode = $temp_shipment->shipment_mode;
+            //$shipment->special_service = $temp_shipment->special_service;
+            //$shipment->special_service_description = $temp_shipment->special_service_description;
             $shipment->return_package_cost = $temp_shipment->return_package_cost;
             $shipment->special_cod_enable = $temp_shipment->special_cod_enable;
             $shipment->special_cod = $temp_shipment->special_cod;

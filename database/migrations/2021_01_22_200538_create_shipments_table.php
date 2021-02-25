@@ -29,6 +29,8 @@ class CreateShipmentsTable extends Migration
             $table->string('from_station_id')->default('0'); 
             $table->string('to_station_id')->default('0'); 
             $table->string('notification_enable')->nullable();  
+            $table->string('special_service')->nullable();  
+            $table->TEXT('special_service_description')->nullable();  
             $table->string('special_cod_enable')->nullable();
             $table->string('special_cod')->nullable();
             $table->string('collect_cod_amount')->nullable();

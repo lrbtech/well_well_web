@@ -228,6 +228,26 @@ visibility: visible;
                           </div>
                           <div class="card-body">
 
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label>Special Service</label>
+              <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml">
+                <div class="radio radio-primary">
+                  <input id="special_service1" type="radio" name="special_service" value="1">
+                  <label class="mb-0" for="special_service1">{{$language[51][Auth::user()->lang]}}</label>
+                </div>
+                <div class="radio radio-primary">
+                  <input checked id="special_service2" type="radio" name="special_service" value="2">
+                  <label class="mb-0" for="special_service2">{{$language[52][Auth::user()->lang]}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 show_special_service">
+                <label>Description</label>
+                <input class="form-control" id="special_service_description" name="special_service_description" type="text">
+            </div>
+          </div>
+
                             <div class="row">
                               <div class="form-group col-md-6">
                                 <label class="col-form-label">{{$language[38][Auth::guard('admin')->user()->lang]}}</label>
@@ -262,13 +282,13 @@ visibility: visible;
 
                               <div class="form-group col-md-4">
                                 <label class="col-form-label">Reference No</label>
-                                <input class="form-control" id="reference_no1" name="reference_no[]" type="text" >
+                                <input class="form-control" id="reference_no1" name="reference_no[]" type="number" min="1" >
                               </div>
 
                               <div class="form-group col-md-2">
                                 <label class="col-form-label">{{$language[42][Auth::guard('admin')->user()->lang]}}
                                 </label>
-                                <input class="form-control" id="weight1" name="weight[]" type="number" >
+                                <input class="form-control" id="weight1" name="weight[]" type="number" min="1" >
                               </div>
 
                               <div class="form-group col-md-8">
@@ -283,7 +303,7 @@ visibility: visible;
                         								<div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected">
-                                                  <input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length1" style="max-width: 100px;">
+                                                  <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length1" style="max-width: 100px;">
                                                 </div>
                                             </span>
                                         </div>
@@ -293,7 +313,7 @@ visibility: visible;
                         								<div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected">
-                                                  <input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width1" style="max-width: 100px;">
+                                                  <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width1" style="max-width: 100px;">
                                                 </div>
                                             </span>
                                         </div>
@@ -303,7 +323,7 @@ visibility: visible;
                         								<div class="input-group-append">
                                             <span class="input-group-text">
                                               <div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected" >
-                                                <input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height1" style="max-width: 100px;">
+                                                <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height1" style="max-width: 100px;">
                                               </div>
                                             </span>
                                         </div>
@@ -320,7 +340,7 @@ visibility: visible;
                         								<div class="input-group-append">
                                             <span class="input-group-text">
                                               <div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected" >
-                                                <input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="dim_weight[]" id="dim_weight1" style="max-width: 100px;">
+                                                <input readonly type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="dim_weight[]" id="dim_weight1" style="max-width: 100px;">
                                               </div>
                                             </span>
                                         </div>
@@ -790,8 +810,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
 <script type="text/javascript">
 $('.new-shipment').addClass('active');
 
-$('.show_special_cod').hide();
-
 $('#city_id').change(function(){
   var id = $('#city_id').val();
   $.ajax({
@@ -1117,6 +1135,7 @@ function getPrice(count){
   var width = $("#width"+count).val();
   var height = $("#height"+count).val();
   var shipment_mode = $("input[name='shipment_mode']:checked").val();
+  
   //alert(to_address);
   if(to_address != ''){
     if(weight != '' && length != '' && width != '' && height != ''){
@@ -1144,7 +1163,7 @@ function getPrice(count){
   }
 }
 
-
+$('.show_special_cod').hide();
 $('#special_cod_enable1').click(function(){
   if ($(this).is(':checked')) {
     //$(this).prop('checked',false);
@@ -1155,6 +1174,29 @@ $('#special_cod_enable1').click(function(){
     //$(this).prop('checked',true);
     //alert("not checked");
     $('.show_special_cod').hide();
+    getvalue();
+  }
+});
+
+$('.show_special_service').hide();
+$('#special_service1').click(function(){
+  var special_service = $("input[name='special_service']:checked").val();
+  if (special_service == '1') {
+    $('.show_special_service').show();
+    getvalue();
+  } else {
+    $('.show_special_service').hide();
+    getvalue();
+  }
+});
+
+$('#special_service2').click(function(){
+  var special_service = $("input[name='special_service']:checked").val();
+  if (special_service == '1') {
+    $('.show_special_service').show();
+    getvalue();
+  } else {
+    $('.show_special_service').hide();
     getvalue();
   }
 });
@@ -1181,8 +1223,10 @@ else{
 $("#total_weight_label").html(total_weight);
 $("#total_weight").val(total_weight);
 
+var special_service = $("input[name='special_service']:checked").val();
+
   $.ajax({
-    url:"/admin/get-area-price/"+total_weight+"/"+to_address+"/"+shipment_mode+"/"+user_id,
+    url:"/admin/get-area-price/"+total_weight+"/"+to_address+"/"+shipment_mode+"/"+user_id+"/"+special_service,
     type: "GET",
     dataType: "JSON",
     success: function( data ) 
@@ -1334,11 +1378,11 @@ function addpackage(no_of_packages){
         '</div>'+
         '<div class="form-group col-md-4">'+
           '<label class="col-form-label">Reference No</label>'+
-          '<input class="form-control" id="reference_no'+count+'" name="reference_no[]" type="text" >'+
+          '<input class="form-control" id="reference_no'+count+'" name="reference_no[]" type="number" min="1" >'+
         '</div>'+
         '<div class="form-group col-md-2">'+
           '<label class="col-form-label">Actual Weight</label>'+
-          '<input class="form-control" id="weight'+count+'" name="weight[]" type="number" >'+
+          '<input class="form-control" id="weight'+count+'" name="weight[]" type="number" min="1" >'+
         '</div>'+
         '<div class="form-group col-md-8">'+
           '<div class="col-md-12">'+
@@ -1351,7 +1395,7 @@ function addpackage(no_of_packages){
                   '<div class="input-group-prepend">'+
                       '<span class="input-group-text">'+
                           '<div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected">'+
-                            '<input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length'+count+'" style="max-width: 100px;">'+
+                            '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length'+count+'" style="max-width: 100px;">'+
                           '</div>'+
                       '</span>'+
                   '</div>'+
@@ -1361,7 +1405,7 @@ function addpackage(no_of_packages){
                   '<div class="input-group-prepend">'+
                       '<span class="input-group-text">'+
                           '<div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected">'+
-                            '<input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width'+count+'" style="max-width: 100px;">'+
+                            '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width'+count+'" style="max-width: 100px;">'+
                           '</div>'+
                       '</span>'+
                   '</div>'+
@@ -1371,7 +1415,7 @@ function addpackage(no_of_packages){
                   '<div class="input-group-append">'+
                       '<span class="input-group-text">'+
                         '<div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected" >'+
-                          '<input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height'+count+'" style="max-width: 100px;">'+
+                          '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height'+count+'" style="max-width: 100px;">'+
                         '</div>'+
                       '</span>'+
                   '</div>'+
@@ -1388,7 +1432,7 @@ function addpackage(no_of_packages){
                     '<div class="input-group-append">'+
                         '<span class="input-group-text">'+
                           '<div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected" >'+
-                            '<input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="dim_weight[]" id="dim_weight'+count+'" style="max-width: 100px;">'+
+                            '<input readonly type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="dim_weight[]" id="dim_weight'+count+'" style="max-width: 100px;">'+
                           '</div>'+
                         '</span>'+
                     '</div>'+

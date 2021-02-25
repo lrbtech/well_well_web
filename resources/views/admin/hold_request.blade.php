@@ -1,4 +1,4 @@
-@extends('user.layouts')
+@extends('admin.layouts')
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
@@ -10,8 +10,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>{{$language[3][Auth::user()->lang]}} <span>{{$language[18][Auth::user()->lang]}}  </span></h2> 
-                  <!-- <h6 class="mb-0">View Shipment</h6>-->
+                  <h2>Hold <span>{{$language[91][Auth::guard('admin')->user()->lang]}}  </span></h2> 
+                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -43,13 +43,13 @@
                           <tr>
                             <th>#</th>
                             <th>Tracking ID</th>
-                            <th>{{$language[59][Auth::user()->lang]}}</th>
-                            <th>{{$language[145][Auth::user()->lang]}}</th>
-                            <th>{{$language[32][Auth::user()->lang]}}</th>
-                            <th>{{$language[24][Auth::user()->lang]}}</th>
-                            <th>{{$language[28][Auth::user()->lang]}}</th>
-                            <th>{{$language[15][Auth::user()->lang]}}</th>
-                            <th>{{$language[16][Auth::user()->lang]}}</th>
+                            <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[24][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[28][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -68,39 +68,6 @@
           <!-- Container-fluid Ends-->
         </div>
 
-
-
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="cancel_modal" tabindex="-1" role="dialog" aria-labelledby="cancel_modal" aria-hidden="true">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-grey-dark-5">
-                <h6 class="modal-title " id="modal-title">Add New</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="cancel_form" method="POST" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                <input type="hidden" name="shipment_id" id="shipment_id">
-
-                    <div class="form-group">
-                        <label>Remark</label>
-                        <textarea id="cancel_remark" name="cancel_remark" class="form-control"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <button onclick="SaveCancelRequest()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Bootstrap Modal --> 
-
-
 @endsection
 @section('extra-js')
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
@@ -108,14 +75,14 @@
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
   <script type="text/javascript">
-$('.view_shipment').addClass('active');
+$('.hold-request').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/user/get-shipment",
+        "url": "/admin/get-hold-request",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -124,7 +91,7 @@ var orderPageTable = $('#datatable').DataTable({
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
-        { data: 'shipment_type', name: 'shipment_type' },
+        { data: 'shipment_time', name: 'shipment_time' },
         { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },
         { data: 'to_address', name: 'to_address' },
@@ -136,7 +103,7 @@ var orderPageTable = $('#datatable').DataTable({
 
 function PrintLabel(id){
   $.ajax({
-    url : '/user/print-label/'+id,
+    url : '/admin/print-label/'+id,
     type: "GET",
     dataType: "JSON",
     success: function(data)
@@ -150,82 +117,18 @@ function PrintLabel(id){
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/user/shipment";
+            window.location.href="/admin/get-hold-request";
             }, 250);
         } else {
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/user/shipment";
+            window.location.href="/admin/get-hold-request";
         }
         //PrintDiv(data);
         
     }
   });
-}
-
-function activeholdshipment(id){
-  var r = confirm("Are you sure");
-  if (r == true) {
-    $.ajax({
-      url : '/user/active-hold-shipment/'+id,
-      type: "GET",
-      dataType: "JSON",
-      success: function(data)
-      {
-        toastr.success(data, 'Successfully Update');
-        window.location.href="/user/shipment";
-      }
-    });
-  }
-}
-
-function cancelholdshipment(id){
-  var r = confirm("Are you sure");
-  if (r == true) {
-    $.ajax({
-      url : '/user/cancel-hold-shipment/'+id,
-      type: "GET",
-      dataType: "JSON",
-      success: function(data)
-      {
-        toastr.success(data, 'Successfully Update');
-        window.location.href="/user/shipment";
-      }
-    });
-  }
-}
-
-
-function CancelRequest(id){
-    $('#modal-title').text('Add Remark');
-    $('#save').text('Save Change');
-    $('input[name=shipment_id]').val(id);
-    $('#cancel_modal').modal('show');
-}
-
-function SaveCancelRequest(){
-  var formData = new FormData($('#cancel_form')[0]);
-    $.ajax({
-        url : '/user/save-cancel-request',
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        dataType: "JSON",
-        success: function(data)
-        {                
-            $("#cancel_form")[0].reset();
-            $('#cancel_modal').modal('hide');
-            location.reload();
-            toastr.success(data, 'Successfully Save');
-        },error: function (data) {
-            var errorData = data.responseJSON.errors;
-            $.each(errorData, function(i, obj) {
-            toastr.error(obj[0]);
-      });
-    }
-    });
 }
 
 </script>

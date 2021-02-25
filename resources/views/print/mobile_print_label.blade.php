@@ -212,12 +212,14 @@ th {
         </div>
         <div class="d-flex justify-between pt-2 ">
             <div>
-                <!-- <div class="d-flex">
+                @if(($key + 1) != '1')
+                <div class="d-flex">
                     <div class="mr-2">
-                        <div><strong style="font-size: 14px;">TRK#</strong></div>
+                        <div><strong style="font-size: 14px;">Master TRK#</strong></div>
                     </div>
-                    <div style="font-size: 20px;"><strong>7654321</strong></div>
-                </div> -->
+                    <div style="font-size: 20px;"><strong>{{$shipment_package[0]->sku_value}}</strong></div>
+                </div>
+                @endif
                 <div style="font-size: 18px;"><strong>Your Tracking ID</strong></div>
                 <div style="font-size: 25px;"><strong>{{$row->sku_value}}</strong></div>
             </div>

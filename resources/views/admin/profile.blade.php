@@ -142,7 +142,7 @@
             </div>
             @if(Auth::guard('admin')->user()->role_id == 0 || Auth::guard('admin')->user()->role_id == 1)
             <div class="card-header">
-              <button onclick="editRateCard({{$customer->id}})" class="btn btn-primary" type="button">Edit Sales Price</button>
+              <button onclick="addRate({{$customer->id}})" class="btn btn-primary" type="button">Edit Sales Price</button>
               <div class="card-options"><a class="card-options-collapse" href="#" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-toggle="card-remove"><i class="fe fe-x"></i></a></div>
             </div>
             @endif
@@ -194,68 +194,159 @@
                     </tr>
                     <tr style="text-align: center;">
                       <th colspan="1">
-                          <label>20 to 1000 kg Price (Per kg)</label>
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_0_to_5_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_5_to_10_kg_price}} AED
+                      </th>
+                    </tr>
+                    
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_10_to_15_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_15_to_20_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
                       </th>
                       <th colspan="2">
                           {{$rate->service_area_20_to_1000_kg_price}} AED
                       </th>
                     </tr>
-                    <tr>
-                      <th>Weight From</th>
-                      <th>Weight To</th>
-                      <th>Service Area Price</th>
-                    </tr>
-                    
                   </thead>
-                  <tbody>
-                  @if(!empty($rate_item))
-                  @foreach($rate_item as $row)
-                  @if($row->status == 1)
-                    <tr>
-                      <td>{{$row->weight_from}}</td>
-                      <td>{{$row->weight_to}}</td>
-                      <td>{{$row->price}} AED</td>
-                    </tr>
-                  @endif
-                  @endforeach
-                  @endif
-                  </tbody>
                 </table>
+
                 <table class="table card-table table-vcenter text-nowrap">
                   <thead>
                     <tr style="text-align: center;">
                       <th colspan="3">
-                          <label>Same Day Delivery Area Price Section</label>
+                          <label>Same Day Delivery Price Section</label>
                       </th>
                     </tr>
                     <tr style="text-align: center;">
                       <th colspan="1">
-                          <label>20 to 1000 kg Price (Per kg)</label>
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_0_to_5_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_5_to_10_kg_price}} AED
+                      </th>
+                    </tr>
+                    
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_10_to_15_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_15_to_20_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
                       </th>
                       <th colspan="2">
                           {{$rate->same_day_delivery_20_to_1000_kg_price}} AED
                       </th>
                     </tr>
-                    <tr>
-                      <th>Weight From</th>
-                      <th>Weight To</th>
-                      <th>Same Day Delivery Price</th>
+                  </thead>
+                </table>
+
+                <table class="table card-table table-vcenter text-nowrap">
+                  <thead>
+                    <tr style="text-align: center;">
+                      <th colspan="3">
+                          <label>Special Service Area Price Section</label>
+                      </th>
+                    </tr>
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_0_to_5_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_5_to_10_kg_price}} AED
+                      </th>
+                    </tr>
+                    
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_10_to_15_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_15_to_20_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_20_to_1000_kg_price}} AED
+                      </th>
                     </tr>
                   </thead>
-                  <tbody>
-                  @if(!empty($rate_item))
-                  @foreach($rate_item as $row)
-                  @if($row->status == 2)
-                    <tr>
-                      <td>{{$row->weight_from}}</td>
-                      <td>{{$row->weight_to}}</td>
-                      <td>{{$row->price}} AED</td>
-                    </tr>
-                  @endif
-                  @endforeach
-                  @endif
-                  </tbody>
                 </table>
+                
                 <table class="table card-table table-vcenter text-nowrap">
                   <thead>
                     <tr style="text-align: center;">
@@ -310,6 +401,10 @@
                       <div class="u-step col-md-3 " id="same_day_delivery"><span class="u-step-icon icon-notepad" aria-hidden="true"></span>
                         <div class="u-step-desc"><span class="u-step-title">Same Day Delivery</span></div>
                       </div>
+
+                      <div class="u-step col-md-3 " id="special_service"><span class="u-step-icon icon-notepad" aria-hidden="true"></span>
+                        <div class="u-step-desc"><span class="u-step-title">Special Service</span></div>
+                      </div>
                   
                     </div>
                   </div>
@@ -321,7 +416,7 @@
             {{ csrf_field() }}
             <input type="hidden" name="customer_id" id="customer_id">
             <div class="modal-body edit_rate_card">
-                <div class="row service_area">
+                <div class="row" id="service_area_show">
                     <div class="form-group col-md-3">
                       <div class="checkbox checkbox-primary">
                         <input value="1" id="insurance_enable" name="insurance_enable" type="checkbox">
@@ -352,7 +447,7 @@
                     </div>
                 </div>
                 
-                <div class="row non_service_area hide">
+                <div class="row" id="non_service_area_table">
                     <div class="form-group col-md-6">
                       <label>0 to 5 kg Price</label>
                       <input autocomplete="off" type="text" id="before_5_kg_price" name="before_5_kg_price" class="form-control">
@@ -363,56 +458,162 @@
                     </div>
                 </div>
 
-                <div class="row services_area_table">
-                  <table id="productTable" class="table">
-                    <thead class="thead-primary">
-                        <tr style="text-align: center;">
-                        <th colspan="2">
-                            <label>20 to 1000 kg Price (Per kg)</label>
-                        </th>
-                        <th colspan="2">
-                            <input autocomplete="off" type="text" id="service_area_20_to_1000_kg_price" name="service_area_20_to_1000_kg_price" class="form-control">
-                        </th>
-                        </tr>
-                        <tr style="text-align: center;">
-                            <th>Weight from</th>
-                            <th>Weight to</th>
-                            <th>Service Area Price</th>
-                            <th style="width: 3%;padding: .0rem !important;">
-                                <button type="button" class="btn btn-default" onclick="addRow()" id="addRowBtn" data-loading-text="Loading..."> <i class="fa fa-plus" aria-hidden="true"></i></button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="productTabletbody">
-                      
-                    </tbody>
-                  </table>
+                <div class="row" id="service_area_table">
+                <table id="productTable" class="table">
+                <thead class="thead-primary">
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="service_area_0_to_5_kg_price" name="service_area_0_to_5_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="service_area_5_to_10_kg_price" name="service_area_5_to_10_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="service_area_10_to_15_kg_price" name="service_area_10_to_15_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="service_area_15_to_20_kg_price" name="service_area_15_to_20_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="service_area_20_to_1000_kg_price" name="service_area_20_to_1000_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                </thead>
+                </table>
                 </div>
 
-                <div class="row same_day_delivery_table hide">
-                  <table id="productTable1" class="table">
-                    <thead class="thead-primary">
-                        <tr style="text-align: center;">
-                        <th colspan="2">
-                            <label>20 to 1000 kg Price (Per kg)</label>
-                        </th>
-                        <th colspan="2">
-                            <input autocomplete="off" type="text" id="same_day_delivery_20_to_1000_kg_price" name="same_day_delivery_20_to_1000_kg_price" class="form-control">
-                        </th>
-                        </tr>
-                        <tr style="text-align: center;">
-                            <th>Weight from</th>
-                            <th>Weight to</th>
-                            <th>Same Day Delivery Price</th>
-                            <th style="width: 3%;padding: .0rem !important;">
-                                <button type="button" class="btn btn-default" onclick="addRow1()" id="addRowBtn" data-loading-text="Loading..."> <i class="fa fa-plus" aria-hidden="true"></i></button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="productTabletbody1">
-                      
-                    </tbody>
-                  </table>
+
+
+                <div class="row" id="special_service_table">
+                <table id="productTable" class="table">
+                <thead class="thead-primary">
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="special_service_0_to_5_kg_price" name="special_service_0_to_5_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="special_service_5_to_10_kg_price" name="special_service_5_to_10_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="special_service_10_to_15_kg_price" name="special_service_10_to_15_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="special_service_15_to_20_kg_price" name="special_service_15_to_20_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="2">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
+                      </th>
+                      <th colspan="2">
+                          <input autocomplete="off" type="text" id="special_service_20_to_1000_kg_price" name="special_service_20_to_1000_kg_price" class="form-control">
+                      </th>
+                    </tr>
+
+                </thead>
+                </table>
+                </div>
+
+                <div id="same_day_delivery_table" class="row">
+                <table id="productTable1" class="table">
+                <thead class="thead-primary">
+                  <tr style="text-align: center;">
+                  <th colspan="2">
+                      <label>0 to 5 kg Price</label>
+                  </th>
+                  <th colspan="2">
+                      <input autocomplete="off" type="text" id="same_day_delivery_0_to_5_kg_price" name="same_day_delivery_0_to_5_kg_price" class="form-control">
+                  </th>
+                  </tr>
+
+                  <tr style="text-align: center;">
+                  <th colspan="2">
+                      <label>5.1 to 10 kg Price</label>
+                  </th>
+                  <th colspan="2">
+                      <input autocomplete="off" type="text" id="same_day_delivery_5_to_10_kg_price" name="same_day_delivery_5_to_10_kg_price" class="form-control">
+                  </th>
+                  </tr>
+
+                  <tr style="text-align: center;">
+                  <th colspan="2">
+                      <label>10.1 to 15 kg Price</label>
+                  </th>
+                  <th colspan="2">
+                      <input autocomplete="off" type="text" id="same_day_delivery_10_to_15_kg_price" name="same_day_delivery_10_to_15_kg_price" class="form-control">
+                  </th>
+                  </tr>
+
+                  <tr style="text-align: center;">
+                  <th colspan="2">
+                      <label>15.1 to 20 kg Price</label>
+                  </th>
+                  <th colspan="2">
+                      <input autocomplete="off" type="text" id="same_day_delivery_15_to_20_kg_price" name="same_day_delivery_15_to_20_kg_price" class="form-control">
+                  </th>
+                  </tr>
+
+                  <tr style="text-align: center;">
+                  <th colspan="2">
+                      <label>20.1 to 1000 kg Price (Per kg)</label>
+                  </th>
+                  <th colspan="2">
+                      <input autocomplete="off" type="text" id="same_day_delivery_20_to_1000_kg_price" name="same_day_delivery_20_to_1000_kg_price" class="form-control">
+                  </th>
+                  </tr>
+                    
+                </thead>
+                </table>
                 </div>
                 
             </div>
@@ -436,6 +637,40 @@ $('.view-profile').addClass('active');
 var add_rate;
 
 
+function addRate(id){
+    $('#modal-title').text('Add Rate Card');
+    $('#save').text('Save Change');
+    add_rate = 1;
+
+    $.ajax({
+      url : '/admin/get-rate-card-staus/'+id,
+      type: "GET",
+      dataType: "JSON",
+      success: function(data)
+      {
+        if(data.status == 1){
+          $('input[name=customer_id]').val(id);
+          $('#price_modal').modal('show');
+        }
+        else if(data.status == 2){
+          editRateCard(id);
+        }
+
+        $("#non_service_area").removeClass('current');
+        $('#same_day_delivery').removeClass('current');
+        $('#service_area').addClass('current');
+        $('#special_service').removeClass('current');
+        $('#service_area_show').show();
+        $('#service_area_table').show();
+        $('#non_service_area_table').hide();
+        $('#same_day_delivery_table').hide();
+        $('#special_service_table').hide();
+
+      }
+    });
+    
+}
+
 function editRateCard(id){
   //alert(id);
   $.ajax({
@@ -447,6 +682,16 @@ function editRateCard(id){
         $('#price_modal').modal('show');
         $('.edit_rate_card').html(data);
         add_rate = 2;
+
+        $("#non_service_area").removeClass('current');
+        $('#same_day_delivery').removeClass('current');
+        $('#service_area').addClass('current');
+        $('#special_service').removeClass('current');
+        $('#service_area_show').show();
+        $('#service_area_table').show();
+        $('#non_service_area_table').hide();
+        $('#same_day_delivery_table').hide();
+        $('#special_service_table').hide();
       }
   });
 }
@@ -454,178 +699,107 @@ function editRateCard(id){
 
 function SavePrice(){
   var formData = new FormData($('#price_form')[0]);
-  $.ajax({
-      url : '/admin/update-sales-team-process',
-      type: "POST",
-      data: formData,
-      contentType: false,
-      processData: false,
-      dataType: "JSON",
-      success: function(data)
-      {                
-          $("#price_form")[0].reset();
-          $('#price_modal').modal('hide');
-          location.reload();
-          toastr.success(data, 'Successfully Save');
-      },error: function (data) {
-          var errorData = data.responseJSON.errors;
-          $.each(errorData, function(i, obj) {
-          toastr.error(obj[0]);
-        });
-      }
-  });
+  if(add_rate == 1){
+    $.ajax({
+        url : '/admin/save-sales-team-process',
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function(data)
+        {                
+            $("#price_form")[0].reset();
+            $('#price_modal').modal('hide');
+            location.reload();
+            toastr.success(data, 'Successfully Save');
+        },error: function (data) {
+            var errorData = data.responseJSON.errors;
+            $.each(errorData, function(i, obj) {
+            toastr.error(obj[0]);
+      });
+    }
+    });
+  }
+  else{
+    $.ajax({
+        url : '/admin/update-sales-team-process',
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function(data)
+        {                
+            $("#price_form")[0].reset();
+            $('#price_modal').modal('hide');
+            location.reload();
+            toastr.success(data, 'Successfully Save');
+        },error: function (data) {
+            var errorData = data.responseJSON.errors;
+            $.each(errorData, function(i, obj) {
+            toastr.error(obj[0]);
+      });
+    }
+    });
+  }
 }
 
 
-function addRow() {
-	var tableLength = $("#productTable tbody tr").length;
 
-	var tableRow;
-	var arrayNumber;
-	var count;
-
-	if(tableLength > 0) {		
-		tableRow = $("#productTable tbody tr:last").attr('id');
-		arrayNumber = $("#productTable tbody tr:last").attr('class');
-		count = tableRow.substring(3);	
-		count = Number(count) + 1;
-		arrayNumber = Number(arrayNumber) + 1;					
-	} else {
-		count = 1;
-		arrayNumber = 0;
-	}
-
-
-var tr = '<tr value="'+count+'" id="row'+count+'">'+
-	'<td>'+
-		'<input style="text-align:right;" type="text" name="weight_from[]" id="weight_from'+count+'" autocomplete="off" class="form-control" />  '+
-	'</td> '+
-	'<td>'+
-		' <input style="text-align:right;" type="text" name="weight_to[]" id="weight_to'+count+'" autocomplete="off" class="form-control" />'+
-	'</td>'+
-	
-	'<td> '+
-		'<input style="text-align: right;" type="text" name="price[]" id="price'+count+'" autocomplete="off" class="form-control" />'+
-	'</td>'+
-	'<td align="center">'+
-		'<button id="removeProductRowBtn'+count+'" class="btn btn-default removeProductRowBtn" type="button" onclick="removeProductRow('+count+')"><i class="fa fa-minus" aria-hidden="true"></i>'+
-'</button>'+
-	'</td>'+
-'</tr>';
-
-
-if(tableLength > 0) {							
-	$("#productTable tbody tr:last").after(tr);
-} else {				
-	$("#productTable tbody").append(tr);
-}		
-
-} // /add row
-// addRow1();
-function addRow1() {
-	var tableLength = $("#productTable1 tbody tr").length;
-
-	var tableRow;
-	var arrayNumber;
-	var count;
-
-	if(tableLength > 0) {		
-		tableRow = $("#productTable1 tbody tr:last").attr('id');
-		arrayNumber = $("#productTable1 tbody tr:last").attr('class');
-		count = tableRow.substring(3);	
-		count = Number(count) + 1;
-		arrayNumber = Number(arrayNumber) + 1;					
-	} else {
-		count = 1;
-		arrayNumber = 0;
-	}
-
-
-var tr = '<tr value="'+count+'" id="rows'+count+'">'+
-	'<td>'+
-		'<input style="text-align:right;" type="text" name="weight_from1[]" id="weight_from1'+count+'" autocomplete="off" class="form-control" />  '+
-	'</td> '+
-	'<td>'+
-		' <input style="text-align:right;" type="text" name="weight_to1[]" id="weight_to1'+count+'" autocomplete="off" class="form-control" />'+
-	'</td>'+
-	
-	'<td> '+
-		'<input style="text-align: right;" type="text" name="price1[]" id="price1'+count+'" autocomplete="off" class="form-control" />'+
-	'</td>'+
-	'<td align="center">'+
-		'<button id="removeProductRowBtnn'+count+'" class="btn btn-default removeProductRowBtnn" type="button" onclick="removeProductRows('+count+')"><i class="fa fa-minus" aria-hidden="true"></i>'+
-'</button>'+
-	'</td>'+
-'</tr>';
-
-
-if(tableLength > 0) {							
-	$("#productTable1 tbody tr:last").after(tr);
-} else {				
-	$("#productTable1 tbody").append(tr);
-}		
-
-} // /add row
-
-
-function removeProductRow(row = null)
-{
-	if(confirm('Are you sure delete this row?'))
-	{
-	   	var tableProductLength = $("#productTable tbody tr").length;
-
-		if(tableProductLength > '1') {
-			$("#row"+row).remove();
-		}
-	}
-}
-function removeProductRows(row = null)
-{
-	if(confirm('Are you sure delete this row?'))
-	{
-	   	var tableProductLength = $("#productTable1 tbody tr").length;
-
-		if(tableProductLength > '1') {
-			$("#rows"+row).remove();
-		}
-	}
-}
 // $('#service_area').on("click",function(){
 //   alert("ok")
 // // })
 $('#service_area').on("click",function(){
-  $('#service_area').addClass('current');
-  $('#same_day_delivery').removeClass('current');
   $("#non_service_area").removeClass('current');
-  $(".same_day_delivery").addClass('hide');
-  $(".service_area").removeClass('hide');
-  $(".same_day_delivery_table").addClass('hide');
-  $(".services_area_table").removeClass('hide');
-  $(".non_service_area").addClass('hide');
+  $('#same_day_delivery').removeClass('current');
+  $('#service_area').addClass('current');
+  $('#special_service').removeClass('current');
+
+  $('#service_area_show').show();
+  $('#service_area_table').show();
+  $('#non_service_area_table').hide();
+  $('#same_day_delivery_table').hide();
+  $('#special_service_table').hide();
 });
 
 $('#same_day_delivery').on('click',function(){
+  $("#non_service_area").removeClass('current');
   $('#same_day_delivery').addClass('current');
   $('#service_area').removeClass('current');
-  $("#non_service_area").removeClass('current');
-  $('#remote_aera').hide('service_area');
-  $(".service_area").addClass('hide');
-  $(".same_day_delivery").removeClass('hide');
-  $(".services_area_table").addClass('hide');
-  $(".same_day_delivery_table").removeClass('hide');
-  $(".non_service_area").addClass('hide');
+  $('#special_service').removeClass('current');
+
+  $('#service_area_show').hide();
+  $('#service_area_table').hide();
+  $('#non_service_area_table').hide();
+  $('#same_day_delivery_table').show();
+  $('#special_service_table').hide();
 });
 
 $('#non_service_area').on('click',function(){
   $("#non_service_area").addClass('current');
   $('#same_day_delivery').removeClass('current');
   $('#service_area').removeClass('current');
-  $('#remote_aera').hide('service_area');
-  $(".service_area").addClass('hide');
-  $(".same_day_delivery").addClass('hide');
-  $(".services_area_table").addClass('hide');
-  $(".same_day_delivery_table").addClass('hide');
-  $(".non_service_area").removeClass('hide');
+  $('#special_service').removeClass('current');
+
+  $('#service_area_show').hide();
+  $('#service_area_table').hide();
+  $('#non_service_area_table').show();
+  $('#same_day_delivery_table').hide();
+  $('#special_service_table').hide();
+});
+
+$('#special_service').on('click',function(){
+  $("#non_service_area").removeClass('current');
+  $('#same_day_delivery').removeClass('current');
+  $('#service_area').removeClass('current');
+  $('#special_service').addClass('current');
+
+  $('#service_area_show').hide();
+  $('#service_area_table').hide();
+  $('#non_service_area_table').hide();
+  $('#same_day_delivery_table').hide();
+  $('#special_service_table').show();
 });
 </script>
 @endsection

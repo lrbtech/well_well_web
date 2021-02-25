@@ -50,6 +50,17 @@ class ShipmentController extends Controller
         return view('admin.new_shipment',compact('drop_point','country','city','area','package_category','agent', 'language'));
     }
 
+    public function specialShipment(){
+        $drop_point = drop_point::all();
+        $country = country::where('status',0)->get();
+        $agent = agent::all();
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
+        $language = language::all();
+        return view('admin.manual_shipment',compact('drop_point','country','city','area','package_category','agent', 'language'));
+    }
+
     public function viewShipment($id){
         $country = country::all();
         $agent = agent::all();
@@ -175,6 +186,8 @@ class ShipmentController extends Controller
         $shipment->from_station_id = $from_station->station_id;
         $shipment->to_station_id = $to_station->station_id;
         $shipment->shipment_mode = $request->shipment_mode;
+        $shipment->special_service = $request->special_service;
+        $shipment->special_service_description = $request->special_service_description;
         $shipment->return_package_cost = $request->return_package_cost;
         $shipment->special_cod_enable = $request->special_cod_enable;
         $shipment->special_cod = $request->special_cod;
@@ -437,7 +450,8 @@ class ShipmentController extends Controller
         
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
-                return '<td>#'.$shipment->order_id.'</td>';
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
             })
             ->addColumn('shipment_time', function ($shipment) {
                 return '<td>'.date('h:i a',strtotime($shipment->shipment_from_time)).' to '.$shipment->shipment_to_time.'</td>';
@@ -452,11 +466,17 @@ class ShipmentController extends Controller
                 }
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -606,14 +626,12 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 10){
                     return '<td>
-                    <p>Cancel Request</p>
+                    <p>Canceled</p>
                     <p>' . $shipment->cancel_remark . '</p>
                     </td>';
                 }
                 elseif($shipment->status == 11){
-                    return '
-                    <p>Canceled</p>
-                    ';
+                    return '<p>Shipment Hold</p>';
                 }
             })
             ->addColumn('action', function ($shipment) {
@@ -672,51 +690,72 @@ class ShipmentController extends Controller
     }
 
 
-    public function getAreaPrice($weight,$to_address,$shipment_mode,$user_id){
+    public function getAreaPrice($weight,$to_address,$shipment_mode,$user_id,$special_service){
         $rate = add_rate::where('user_id',$user_id)->first();
         $address = manage_address::find($to_address);
         $area = city::find($address->area_id);
         $data =array();
 
-        $rate_item = add_rate_item::where('user_id',$user_id)->where('status',$shipment_mode)->get();
+        //$rate_item = add_rate_item::where('user_id',$user_id)->where('status',$shipment_mode)->get();
         $price=0;
         
         if($area->remote_area == '0'){
-            if(!empty($rate_item)){
-                foreach($rate_item as $row){
-                    if($row->weight_from <= $weight && $row->weight_to >= $weight ){
-                        $price = $row->price;
-                    }
-                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '1'){
-                        $price = $weight * $rate->service_area_20_to_1000_kg_price;
-                    }
-                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '2'){
-                        $price = $weight * $rate->same_day_delivery_20_to_1000_kg_price;
-                    }
+            if($special_service == '1'){
+                if('0' <= $weight && '5' >= $weight){
+                    $price = $rate->special_service_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $weight && '10' >= $weight){
+                    $price = $rate->special_service_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $weight && '15' >= $weight){
+                    $price = $rate->special_service_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $weight && '20' >= $weight){
+                    $price = $rate->special_service_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $weight && '99999' >= $weight){
+                    $price = (($weight - 20) * $rate->special_service_20_to_1000_kg_price) + $rate->special_service_15_to_20_kg_price; 
+                }
+            }
+            else{
+                if('0' <= $weight && '5' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $weight && '10' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $weight && '15' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $weight && '20' >= $weight && $shipment_mode == '1'){
+                    $price = $rate->service_area_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $weight && '99999' >= $weight && $shipment_mode == '1'){
+                    $price = (($weight - 20) * $rate->service_area_20_to_1000_kg_price) + $rate->service_area_15_to_20_kg_price; 
+                }
+                elseif('0' <= $weight && '5' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $weight && '10' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $weight && '15' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $weight && '10' >= $weight && $shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $weight && '999999' >= $weight && $shipment_mode == '2'){
+                    $price = (($weight - 20) * $rate->same_day_delivery_20_to_1000_kg_price) + $rate->same_day_delivery_15_to_20_kg_price;
                 }
             }
         }
         else{
-            if(!empty($rate_item)){
-                foreach($rate_item as $row){
-                    if($row->weight_from <= $weight && $row->weight_to >= $weight ){
-                        $price = $row->price;
-                    }
-                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '1'){
-                        $price = $weight * $rate->service_area_20_to_1000_kg_price;
-                    }
-                    elseif('20.1' <= $weight && '9999999' >= $weight && $shipment_mode == '2'){
-                        $price = $weight * $rate->same_day_delivery_20_to_1000_kg_price;
-                    }
-                }
+            if('0' <= $weight && '5' >= $weight){
+                $price = $rate->before_5_kg_price;
             }
             else{
-                if('0' <= $weight && '5' >= $weight){
-                    $price = $rate->before_5_kg_price;
-                }
-                else{
-                    $price = $weight * $rate->above_5_kg_price;
-                }
+                $price = (($weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price;
             }
         }
         

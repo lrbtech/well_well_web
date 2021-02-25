@@ -30,6 +30,8 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
+                <form action="/admin/excel-revenue-report" method="post" enctype="multipart/form-data">
+                  {{ csrf_field() }}
                   <div class="card-header">
                     <div class="row">
                         <div class="form-group col-md-4">
@@ -43,16 +45,20 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}</button>
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}</button> <br>
+                            <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
+                            </button>
                         </div>
                     </div>
                   </div>
+                  </form>
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>Order ID</th>
                             <th>{{$language[119][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[64][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[66][Auth::guard('admin')->user()->lang]}}</th>
@@ -100,6 +106,7 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'order_id', name: 'order_id' },
         { data: 'total_weight', name: 'total_weight' },
         { data: 'shipment_price', name: 'shipment_price' },
@@ -131,6 +138,29 @@ $('#search').click(function(){
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });
+
+
+// $('#downloadexcel').click(function(){
+//   var formData = new FormData($('#form')[0]);
+//     $.ajax({
+//         url : '/admin/excel-revenue-report',
+//         type: "POST",
+//         data: formData,
+//         contentType: false,
+//         processData: false,
+//         dataType: "JSON",
+//         success: function(data)
+//         {                
+//             $("#form")[0].reset();
+//             toastr.success(data, 'Successfully Export');
+//         },error: function (data) {
+//             var errorData = data.responseJSON.errors;
+//             $.each(errorData, function(i, obj) {
+//             toastr.error(obj[0]);
+//       });
+//     }
+//     });
+// });
 
 </script>
 @endsection

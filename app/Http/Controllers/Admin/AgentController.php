@@ -8,6 +8,7 @@ use App\Models\agent;
 use App\Models\city;
 use App\Models\language;
 use Hash;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class AgentController extends Controller
 {
@@ -37,8 +38,18 @@ class AgentController extends Controller
             'emirates_id_file.max' => 'Sorry! Maximum allowed size for an image is 1MB',
         ]);
 
+        
+        $config = [
+            'table' => 'agents',
+            'field' => 'agent_id',
+            'length' => 4,
+            'prefix' => '1'
+        ];
+
+        $agent_id = IdGenerator::generate($config);
+
         $agent = new agent;
-        $agent->agent_id = $request->agent_id;
+        $agent->agent_id = $agent_id;
         $agent->name = $request->name;
         $agent->email = $request->email;
         $agent->mobile = $request->mobile;
@@ -137,7 +148,7 @@ class AgentController extends Controller
         
         $agent = agent::find($request->id);
         $agent->name = $request->name;
-        $agent->agent_id = $request->agent_id;
+        //$agent->agent_id = $request->agent_id;
         $agent->email = $request->email;
         $agent->mobile = $request->mobile;
         $agent->dob = $request->dob;

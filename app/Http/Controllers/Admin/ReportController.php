@@ -26,6 +26,10 @@ use Auth;
 use DB;
 use Mail;
 use PDF;
+use App\Exports\ShipmentExport;
+use App\Exports\RevenueExport;
+use App\Exports\AgentExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -43,8 +47,25 @@ class ReportController extends Controller
         return view('admin.shipment_report',compact('agent','language'));
     }
 
+    public function AgentReport(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $agent = agent::all();
+        }
+        else{
+            $q =DB::table('agents as a');
+            $q->join('cities as c','a.city_id','=','c.id');
+            $q->where('c.station_id', Auth::guard('admin')->user()->station_id);
+            $q->select('a.*');
+            $agent = $q->get();
+        }
+        $language = language::all();
+        return view('admin.agent_report',compact('agent','language'));
+    }
 
-    public function getShipmentReport($status,$user_type){
+
+    public function getShipmentReport($status,$user_type,$fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
         
         $i =DB::table('shipments');
         if ( $user_type != 3 )
@@ -57,9 +78,13 @@ class ReportController extends Controller
                 $i->where('shipments.sender_id', 0);
             }
         }
-        if ( $status != 9 )
+        if ( $status != 20 )
         {
             $i->where('shipments.status', $status);
+        }
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
         }
 
         $i->orderBy('shipments.id','DESC');
@@ -67,7 +92,8 @@ class ReportController extends Controller
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
-                return '<td>#'.$shipment->order_id.'</td>';
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
                 if ($shipment->shipment_mode == 2) {
@@ -78,7 +104,7 @@ class ReportController extends Controller
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
-                <p>' . date("d-m-Y",strtotime($shipment->shipment_date)) . '</p>
+                <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
                 </td>';
             })
 
@@ -121,35 +147,111 @@ class ReportController extends Controller
             })
             ->addColumn('status', function ($shipment) {
                 if($shipment->status == 0){
-                    return 'New Request';
+                    return 'Ready for Pickup';
                 }
                 elseif($shipment->status == 1){
-                    return 'Approved';
+                    $agent = agent::find($shipment->pickup_agent_id);
+                    if(!empty($agent)){
+                        return 'Schedule for Pickup '.$agent->agent_id;
+                    }
+                    else{
+                        return 'Schedule for Pickup';
+                    }
                 }
                 elseif($shipment->status == 2){
-                    return 'Package Collected';
+                    $agent = agent::find($shipment->pickup_agent_id);
+                    if(!empty($agent)){
+                        return 'Package Collected '.$agent->agent_id;
+                    }
+                    else{
+                        return 'Package Collected';
+                    }
                 }
                 elseif($shipment->status == 3){
-                    return 'Exception';
                     return '<td>
-                    <p>Exception</p>
+                    <p>Pickup Exception</p>
+                    <p>' . $shipment->exception_category . '</p>
                     <p>' . $shipment->exception_remark . '</p>
                     </td>';
                 }
                 elseif($shipment->status == 4){
-                    return 'Received Station Hub';
+                    $from_station = station::find($shipment->from_station_id);
+                    $agent = agent::find($shipment->transit_in_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Transit In '.$from_station->station.'</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Transit In '.$from_station->station.'</p>'
+                       ;
+                    }
                 }
                 elseif($shipment->status == 5){
                     return 'Assign Agent to Transit Out (Hub)';
                 }
                 elseif($shipment->status == 6){
-                    return 'Other Transit in Received (Hub)';
+                    $to_station = station::find($shipment->to_station_id);
+                    $agent = agent::find($shipment->transit_out_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Transit Out '.$to_station->station.'</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Transit Out '.$to_station->station.'</p>'
+                       ;
+                    }
                 }
                 elseif($shipment->status == 7){
-                    return 'Assign Agent to Delivery';
+                    $agent = agent::find($shipment->delivery_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>In the Van for Delivery</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>In the Van for Delivery</p>'
+                       ;
+                    }
                 }
                 elseif($shipment->status == 8){
-                    return 'Shipment delivered';
+                    $agent = agent::find($shipment->delivery_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Shipment delivered</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Shipment delivered</p>'
+                       ;
+                    }
+                }
+                elseif($shipment->status == 9){
+                    return '<td>
+                    <p>Delivery Exception</p>
+                    <p>' . $shipment->delivery_exception_category . '</p>
+                    <p>' . $shipment->delivery_exception_remark . '</p>
+                    </td>';
+                }
+                elseif($shipment->status == 10){
+                    return '<td>
+                    <p>Canceled</p>
+                    <p>' . $shipment->cancel_remark . '</p>
+                    </td>';
+                }
+                elseif($shipment->status == 11){
+                    return '
+                    <p>Shipemnt Hold</p>
+                    ';
                 }
             })
             ->addColumn('action', function ($shipment) {
@@ -166,9 +268,31 @@ class ReportController extends Controller
             })
             
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status'])
+        ->addIndexColumn()
         ->make(true);
-
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+    public function excelShipmentReport(Request $request){
+        // $request->validate([
+        //     'from_date'=>'required',
+        //     'to_date'=>'required',
+        // ]);
+        $fdate = date('Y-m-d', strtotime($request->from_date));
+        $tdate = date('Y-m-d', strtotime($request->to_date));
+        $status = $request->shipment_status;
+        $user_type = $request->user_type;
+        
+        return Excel::download(new ShipmentExport($status,$user_type,$fdate,$tdate), 'shipmentreport.xlsx');
+        //return (new BookingExport($fdate,$tdate))->download('report.xlsx');
+    }
+
+    public function excelRevenueReport(Request $request){
+        $fdate = date('Y-m-d', strtotime($request->from_date));
+        $tdate = date('Y-m-d', strtotime($request->to_date));
+        
+        return Excel::download(new RevenueExport($fdate,$tdate), 'revenuereport.xlsx');
+        //return (new BookingExport($fdate,$tdate))->download('report.xlsx');
     }
 
 
@@ -237,9 +361,231 @@ class ReportController extends Controller
             })
             
         ->rawColumns(['order_id','postal_charge', 'shipment_price', 'total_weight','total','vat','insurance','cod_amount'])
+        ->addIndexColumn()
         ->make(true);
 
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+
+
+    public function getAgentReport($agent_id,$fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
+        
+        $i =DB::table('shipments');
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+        }
+        if ( $agent_id != 'agent' )
+        {
+            $i->where('shipments.pickup_agent_id', $agent_id);
+            $i->orWhere('shipments.package_collect_agent_id', $agent_id);
+            $i->orWhere('shipments.pickup_exception_id', $agent_id);
+            $i->orWhere('shipments.package_collect_agent_id', $agent_id);
+            $i->orWhere('shipments.transit_in_id', $agent_id);
+            $i->orWhere('shipments.revenue_exception_id', $agent_id);
+            $i->orWhere('shipments.transit_out_id', $agent_id);
+            $i->orWhere('shipments.package_at_station_id', $agent_id);
+            $i->orWhere('shipments.van_scan_id', $agent_id);
+            $i->orWhere('shipments.delivery_agent_id', $agent_id);
+            $i->orWhere('shipments.delivery_exception_id', $agent_id);
+        }
+
+        $i->orderBy('shipments.id','DESC');
+        $shipment = $i->get();
+
+        return Datatables::of($shipment)
+            ->addColumn('order_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('shipment_mode', function ($shipment) {
+                if ($shipment->shipment_mode == 2) {
+                    return '<td>Express</td>';
+                } else {
+                    return '<td>Standard</td>';
+                }
+            })
+            ->addColumn('shipment_date', function ($shipment) {
+                return '<td>
+                <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
+                </td>';
+            })
+
+            ->addColumn('from_address', function ($shipment) {
+                $from_address = manage_address::find($shipment->from_address);
+                $from_city = city::find($from_address->city_id);
+                $from_area = city::find($from_address->area_id);
+                $from_station = station::find($shipment->from_station_id);
+                $user = User::find($shipment->sender_id);
+                if(!empty($from_area)){
+                return '<td>
+                <p>' . $from_area->city . '</p>
+                <p>' . $from_city->city . '</p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('to_address', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $to_station = station::find($shipment->to_station_id);
+                if(!empty($to_area)){
+                return '<td>
+                <p>' . $to_area->city . '</p>
+                <p>' . $to_city->city . '</p>
+                <p><b>Station :' . $to_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('total', function ($shipment) {
+                return '<td>
+                <p>AED ' . $shipment->total . '</p>
+                </td>';
+            })
+            ->addColumn('status', function ($shipment) {
+                if($shipment->status == 0){
+                    return 'Ready for Pickup';
+                }
+                elseif($shipment->status == 1){
+                    $agent = agent::find($shipment->pickup_agent_id);
+                    if(!empty($agent)){
+                        return 'Schedule for Pickup '.$agent->agent_id;
+                    }
+                    else{
+                        return 'Schedule for Pickup';
+                    }
+                }
+                elseif($shipment->status == 2){
+                    $agent = agent::find($shipment->pickup_agent_id);
+                    if(!empty($agent)){
+                        return 'Package Collected '.$agent->agent_id;
+                    }
+                    else{
+                        return 'Package Collected';
+                    }
+                }
+                elseif($shipment->status == 3){
+                    return '<td>
+                    <p>Pickup Exception</p>
+                    <p>' . $shipment->exception_category . '</p>
+                    <p>' . $shipment->exception_remark . '</p>
+                    </td>';
+                }
+                elseif($shipment->status == 4){
+                    $from_station = station::find($shipment->from_station_id);
+                    $agent = agent::find($shipment->transit_in_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Transit In '.$from_station->station.'</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Transit In '.$from_station->station.'</p>'
+                       ;
+                    }
+                }
+                elseif($shipment->status == 5){
+                    return 'Assign Agent to Transit Out (Hub)';
+                }
+                elseif($shipment->status == 6){
+                    $to_station = station::find($shipment->to_station_id);
+                    $agent = agent::find($shipment->transit_out_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Transit Out '.$to_station->station.'</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Transit Out '.$to_station->station.'</p>'
+                       ;
+                    }
+                }
+                elseif($shipment->status == 7){
+                    $agent = agent::find($shipment->delivery_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>In the Van for Delivery</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>In the Van for Delivery</p>'
+                       ;
+                    }
+                }
+                elseif($shipment->status == 8){
+                    $agent = agent::find($shipment->delivery_agent_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Shipment delivered</p>
+                        <p>Agent ID '.$agent->agent_id.'</p>'
+                       ;
+                    }
+                    else{
+                        return '
+                        <p>Shipment delivered</p>'
+                       ;
+                    }
+                }
+                elseif($shipment->status == 9){
+                    return '<td>
+                    <p>Delivery Exception</p>
+                    <p>' . $shipment->delivery_exception_category . '</p>
+                    <p>' . $shipment->delivery_exception_remark . '</p>
+                    </td>';
+                }
+                elseif($shipment->status == 10){
+                    return '<td>
+                    <p>Canceled</p>
+                    <p>' . $shipment->cancel_remark . '</p>
+                    </td>';
+                }
+                elseif($shipment->status == 11){
+                    return '
+                    <p>Shipemnt Hold</p>
+                    ';
+                }
+            })
+            ->addColumn('action', function ($shipment) {
+                if($shipment->status == 8){
+                    return '<td>
+                    <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
+                    </td>';
+                }
+                else{
+                    return '<td>
+                    <p><a onclick="PrintLabel('.$shipment->id.')" href="#">Print</a></p>
+                    </td>';
+                }
+            })
+            
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status'])
+        ->addIndexColumn()
+        ->make(true);
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+    public function excelAgentReport(Request $request){
+        $fdate = date('Y-m-d', strtotime($request->from_date));
+        $tdate = date('Y-m-d', strtotime($request->to_date));
+        $agent_id = $request->agent_id;
+        
+        return Excel::download(new AgentExport($agent_id,$fdate,$tdate), 'agentreport.xlsx');
+        //return (new BookingExport($fdate,$tdate))->download('report.xlsx');
     }
 
 

@@ -131,7 +131,8 @@
         </tr>
         <tr>
             <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
-                <table class="table card-table table-vcenter text-nowrap">
+            @if(!empty($rate))
+              <table class="table card-table table-vcenter text-nowrap">
                   <thead>
                     <tr>
                       <th>Insurance Percentage</th>
@@ -176,68 +177,159 @@
                     </tr>
                     <tr style="text-align: center;">
                       <th colspan="1">
-                          <label>20 to 1000 kg Price (Per kg)</label>
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_0_to_5_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_5_to_10_kg_price}} AED
+                      </th>
+                    </tr>
+                    
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_10_to_15_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->service_area_15_to_20_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
                       </th>
                       <th colspan="2">
                           {{$rate->service_area_20_to_1000_kg_price}} AED
                       </th>
                     </tr>
-                    <tr>
-                      <th>Weight From</th>
-                      <th>Weight To</th>
-                      <th>Service Area Price</th>
-                    </tr>
-                    
                   </thead>
-                  <tbody>
-                  @if(!empty($rate_item))
-                  @foreach($rate_item as $row)
-                  @if($row->status == 1)
-                    <tr>
-                      <td>{{$row->weight_from}}</td>
-                      <td>{{$row->weight_to}}</td>
-                      <td>{{$row->price}} AED</td>
-                    </tr>
-                  @endif
-                  @endforeach
-                  @endif
-                  </tbody>
                 </table>
+
                 <table class="table card-table table-vcenter text-nowrap">
                   <thead>
                     <tr style="text-align: center;">
                       <th colspan="3">
-                          <label>Same Day Delivery Area Price Section</label>
+                          <label>Same Day Delivery Price Section</label>
                       </th>
                     </tr>
                     <tr style="text-align: center;">
                       <th colspan="1">
-                          <label>20 to 1000 kg Price (Per kg)</label>
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_0_to_5_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_5_to_10_kg_price}} AED
+                      </th>
+                    </tr>
+                    
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_10_to_15_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->same_day_delivery_15_to_20_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
                       </th>
                       <th colspan="2">
                           {{$rate->same_day_delivery_20_to_1000_kg_price}} AED
                       </th>
                     </tr>
-                    <tr>
-                      <th>Weight From</th>
-                      <th>Weight To</th>
-                      <th>Same Day Delivery Price</th>
+                  </thead>
+                </table>
+
+                <table class="table card-table table-vcenter text-nowrap">
+                  <thead>
+                    <tr style="text-align: center;">
+                      <th colspan="3">
+                          <label>Special Service Area Price Section</label>
+                      </th>
+                    </tr>
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>0 to 5 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_0_to_5_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>5.1 to 10 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_5_to_10_kg_price}} AED
+                      </th>
+                    </tr>
+                    
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>10.1 to 15 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_10_to_15_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>15.1 to 20 kg Price</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_15_to_20_kg_price}} AED
+                      </th>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                      <th colspan="1">
+                          <label>20.1 to 1000 kg Price (Per kg)</label>
+                      </th>
+                      <th colspan="2">
+                          {{$rate->special_service_20_to_1000_kg_price}} AED
+                      </th>
                     </tr>
                   </thead>
-                  <tbody>
-                  @if(!empty($rate_item))
-                  @foreach($rate_item as $row)
-                  @if($row->status == 2)
-                    <tr>
-                      <td>{{$row->weight_from}}</td>
-                      <td>{{$row->weight_to}}</td>
-                      <td>{{$row->price}} AED</td>
-                    </tr>
-                  @endif
-                  @endforeach
-                  @endif
-                  </tbody>
                 </table>
+                
                 <table class="table card-table table-vcenter text-nowrap">
                   <thead>
                     <tr style="text-align: center;">
@@ -259,6 +351,7 @@
                   <tbody>
                   </tbody>
                 </table>
+                @endif
             </td>
         </tr>
         <tr>

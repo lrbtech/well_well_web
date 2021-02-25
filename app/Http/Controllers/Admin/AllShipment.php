@@ -142,6 +142,12 @@ class AllShipment extends Controller
         return view('admin.cancel_request',compact('agent','language'));
     }
 
+    public function HoldRequest(){
+        $agent = agent::all();
+        $language = language::all();
+        return view('admin.hold_request',compact('agent','language'));
+    }
+
     public function TodayPickupRequest(){
         if(Auth::guard('admin')->user()->station_id == '0'){
             $agent = agent::all();
@@ -457,11 +463,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->shipment_from_time)).' to '.$shipment->shipment_to_time.'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -558,11 +570,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->shipment_from_time)).' to '.$shipment->shipment_to_time.'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -645,11 +663,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->pickup_assign_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -759,11 +783,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->exception_assign_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -860,11 +890,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->package_collect_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -970,11 +1006,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->transit_in_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -1093,11 +1135,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->transit_out_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -1201,11 +1249,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->van_scan_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -1310,11 +1364,17 @@ class AllShipment extends Controller
                 </td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -1415,11 +1475,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->delivery_exception_assign_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -1514,11 +1580,17 @@ class AllShipment extends Controller
                 return '<td>'.date('h:i a',strtotime($shipment->cancel_request_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
                 if ($shipment->shipment_mode == 2) {
-                    return '<td>Express</td>';
+                    $special_service.='<p>Express</p>';
                 } else {
-                    return '<td>Standard</td>';
+                    $special_service.='<p>Standard</p>';
                 }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
@@ -1578,6 +1650,111 @@ class AllShipment extends Controller
                 //     <p>Canceled</p>
                 //     ';
                 // }
+            })
+            ->addColumn('action', function ($shipment) {
+                $output='';
+                // if($shipment->status == 10){
+                //     $output.='<a onclick="ShipmentCancelled('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>';
+                // }
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        '.$output.'
+                   </div>
+                </td>';
+            })
+            
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->addIndexColumn()
+        ->make(true);
+
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+
+    public function getHoldRequest(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $shipment = shipment::where('status',11)->orderBy('id', 'DESC')->get();
+        }
+        else{
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',11)->orderBy('id', 'DESC')->get();
+        }
+
+        return Datatables::of($shipment)
+            ->addColumn('order_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('shipment_time', function ($shipment) {
+                return '<td>'.date('h:i a',strtotime($shipment->cancel_request_time)).'</td>';
+            })
+            ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
+                if ($shipment->shipment_mode == 2) {
+                    $special_service.='<p>Express</p>';
+                } else {
+                    $special_service.='<p>Standard</p>';
+                }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
+            })
+            ->addColumn('shipment_date', function ($shipment) {
+                return '<td>
+                <p>' . date("d-m-Y",strtotime($shipment->cancel_request_date)) . '</p>
+                </td>';
+            })
+            ->addColumn('from_address', function ($shipment) {
+                $from_address = manage_address::find($shipment->from_address);
+                $from_city = city::find($from_address->city_id);
+                $from_area = city::find($from_address->area_id);
+                $from_station = station::find($shipment->from_station_id);
+                if(!empty($from_area)){
+                return '<td>
+                <p>' . $from_area->city . '</p>
+                <p>' . $from_city->city . '</p>
+                <p><b>Station :' . $from_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('to_address', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $to_station = station::find($shipment->to_station_id);
+                if(!empty($to_area)){
+                return '<td>
+                <p>' . $to_area->city . '</p>
+                <p>' . $to_city->city . '</p>
+                <p><b>Station :' . $to_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('agent', function ($shipment) {
+                $agent = agent::find($shipment->agent_id);
+                if(!empty($agent)){
+                return '<td>
+                <p>' . $agent->name . '</p>
+                <p>' . $agent->email . '</p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('status', function ($shipment) {
+                if($shipment->status == 10){
+                    return '<td><p>Hold Shipment</p></td>';
+                }
             })
             ->addColumn('action', function ($shipment) {
                 $output='';

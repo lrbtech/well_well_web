@@ -9,6 +9,7 @@ use App\Models\role;
 use App\Models\language;
 use App\Models\station;
 use Hash;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class UserController extends Controller
 {
@@ -30,8 +31,17 @@ class UserController extends Controller
             'image.required' => 'Item Image Field is Required',
         ]);
 
+        $config = [
+            'table' => 'admins',
+            'field' => 'employee_id',
+            'length' => 4,
+            'prefix' => '1'
+        ];
+
+        $employee_id = IdGenerator::generate($config);
+
         $admin = new admin;
-        $admin->employee_id = $request->employee_id;
+        $admin->employee_id = $employee_id;
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->mobile = $request->mobile;
@@ -126,8 +136,8 @@ class UserController extends Controller
             'profile_image.max' => 'Sorry! Maximum allowed size for an image is 1MB',
             //'image.required' => 'Item Image Field is Required',
         ]);
+
         $admin = admin::find($request->id);
-        $admin->employee_id = $request->employee_id;
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->mobile = $request->mobile;

@@ -1,6 +1,6 @@
 @extends('admin.layouts')
 @section('extra-css')
-<link rsel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
+<link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
 @endsection
 @section('section')        
@@ -42,7 +42,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>User Id</th>
+                            <th>Tracking ID</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
@@ -67,6 +67,7 @@
           </div>
           <!-- Container-fluid Ends-->
         </div>
+
 
 <!-- Bootstrap Modal -->
 <div class="modal fade" id="assign-agent-modal" tabindex="-1" role="dialog" aria-labelledby="assign-agent-modal" aria-hidden="true">
@@ -171,16 +172,15 @@
         </div>
     </div>
 </div>
-<!-- /Bootstrap Modal --> 
+<!-- /Bootstrap Modal -->  
 
 @endsection
 @section('extra-js')
- 
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
-  <script>
+  <script type="text/javascript">
 $('.shipment').addClass('active');
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
@@ -193,8 +193,8 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
-        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        { data: 'user_id', name: 'user_id' },
+        { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_time', name: 'shipment_time' },
         { data: 'shipment_mode', name: 'shipment_mode' },
@@ -327,11 +327,10 @@ function updateAssignAgentDelivery(){
             var errorData = data.responseJSON.errors;
             $.each(errorData, function(i, obj) {
             toastr.error(obj[0]);
-      });
-    }
+             });
+        }
     });
 }
+
 </script>
-
-
 @endsection

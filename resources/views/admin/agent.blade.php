@@ -113,7 +113,7 @@
         <div class="row">
           <div class="form-group col-md-6">
               <label class="col-form-label">{{$language[236][Auth::guard('admin')->user()->lang]}}</label>
-              <input autocomplete="off" type="text" id="agent_id" name="agent_id" class="form-control">
+              <input readonly autocomplete="off" type="text" id="agent_id" name="agent_id" class="form-control">
           </div>
 
           <div class="form-group col-md-6">

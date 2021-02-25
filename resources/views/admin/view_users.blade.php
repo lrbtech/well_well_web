@@ -103,7 +103,7 @@
         <div class="row">
           <div class="form-group col-md-6">
             <label class="col-form-label">Employee ID</label>
-            <input autocomplete="off" type="text" id="employee_id" name="employee_id" class="form-control">
+            <input readonly autocomplete="off" type="text" id="employee_id" name="employee_id" class="form-control">
           </div>
 
           <div class="form-group col-md-6">

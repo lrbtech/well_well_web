@@ -30,7 +30,7 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
-                  <form action="/admin/excel-shipment-report" method="post" enctype="multipart/form-data">
+                  <form action="/admin/excel-agent-report" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="card-header">
                     <div class="row">
@@ -43,35 +43,17 @@
                             <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
-                        <div class="form-group col-md-2">
-                            <label>{{$language[100][Auth::guard('admin')->user()->lang]}}</label>
-                            <select id="shipment_status" name="shipment_status" class="form-control">
-                              <option value="20">All Data</option>
-                              <option value="0">New Request</option>
-                              <option value="1">Pickup Assigned</option>
-                              <option value="2">Package Collected</option>
-                              <option value="3">Pickup Exception</option>
-                              <option value="4">Transit In</option>
-                              <option value="6">Transit Out</option>
-                              <option value="7">In the Van for Delivery</option>
-                              <option value="8">Shipment delivered</option>
-                              <option value="9">Delivery Exception</option>
-                              <option value="10">Cancel Shipment</option>
-                              <option value="11">Shipment Hold</option>
-                            </select>
+                        <div class="form-group col-md-3">
+                            <label>{{$language[75][Auth::guard('admin')->user()->lang]}}</label>
+                          <select id="agent_id" name="agent_id" class="form-control">
+                            <option value="agent">{{$language[76][Auth::guard('admin')->user()->lang]}}</option>
+                            @foreach($agent as $row)
+                            <option value="{{$row->id}}">{{$row->name}}</option>
+                            @endforeach
+                          </select>
                         </div>
 
-                        <div class="form-group col-md-2">
-                            <label>{{$language[110][Auth::guard('admin')->user()->lang]}}</label>
-                            <select id="user_type" name="user_type" class="form-control">
-                              <option value="3">{{$language[101][Auth::guard('admin')->user()->lang]}}</option>
-                              <option value="0">{{$language[111][Auth::guard('admin')->user()->lang]}}</option>
-                              <option value="1">{{$language[112][Auth::guard('admin')->user()->lang]}}</option>
-                              <option value="2">{{$language[113][Auth::guard('admin')->user()->lang]}}</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
                             </button> <br>
                             <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
@@ -122,14 +104,14 @@
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
   <script type="text/javascript">
-$('.shipment').addClass('active');
+$('.agent-report').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-shipment-report/20/3/1/1",
+        "url": "/admin/get-agent-report/agent/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -171,9 +153,8 @@ $('#search').click(function(){
     }else{
       tdate = '1';
     }
-    var shipment_status = $('#shipment_status').val();
-    var user_type = $('#user_type').val();
-    var new_url = '/admin/get-shipment-report/'+shipment_status+'/'+user_type+'/'+fdate+'/'+tdate;
+    var agent_id = $('#agent_id').val();
+    var new_url = '/admin/get-agent-report/'+agent_id+'/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });

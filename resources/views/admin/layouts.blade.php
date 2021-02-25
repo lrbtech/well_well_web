@@ -436,6 +436,8 @@
                   <li class="new-shipment"><a class="new-shipment" href="/admin/new-shipment">{{$language[173][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
+                  <li class="special-shipment"><a class="special-shipment" href="/admin/special-shipment">Create Special Shipment</a></li>
+
                   @if(Auth::guard('admin')->user()->all_shipment == 'on')
                   <li class="shipment"><a class="shipment" href="/admin/shipment">{{$language[174][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
@@ -447,6 +449,8 @@
                   @if(Auth::guard('admin')->user()->cancel_request == 'on')
                   <li class="cancel-request"><a class="cancel-request" href="/admin/cancel-request">{{$language[176][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
+
+                  <li class="hold-request"><a class="hold-request" href="/admin/hold-request">Shipment hold</a></li> 
                 </ul>
               </li>
               @endif
@@ -554,6 +558,7 @@
                   @if(Auth::guard('admin')->user()->revenue_report == 'on')
                    <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">{{$language[193][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
+                  <li class="agent-report"><a class="agent-report" href="/admin/agent-report">Agent Report</a></li> 
                 </ul>
               </li>
               @endif
