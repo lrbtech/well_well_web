@@ -24,6 +24,7 @@ use App\Models\temp_shipment;
 use App\Models\temp_shipment_package;
 use App\Models\system_logs;
 use App\Models\weeks;
+use App\Models\shipment_notes;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -217,6 +218,27 @@ class ShipmentController extends Controller
         return view('user.shipment',compact('language'));
     }
 
+    public function viewShipment($id){
+        $country = country::all();
+        $agent = agent::all();
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+
+        $shipment =shipment::find($id);
+        $user =User::find($shipment->sender_id);
+        $shipment_package = shipment_package::where('shipment_id',$id)->get();
+        $shipment_notes = shipment_notes::where('shipment_id',$id)->get();
+
+        $system_logs = system_logs::where('_id',$id)->where('category','shipment')->get();
+
+        $from_address =manage_address::find($shipment->from_address);
+        $to_address =manage_address::find($shipment->to_address);
+        $language = language::all();
+
+        return view('user.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs'));
+    }
+
     public function getShipment(){
         $shipment = shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
 
@@ -275,17 +297,18 @@ class ShipmentController extends Controller
                 }
             })
             ->addColumn('status', function ($shipment) {
+                $output='';
                 if($shipment->status == 0){
-                    return 'Scheduled for Pickup';
+                    $output.='Scheduled for Pickup';
                 }
                 elseif($shipment->status == 1){
-                    return 'Pickup Assigned';
+                    $output.='Pickup Assigned';
                 }
                 elseif($shipment->status == 2){
-                    return 'Package Collected';
+                    $output.='Package Collected';
                 }
                 elseif($shipment->status == 3){
-                    return '
+                    $output.='
                     <p>Pickup Exception</p>
                     <p>' . $shipment->exception_category . '</p>
                     <p>' . $shipment->exception_remark . '</p>
@@ -293,55 +316,57 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 4){
                     $from_station = station::find($shipment->from_station_id);
-                    return 'Transit In '.$from_station->station;
+                    $output.='Transit In '.$from_station->station;
                 }
                 elseif($shipment->status == 5){
-                    return 'Assign Agent to Transit Out (Hub)';
+                    $output.='Assign Agent to Transit Out (Hub)';
                 }
                 elseif($shipment->status == 6){
                     $to_station = station::find($shipment->to_station_id);
-                    return 'Transit Out '.$to_station->station;
+                    $output.='Transit Out '.$to_station->station;
                 }
                 elseif($shipment->status == 7){
-                    return 'In the Van for Delivery';
+                    $output.='In the Van for Delivery';
                 }
                 elseif($shipment->status == 8){
-                    return 'Shipment delivered';
+                    $output.='Shipment delivered';
                 }
                 elseif($shipment->status == 9){
-                    return '
+                    $output.='
                     <p>Delivery Exception</p>
                     <p>' . $shipment->delivery_exception_category . '</p>
                     <p>' . $shipment->delivery_exception_remark . '</p>
                     ';
                 }
                 elseif($shipment->status == 10){
-                    return '
+                    $output.='
                     <p>Canceled</p>
                     <p>' . $shipment->cancel_remark . '</p>
                     ';
                 }
-                elseif($shipment->status == 11){
-                    return '
-                    <p>Shipment Hold</p>
-                    ';
+
+                if($shipment->hold_status == 1){
+                    $output.='<p>Shipment Hold</p>';
                 }
+                return $output;
+
             })
             ->addColumn('action', function ($shipment) {
                 $output='';
-                if($shipment->status == 0){
+                if($shipment->hold_status == 0){
                     $output.='<a onclick="activeholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Active Hold Shipment</a>';
                 }
-                elseif($shipment->status == 11){
+                elseif($shipment->hold_status == 1){
                     $output.='<a onclick="cancelholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Cancel Hold Shipment</a>';
                 }
-                elseif($shipment->status == 8){
+                if($shipment->status == 8){
                     $output.='<a target="_blank" href="/user/print-invoice/'.$shipment->id.'" class="dropdown-item">Print</a>';
                 }
                 else{
                     $output.='
                     <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
                     <a onclick="CancelRequest('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>
+                    <a href="/user/view-shipment/'.$shipment->id.'" class="dropdown-item">View Shipment</a>
                     ';
                 }
                 return '<td>
@@ -379,7 +404,7 @@ class ShipmentController extends Controller
 
     public function activeHoldShipment($id){
         $shipment = shipment::find($id);
-        $shipment->status = 11;
+        $shipment->hold_status = 1;
         $shipment->save();
 
         $system_logs = new system_logs;
@@ -394,7 +419,7 @@ class ShipmentController extends Controller
 
     public function cancelHoldShipment($id){
         $shipment = shipment::find($id);
-        $shipment->status = 0;
+        $shipment->hold_status = 0;
         $shipment->save();
 
         $system_logs = new system_logs;

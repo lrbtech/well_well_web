@@ -72,7 +72,7 @@
           <div class="vertical-mobile-sidebar"><i class="fa fa-bars sidebar-bar">               </i></div>
           <div class="nav-right col pull-right right-menu">
             <ul class="nav-menus">
-              <li>
+              <!-- <li>
               <form class="form-inline search-form" action="/user/shipment-track" method="POST">
                 {{ csrf_field() }}
                   <div class="form-group">
@@ -92,7 +92,7 @@
                     </div>
                   </div>
                 </form>
-              </li>
+              </li> -->
 
                <li>
                   <div class="form-group">
@@ -278,6 +278,13 @@
               </a>
             </li>
 
+            <li><a href="#" class="has-submenu" id="sm-1614352107947391-7" aria-haspopup="true" aria-controls="sm-1614352107947391-8" aria-expanded="false"> Report<span class="sub-arrow"></span></a>
+              <ul id="sm-1614352107947391-8" role="group" aria-hidden="true" aria-labelledby="sm-1614352107947391-7" aria-expanded="false" class="sm-nowrap" style="width: auto; min-width: 10em; display: none; max-width: 20em; top: auto; left: 0px; margin-left: 0px; margin-top: 0px;">
+                <li><a href="/user/shipment-report">Shipment Report</a></li>
+                <li><a href="/user/revenue-report">Revenue Report</a></li>
+              </ul>
+            </li>
+
           </ul>
         </nav>
       </div>
@@ -359,19 +366,16 @@
       @yield('section')
       </div>
       @else
-      <div class="alert alert-danger dark" role="alert" style="    text-align: center;
-    margin-top: 100px;">
-                      <p>
-                        <?php 
-                        if(Auth::user()->status == 0){
-                          echo "Please Verify Your Account";
-                        }else{
-                          echo "Your Account is Under Verification, Please Wait!";
-                        }
-
-                        ?>
-                      </p>
-
+      <div class="alert alert-danger dark" role="alert" style="text-align: center; margin-top: 100px;">
+        <p>
+          <?php 
+          if(Auth::user()->status == 0){
+            echo "Please Verify Your Account";
+          }else{
+            echo "Your Account is Under Verification, Please Wait!";
+          }
+          ?>
+        </p>
       </div>
       @endif
                     </div>

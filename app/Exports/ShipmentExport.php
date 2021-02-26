@@ -82,14 +82,20 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         $from_station = station::find($shipment->from_station_id);
         $user = User::find($shipment->sender_id);
         
-        $ship_from = $from_area->city . $from_city->city . ' Station :' . $from_station->station;
+        $ship_from='';
+        if(!empty($from_area)){
+            $ship_from = $from_area->city . $from_city->city . ' Station :' . $from_station->station;
+        }
 
         $to_address = manage_address::find($shipment->to_address);
         $to_city = city::find($to_address->city_id);
         $to_area = city::find($to_address->area_id);
         $to_station = station::find($shipment->to_station_id);
 
-        $ship_to = $to_area->city . $to_city->city . 'Station :' . $to_station->station;
+        $ship_to='';
+        if(!empty($to_area)){
+            $ship_to = $to_area->city . $to_city->city . 'Station :' . $to_station->station;
+        }
 
         $status='';
         if($shipment->status == 0){

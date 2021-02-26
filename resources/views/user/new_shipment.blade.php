@@ -1122,7 +1122,9 @@ else{
 $("#total_weight_label").html(total_weight);
 $("#total_weight").val(total_weight);
 
-var special_service = $("input[name='special_service']:checked").val();
+//var special_service = $("input[name='special_service']:checked").val();
+
+var special_service = '2';
 
   $.ajax({
     url:"/user/get-area-price/"+total_weight+"/"+to_address+"/"+shipment_mode+"/"+special_service,

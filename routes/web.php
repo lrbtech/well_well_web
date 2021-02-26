@@ -214,7 +214,7 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'newShipment']);
     Route::get('/special-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'specialShipment']);
-    Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
+    // Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
     
     Route::POST('/save-new-address', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewAddress']);
     Route::POST('/save-new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewShipment']);
@@ -227,6 +227,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/get-area-price/{weight}/{to_address}/{shipment_mode}/{user_id}/{special_service}', [App\Http\Controllers\Admin\ShipmentController::class, 'getAreaPrice']);
 
     Route::get('/get-price-details/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'getPriceDetails']);
+
+    Route::get('/get-agent-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'getAgentShipment']);
 
     Route::post('/assign-agent', [App\Http\Controllers\Admin\ShipmentController::class, 'assignAgent']);
     Route::post('/assign-agent-station', [App\Http\Controllers\Admin\ShipmentController::class, 'AssignAgentStation']);
@@ -394,6 +396,18 @@ Route::group(['prefix' => 'user'],function(){
     Route::get('/change-language/{language}', [App\Http\Controllers\User\ProfileController::class, 'changelanguage']);
 
     Route::POST('/shipment-track', [App\Http\Controllers\User\ShipmentController::class, 'shipmentTrack']);
+
+    Route::get('/view-shipment/{id}', [App\Http\Controllers\User\ShipmentController::class, 'viewShipment']);
+
+    //report
+    Route::get('/shipment-report', [App\Http\Controllers\User\ReportController::class, 'ShipmentReport']);
+    Route::POST('/get-shipment-report/{status}/{date1}/{date2}', [App\Http\Controllers\User\ReportController::class, 'getShipmentReport']);
+
+    Route::POST('/excel-shipment-report', [App\Http\Controllers\User\ReportController::class, 'excelShipmentReport']);
+    Route::POST('/excel-revenue-report', [App\Http\Controllers\User\ReportController::class, 'excelRevenueReport']);
+
+    Route::get('/revenue-report', [App\Http\Controllers\User\ReportController::class, 'RevenueReport']);
+    Route::POST('/get-revenue-report/{date1}/{date2}', [App\Http\Controllers\User\ReportController::class, 'getRevenueReport']);
 
 });
 

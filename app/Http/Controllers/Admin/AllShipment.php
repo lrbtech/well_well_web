@@ -240,6 +240,7 @@ class AllShipment extends Controller
             $q->where('s.shipment_date', $today);
             $q->where('s.status', 0);
             $q->where('s.sender_id','!=',0);
+            $q->where('s.hold_status',0);
             $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
             $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
             $shipment = $q->get();
@@ -251,6 +252,7 @@ class AllShipment extends Controller
             $q->where('s.shipment_date',$today);
             $q->where('s.status', 0);
             $q->where('s.sender_id','!=',0);
+            $q->where('s.hold_status',0);
             $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
             $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")]);
             $shipment = $q->get();
@@ -337,6 +339,7 @@ class AllShipment extends Controller
             $q->where('s.shipment_date','!=',$today);
             $q->where('s.status', 0);
             $q->where('s.sender_id','!=',0);
+            $q->where('s.hold_status',0);
             $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
             $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
             $shipment = $q->get();
@@ -348,6 +351,7 @@ class AllShipment extends Controller
             $q->where('s.shipment_date','!=',$today);
             $q->where('s.status', 0);
             $q->where('s.sender_id','!=',0);
+            $q->where('s.hold_status',0);
             $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
             $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
             $shipment = $q->get();
@@ -434,10 +438,10 @@ class AllShipment extends Controller
 
     public function getNewShipmentRequest(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',0)->where('sender_id','!=',0)->orderBy('id','DESC')->get();
+            $shipment = shipment::where('status',0)->where('sender_id','!=',0)->orderBy('id','DESC')->where('hold_status',0)->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('sender_id','!=',0)->where('status',0)->orderBy('id','DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('sender_id','!=',0)->where('status',0)->orderBy('id','DESC')->where('hold_status',0)->get();
         }
         
         return Datatables::of($shipment)
@@ -541,10 +545,10 @@ class AllShipment extends Controller
 
     public function getGuestPickupRequest(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',0)->where('sender_id',0)->orderBy('id','DESC')->get();
+            $shipment = shipment::where('status',0)->where('sender_id',0)->orderBy('id','DESC')->where('hold_status',0)->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('sender_id',0)->where('status',0)->orderBy('id','DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('sender_id',0)->where('status',0)->orderBy('id','DESC')->where('hold_status',0)->get();
         }
         
         return Datatables::of($shipment)
@@ -648,10 +652,10 @@ class AllShipment extends Controller
 
     public function getScheduleForPickup(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',1)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',1)->orderBy('id', 'DESC')->where('hold_status',0)->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',1)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',1)->orderBy('id', 'DESC')->where('hold_status',0)->get();
         }
 
         return Datatables::of($shipment)
@@ -759,10 +763,10 @@ class AllShipment extends Controller
 
     public function getPickupException(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',3)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',3)->orderBy('id', 'DESC')->where('hold_status',0)->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',3)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',3)->orderBy('id', 'DESC')->where('hold_status',0)->get();
         }
 
         return Datatables::of($shipment)
@@ -875,10 +879,10 @@ class AllShipment extends Controller
 
     public function getPackageCollected(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',2)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',2)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',2)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',2)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -983,17 +987,17 @@ class AllShipment extends Controller
 
     public function getTransitIn(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',4)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',4)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',4)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',4)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
 
             // $shipment = DB::table('shipments')
             // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
             //         ['status','4']])
             // ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
             //         ['status','6']])
-            // ->orderBy('id', 'DESC')
+            // ->where('hold_status',0)->orderBy('id', 'DESC')
             // ->get();
          }
 
@@ -1113,16 +1117,16 @@ class AllShipment extends Controller
 
     public function getTransitOut(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',6)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',6)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',6)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',6)->where('hold_status',0)->orderBy('id', 'DESC')->get();
             // $shipment = DB::table('shipments')
             // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
             //         ['status','4']])
             // ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
             //         ['status','6']])
-            // ->orderBy('id', 'DESC')
+            // ->where('hold_status',0)->orderBy('id', 'DESC')
             // ->get();
         }
 
@@ -1234,10 +1238,10 @@ class AllShipment extends Controller
 
     public function getReadyForDelivery(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',7)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',7)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',7)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',7)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1346,10 +1350,10 @@ class AllShipment extends Controller
 
     public function getShipmentDelivered(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',8)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',8)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',8)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',8)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1460,10 +1464,10 @@ class AllShipment extends Controller
 
     public function getDeliveryException(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',9)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',9)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1565,10 +1569,10 @@ class AllShipment extends Controller
 
     public function getCancelRequest(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',10)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',10)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',10)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',10)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1675,10 +1679,10 @@ class AllShipment extends Controller
 
     public function getHoldRequest(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',11)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('hold_status',1)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',11)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',1)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1752,9 +1756,7 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('status', function ($shipment) {
-                if($shipment->status == 10){
-                    return '<td><p>Hold Shipment</p></td>';
-                }
+                return '<td><p>Hold Shipment</p></td>';
             })
             ->addColumn('action', function ($shipment) {
                 $output='';

@@ -79,7 +79,44 @@
           <!-- Container-fluid Ends-->
         </div>
 
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="agent-model" tabindex="-1" role="dialog" aria-labelledby="agent-model" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-grey-dark-5">
+                <h6 class="modal-title " id="modal-title">View Agent Details</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="agent-form" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
 
+                    <div class="form-group">
+                        <label>No of Shipments</label>
+                        <input readonly type="text" name="no_of_shipments" id="no_of_shipments" class="form-control" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>No of Packages</label>
+                        <input readonly type="text" name="no_of_packages" id="no_of_packages" class="form-control" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Total Weight</label>
+                        <input readonly type="text" name="total_weight" id="total_weight" class="form-control" >
+                    </div>
+
+                    <div class="form-group">
+                        <button id="assignagent" class="btn btn-primary btn-block mr-10" type="button">Assign Agent</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Bootstrap Modal -->  
 @endsection
 @section('extra-js')
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
@@ -152,6 +189,49 @@ $(document).on('click','#save', function(){
   }
 });
 
+$(document).on('click','#assignagent', function(){
+    var order_id=[];
+    var agent_id = $('#agent_id').val();
+
+  if(agent_id != ''){
+    $(".order_checkbox:checked").each(function(){
+        order_id.push($(this).val());
+    });
+    if(order_id.length > 0){
+        $.ajax({
+            url:"/admin/checkbox-assign-agent",
+            method:"GET",
+            data:{id:order_id,agent_id:agent_id},
+            success:function(data){
+              toastr.success(data);
+              //window.location.href="/admin/new-shipment-request";
+              var new_url = '/admin/get-new-shipment-request';
+              orderPageTable.ajax.url(new_url).load();
+            }
+        })
+    }else{
+        toastr.error("Please select atleast one Checkbox");
+    }
+  }else{
+    toastr.error("Please select Agent");
+  }
+});
+
+
+$(document).on('change','#agent_id', function(){
+  var agent_id = $('#agent_id').val();
+  $.ajax({
+    url : '/admin/get-agent-shipment/'+agent_id,
+    type: "GET",
+    dataType: "JSON",
+    success:function(data) {
+      $("#no_of_packages").val(data.shipment.no_of_packages);
+      $("#no_of_shipments").val(data.shipment.no_of_shipments);
+      $("#total_weight").val(data.shipment.total_weight);
+      $('#agent-model').modal('show');
+    }
+  });
+});
 
 function PrintLabel(id){
   $.ajax({

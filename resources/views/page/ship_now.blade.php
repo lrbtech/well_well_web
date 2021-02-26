@@ -616,7 +616,7 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                    <div class="g-recaptcha" data-sitekey="6LdazmQaAAAAAEh3bypTVoF54lDYbBsqBtTeVPii"></div>
+                    {!! NoCaptcha::display() !!}
                     </div>
                 </div>
 
@@ -660,7 +660,7 @@
 <script src="/assets/login/assets/js/jquery-2.2.4.min.js" type="text/javascript"></script>
 <script src="/assets/login/assets/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="/assets/login/assets/js/jquery.bootstrap.js" type="text/javascript"></script>
-
+{!! NoCaptcha::renderJs() !!}
 <!--  Plugin for the Wizard -->
 <!-- <script src="/assets/login/assets/js/material-bootstrap-wizard.js"></script>  -->
 

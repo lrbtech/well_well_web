@@ -31,6 +31,7 @@ use Auth;
 use DB;
 use PDF;
 use App\Rules\Captcha;
+use NoCaptcha;
 
 class PageController extends Controller
 {
@@ -307,9 +308,12 @@ class PageController extends Controller
     public function saveMobileVerify(Request $request){
 
         $this->validate($request, [
-            'g-captcha-response'=> new Captcha(),
+            'g-recaptcha-response' => 'required|captcha',
+            'shipment_date'=>'required',
+            'shipment_from_time'=>'required',
           ],[
-            //'emirates_id_file.max' => 'Sorry! Maximum allowed size for an image is 1MB',
+            'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+            'g-recaptcha-response.captcha' => 'Captcha error! try again later or contact site admin.',
         ]);
 
         $randomid = mt_rand(1000,9999); 

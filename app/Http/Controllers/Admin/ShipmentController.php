@@ -442,10 +442,10 @@ class ShipmentController extends Controller
 
     public function getShipment(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::orderBy('id','DESC')->get();
+            $shipment = shipment::orderBy('id','DESC')->where('hold_status',0)->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->orderBy('id','DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->orderBy('id','DESC')->where('hold_status',0)->get();
         }
         
         return Datatables::of($shipment)
@@ -630,9 +630,6 @@ class ShipmentController extends Controller
                     <p>' . $shipment->cancel_remark . '</p>
                     </td>';
                 }
-                elseif($shipment->status == 11){
-                    return '<p>Shipment Hold</p>';
-                }
             })
             ->addColumn('action', function ($shipment) {
                 $output='';
@@ -793,6 +790,21 @@ class ShipmentController extends Controller
 
     //     return response()->json($data); 
     // }
+
+
+    public function getAgentShipment($id)
+    {
+        $shipment_count = shipment::where('pickup_agent_id',$id)->where('status',1)->count();
+
+        $q =DB::table('shipments as s');
+        $q->where('s.status', 1);
+        $q->where('s.pickup_agent_id', $id);
+        $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") , DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.total_weight) as total_weight") ]);
+        $shipment = $q->first();
+
+        return response()->json(['shipment'=>$shipment , 'shipment_count'=>$shipment_count]);
+        //return response()->json($data); 
+    }
 
     public function printLabel($id){
         $shipment = shipment::find($id);

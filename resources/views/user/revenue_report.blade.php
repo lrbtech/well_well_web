@@ -1,4 +1,4 @@
-@extends('admin.layouts')
+@extends('user.layouts')
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
@@ -10,8 +10,8 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>{{$language[18][Auth::guard('admin')->user()->lang]}} <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
-                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
+                  <h2>Revenue <span>{{$language[99][Auth::user()->lang]}}  </span></h2> 
+                  <!-- <h6 class="mb-0">{{$language[9][Auth::user()->lang]}}</h6> -->
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -30,22 +30,22 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
-                <form action="/admin/excel-revenue-report" method="post" enctype="multipart/form-data">
+                <form action="/user/excel-revenue-report" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="card-header">
                     <div class="row">
                         <div class="form-group col-md-4">
-                            <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
+                            <label>{{$language[117][Auth::user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
+                            <label>{{$language[118][Auth::user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
 
                         <div class="form-group col-md-4">
-                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}</button> <br>
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::user()->lang]}}</button> <br>
                             <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
                             </button>
                         </div>
@@ -59,13 +59,13 @@
                           <tr>
                             <th>#</th>
                             <th>Order ID</th>
-                            <th>{{$language[119][Auth::guard('admin')->user()->lang]}}</th>
-                            <th>{{$language[64][Auth::guard('admin')->user()->lang]}}</th>
-                            <th>{{$language[66][Auth::guard('admin')->user()->lang]}}</th>
-                            <th>{{$language[68][Auth::guard('admin')->user()->lang]}}</th>
-                            <th>{{$language[69][Auth::guard('admin')->user()->lang]}}</th>
-                            <th>{{$language[54][Auth::guard('admin')->user()->lang]}}</th>
-                            <th>{{$language[70][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[119][Auth::user()->lang]}}</th>
+                            <th>{{$language[64][Auth::user()->lang]}}</th>
+                            <th>{{$language[66][Auth::user()->lang]}}</th>
+                            <th>{{$language[68][Auth::user()->lang]}}</th>
+                            <th>{{$language[69][Auth::user()->lang]}}</th>
+                            <th>{{$language[54][Auth::user()->lang]}}</th>
+                            <th>{{$language[70][Auth::user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -93,14 +93,14 @@
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
   <script type="text/javascript">
-$('.shipment').addClass('active');
+$('.revenue-report').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-revenue-report/1/1",
+        "url": "/user/get-revenue-report/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -134,7 +134,7 @@ $('#search').click(function(){
     }else{
       tdate = '1';
     }
-    var new_url = '/admin/get-revenue-report/'+fdate+'/'+tdate;
+    var new_url = '/user/get-revenue-report/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });

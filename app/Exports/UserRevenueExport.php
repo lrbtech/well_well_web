@@ -19,6 +19,7 @@ use App\Models\agent;
 use App\Models\station;
 use App\Models\language;
 use DB;
+use Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -27,7 +28,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , WithMapping
+class UserRevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , WithMapping
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -50,6 +51,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         {
             $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
         }
+        $i->where('shipments.sender_id',Auth::user()->id);
         $i->orderBy('shipments.id','DESC');
         $shipment = $i->get();
         return $shipment;

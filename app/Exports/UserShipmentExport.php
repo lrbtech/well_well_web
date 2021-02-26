@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Exports;
-
 use App\Models\drop_point;
 use App\Models\country;
 use App\Models\city;
@@ -19,6 +18,7 @@ use App\Models\agent;
 use App\Models\station;
 use App\Models\language;
 use DB;
+use Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -27,32 +27,32 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , WithMapping
+class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , WithMapping
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($fdate,$tdate)
+    public function __construct($status,$fdate,$tdate)
     {
         $this->fdate = $fdate;
         $this->tdate = $tdate;
+        $this->status = $status;
     }
 
     public function collection()
     {
-        // if($this->fdate != '1970-01-01' && $this->tdate != '1970-01-01'){
-        //     $shipment = shipment::whereBetween('date', [$this->fdate, $this->tdate])->orderBy('id','DESC')->get();
-        // }else{
-        //     $shipment = shipment::orderBy('id','desc')->get();
-        // }
         $i =DB::table('shipments');
+        if ( $this->status != 20 )
+        {
+            $i->where('shipments.status', $this->status);
+        }
         if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
         {
             $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
         }
+        $i->where('shipments.sender_id',Auth::user()->id);
         $i->orderBy('shipments.id','DESC');
-        $shipment = $i->get();
-        return $shipment;
+        return $shipment = $i->get();
         //return booking::query()->whereYear('created_at', $this->fdate);
     }
 
@@ -73,7 +73,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         $user = User::find($shipment->sender_id);
         
         $ship_from='';
-        if(!empty($from_area->city)){
+        if(!empty($from_area)){
             $ship_from = $from_area->city . $from_city->city . ' Station :' . $from_station->station;
         }
 
@@ -83,8 +83,114 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         $to_station = station::find($shipment->to_station_id);
 
         $ship_to='';
-        if(!empty($to_area->city)){
+        if(!empty($to_area)){
             $ship_to = $to_area->city . $to_city->city . 'Station :' . $to_station->station;
+        }
+
+        $status='';
+        if($shipment->status == 0){
+            $status='Ready for Pickup';
+        }
+        elseif($shipment->status == 1){
+            $agent = agent::find($shipment->pickup_agent_id);
+            if(!empty($agent)){
+                $status='Schedule for Pickup '.$agent->agent_id;
+            }
+            else{
+                $status='Schedule for Pickup';
+            }
+        }
+        elseif($shipment->status == 2){
+            $agent = agent::find($shipment->pickup_agent_id);
+            if(!empty($agent)){
+                $status='Package Collected '.$agent->agent_id;
+            }
+            else{
+                $status='Package Collected';
+            }
+        }
+        elseif($shipment->status == 3){
+            $status='
+            Pickup Exception
+            ' . $shipment->exception_category . '
+            ' . $shipment->exception_remark . '
+            ';
+        }
+        elseif($shipment->status == 4){
+            $from_station = station::find($shipment->from_station_id);
+            $agent = agent::find($shipment->transit_in_id);
+            if(!empty($agent)){
+                $status='
+                Transit In '.$from_station->station.'
+                Agent ID '.$agent->agent_id.''
+               ;
+            }
+            else{
+                $status='
+                Transit In '.$from_station->station.''
+               ;
+            }
+        }
+        elseif($shipment->status == 5){
+            $status='Assign Agent to Transit Out (Hub)';
+        }
+        elseif($shipment->status == 6){
+            $to_station = station::find($shipment->to_station_id);
+            $agent = agent::find($shipment->transit_out_id);
+            if(!empty($agent)){
+                $status='
+                Transit Out '.$to_station->station.'
+                Agent ID '.$agent->agent_id.''
+               ;
+            }
+            else{
+                $status='
+                Transit Out '.$to_station->station.''
+               ;
+            }
+        }
+        elseif($shipment->status == 7){
+            $agent = agent::find($shipment->delivery_agent_id);
+            if(!empty($agent)){
+                $status='
+                In the Van for Delivery
+                Agent ID '.$agent->agent_id.''
+               ;
+            }
+            else{
+                $status='
+                In the Van for Delivery'
+               ;
+            }
+        }
+        elseif($shipment->status == 8){
+            $agent = agent::find($shipment->delivery_agent_id);
+            if(!empty($agent)){
+                $status='Shipment delivered
+                Agent ID '.$agent->agent_id;
+            }
+            else{
+                $status='Shipment delivered';
+               ;
+            }
+        }
+        elseif($shipment->status == 9){
+            $status='
+            Delivery Exception
+            ' . $shipment->delivery_exception_category . '
+            ' . $shipment->delivery_exception_remark . '
+            ';
+        }
+        elseif($shipment->status == 10){
+            $status='
+            Canceled
+            ' . $shipment->cancel_remark . '
+            ';
+        }
+        elseif($shipment->status == 11){
+            $status='
+            Shipemnt Hold
+            ';
         }
 
         $special_service='';
@@ -120,7 +226,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         'Total Weight ' .$shipment->total_weight . ' Kg';
         
         return [
-            $shipment->order_id,
+            $shipment_package[0]->sku_value,
             $shipment->date,
             $user_type,
             $user_details,
@@ -129,16 +235,8 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
             $shipment_details,
             $ship_from,
             $ship_to,
-            'AED '.$shipment->shipment_price,
-            'AED '.$shipment->insurance_amount,
-            'AED '.$shipment->cod_amount,
-            'AED '.$shipment->sub_total,
-            'AED '.$shipment->vat_amount,
-            'AED '.$shipment->postal_charge,
             'AED '.$shipment->total,
-            'AED '.$shipment->special_cod,
-            'AED '.$shipment->collect_cod_amount,
-            $shipment->cod_type,
+            $status,
         ];
     }
 
@@ -146,7 +244,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
     public function headings(): array
     {
         return [
-            'Inv ID',
+            'Tracking ID',
             'Date',
             'User Type',
             'User Details',
@@ -155,17 +253,11 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
             'Shipment Details',
             'Ship From',
             'Ship To',
-            'Shipment Price',
-            'Insurance',
-            'C.O.D',
-            'Sub Total',
-            'Vat',
-            'Postal Charge',
             'Total',
-            'Special C.O.D',
-            'Collected C.O.D',
-            'C.O.D Payment Type',
+            'Status',
         ];
     }
 
+
 }
+
