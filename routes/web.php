@@ -146,6 +146,13 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/edit-area/{id}', [App\Http\Controllers\Admin\CityController::class, 'editArea']);
     Route::get('/area-delete/{id}/{status}', [App\Http\Controllers\Admin\CityController::class, 'deleteArea']);
 
+    //complaint
+	Route::get('/complaint', [App\Http\Controllers\Admin\ComplaintController::class, 'complaint']);
+    Route::POST('/save-complaint', [App\Http\Controllers\Admin\ComplaintController::class, 'savecomplaint']);
+    Route::POST('/update-complaint', [App\Http\Controllers\Admin\ComplaintController::class, 'updatecomplaint']);
+    Route::get('/edit-complaint/{id}', [App\Http\Controllers\Admin\ComplaintController::class, 'editcomplaint']);
+    Route::get('/complaint-delete/{id}/{status}', [App\Http\Controllers\Admin\ComplaintController::class, 'deletecomplaint']);
+
 
     //drop-point
 	Route::get('/drop-point', [App\Http\Controllers\Admin\SettingsController::class, 'DropPoint']);
@@ -214,7 +221,8 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'newShipment']);
     Route::get('/special-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'specialShipment']);
-    // Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
+
+    Route::get('/complaint-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'complaintShipment']);
     
     Route::POST('/save-new-address', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewAddress']);
     Route::POST('/save-new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewShipment']);
@@ -308,7 +316,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/update-cancel-request/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'updateCancelRequest']);
 
     Route::get('/revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'revenueException']);
-    Route::get('/get-revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getRevenueException']);
+    Route::post('/get-revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getRevenueException']);
 
     //report
     Route::get('/shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'ShipmentReport']);
@@ -345,6 +353,29 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/search-to-address/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'searchToAddress']);
 
     //System Logs
+
+
+    //fleet management
+    //fleet-vehicle type management
+    Route::get('/get-vehicle-type', [App\Http\Controllers\Admin\FleetManagement::class, 'getVehicleType']);
+    Route::get('/edit-vehicle-type/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'editVehicleType']);
+    Route::get('/delete-vehicle-type/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteVehicleType']);
+    Route::POST('/create-vehicle-type', [App\Http\Controllers\Admin\FleetManagement::class, 'createVehicleType']);
+    Route::POST('/update-vehicle-type', [App\Http\Controllers\Admin\FleetManagement::class, 'updateVehicleType']);
+    //fleet vehicle group
+    Route::get('/get-vehicle-group', [App\Http\Controllers\Admin\FleetManagement::class, 'getVehicleGroup']);
+    Route::get('/edit-vehicle-group/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'editVehicleGroup']);
+    Route::get('/delete-vehicle-group/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteVehicleGroup']);
+    Route::POST('/create-vehicle-group', [App\Http\Controllers\Admin\FleetManagement::class, 'createVehicleGroup']);
+    Route::POST('/update-vehicle-group', [App\Http\Controllers\Admin\FleetManagement::class, 'updateVehicleGroup']);
+    //fleet management
+    Route::get('/get-fleet', [App\Http\Controllers\Admin\FleetManagement::class, 'getFleet']);
+    Route::get('/edit-fleet/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'editFleet']);
+    Route::get('/delete-fleet/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteFleet']);
+    Route::POST('/create-fleet', [App\Http\Controllers\Admin\FleetManagement::class, 'createFleet']);
+    Route::POST('/update-fleet', [App\Http\Controllers\Admin\FleetManagement::class, 'updateFleet']);
+    //remainder
+    Route::get('/get-remainder', [App\Http\Controllers\Admin\FleetManagement::class, 'getRemainder']);
 });
 
 

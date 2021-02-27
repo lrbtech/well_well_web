@@ -54,7 +54,17 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         }
         if ( $this->status != 20 )
         {
-            $i->where('shipments.status', $this->status);
+            if ( $this->status == 4 ){
+                $i->where('shipments.status', 4);
+                $i->orWhere('shipments.status', 11);
+            }
+            elseif ( $this->status == 6 ){
+                $i->where('shipments.status', 6);
+                $i->orWhere('shipments.status', 12);
+            }
+            else{
+                $i->where('shipments.status', $this->status);
+            }
         }
         if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
         {

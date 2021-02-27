@@ -217,10 +217,19 @@ class ApiController extends Controller
                 'height' => $value->height,
                 'price' => $value->chargeable_weight,
                 'barcode_package' => $value->sku_value,
-                'exception' => $value->exception,
-                'exception_category' => $value->exception_category,
-                'exception_remark' => $value->exception_remark,
+                'exception' => 0,
+                'exception_category' => '',
+                'exception_remark' => '',
             );
+            if($value->exception != null){
+                $data['exception'] = (int)$value->exception;
+            }
+            if($value->exception_category != null){
+                $data['exception_category'] = $value->exception_category;
+            }
+            if($value->exception_remark != null){
+                $data['exception_remark'] = $value->exception_remark;
+            }
             $datas[] = $data;
         }   
         return response()->json($datas); 
@@ -463,44 +472,65 @@ class ApiController extends Controller
         $area = city::find($address->area_id);
         $data =array();
 
-        $rate_item = add_rate_item::where('user_id',$shipment->sender_id)->where('status',$shipment->shipment_mode)->get();
+        // $rate_item = add_rate_item::where('user_id',$shipment->sender_id)->where('status',$shipment->shipment_mode)->get();
         
         if($area->remote_area == '0'){
-            if(!empty($rate_item)){
-                foreach($rate_item as $row){
-                    if($row->weight_from <= $total_weight && $row->weight_to >= $total_weight ){
-                        $price = $row->price;
-                    }
-                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '1'){
-                        $price = $total_weight * $rate->service_area_20_to_1000_kg_price;
-                    }
-                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '2'){
-                        $price = $total_weight * $rate->same_day_delivery_20_to_1000_kg_price;
-                    }
+            if($shipment->special_service == '1'){
+                if('0' <= $total_weight && '5' >= $total_weight){
+                    $price = $rate->special_service_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $total_weight && '10' >= $total_weight){
+                    $price = $rate->special_service_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $total_weight && '15' >= $total_weight){
+                    $price = $rate->special_service_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $total_weight && '20' >= $total_weight){
+                    $price = $rate->special_service_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $total_weight && '99999' >= $total_weight){
+                    $price = (($total_weight - 20) * $rate->special_service_20_to_1000_kg_price) + $rate->special_service_15_to_20_kg_price; 
+                }
+            }
+            else{
+                if('0' <= $total_weight && '5' >= $total_weight && $shipment->shipment_mode == '1'){
+                    $price = $rate->service_area_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $total_weight && '10' >= $total_weight && $shipment->shipment_mode == '1'){
+                    $price = $rate->service_area_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $total_weight && '15' >= $total_weight && $shipment->shipment_mode == '1'){
+                    $price = $rate->service_area_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $total_weight && '20' >= $total_weight && $shipment->shipment_mode == '1'){
+                    $price = $rate->service_area_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $total_weight && '99999' >= $total_weight && $shipment->shipment_mode == '1'){
+                    $price = (($total_weight - 20) * $rate->service_area_20_to_1000_kg_price) + $rate->service_area_15_to_20_kg_price; 
+                }
+                elseif('0' <= $total_weight && '5' >= $total_weight && $shipment->shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_0_to_5_kg_price;
+                }
+                elseif('5.1' <= $total_weight && '10' >= $total_weight && $shipment->shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_5_to_10_kg_price;
+                }
+                elseif('10.1' <= $total_weight && '15' >= $total_weight && $shipment->shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_10_to_15_kg_price;
+                }
+                elseif('15.1' <= $total_weight && '10' >= $total_weight && $shipment->shipment_mode == '2'){
+                    $price = $rate->same_day_delivery_15_to_20_kg_price;
+                }
+                elseif('20.1' <= $total_weight && '999999' >= $total_weight && $shipment->shipment_mode == '2'){
+                    $price = (($total_weight - 20) * $rate->same_day_delivery_20_to_1000_kg_price) + $rate->same_day_delivery_15_to_20_kg_price;
                 }
             }
         }
         else{
-            if(!empty($rate_item)){
-                foreach($rate_item as $row){
-                    if($row->weight_from <= $total_weight && $row->weight_to >= $total_weight ){
-                        $price = $row->price;
-                    }
-                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '1'){
-                        $price = $total_weight * $rate->service_area_20_to_1000_kg_price;
-                    }
-                    elseif('20.1' <= $total_weight && '1000' >= $total_weight && $shipment->shipment_mode == '2'){
-                        $price = $total_weight * $rate->same_day_delivery_20_to_1000_kg_price;
-                    }
-                }
+            if('0' <= $total_weight && '5' >= $total_weight){
+                $price = $rate->before_5_kg_price;
             }
             else{
-                if('0' <= $total_weight && '5' >= $total_weight){
-                    $price = $rate->before_5_kg_price;
-                }
-                else{
-                    $price = $total_weight * $rate->above_5_kg_price;
-                }
+                $price = (($total_weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price;
             }
         }
 
@@ -691,19 +721,31 @@ class ApiController extends Controller
     public function transistIn(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
-            
-            $shipment->status = 4;
+            if($shipment->status == 2){
+                $shipment->status = 4;
+            }
+            else{
+                $shipment->status = 11;
+            }
             $shipment->transit_in_id = $request->agent_id;
             $shipment->transit_in_date = date('Y-m-d');
             $shipment->transit_in_time = date('H:i:s');
             $shipment->save();
+            
 
             $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
-            $system_logs->remark = 'Transit In by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $to_station = station::find($shipment->to_station_id);
+            $from_station = station::find($shipment->from_station_id);
+            if($shipment->status == 4){
+                $system_logs->remark = 'Transit In to '.$from_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            }
+            else{
+                $system_logs->remark = 'Transit In to '.$to_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            }
             $system_logs->save();
 
            // return response()->json($shipment);
@@ -720,7 +762,12 @@ class ApiController extends Controller
         try{
             $shipment = shipment::find($request->shipment_id);
             
-            $shipment->status = 6;
+            if($shipment->status == 4){
+                $shipment->status = 6;
+            }
+            else{
+                $shipment->status = 12;
+            }
             $shipment->transit_out_id = $request->agent_id;
             $shipment->transit_out_date = date('Y-m-d');
             $shipment->transit_out_time = date('H:i:s');
@@ -731,7 +778,15 @@ class ApiController extends Controller
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
-            $system_logs->remark = 'Transit Out by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $to_station = station::find($shipment->to_station_id);
+            $from_station = station::find($shipment->from_station_id);
+            if($shipment->status >= 4){
+                $system_logs->remark = 'Transit Out to '.$from_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            }
+            else{
+                $system_logs->remark = 'Transit Out to '.$to_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            }
+            
             $system_logs->save();
 
 
@@ -749,13 +804,18 @@ class ApiController extends Controller
     public function packageAtStation(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
-            $shipment->transit_out_id = $request->agent_id;
-            $shipment->transit_out_date = date('Y-m-d');
-            $shipment->transit_out_time = date('H:i:s');
+            // $shipment->transit_out_id = $request->agent_id;
+            // $shipment->transit_out_date = date('Y-m-d');
+            // $shipment->transit_out_time = date('H:i:s');
             $shipment->package_at_station_id = $request->agent_id;
             $shipment->package_at_station_date = date('Y-m-d');
             $shipment->package_at_station_time = date('H:i:s');
-            $shipment->status = 6;
+            if($shipment->status == 6){
+                $shipment->status = 4;
+            }
+            else{
+                $shipment->status = 11;
+            }
             $shipment->save();
 
             $agent = agent::find($request->agent_id);
@@ -763,7 +823,14 @@ class ApiController extends Controller
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
-            $system_logs->remark = 'Package At Station by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $to_station = station::find($shipment->to_station_id);
+            $from_station = station::find($shipment->from_station_id);
+            if($shipment->status == 4){
+                $system_logs->remark = 'Package At Station to '.$from_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            }
+            else{
+                $system_logs->remark = 'Package At Station to '.$to_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            }
             $system_logs->save();
 
            // return response()->json($shipment);
@@ -1188,7 +1255,7 @@ class ApiController extends Controller
 
         $hub = shipment::where('transit_in_date',$today)->where('transit_in_id',$id)->where('status',4)->count();
 
-        $delivery = shipment::where('delivery_assign_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
+        $delivery = shipment::where('van_scan_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
         $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();
 
         $data = array(
@@ -1271,18 +1338,19 @@ class ApiController extends Controller
 
         $hub = shipment::where('transit_in_date',$today)->where('transit_in_id',$id)->where('status',4)->count();
 
-        $delivery = shipment::where('delivery_assign_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
+        $delivery = shipment::where('van_scan_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
         $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();
 
         $shipment_new = shipment::where('date','=',$today)->get();
         
         $datas =array();
         foreach ($shipment_new as $key => $value) {
+            $shipment_package = shipment_package::where('shipment_id',$value->id)->get();
             $from_station = station::find($value->from_station_id);
             $to_station = station::find($value->to_station_id);
             $data = array(
                 'id' => $value->id,
-                'order_id' => $value->order_id,
+                'order_id' => $shipment_package[0]->sku_value,
                 'from_station' => $from_station->station,
                 'to_station' => $to_station->station,
                 'status' => '',
@@ -1291,28 +1359,34 @@ class ApiController extends Controller
                 $data['status'] = 'New Request';
             }
             elseif($value->status == 1){
-                $data['status'] = 'Approved';
+                $data['status'] = 'Pickup Assigned';
             }
             elseif($value->status == 2){
                 $data['status'] = 'Package Collected';
             }
             elseif($value->status == 3){
-                $data['status'] = 'Exception';
+                $data['status'] = 'Pickup Exception';
             }
             elseif($value->status == 4){
-                $data['status'] = 'Received Station Hub';
-            }
-            elseif($value->status == 5){
-                $data['status'] = 'Assign Agent to Transit Out (Hub)';
+                $data['status'] = 'Transit In';
             }
             elseif($value->status == 6){
-                $data['status'] = 'Other Transit in Received (Hub)';
+                $data['status'] = 'Transit Out';
+            }
+            elseif($value->status == 11){
+                $data['status'] = 'Transit In';
+            }
+            elseif($value->status == 12){
+                $data['status'] = 'Transit Out';
             }
             elseif($value->status == 7){
-                $data['status'] = 'Assign Agent to Delivery';
+                $data['status'] = 'In the Van for Delivery';
             }
             elseif($value->status == 8){
                 $data['status'] = 'Shipment delivered';
+            }
+            elseif($value->status == 9){
+                $data['status'] = 'Delivery Exception';
             }
             $datas[] = $data;
         }   

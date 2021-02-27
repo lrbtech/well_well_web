@@ -61,6 +61,28 @@ class ShipmentController extends Controller
         return view('admin.manual_shipment',compact('drop_point','country','city','area','package_category','agent', 'language'));
     }
 
+    public function complaintShipment($id){
+        $shipment1 = shipment_package::where('sku_value',$id)->first();
+        $country = country::all();
+        $agent = agent::all();
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+
+        $shipment =shipment::where('id',$shipment1->shipment_id)->first();
+        $user =User::find($shipment->sender_id);
+        $shipment_package = shipment_package::where('shipment_id',$shipment1->shipment_id)->get();
+        $shipment_notes = shipment_notes::where('shipment_id',$shipment1->shipment_id)->get();
+
+        $system_logs = system_logs::where('_id',$shipment1->shipment_id)->where('category','shipment')->get();
+
+        $from_address =manage_address::find($shipment->from_address);
+        $to_address =manage_address::find($shipment->to_address);
+        $language = language::all();
+
+        return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs'));
+    }
+
     public function viewShipment($id){
         $country = country::all();
         $agent = agent::all();
@@ -528,6 +550,8 @@ class ShipmentController extends Controller
                 }
             })
             ->addColumn('status', function ($shipment) {
+                $to_station = station::find($shipment->to_station_id);
+                $from_station = station::find($shipment->from_station_id);
                 if($shipment->status == 0){
                     return 'Ready for Pickup';
                 }
@@ -557,37 +581,16 @@ class ShipmentController extends Controller
                     </td>';
                 }
                 elseif($shipment->status == 4){
-                    $from_station = station::find($shipment->from_station_id);
-                    $agent = agent::find($shipment->transit_in_id);
-                    if(!empty($agent)){
-                        return '
-                        <p>Transit In '.$from_station->station.'</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
-                    }
-                    else{
-                        return '
-                        <p>Transit In '.$from_station->station.'</p>'
-                       ;
-                    }
-                }
-                elseif($shipment->status == 5){
-                    return 'Assign Agent to Transit Out (Hub)';
+                    return '<p>Transit In '.$from_station->station.'</p>';
                 }
                 elseif($shipment->status == 6){
-                    $to_station = station::find($shipment->to_station_id);
-                    $agent = agent::find($shipment->transit_out_id);
-                    if(!empty($agent)){
-                        return '
-                        <p>Transit Out '.$to_station->station.'</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
-                    }
-                    else{
-                        return '
-                        <p>Transit Out '.$to_station->station.'</p>'
-                       ;
-                    }
+                    return '<p>Transit Out '.$from_station->station.'</p>';
+                }
+                elseif($shipment->status == 11){
+                    return '<p>Transit In '.$to_station->station.'</p>';
+                }
+                elseif($shipment->status == 12){
+                    return '<p>Transit Out '.$to_station->station.'</p>';
                 }
                 elseif($shipment->status == 7){
                     $agent = agent::find($shipment->delivery_agent_id);
@@ -626,7 +629,7 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 10){
                     return '<td>
-                    <p>Canceled</p>
+                    <p>Shipment Cancel</p>
                     <p>' . $shipment->cancel_remark . '</p>
                     </td>';
                 }

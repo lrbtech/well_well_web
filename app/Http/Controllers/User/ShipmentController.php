@@ -297,6 +297,8 @@ class ShipmentController extends Controller
                 }
             })
             ->addColumn('status', function ($shipment) {
+                $to_station = station::find($shipment->to_station_id);
+                $from_station = station::find($shipment->from_station_id);
                 $output='';
                 if($shipment->status == 0){
                     $output.='Scheduled for Pickup';
@@ -315,15 +317,16 @@ class ShipmentController extends Controller
                     ';
                 }
                 elseif($shipment->status == 4){
-                    $from_station = station::find($shipment->from_station_id);
-                    $output.='Transit In '.$from_station->station;
-                }
-                elseif($shipment->status == 5){
-                    $output.='Assign Agent to Transit Out (Hub)';
+                    $output.= '<p>Transit In '.$from_station->station.'</p>';
                 }
                 elseif($shipment->status == 6){
-                    $to_station = station::find($shipment->to_station_id);
-                    $output.='Transit Out '.$to_station->station;
+                    $output.= '<p>Transit Out '.$from_station->station.'</p>';
+                }
+                elseif($shipment->status == 11){
+                    $output.= '<p>Transit In '.$to_station->station.'</p>';
+                }
+                elseif($shipment->status == 12){
+                    $output.= '<p>Transit Out '.$to_station->station.'</p>';
                 }
                 elseif($shipment->status == 7){
                     $output.='In the Van for Delivery';
@@ -340,7 +343,7 @@ class ShipmentController extends Controller
                 }
                 elseif($shipment->status == 10){
                     $output.='
-                    <p>Canceled</p>
+                    <p>Shipment Cancel</p>
                     <p>' . $shipment->cancel_remark . '</p>
                     ';
                 }
@@ -353,16 +356,16 @@ class ShipmentController extends Controller
             })
             ->addColumn('action', function ($shipment) {
                 $output='';
-                if($shipment->hold_status == 0){
-                    $output.='<a onclick="activeholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Active Hold Shipment</a>';
-                }
-                elseif($shipment->hold_status == 1){
-                    $output.='<a onclick="cancelholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Cancel Hold Shipment</a>';
-                }
                 if($shipment->status == 8){
                     $output.='<a target="_blank" href="/user/print-invoice/'.$shipment->id.'" class="dropdown-item">Print</a>';
                 }
                 else{
+                    if($shipment->hold_status == 0){
+                        $output.='<a onclick="activeholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Active Hold Shipment</a>';
+                    }
+                    elseif($shipment->hold_status == 1){
+                        $output.='<a onclick="cancelholdshipment('.$shipment->id.')" class="dropdown-item" href="#">Cancel Hold Shipment</a>';
+                    }
                     $output.='
                     <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
                     <a onclick="CancelRequest('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>

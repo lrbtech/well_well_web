@@ -78,11 +78,10 @@
         .hide {
             visibility: visible;
         }
-    </style>
-<style>
-    .pac-container {
-        z-index: 10000 !important;
-    }
+        .pac-container {
+            z-index: 1200 !important;
+        }
+
 </style>
 </head>
 
@@ -195,7 +194,7 @@
                     <div class="form-group label-floating">
                         <label class="control-label">Name
                             <small>(required)</small></label>
-                        <input name="from_name" id="from_name" type="text" class="form-control">
+                        <input autocomplete="off" name="from_name" id="from_name" type="text" class="form-control">
                     </div>
                 </div>
             </div>
@@ -224,7 +223,7 @@
                         <!-- <input name="mobile" id="mobile" type="text" class="form-control"> -->
                         <div class="input-group">
                             <span class="input-group-addon">+971</span>
-                            <input name="from_mobile" id="from_mobile" class="form-control" type="text">
+                            <input autocomplete="off" name="from_mobile" id="from_mobile" class="form-control" type="text">
                         </div>
                     </div>
                 </div>
@@ -256,7 +255,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label>Address</label>
-                    <input id="from_address" name="from_address" class="form-control"></input>
+                    <input autocomplete="false" id="from_address" name="from_address" class="form-control"></input>
                 </div>
             </div>
 
@@ -324,7 +323,7 @@
                     <div class="form-group label-floating">
                         <label class="control-label">Contact Name
                             <small>(required)</small></label>
-                        <input name="to_name" id="to_name" type="text" class="form-control">
+                        <input autocomplete="off" name="to_name" id="to_name" type="text" class="form-control">
                     </div>
                 </div>
             </div>
@@ -337,7 +336,7 @@
                     <div class="form-group label-floating">
                         <label class="control-label">Contact Mobile
                             <small>(required)</small></label>
-                        <input name="to_mobile" id="to_mobile" type="text" class="form-control">
+                        <input autocomplete="off" name="to_mobile" id="to_mobile" type="text" class="form-control">
                     </div>
                 </div>
             </div>
@@ -368,7 +367,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label>Address</label>
-                    <input id="to_address" name="to_address" class="form-control"></input>
+                    <input autocomplete="off" id="to_address" name="to_address" class="form-control"></input>
                 </div>
             </div>
 
@@ -656,11 +655,11 @@
         </div>
 
 </body>
+{!! NoCaptcha::renderJs() !!}
 <!--   Core JS Files   -->
 <script src="/assets/login/assets/js/jquery-2.2.4.min.js" type="text/javascript"></script>
 <script src="/assets/login/assets/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="/assets/login/assets/js/jquery.bootstrap.js" type="text/javascript"></script>
-{!! NoCaptcha::renderJs() !!}
 <!--  Plugin for the Wizard -->
 <!-- <script src="/assets/login/assets/js/material-bootstrap-wizard.js"></script>  -->
 
@@ -674,8 +673,6 @@
 
 <script src="{{ asset('assets/toastr/toastr.min.js')}}" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/toastr/toastr.css')}}">
-
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <script>
     /* script */
@@ -706,7 +703,10 @@ function get_from_latlng(id){
         type: "GET",
         success: function(data)
         {
-            //initialize(data.lat, data.lng);
+            from_lat = data.lat;
+            from_lng = data.lng;
+            //google.maps.event.addDomListener(initialize);
+            //initialize();
         }
     });
 }
@@ -736,8 +736,6 @@ function get_to_latlng(id){
     });
 }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
-    google.maps.event.addDomListener(window, 'load', initialize1);
     function initialize() {
         var latlng = new google.maps.LatLng(from_lat, from_lng);
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -868,7 +866,8 @@ function get_to_latlng(id){
         document.getElementById('to_longitude').value = lng;
     }
     
-
+    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', initialize1);
 
     //wizard function
 

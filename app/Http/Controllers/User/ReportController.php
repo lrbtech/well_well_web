@@ -55,7 +55,17 @@ class ReportController extends Controller
 
         if ( $status != 20 )
         {
-            $i->where('shipments.status', $status);
+            if ( $status == 4 ){
+                $i->where('shipments.status', 4);
+                $i->orWhere('shipments.status', 11);
+            }
+            elseif ( $status == 6 ){
+                $i->where('shipments.status', 6);
+                $i->orWhere('shipments.status', 12);
+            }
+            else{
+                $i->where('shipments.status', $status);
+            }
         }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
@@ -219,7 +229,7 @@ class ReportController extends Controller
                 }
                 elseif($shipment->status == 10){
                     return '<td>
-                    <p>Canceled</p>
+                    <p>Shipment Cancel</p>
                     <p>' . $shipment->cancel_remark . '</p>
                     </td>';
                 }

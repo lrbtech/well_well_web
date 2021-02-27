@@ -987,10 +987,10 @@ class AllShipment extends Controller
 
     public function getTransitIn(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',4)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',4)->orWhere('status',11)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',4)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',4)->orWhere('status',11)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
 
             // $shipment = DB::table('shipments')
             // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
@@ -1073,18 +1073,12 @@ class AllShipment extends Controller
             })
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
-                $agent = agent::find($shipment->transit_in_id);
-                if(!empty($agent)){
-                    return '
-                    <p>Transit In '.$from_station->station.'</p>
-                    <p>Agent ID :'.$agent->agent_id.'</p>
-                    <p>Name :' . $agent->name . '</p>'
-                   ;
+                $to_station = station::find($shipment->to_station_id);
+                if($shipment->status == 4){
+                    return '<p>Transit In '.$from_station->station.'</p>';
                 }
-                else{
-                    return '
-                    <p>Transit In '.$from_station->station.'</p>'
-                   ;
+                elseif($shipment->status == 11){
+                    return '<p>Transit In '.$to_station->station.'</p>';
                 }
             })
             ->addColumn('action', function ($shipment) {
@@ -1117,10 +1111,10 @@ class AllShipment extends Controller
 
     public function getTransitOut(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',6)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',6)->orWhere('status',12)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',6)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',6)->orWhere('status',12)->where('hold_status',0)->orderBy('id', 'DESC')->get();
             // $shipment = DB::table('shipments')
             // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
             //         ['status','4']])
@@ -1201,20 +1195,13 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('status', function ($shipment) {
-
+                $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
-                $agent = agent::find($shipment->transit_out_id);
-                if(!empty($agent)){
-                    return '
-                    <p>Transit Out '.$to_station->station.'</p>
-                    <p>Agent ID :'.$agent->agent_id.'</p>
-                    <p>Name :' . $agent->name . '</p>'
-                    ;
+                if($shipment->status == 6){
+                    return '<p>Transit Out '.$from_station->station.'</p>';
                 }
-                else{
-                    return '
-                    <p>Transit Out '.$to_station->station.'</p>'
-                    ;
+                elseif($shipment->status == 12){
+                    return '<p>Transit Out '.$to_station->station.'</p>';
                 }
             })
             ->addColumn('action', function ($shipment) {
@@ -1647,7 +1634,7 @@ class AllShipment extends Controller
             })
             ->addColumn('status', function ($shipment) {
                 if($shipment->status == 10){
-                    return '<td><p>Canceled</p> <p>'.$shipment->cancel_remark.'</p></td>';
+                    return '<td><p>Shipment Cancel</p> <p>'.$shipment->cancel_remark.'</p></td>';
                 }
                 // elseif($shipment->status == 11){
                 //     return '
@@ -1817,7 +1804,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->shipment_id.'">View Shipment</a>    
                         '.$output.'
                    </div>
                 </td>';

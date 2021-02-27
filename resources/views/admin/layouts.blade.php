@@ -47,6 +47,11 @@
       .hide{
        display:none
       }
+      span.badge.badge-pill.badge-warning {
+    position: absolute;
+    top: 10px;
+    right: 50px !important;
+}
     </style>
   </head>
   @if(Auth::guard('admin')->user()->lang == 'english')
@@ -395,7 +400,7 @@
 
               
               <li>
-                <a class="bar-icons" href="/admin/dashboard"><i class="pe-7s-id"></i><span>{{$language[1][Auth::guard('admin')->user()->lang]}}</span></a>
+                <a class="bar-icons" href="/admin/dashboard"><i class="pe-7s-home"></i><span>{{$language[1][Auth::guard('admin')->user()->lang]}}</span></a>
                 <!-- <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">Dashboard</li>
                   <li class="dashboard"><a class="dashboard" href="/admin/dashboard">Dashboard</a></li>
@@ -428,7 +433,7 @@
               @if(Auth::guard('admin')->user()->new_shipment == 'on' || Auth::guard('admin')->user()->all_shipment == 'on' || Auth::guard('admin')->user()->cancel_request == 'on' || Auth::guard('admin')->user()->revenue_exception == 'on')
 
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[18][Auth::guard('admin')->user()->lang]}}</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-cart"></i><span>{{$language[18][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[18][Auth::guard('admin')->user()->lang]}}</li>
                   
@@ -457,7 +462,7 @@
 
               @if(Auth::guard('admin')->user()->new_shipment_request == 'on' || Auth::guard('admin')->user()->today_pickup_request == 'on' || Auth::guard('admin')->user()->future_pickup_request == 'on' || Auth::guard('admin')->user()->schedule_for_pickup == 'on' || Auth::guard('admin')->user()->pickup_exception == 'on' || Auth::guard('admin')->user()->package_collected == 'on')
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[57][Auth::guard('admin')->user()->lang]}}</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-cart"></i><span>{{$language[57][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[57][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->new_shipment_request == 'on')
@@ -497,7 +502,7 @@
               @if(Auth::guard('admin')->user()->transit_in == 'on' || Auth::guard('admin')->user()->transit_out == 'on' )
 
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[183][Auth::guard('admin')->user()->lang]}}</span></a> 
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-network"></i><span>{{$language[183][Auth::guard('admin')->user()->lang]}}</span></a> 
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[183][Auth::guard('admin')->user()->lang]}}</li> 
                   @if(Auth::guard('admin')->user()->transit_in == 'on')
@@ -513,7 +518,7 @@
 
               @if(Auth::guard('admin')->user()->ready_for_delivery == 'on' || Auth::guard('admin')->user()->delivery_exception == 'on' || Auth::guard('admin')->user()->shipment_delivered == 'on' )
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[89][Auth::guard('admin')->user()->lang]}}</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-cart"></i><span>{{$language[89][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[89][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->ready_for_delivery == 'on')
@@ -547,9 +552,31 @@
               </li>
               @endif
 
+
+              
+              <li>
+                <span class="badge badge-pill badge-danger">20</span>
+                <span class="badge badge-pill badge-warning">20</span>
+              
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-car"></i><span>Fleet </span></a>
+                <ul class="iconbar-mainmenu custom-scrollbar">
+                  <li class="iconbar-header">Fleet Management</li>
+                  
+                  <li class="agent"><a class="agent" href="/admin/get-fleet">vehicle Management</a></li> 
+                  <li class="agent"><a class="agent" href="/admin/get-vehicle-group">vehicle Group </a></li> 
+                  <li class="agent"><a class="agent" href="/admin/get-vehicle-type">Type of vehicle </a></li> 
+                  <li class="agent"><a class="agent" href="/admin/get-remainder">Remainder </a></li> 
+         
+                </ul>
+              </li>
+            
+
+
+
+
               @if(Auth::guard('admin')->user()->shipment_report == 'on' || Auth::guard('admin')->user()->revenue_report == 'on' || Auth::guard('admin')->user()->agent_report == 'on' || Auth::guard('admin')->user()->user_report == 'on')
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[99][Auth::guard('admin')->user()->lang]}}</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-graph3"></i><span>{{$language[99][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[99][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->shipment_report == 'on')
@@ -566,7 +593,7 @@
               @if(Auth::guard('admin')->user()->country == 'on' || Auth::guard('admin')->user()->area == 'on' || Auth::guard('admin')->user()->city == 'on' || Auth::guard('admin')->user()->package_category == 'on' || Auth::guard('admin')->user()->exception_category == 'on' || Auth::guard('admin')->user()->station == 'on' || Auth::guard('admin')->user()->financial_settings == 'on' || Auth::guard('admin')->user()->common_price == 'on' || Auth::guard('admin')->user()->languages == 'on' || Auth::guard('admin')->user()->system_logs == 'on')
 
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[132][Auth::guard('admin')->user()->lang]}}</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-config"></i><span>{{$language[132][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[132][Auth::guard('admin')->user()->lang]}}</li>
                   @if(Auth::guard('admin')->user()->country == 'on')
@@ -583,6 +610,8 @@
                   @endif
 
                   <!-- <li class="push-notification"><a class="push-notification" href="/admin/push-notification">Push Notification</a></li> -->
+
+                  <li class="complaint"><a class="complaint" href="/admin/complaint">Complaint Request</a></li>
 
                   @if(Auth::guard('admin')->user()->station == 'on')
                   <li class="station"><a class="station" href="/admin/station">{{$language[197][Auth::guard('admin')->user()->lang]}}</a></li>

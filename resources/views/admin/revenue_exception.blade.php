@@ -32,7 +32,7 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table class="display" id="basic-1">
+                      <table class="display" id="datatable">
                         <thead>
                           <tr>
                             <th>#</th>

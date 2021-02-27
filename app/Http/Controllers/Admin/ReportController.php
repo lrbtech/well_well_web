@@ -80,7 +80,17 @@ class ReportController extends Controller
         }
         if ( $status != 20 )
         {
-            $i->where('shipments.status', $status);
+            if ( $status == 4 ){
+                $i->where('shipments.status', 4);
+                $i->orWhere('shipments.status', 11);
+            }
+            elseif ( $status == 6 ){
+                $i->where('shipments.status', 6);
+                $i->orWhere('shipments.status', 12);
+            }
+            else{
+                $i->where('shipments.status', $status);
+            }
         }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
@@ -146,6 +156,8 @@ class ReportController extends Controller
                 </td>';
             })
             ->addColumn('status', function ($shipment) {
+                $to_station = station::find($shipment->to_station_id);
+                $from_station = station::find($shipment->from_station_id);
                 if($shipment->status == 0){
                     return 'Ready for Pickup';
                 }
@@ -175,37 +187,16 @@ class ReportController extends Controller
                     </td>';
                 }
                 elseif($shipment->status == 4){
-                    $from_station = station::find($shipment->from_station_id);
-                    $agent = agent::find($shipment->transit_in_id);
-                    if(!empty($agent)){
-                        return '
-                        <p>Transit In '.$from_station->station.'</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
-                    }
-                    else{
-                        return '
-                        <p>Transit In '.$from_station->station.'</p>'
-                       ;
-                    }
-                }
-                elseif($shipment->status == 5){
-                    return 'Assign Agent to Transit Out (Hub)';
+                    return '<p>Transit In '.$from_station->station.'</p>';
                 }
                 elseif($shipment->status == 6){
-                    $to_station = station::find($shipment->to_station_id);
-                    $agent = agent::find($shipment->transit_out_id);
-                    if(!empty($agent)){
-                        return '
-                        <p>Transit Out '.$to_station->station.'</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
-                    }
-                    else{
-                        return '
-                        <p>Transit Out '.$to_station->station.'</p>'
-                       ;
-                    }
+                    return '<p>Transit Out '.$from_station->station.'</p>';
+                }
+                elseif($shipment->status == 11){
+                    return '<p>Transit In '.$to_station->station.'</p>';
+                }
+                elseif($shipment->status == 12){
+                    return '<p>Transit Out '.$to_station->station.'</p>';
                 }
                 elseif($shipment->status == 7){
                     $agent = agent::find($shipment->delivery_agent_id);
@@ -244,14 +235,9 @@ class ReportController extends Controller
                 }
                 elseif($shipment->status == 10){
                     return '<td>
-                    <p>Canceled</p>
+                    <p>Shipment Cancel</p>
                     <p>' . $shipment->cancel_remark . '</p>
                     </td>';
-                }
-                elseif($shipment->status == 11){
-                    return '
-                    <p>Shipemnt Hold</p>
-                    ';
                 }
             })
             ->addColumn('action', function ($shipment) {
