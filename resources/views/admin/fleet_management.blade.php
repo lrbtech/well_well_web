@@ -52,6 +52,7 @@
                             <th>VIN</th>
                             <th>Engine</th>
                             <th>Type of vehicle </th>
+                            <th>Vehicle Group</th>
                             <th>Plate No</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -64,10 +65,29 @@
                             <td>{{$key+1}}</td>
                             <td>{{$row->id}}</td>
                             <td>{{$row->model}}</td>
-                            <td>{{$row->agent_id}}</td>
+                            <td>
+                            @foreach($agent as $agent1)
+                            @if($agent1->id == $row->agent_id)
+                            {{$agent1->name}}
+                            @endif
+                            @endforeach
+                            </td>
                             <td>{{$row->vin}}</td>
                             <td>{{$row->engine}}</td>
-                            <td>{{$row->type_vehicle}}</td>
+                            <td>
+                            @foreach($vehicle_type as $vehicle_type1)
+                            @if($vehicle_type1->id == $row->type_vehicle)
+                            {{$vehicle_type1->vehicle_type}}
+                            @endif
+                            @endforeach
+                            </td>
+                            <td>
+                            @foreach($vehicle_group as $vehicle_group1)
+                            @if($vehicle_group1->id == $row->group)
+                            {{$vehicle_group1->vehicle_group}}
+                            @endif
+                            @endforeach
+                            </td>
                             <td>{{$row->plate_no}}</td>
                             <td>
                             @if($row->status == 0)
