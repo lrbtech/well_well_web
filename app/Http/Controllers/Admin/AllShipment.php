@@ -992,7 +992,7 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',4)->orWhere('status',11)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',4)->orWhere('status',11)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',4)->orWhere('status',11)->where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
 
             // $shipment = DB::table('shipments')
             // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
@@ -1116,7 +1116,7 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',6)->orWhere('status',12)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',6)->orWhere('status',12)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('status',6)->orWhere('status',12)->where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
             // $shipment = DB::table('shipments')
             // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
             //         ['status','4']])
