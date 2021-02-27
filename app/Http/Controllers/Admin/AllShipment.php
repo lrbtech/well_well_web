@@ -718,18 +718,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
 
                 if($shipment->status == 1){
@@ -754,7 +742,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','agent','action','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -838,18 +826,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
 
                 if($shipment->status == 3){
@@ -870,7 +846,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','agent','action','status','checkbox'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','checkbox'])
         ->addIndexColumn()
         ->make(true);
 
@@ -945,18 +921,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
                 $agent = agent::find($shipment->package_collect_agent_id);
                 if(!empty($agent)){
@@ -979,7 +943,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -992,15 +956,19 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',4)->orWhere('status',11)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('status',4)->orWhere('status',11)->where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            // $shipment = shipment::where('status',4)->where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('status',11)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
 
-            // $shipment = DB::table('shipments')
-            // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
-            //         ['status','4']])
-            // ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
-            //         ['status','6']])
-            // ->where('hold_status',0)->orderBy('id', 'DESC')
-            // ->get();
+            $shipment = DB::table('shipments')
+            ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','4']])
+            ->orWhere([['from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','11']])
+            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','4']])
+            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','11']])
+            ->where('hold_status',0)->orderBy('id', 'DESC')
+            ->get();
          }
 
         return Datatables::of($shipment)
@@ -1061,18 +1029,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
@@ -1102,7 +1058,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -1116,14 +1072,18 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',6)->orWhere('status',12)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('status',6)->orWhere('status',12)->where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
-            // $shipment = DB::table('shipments')
-            // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
-            //         ['status','4']])
-            // ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
-            //         ['status','6']])
-            // ->where('hold_status',0)->orderBy('id', 'DESC')
-            // ->get();
+            // $shipment = shipment::where('status',6)->orWhere('status',12)->where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = DB::table('shipments')
+            ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','6']])
+            ->orWhere([['from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','12']])
+            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','6']])
+            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','12']])
+            ->where('hold_status',0)->orderBy('id', 'DESC')
+            ->get();
         }
 
         return Datatables::of($shipment)
@@ -1184,18 +1144,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
@@ -1217,7 +1165,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -1291,18 +1239,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
                 $agent = agent::find($shipment->van_scan_id);
                 if(!empty($agent)){
@@ -1329,7 +1265,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -1406,18 +1342,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
                 $agent = agent::find($shipment->delivery_agent_id);
                 if(!empty($agent)){
@@ -1443,7 +1367,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -1517,18 +1441,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
 
                 if($shipment->status == 9){
@@ -1548,7 +1460,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -1622,18 +1534,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
                 if($shipment->status == 10){
                     return '<td><p>Shipment Cancel</p> <p>'.$shipment->cancel_remark.'</p></td>';
@@ -1658,7 +1558,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
@@ -1732,18 +1632,6 @@ class AllShipment extends Controller
                     return '<td></td>';
                 }
             })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
             ->addColumn('status', function ($shipment) {
                 return '<td><p>Hold Shipment</p></td>';
             })
@@ -1761,7 +1649,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 
