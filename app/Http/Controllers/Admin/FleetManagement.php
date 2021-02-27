@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\language;
 use App\Models\fleet_management;
 use App\Models\vehicle_group;
+use App\Models\agent;
 use App\Models\vehicle_type;
 class FleetManagement extends Controller
 {
@@ -77,8 +78,9 @@ class FleetManagement extends Controller
         $vehicle_type = vehicle_type::where('status',0)->get();
         $vehicle_group = vehicle_group::where('status',0)->get();
         $fleet_management = fleet_management::where('status',0)->get();
+        $agent = agent::where('status',0)->get();
         $language = language::all();
-        return view('admin.fleet_management',compact('fleet_management','language','vehicle_type','vehicle_group'));
+        return view('admin.fleet_management',compact('fleet_management','language','vehicle_type','vehicle_group','agent'));
     }
     public function editFleet($id){
         $fleet_management = fleet_management::find($id);

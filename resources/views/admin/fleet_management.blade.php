@@ -53,6 +53,7 @@
                             <th>Engine</th>
                             <th>Type of vehicle </th>
                             <th>Plate No</th>
+                            <th>Status</th>
                             <th>Action</th>
                         
                           </tr>
@@ -68,6 +69,13 @@
                             <td>{{$row->engine}}</td>
                             <td>{{$row->type_vehicle}}</td>
                             <td>{{$row->plate_no}}</td>
+                            <td>
+                            @if($row->status == 0)
+                            Active
+                            @else 
+                            DeActive
+                            @endif
+                            </td>
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
@@ -136,8 +144,75 @@
               <input autocomplete="off" type="text" id="engine" name="engine" class="form-control">
             </div>
             <div class="form-group col-md-6">
-              <label class="col-form-label">Vehicle model</label>
-              <input autocomplete="off" type="text" id="model" name="model" class="form-control">
+              <label class="col-form-label">Vehicle Type</label>
+              <select id="type_vehicle" name="type_vehicle" class="form-control">
+              <option value="">SELECT</option>
+              @foreach($vehicle_type as $row)
+              <option value="{{$row->id}}">{{$row->vehicle_type}}</option>
+              @endforeach
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Vehicle Group</label>
+              <select id="group" name="group" class="form-control">
+              <option value="">SELECT</option>
+              @foreach($vehicle_group as $row)
+              <option value="{{$row->id}}">{{$row->vehicle_group}}</option>
+              @endforeach
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Department</label>
+              <input autocomplete="off" type="text" id="department" name="department" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Plate No</label>
+              <input autocomplete="off" type="text" id="plate_no" name="plate_no" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Vehicle Category</label>
+              <select id="type" name="type" class="form-control">
+              <option value="">SELECT</option>
+              <option>Two Wheeler</option>
+              <option>Four Wheeler</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Expirataion</label>
+              <input autocomplete="off" type="text" id="expirataion" name="expirataion" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Odometer</label>
+              <input autocomplete="off" type="text" id="odometer" name="odometer" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Odometer Date</label>
+              <input autocomplete="off" type="date" id="odometer_date" name="odometer_date" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Insurance No</label>
+              <input autocomplete="off" type="text" id="insurance_no" name="insurance_no" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Insurance Expire</label>
+              <input autocomplete="off" type="date" id="insurance_expire" name="insurance_expire" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Oil Change Date</label>
+              <input autocomplete="off" type="date" id="oil_change_date" name="oil_change_date" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Service Date</label>
+              <input autocomplete="off" type="date" id="service_date" name="service_date" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="col-form-label">Choose Agent</label>
+              <select id="agent_id" name="agent_id" class="form-control">
+              <option value="">SELECT</option>
+              @foreach($agent as $row)
+              <option value="{{$row->id}}">{{$row->name}}</option>
+              @endforeach
+              </select>
             </div>
         </div>
 
@@ -174,7 +249,7 @@ function Save(){
   var formData = new FormData($('#form')[0]);
   if(action_type == 1){
     $.ajax({
-        url : '/admin/create-vehicle-type',
+        url : '/admin/create-fleet',
         type: "POST",
         data: formData,
         contentType: false,
@@ -195,7 +270,7 @@ function Save(){
     });
   }else{
     $.ajax({
-      url : '/admin/update-vehicle-type',
+      url : '/admin/update-fleet',
       type: "POST",
       data: formData,
       contentType: false,
@@ -220,14 +295,32 @@ function Save(){
 
 function Edit(id){
   $.ajax({
-    url : '/admin/edit-vehicle-type/'+id,
+    url : '/admin/edit-fleet/'+id,
     type: "GET",
     dataType: "JSON",
     success: function(data)
     {
-      $('#modal-title').text('Update Package Category');
+      $('#modal-title').text('Update Fleet');
       $('#save').text('Save Change');
-      $('input[name=vehicle_type]').val(data.vehicle_type);
+      $('input[name=make]').val(data.make);
+      $('input[name=model]').val(data.model);
+      $('input[name=model_year]').val(data.model_year);
+      $('input[name=color]').val(data.color);
+      $('input[name=vin]').val(data.vin);
+      $('input[name=engine]').val(data.engine);
+      $('select[name=type_vehicle]').val(data.type_vehicle);
+      $('input[name=department]').val(data.department);
+      $('select[name=group]').val(data.group);
+      $('input[name=plate_no]').val(data.plate_no);
+      $('select[name=type]').val(data.type);
+      $('input[name=expirataion]').val(data.expirataion);
+      $('input[name=odometer]').val(data.odometer);
+      $('input[name=odometer_date]').val(data.odometer_date);
+      $('input[name=insurance_no]').val(data.insurance_no);
+      $('input[name=insurance_expire]').val(data.insurance_expire);
+      $('input[name=oil_change_date]').val(data.oil_change_date);
+      $('input[name=service_date]').val(data.service_date);
+      $('select[name=agent_id]').val(data.agent_id);
       $('input[name=id]').val(id);
       $('#popup_modal').modal('show');
       action_type = 2;
@@ -239,7 +332,7 @@ function Delete(id,status){
     var r = confirm("Are you sure");
     if (r == true) {
       $.ajax({
-        url : '/admin/delete-vehicle-type/'+id,
+        url : '/admin/delete-fleet/'+id+'/'+status,
         type: "GET",
         dataType: "JSON",
         success: function(data)
