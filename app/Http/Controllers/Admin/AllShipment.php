@@ -247,6 +247,7 @@ class AllShipment extends Controller
         }
         else{
             //$shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',0)->orderBy('id','DESC')->get();
+            $today = date('Y-m-d');
             $q =DB::table('shipments as s');
             $q->where('s.from_station_id', Auth::guard('admin')->user()->station_id);
             $q->where('s.shipment_date',$today);
@@ -346,6 +347,7 @@ class AllShipment extends Controller
         }
         else{
             //$shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',0)->orderBy('id','DESC')->get();
+            $today = date('Y-m-d');
             $q =DB::table('shipments as s');
             $q->where('s.from_station_id', Auth::guard('admin')->user()->station_id);
             $q->where('s.shipment_date','!=',$today);

@@ -27,6 +27,8 @@
     <link href="/assets/login/assets/css/demo.css" rel="stylesheet" />
     
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCanHknp355-rJzwBPbz1FZDWs9t9ym_lY&sensor=false&libraries=places"></script>
+    
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 
     <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMTNFnPj4AizpevEiZcG77II6MptFemd4&sensor=false&libraries=places"></script> -->
     <style type="text/css">
@@ -615,7 +617,7 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                    {!! NoCaptcha::display() !!}
+                    <div class="g-recaptcha" data-sitekey="6Leqf2kaAAAAAOsMu55pgblKCMKFIabdfDik1_kP"></div>
                     </div>
                 </div>
 
@@ -655,7 +657,7 @@
         </div>
 
 </body>
-{!! NoCaptcha::renderJs() !!}
+
 <!--   Core JS Files   -->
 <script src="/assets/login/assets/js/jquery-2.2.4.min.js" type="text/javascript"></script>
 <script src="/assets/login/assets/js/bootstrap.min.js" type="text/javascript"></script>
