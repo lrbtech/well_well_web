@@ -632,6 +632,7 @@
                   <!-- @if(Auth::guard('admin')->user()->languages == 'on') -->
                   <li class="languages"><a class="languages" href="/admin/languages">{{$language[200][Auth::guard('admin')->user()->lang]}}</a></li>
                   <!-- @endif -->
+                  
                   @if(Auth::guard('admin')->user()->system_logs == 'on')
                   <li class="system-logs"><a class="system-logs" href="/admin/system-logs">{{$language[201][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
