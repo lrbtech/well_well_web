@@ -419,15 +419,19 @@
         <div class="parent">
             <h4><strong>Package and Shipment Detail</strong></h4>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label class="col-form-label">Number of Packages</label>
                     <input class="form-control" id="no_of_packages" name="no_of_packages" type="number" min="1">
                 </div>
 
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label class="col-form-label">Declared Value</label>
                     <input class="form-control" id="declared_value" name="declared_value" type="number">
                     <input type="hidden" name="same_data" id="same_data">
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="col-form-label">Reference No</label>
+                    <input class="form-control" id="reference_no" name="reference_no" type="number" min="1" >
                 </div>
             </div>
             <div class="row">
@@ -445,29 +449,26 @@
                     <label class="col-form-label">Description</label>
                     <input type="text" class="form-control" id="description1" name="description[]">
                 </div>
+                
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">Reference No</label>
-                    <input type="text" class="form-control" id="reference_no1" name="reference_no[]">
-                </div>
-                <div class="form-group col-md-2">
                     <label class="col-form-label">Actual Weight</label>
-                    <input class="form-control" id="weight1" name="weight[]" type="number">
+                    <input class="form-control" id="weight1" name="weight[]" type="number" min="1">
                 </div>
 
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-10">
                     <div class="col-md-12">
-                        <label class="col-form-label">Dimensions&nbsp;&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm):</label>
+                        <label class="col-form-label">Dimensions&nbsp;&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm) = Dimension Weight</label>
                         <div class="input-group">
                             <span class="input-group-text">
-                                <input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length1" style="max-width: 100px;">
+                                <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length1" style="max-width: 100px;">
                             </span>
                             <span class="input-group-text">x</span>
                             <span class="input-group-text">
-                                <input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width1" style="max-width: 100px;">
+                                <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width1" style="max-width: 100px;">
                             </span>
                             <span class="input-group-text">x</span>
                             <span class="input-group-text">
-                                <input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height1" style="max-width: 100px;">
+                                <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height1" style="max-width: 100px;">
                             </span>
                             <span class="input-group-text">
                                 <input style="max-width: 100px;" onclick="getPrice(1)" type="button" class="btn btn-fill btn-success btn-wd" value="Get Dim Weight" />
@@ -1273,23 +1274,28 @@ function getPrice(count){
   var width = $("#width"+count).val();
   var height = $("#height"+count).val();
     
-  if(weight != '' && length != '' && width != '' && height != ''){
-      
-        var dimension = (length * width * height) / 5000;
-        $("#dim_weight"+count).val(dimension);
-        if(dimension > weight)
-        {
-          $("#chargeable_weight"+count).val(dimension);
-        }
-        else{
-          $("#chargeable_weight"+count).val(weight);
-        }  
+    if(weight != ''){
+      if(length > 0 && width > 0 && height > 0){
+        
+          var dimension = (length * width * height) / 5000;
+          $("#dim_weight"+count).val(dimension);
+          if(dimension > weight)
+          {
+            $("#chargeable_weight"+count).val(dimension);
+          }
+          else{
+            $("#chargeable_weight"+count).val(weight);
+          }  
 
-        getvalue();
-      
-    }
-    else{
-      alert('Please Fill All Data (Weight , Length , Width , Heigth)');
+          getvalue();
+        
+      }
+      else{
+        alert('Please Fill All Data with Proper Value(Length , Width , Heigth)');
+      }
+    }else{
+      alert('Please Fill Weight');
+      $("#weight"+count).focus();
     }
   
 }
@@ -1464,28 +1470,25 @@ function addpackage(no_of_packages){
           '<label class="col-form-label">Description</label>'+
           '<input class="form-control" id="description'+count+'" name="description[]" type="text" >'+
         '</div>'+
+        
         '<div class="form-group col-md-4">'+
-          '<label class="col-form-label">Reference No</label>'+
-          '<input class="form-control" id="reference_no'+count+'" name="reference_no[]" type="text" >'+
-        '</div>'+
-        '<div class="form-group col-md-2">'+
           '<label class="col-form-label">Actual Weight</label>'+
           '<input class="form-control" id="weight'+count+'" name="weight[]" type="number" >'+
         '</div>'+
-        '<div class="form-group col-md-8">'+
+        '<div class="form-group col-md-10">'+
             '<div class="col-md-12">'+
-                '<label class="col-form-label">Dimensions&nbsp;&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm):</label>'+
+                '<label class="col-form-label">Dimensions&nbsp;&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm) = Dimension Weight</label>'+
                 '<div class="input-group">'+
                     '<span class="input-group-text">'+
-                        '<input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length'+count+'" style="max-width: 100px;">'+
+                        '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length'+count+'" style="max-width: 100px;">'+
                     '</span>'+
                     '<span class="input-group-text">x</span>'+
                     '<span class="input-group-text">'+
-                        '<input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width'+count+'" style="max-width: 100px;">'+
+                        '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width'+count+'" style="max-width: 100px;">'+
                     '</span>'+
                     '<span class="input-group-text">x</span>'+
                     '<span class="input-group-text">'+
-                        '<input type="text" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height'+count+'" style="max-width: 100px;">'+
+                        '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height'+count+'" style="max-width: 100px;">'+
                     '</span>'+
                     '<span class="input-group-text">'+
                         '<input style="max-width: 100px;" onclick="getPrice('+count+')" type="button" class="btn btn-fill btn-success btn-wd" value="Get Dim Weight" />'+
@@ -1536,6 +1539,38 @@ $('#shipment_date').change(function(){
         $('#shipment_from_time').html(data);
     }
   });
+});
+
+$('#special_cod').change(function(){
+  var declared_value = Number($("#declared_value").val());
+  var special_cod = Number($("#special_cod").val());
+  if (declared_value != '') {
+    if (special_cod > declared_value) {
+      alert('COD value should be less then declared value of the package');
+      $("#special_cod").val('');
+      $("#special_cod").focus();
+    }
+  }
+  else{
+    alert('Enter Declared Value'); 
+    $("#declared_value").focus();
+  }
+});
+
+$('#declared_value').change(function(){
+    var declared_value = Number($("#declared_value").val());
+  var special_cod = Number($("#special_cod").val());
+  if (declared_value != '') {
+    if (special_cod > declared_value) {
+      alert('COD value should be less then declared value of the package');
+      $("#special_cod").val('');
+      $("#special_cod").focus();
+    }
+  }
+  else{
+    alert('Enter Declared Value'); 
+    $("#declared_value").focus();
+  }
 });
 
 function Send(){

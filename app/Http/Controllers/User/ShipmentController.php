@@ -158,6 +158,7 @@ class ShipmentController extends Controller
         $shipment->before_total = $request->before_total;
         $shipment->cod_amount = $request->cod_amount;
         $shipment->total = $request->total;
+        $shipment->reference_no = $request->reference_no;
         $shipment->save();
 
         // $system_logs = new system_logs;
@@ -174,7 +175,7 @@ class ShipmentController extends Controller
                 $shipment_package = new temp_shipment_package;
                 $shipment_package->temp_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
-                $shipment_package->reference_no = $_POST['reference_no'][$x];
+                //$shipment_package->reference_no = $_POST['reference_no'][$x];
                 $shipment_package->description = $_POST['description'][$x];
                 $shipment_package->weight = $_POST['weight'][$x];
                 $shipment_package->length = $_POST['length'][$x];
@@ -194,7 +195,7 @@ class ShipmentController extends Controller
                     $shipment_package = new temp_shipment_package;
                     $shipment_package->temp_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
-                    $shipment_package->reference_no = $_POST['reference_no'][$x];
+                    //$shipment_package->reference_no = $_POST['reference_no'][$x];
                     $shipment_package->description = $_POST['description'][$x];
                     $shipment_package->weight = $_POST['weight'][$x];
                     $shipment_package->length = $_POST['length'][$x];
@@ -495,11 +496,18 @@ class ShipmentController extends Controller
             }
         }
         else{
+            $price1=0;
+            if($shipment_mode == '1'){
+                $price1 = $rate->service_area_0_to_5_kg_price;
+            }
+            elseif($shipment_mode == '2'){
+                $price1 = $rate->same_day_delivery_0_to_5_kg_price;
+            }
             if('0' <= $weight && '5' >= $weight){
-                $price = $rate->before_5_kg_price;
+                $price = $rate->before_5_kg_price + $price1;
             }
             else{
-                $price = (($weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price;
+                $price = (($weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price + $price1;
             }
         }
 

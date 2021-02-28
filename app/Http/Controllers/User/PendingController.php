@@ -158,6 +158,7 @@ class PendingController extends Controller
             $shipment->before_total = $temp_shipment->before_total;
             $shipment->cod_amount = $temp_shipment->cod_amount;
             $shipment->total = $temp_shipment->total;
+            $shipment->reference_no = $temp_shipment->reference_no;
             $shipment->save();
 
             $system_logs = new system_logs;
@@ -178,7 +179,7 @@ class PendingController extends Controller
                 $shipment_package->sku_value = $sku_value;
                 $shipment_package->shipment_id = $shipment->id;
                 $shipment_package->category = $temp->category;
-                $shipment_package->reference_no = $temp->reference_no;
+                //$shipment_package->reference_no = $temp->reference_no;
                 $shipment_package->description = $temp->description;
                 $shipment_package->weight = $temp->weight;
                 $shipment_package->length = $temp->length;

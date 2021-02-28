@@ -17,7 +17,6 @@ class CreateTempShipmentPackagesTable extends Migration
             $table->id();
             $table->string('temp_id')->nullable();  
             $table->string('category')->nullable();
-            $table->string('reference_no')->nullable();
             $table->TEXT('description')->nullable();
             $table->string('weight')->nullable();  
             $table->string('length')->nullable();  

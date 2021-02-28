@@ -428,6 +428,7 @@ class PageController extends Controller
         $shipment->insurance_amount = $request->insurance_amount;
         $shipment->before_total = $request->before_total;
         $shipment->total = $request->total;
+        $shipment->reference_no = $request->reference_no;
         $shipment->save();
 
         $system_logs = new system_logs;
@@ -449,7 +450,7 @@ class PageController extends Controller
                 $shipment_package->shipment_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
                 $shipment_package->description = $_POST['description'][$x];
-                $shipment_package->reference_no = $_POST['reference_no'][$x];
+                //$shipment_package->reference_no = $_POST['reference_no'][$x];
                 $shipment_package->weight = $_POST['weight'][$x];
                 $shipment_package->length = $_POST['length'][$x];
                 $shipment_package->width = $_POST['width'][$x];
@@ -474,7 +475,7 @@ class PageController extends Controller
                     $shipment_package->shipment_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
                     $shipment_package->description = $_POST['description'][$x];
-                    $shipment_package->reference_no = $_POST['reference_no'][$x];
+                    //$shipment_package->reference_no = $_POST['reference_no'][$x];
                     $shipment_package->weight = $_POST['weight'][$x];
                     $shipment_package->length = $_POST['length'][$x];
                     $shipment_package->width = $_POST['width'][$x];

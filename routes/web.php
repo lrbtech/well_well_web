@@ -335,6 +335,13 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'RevenueReport']);
     Route::POST('/get-revenue-report/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getRevenueReport']);
+
+
+    //report
+    Route::get('/payments-in-report', [App\Http\Controllers\Admin\ReportController::class, 'PaymentsInReport']);
+    Route::POST('/get-payments-in-report/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getPaymentsInReport']);
+
+    Route::POST('/excel-payments-in-report', [App\Http\Controllers\Admin\ReportController::class, 'excelPaymentsInReport']);
     
     //languages modules
     Route::get('/languages', [App\Http\Controllers\Admin\SettingsController::class, 'languageTable']);

@@ -118,14 +118,14 @@ visibility: visible;
               <div class="col-sm-6">
                 <div class="card">
                   <div class="card-header">
-                    <h5>{{$language[24][Auth::guard('admin')->user()->lang]}}<button id="add_from_address" class="btn btn-primary m-r-15" type="button">{{$language[25][Auth::guard('admin')->user()->lang]}}</button></h5>
-                    <span>{{$language[26][Auth::guard('admin')->user()->lang]}}</span>
+                    <h5>Pickup Address <button id="add_from_address" class="btn btn-primary m-r-15" type="button">Create Pickup Address</button></h5>
+                    <span>{{$language[26][Auth::user()->lang]}}</span>
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
                       <div class="row">
 
                         <div class="col-md-12">
-                          <label>{{$language[27][Auth::guard('admin')->user()->lang]}}</label>
+                          <label>Search Pickup Address</label>
                           <!-- <input class="form-control" id="search_from_address" name="search_from_address" type="text"> -->
                           <select id="search_from_address" name="search_from_address" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                             <option value="">SELECT</option>
@@ -249,17 +249,22 @@ visibility: visible;
           </div>
 
                             <div class="row">
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-4">
                                 <label class="col-form-label">{{$language[38][Auth::guard('admin')->user()->lang]}}</label>
                                 <input class="form-control" id="no_of_packages" name="no_of_packages" type="number" min="1">
                               </div>
                           
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-4">
                                 <label class="col-form-label">{{$language[39][Auth::guard('admin')->user()->lang]}}</label>
                                 <input class="form-control" id="declared_value" name="declared_value" type="number" >
                                 <input type="hidden" name="same_data" id="same_data">                           
                               </div>
+                              <div class="form-group col-md-4">
+                                <label class="col-form-label">Reference No</label>
+                                <input class="form-control" id="reference_no" name="reference_no" type="number" min="1" >
+                              </div>
                             </div>
+
 
                             <div class="row">
 
@@ -280,23 +285,20 @@ visibility: visible;
                                 <input class="form-control" id="description1" name="description[]" type="text" >
                               </div>
 
-                              <div class="form-group col-md-4">
-                                <label class="col-form-label">Reference No</label>
-                                <input class="form-control" id="reference_no1" name="reference_no[]" type="number" min="1" >
-                              </div>
+                              
 
-                              <div class="form-group col-md-2">
+                              <div class="form-group col-md-4">
                                 <label class="col-form-label">{{$language[42][Auth::guard('admin')->user()->lang]}}
                                 </label>
                                 <input class="form-control" id="weight1" name="weight[]" type="number" min="1" >
                               </div>
 
-                              <div class="form-group col-md-8">
+                              <div class="form-group col-md-10">
                                 <div class="col-md-12">
                                   <div class="kt-form__group--inline">
                                     <div class="kt-form__label">
                                         <label class="kt-label m-label--single">{{$language[43][Auth::guard('admin')->user()->lang]}}
-                                          &nbsp;<i class="flaticon2-delivery-package"></i>&nbsp;[{{$language[44][Auth::guard('admin')->user()->lang]}}&nbsp;x&nbsp;{{$language[45][Auth::guard('admin')->user()->lang]}}&nbsp;x&nbsp;{{$language[47][Auth::guard('admin')->user()->lang]}}] (cm):</label>
+                                          &nbsp;<i class="flaticon2-delivery-package"></i>&nbsp;[{{$language[44][Auth::guard('admin')->user()->lang]}}&nbsp;x&nbsp;{{$language[45][Auth::guard('admin')->user()->lang]}}&nbsp;x&nbsp;{{$language[47][Auth::guard('admin')->user()->lang]}}] (cm) = Dimension Weight</label>
                                     </div>
                                     <div class="kt-form__control">
                                       <div class="input-group">
@@ -1138,26 +1140,30 @@ function getPrice(count){
   
   //alert(to_address);
   if(to_address != ''){
-    if(weight != '' && length != '' && width != '' && height != ''){
-      
-        var dimension = (length * width * height) / 5000;
-        $("#dim_weight"+count).val(dimension);
-        if(dimension > weight)
-        {
-          $("#chargeable_weight"+count).val(dimension);
-        }
-        else{
-          $("#chargeable_weight"+count).val(weight);
-        }  
+    if(weight != ''){
+      if(length > 0 && width > 0 && height > 0){
+        
+          var dimension = (length * width * height) / 5000;
+          $("#dim_weight"+count).val(dimension);
+          if(dimension > weight)
+          {
+            $("#chargeable_weight"+count).val(dimension);
+          }
+          else{
+            $("#chargeable_weight"+count).val(weight);
+          }  
 
-        getvalue();
-      
+          getvalue();
+        
+      }
+      else{
+        alert('Please Fill All Data with Proper Value(Length , Width , Heigth)');
+      }
+    }else{
+      alert('Please Fill Weight');
+      $("#weight"+count).focus();
     }
-    else{
-      alert('Please Fill All Data (Weight , Length , Width , Heigth)');
-    }
-  }
-  else{
+  }else{
     alert('Please Choose a To Address');
     $("#search_to_address").focus();
   }
@@ -1377,25 +1383,21 @@ function addpackage(no_of_packages){
           '<input class="form-control" id="description'+count+'" name="description[]" type="text" >'+
         '</div>'+
         '<div class="form-group col-md-4">'+
-          '<label class="col-form-label">Reference No</label>'+
-          '<input class="form-control" id="reference_no'+count+'" name="reference_no[]" type="number" min="1" >'+
-        '</div>'+
-        '<div class="form-group col-md-2">'+
           '<label class="col-form-label">Actual Weight</label>'+
           '<input class="form-control" id="weight'+count+'" name="weight[]" type="number" min="1" >'+
         '</div>'+
-        '<div class="form-group col-md-8">'+
+        '<div class="form-group col-md-10">'+
           '<div class="col-md-12">'+
             '<div class="kt-form__group--inline">'+
               '<div class="kt-form__label">'+
-                  '<label class="kt-label m-label--single">Dimensions&nbsp;<i class="flaticon2-delivery-package"></i>&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm):</label>'+
+                  '<label class="kt-label m-label--single">Dimensions&nbsp;<i class="flaticon2-delivery-package"></i>&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm) = Dimension Weight</label>'+
               '</div>'+
               '<div class="kt-form__control">'+
                 '<div class="input-group">'+
                   '<div class="input-group-prepend">'+
                       '<span class="input-group-text">'+
                           '<div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected">'+
-                            '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length'+count+'" style="max-width: 100px;">'+
+                            '<input  type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length'+count+'" style="max-width: 100px;">'+
                           '</div>'+
                       '</span>'+
                   '</div>'+
@@ -1405,7 +1407,7 @@ function addpackage(no_of_packages){
                   '<div class="input-group-prepend">'+
                       '<span class="input-group-text">'+
                           '<div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected">'+
-                            '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width'+count+'" style="max-width: 100px;">'+
+                            '<input  type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="width[]" id="width'+count+'" style="max-width: 100px;">'+
                           '</div>'+
                       '</span>'+
                   '</div>'+
@@ -1415,7 +1417,7 @@ function addpackage(no_of_packages){
                   '<div class="input-group-append">'+
                       '<span class="input-group-text">'+
                         '<div class="input-group  bootstrap-touchspin bootstrap-touchspin-injected" >'+
-                          '<input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height'+count+'" style="max-width: 100px;">'+
+                          '<input  type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height'+count+'" style="max-width: 100px;">'+
                         '</div>'+
                       '</span>'+
                   '</div>'+

@@ -526,11 +526,18 @@ class ApiController extends Controller
             }
         }
         else{
+            $price1=0;
+            if($shipment->shipment_mode == '1'){
+                $price1 = $rate->service_area_0_to_5_kg_price;
+            }
+            elseif($shipment->shipment_mode == '2'){
+                $price1 = $rate->same_day_delivery_0_to_5_kg_price;
+            }
             if('0' <= $total_weight && '5' >= $total_weight){
-                $price = $rate->before_5_kg_price;
+                $price = $rate->before_5_kg_price + $price1;
             }
             else{
-                $price = (($total_weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price;
+                $price = (($total_weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price + $price1;
             }
         }
 
@@ -899,8 +906,9 @@ class ApiController extends Controller
 
             $shipment->receiver_signature = 'data:image/png;base64,'.$request->receiver_signature;
             $shipment->receiver_signature_name = $request->signature_name;
-            
-            // if(isset($request->receiver_id_copy)){
+            $shipment->signature_person_name = $request->signature_person_name;
+            $shipment->delivery_address = $request->delivery_address;
+
             //     if($request->receiver_id_copy!=""){                
             //         $image = $request->receiver_id_copy;
             //         $image_name = $request->receiver_id_copy_name;
@@ -1158,7 +1166,7 @@ class ApiController extends Controller
         ->where("sp.shipment_id",$id)
         ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
         ->join('stations as st', 'st.id', '=', 's.to_station_id')
-        ->select('s.*','sp.sku_value','sp.reference_no','sp.length','sp.width','sp.height','sp.category','sp.description','st.station')
+        ->select('s.*','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station')
         //->groupBy("users.id")
         ->get();
 

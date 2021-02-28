@@ -637,6 +637,9 @@
     <!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
     <script src="/assets/login/assets/js/jquery.validate.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/additional-methods.js"></script>
+    
+<script src="{{ asset('sweetalert2/sweetalert2.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
 
      <script src="{{ asset('assets/toastr/toastr.min.js')}}" type="text/javascript"></script>
     <script>
@@ -1362,12 +1365,24 @@ function Save(){
             dataType: "JSON",
             success: function(data)
             {                
-                console.log(data);
-                $("#form")[0].reset();
-                // toastr.success(data, 'Successfully Save');
-                alert('Save Successfully');
-                window.location.href = '/login';
-                $("#save").attr("disabled", false);
+                Swal.fire({
+                text: "Thanks for the Registration please Verify your Email",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ok!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log(data);
+                    $("#form")[0].reset();
+                    // toastr.success(data, 'Successfully Save');
+                   // alert('Save Successfully');
+                    window.location.href = '/login';
+                    $("#save").attr("disabled", false);
+                }
+                })
+                
 
             },error: function (data) {
                 var errorData = data.responseJSON.errors;
