@@ -317,8 +317,9 @@ class SettingsController extends Controller
 
     public function changePassword()
     {
+        $language = language::all();
         $user = admin::find(Auth::guard('admin')->user()->id);
-        return view('admin.change_password',compact('user'));
+        return view('admin.change_password',compact('user','language'));
     }
 
     public function changelanguage($language)
