@@ -122,6 +122,8 @@
                         <span>In the Van for Delivery</span>
                     @elseif($shipment->status == 8)
                         <span>Shipment Delivered</span>
+                    @elseif($shipment->status == 10)
+                        <span>Shipment Canceled</span>
                     @endif
                 </h3>
             </div>
