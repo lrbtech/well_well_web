@@ -1257,19 +1257,19 @@ class ApiController extends Controller
             if($row->status == 1 && $row->pickup_agent_id == $id && $row->pickup_assign_date == $today){
                 $on_pickup++;
             }
-            elseif($row->status == 2 && $row->pickup_agent_id == $id && $row->package_collect_date == $today){
+            elseif($row->status == 2 && $row->package_collect_agent_id == $id && $row->package_collect_date == $today){
                 $pickup++;
             }
-            elseif($row->status == 3 && $row->pickup_agent_id == $id && $row->exception_assign_date == $today){
+            elseif($row->status == 3 && $row->pickup_exception_id == $id && $row->exception_assign_date == $today){
                 $exception++;
             }
-            elseif($row->status == 4 && $row->pickup_agent_id == $id && $row->transit_in_date == $today){
+            elseif($row->status == 4 && $row->transit_in_id == $id && $row->transit_in_date == $today){
                 $hub++;
             }
-            elseif($row->status == 6 && $row->pickup_agent_id == $id && $row->transit_out_date == $today){
+            elseif($row->status == 6 && $row->transit_out_id == $id && $row->transit_out_date == $today){
                 $hub++;
             }
-            elseif($row->status == 11 && $row->pickup_agent_id == $id && $row->transit_in_date == $today){
+            elseif($row->status == 11 && $row->transit_in_id == $id && $row->transit_in_date == $today){
                 $hub++;
             }
             elseif($row->status == 12 && $row->transit_out_id == $id && $row->transit_out_date == $today){
@@ -1379,31 +1379,31 @@ class ApiController extends Controller
         $total_shipment = 0;
 
         foreach($shipment as $row){
-            if($row->status == 1 && $row->pickup_assign_date == $today){
+            if($row->status == 1 && $row->pickup_agent_id == $id && $row->pickup_assign_date == $today){
                 $on_pickup++;
             }
-            elseif($row->status == 2 && $row->package_collect_date == $today){
+            elseif($row->status == 2 && $row->package_collect_agent_id == $id && $row->package_collect_date == $today){
                 $pickup++;
             }
-            elseif($row->status == 3 && $row->exception_assign_date == $today){
+            elseif($row->status == 3 && $row->pickup_exception_id == $id && $row->exception_assign_date == $today){
                 $exception++;
             }
-            elseif($row->status == 4 && $row->transit_in_date == $today){
+            elseif($row->status == 4 && $row->transit_in_id == $id && $row->transit_in_date == $today){
                 $hub++;
             }
-            elseif($row->status == 6 && $row->transit_out_date == $today){
+            elseif($row->status == 6 && $row->transit_out_id == $id && $row->transit_out_date == $today){
                 $hub++;
             }
-            elseif($row->status == 11 && $row->transit_in_date == $today){
+            elseif($row->status == 11 && $row->transit_in_id == $id && $row->transit_in_date == $today){
                 $hub++;
             }
-            elseif($row->status == 12 && $row->transit_out_date == $today){
+            elseif($row->status == 12 && $row->transit_out_id == $id && $row->transit_out_date == $today){
                 $hub++;
             }
-            elseif($row->status == 7 && $row->van_scan_date == $today){
+            elseif($row->status == 7 && $row->van_scan_id == $id && $row->van_scan_date == $today){
                 $delivery++;
             }
-            elseif($row->status == 8 && $row->delivery_date == $today){
+            elseif($row->status == 8 && $row->delivery_agent_id == $id && $row->delivery_date == $today){
                 $completed++;
             }
         }
