@@ -758,21 +758,15 @@ select_location = $( "#city_id option:selected" ).text();
 /* script */
 $(document).ready(function(){
     if ( $('#shipment_date').prop('type') != 'date' ) $('#shipment_date').datepicker({ language: "en"});
-  //   if ( $('#shipment_from_time').prop('type') != 'time' ) $('#shipment_from_time').datepicker({
-  //      language: "en",
-  //  timepicker: true,
-  //     datepicker: false,
-  //     format: 'H:i',
-  //     locale: 'nl',
-  //     value: new Date('<%= params[:pickup_date] %>' + ' ' + '<%= params[:pickup_time] %>'),
-  //     minDate: 0, // ignore days in the past
-  //     allowTimes: [
-  //       '08:00', '09:00', '10:00',
-  //       '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'
-  //     ]
-  // });
-    // if ( $('#shipment_from_time').prop('type') != 'time' ) $('#shipment_from_time').timepicker();
-    $('#shipment_from_time').clockpicker({ twelvehour: true })
+
+    var is_chrome = !!window.chrome && !is_opera && !is_Edge;
+    if(!is_chrome){
+      $('#shipment_from_time').clockpicker({ twelvehour: true ,afterHourSelect: function() {
+        // var shipment_from_time = $("#shipment_from_time").val();
+        // var to_time = moment.utc(shipment_from_time,'hh:mm A').add(2,'hour').format('hh:mm A');
+        // $("#shipment_to_time").val(to_time);
+    }})
+    }
 });
 function initialize() {
    var latlng = new google.maps.LatLng(24.453884,54.3773438);

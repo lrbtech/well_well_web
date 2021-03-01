@@ -30,7 +30,7 @@
                 <li><a href="#home-section" class="nav-link active">الرئيسية</a></li>
                 <li><a href="#about-section" class="nav-link">من نحن</a></li>
                 <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
-                <li><a href="/ship-now" class="nav-link">الشحن</a></li>
+                <li><a href="/ar-ship-now" class="nav-link">الشحن</a></li>
 
                 <li><a href="#service-solution" class="nav-link">الحلول والخدمات</a></li>
                 <li><a href="#service-advance" class="nav-link">المساعدة والدعم</a></li>
@@ -56,7 +56,7 @@
                                     <li><a href="#home-section" class="nav-link active">الرئيسية</a></li>
                                     <li><a href="#about-section" class="nav-link">من نحن</a></li>
                                     <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
-                                    <li><a href="/ship-now" class="nav-link">الشحن</a></li>
+                                    <li><a href="/ar-ship-now" class="nav-link">الشحن</a></li>
 
                                     <li><a href="#service-solution" class="nav-link">الحلول والخدمات</a></li>
                                     <li><a href="#service-advance" class="nav-link">المساعدة والدعم</a></li>

@@ -139,6 +139,15 @@ class PageController extends Controller
         return view('page.user_register',compact('country','city','area','settings'));
     }
 
+    public function ArabicUserRegister()
+    {
+        $country = country::where('status',0)->get();
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
+        $settings = settings::find(1);
+        return view('page.ar_register',compact('country','city','area','settings'));
+    }
+
 
     public function saveUserRegister(Request $request){
 
@@ -286,6 +295,17 @@ class PageController extends Controller
         $area = city::where('parent_id','!=',0)->where('status',0)->get();
         $package_category = package_category::where('status',0)->get();
         return view('page.ship_now',compact('country','city','area','package_category','settings','language'));
+    }
+
+    public function arShipNow()
+    {
+        $language = language::all();
+        $country = country::where('status',0)->get();
+        $settings = settings::find(1);
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
+        $package_category = package_category::where('status',0)->get();
+        return view('page.ar_ship_now',compact('country','city','area','package_category','settings','language'));
     }
 
 
@@ -441,7 +461,7 @@ class PageController extends Controller
         $guest_user->landline = $request->from_landline;
         $guest_user->latitude = $request->from_latitude;
         $guest_user->longitude = $request->from_longitude;
-        $guest_user->address1 = $request->from_address;
+        $guest_user->address = $request->from_address;
         $guest_user->shipment_id = $shipment->id;
         $guest_user->save();
 
