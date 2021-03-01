@@ -107,10 +107,14 @@ class PendingController extends Controller
 
     public function scheduleShipment(Request $request)
     {
+        
+        
         $data = temp_shipment::whereIn('id', $request->id)->get();
+        
         foreach ($data as $row) {
             
         $temp_shipment = temp_shipment::find($row->id);
+
             $config = [
                 'table' => 'shipments',
                 'field' => 'order_id',
@@ -160,25 +164,24 @@ class PendingController extends Controller
             $shipment->total = $temp_shipment->total;
             $shipment->reference_no = $temp_shipment->reference_no;
             $shipment->save();
-
             if($temp_shipment->special_cod_enable == 1){
                 $user = User::find($temp_shipment->sender_id);
-                $cod=$temp_shipment->special_cod - $temp_shipment->cod_amount;
+                $cod= (float)($temp_shipment->special_cod) - (float)($temp_shipment->cod_amount);
                 $user->total = $user->total + $cod;
                 $user->save();
             }
-
+            
+            
             $system_logs = new system_logs;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = Auth::user()->email;
             $system_logs->remark = 'New Shipment Created by Customer';
             $system_logs->save();
-    
             $temp_shipment_package = temp_shipment_package::where('temp_id', $temp_shipment->id)->get();
             foreach ($temp_shipment_package as $temp) {
                 do {
-                    $sku_value = mt_rand( 1000000000, 9999999999 );
+                    $sku_value = mt_rand( 1000000000, 9999999999);
                 } 
                 while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
 

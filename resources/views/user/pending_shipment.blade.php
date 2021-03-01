@@ -161,6 +161,7 @@ if(shipment_date != '' && shipment_from_time){
             method:"GET",
             data:{id:order_id,shipment_date:shipment_date,shipment_from_time:shipment_from_time,shipment_to_time:shipment_to_time},
             success:function(data){
+              console.log(data);
                 toastr.success(data);
                 window.location.href="/user/shipment";
             }

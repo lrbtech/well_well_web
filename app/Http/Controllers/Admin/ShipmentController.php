@@ -675,7 +675,7 @@ class ShipmentController extends Controller
             ->addColumn('action', function ($shipment) {
                 $output='';
                 $output1='';
-                $role_get = role::find(Auth::guard('admin')->user()->role_id);
+                //$role_get = role::find(Auth::guard('admin')->user()->role_id);
                 if($shipment->status == 0){
                     $output.='<a onclick="AssignAgent('.$shipment->id.')" class="dropdown-item" href="#">Assign Agent</a>
                     <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
