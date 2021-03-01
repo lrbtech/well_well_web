@@ -728,19 +728,31 @@ class ApiController extends Controller
     public function transistIn(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
-            if($shipment->status == 2){
+            $agent = agent::find($request->agent_id);
+            $city = city::find($agent->city_id);
+            //if($shipment->status == 2){
+            if($shipemnt->from_station_id == $city->station_id){
                 $shipment->status = 4;
             }
-            else{
+            elseif($shipemnt->to_station_id == $city->station_id){
                 $shipment->status = 11;
             }
+            // }
+            // else{
+            //     if($shipemnt->to_station_id == $city->station_id){
+            //         $shipment->status = 11;
+            //     }
+            //     else{
+            //         $shipment->status = 4;
+            //     }
+            // }
             $shipment->transit_in_id = $request->agent_id;
             $shipment->transit_in_date = date('Y-m-d');
             $shipment->transit_in_time = date('H:i:s');
             $shipment->save();
             
 
-            $agent = agent::find($request->agent_id);
+            
             $system_logs = new system_logs;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
@@ -769,10 +781,19 @@ class ApiController extends Controller
         try{
             $shipment = shipment::find($request->shipment_id);
             
-            if($shipment->status == 4){
+            // if($shipment->status == 4){
+            //     $shipment->status = 6;
+            // }
+            // else{
+            //     $shipment->status = 12;
+            // }
+            $agent = agent::find($request->agent_id);
+            $city = city::find($agent->city_id);
+            //if($shipment->status == 2){
+            if($shipemnt->from_station_id == $city->station_id){
                 $shipment->status = 6;
             }
-            else{
+            elseif($shipemnt->to_station_id == $city->station_id){
                 $shipment->status = 12;
             }
             $shipment->transit_out_id = $request->agent_id;
@@ -780,7 +801,7 @@ class ApiController extends Controller
             $shipment->transit_out_time = date('H:i:s');
             $shipment->save();
 
-            $agent = agent::find($request->agent_id);
+            //$agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
