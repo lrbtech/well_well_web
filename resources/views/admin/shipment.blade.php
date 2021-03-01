@@ -204,8 +204,6 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'action', name: 'action' },
     ]
 });
-
-
 function PrintLabel(id){
   $.ajax({
     url : '/admin/print-label/'+id,
@@ -234,8 +232,6 @@ function PrintLabel(id){
     }
   });
 }
-
-
 function AssignAgent(id){
     var r = confirm("Are you sure");
     if (r == true) {
@@ -243,7 +239,6 @@ function AssignAgent(id){
       $('#assign-agent-modal').modal('show');
     } 
 }
-
 function AssignAgentStation(id){
     var r = confirm("Are you sure");
     if (r == true) {
@@ -251,7 +246,6 @@ function AssignAgentStation(id){
       $('#assign-agent-station-modal').modal('show');
     } 
 }
-
 function AssignAgentDelivery(id){
     var r = confirm("Are you sure");
     if (r == true) {
@@ -259,7 +253,6 @@ function AssignAgentDelivery(id){
       $('#assign-agent-delivery-modal').modal('show');
     } 
 }
-
 function updateAssignAgent(){
   var formData = new FormData($('#form')[0]);
     $.ajax({
@@ -283,7 +276,6 @@ function updateAssignAgent(){
     }
     });
 }
-
 function updateAssignAgentStation(){
   var formData = new FormData($('#form1')[0]);
     $.ajax({
@@ -307,7 +299,6 @@ function updateAssignAgentStation(){
     }
     });
 }
-
 function updateAssignAgentDelivery(){
   var formData = new FormData($('#form2')[0]);
     $.ajax({
@@ -331,6 +322,5 @@ function updateAssignAgentDelivery(){
         }
     });
 }
-
 </script>
 @endsection

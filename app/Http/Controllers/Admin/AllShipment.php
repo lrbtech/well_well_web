@@ -1210,7 +1210,7 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',7)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',7)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',7)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1310,7 +1310,7 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',8)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',8)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',8)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1412,7 +1412,7 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
@@ -1505,7 +1505,7 @@ class AllShipment extends Controller
             $shipment = shipment::where('status',10)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',10)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',10)->where('hold_status',0)->orderBy('id', 'DESC')->get();
         }
 
         return Datatables::of($shipment)
