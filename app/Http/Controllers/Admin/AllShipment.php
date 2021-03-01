@@ -1033,7 +1033,7 @@ class AllShipment extends Controller
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
-                $agent = agent::find($shipment->package_collect_agent_id);
+                $agent = agent::find($shipment->transit_in_id);
                 if(!empty($agent)){
                     if($shipment->status == 4){
                         return '<p>Transit In '.$from_station->station.'</p>
@@ -1164,7 +1164,7 @@ class AllShipment extends Controller
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
-                $agent = agent::find($shipment->package_collect_agent_id);
+                $agent = agent::find($shipment->transit_out_id);
                 if(!empty($agent)){
                     if($shipment->status == 6){
                         return '<p>Transit Out '.$from_station->station.'</p>
