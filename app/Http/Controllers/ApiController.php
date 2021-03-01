@@ -1227,9 +1227,9 @@ class ApiController extends Controller
         $today = date('Y-m-d');
         //$total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
 
-        $total_shipment_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("total");
+        $total_shipment_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
 
-        $collected_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
+        $collected_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("collect_cod_amount");
 
         $i =DB::table('shipments');
         $i->where('shipments.pickup_agent_id', $id);
@@ -1352,9 +1352,9 @@ class ApiController extends Controller
         $today = date('Y-m-d');
         //$total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
 
-        $total_shipment_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("total");
+        $total_shipment_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
 
-        $collected_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
+        $collected_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("collect_cod_amount");
 
         $i =DB::table('shipments');
         $i->where('shipments.pickup_agent_id', $id);
