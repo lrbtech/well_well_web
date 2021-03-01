@@ -731,10 +731,10 @@ class ApiController extends Controller
             $agent = agent::find($request->agent_id);
             $city = city::find($agent->city_id);
             //if($shipment->status == 2){
-            if($shipemnt->from_station_id == $city->station_id){
+            if($shipment->from_station_id == $city->station_id){
                 $shipment->status = 4;
             }
-            elseif($shipemnt->to_station_id == $city->station_id){
+            elseif($shipment->to_station_id == $city->station_id){
                 $shipment->status = 11;
             }
             // }
@@ -790,10 +790,10 @@ class ApiController extends Controller
             $agent = agent::find($request->agent_id);
             $city = city::find($agent->city_id);
             //if($shipment->status == 2){
-            if($shipemnt->from_station_id == $city->station_id){
+            if($shipment->from_station_id == $city->station_id){
                 $shipment->status = 6;
             }
-            elseif($shipemnt->to_station_id == $city->station_id){
+            elseif($shipment->to_station_id == $city->station_id){
                 $shipment->status = 12;
             }
             $shipment->transit_out_id = $request->agent_id;
