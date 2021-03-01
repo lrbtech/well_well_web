@@ -475,12 +475,49 @@ class ShipmentController extends Controller
         return response()->json('successfully update'); 
     }
 
-    public function getShipment(){
+    public function getShipment($status){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::orderBy('id','DESC')->where('hold_status',0)->get();
+            $i =DB::table('shipments');
+            if ( $status != 20 )
+            {
+                if ( $status == 4 ){
+                    $i->where('shipments.status', 4);
+                    $i->orWhere('shipments.status', 11);
+                }
+                elseif ( $status == 6 ){
+                    $i->where('shipments.status', 6);
+                    $i->orWhere('shipments.status', 12);
+                }
+                else{
+                    $i->where('shipments.status', $status);
+                }
+            }
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->orderBy('id','DESC')->where('hold_status',0)->get();
+            //$shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->orderBy('id','DESC')->where('hold_status',0)->get();
+            $i =DB::table('shipments');
+            if ( $status != 20 )
+            {
+                if ( $status == 4 ){
+                    $i->where('shipments.status', 4);
+                    $i->orWhere('shipments.status', 11);
+                }
+                elseif ( $status == 6 ){
+                    $i->where('shipments.status', 6);
+                    $i->orWhere('shipments.status', 12);
+                }
+                else{
+                    $i->where('shipments.status', $status);
+                }
+            }
+            $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
+            $i->orWhere('shipments.to_station_id',Auth::guard('admin')->user()->station_id);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
         
         return Datatables::of($shipment)
@@ -544,18 +581,6 @@ class ShipmentController extends Controller
                 <p>' . $to_area->city . '</p>
                 <p>' . $to_city->city . '</p>
                 <p><b>Station :' . $to_station->station . '</b></p>
-                </td>';
-                }
-                else{
-                    return '<td></td>';
-                }
-            })
-            ->addColumn('agent', function ($shipment) {
-                $agent = agent::find($shipment->agent_id);
-                if(!empty($agent)){
-                return '<td>
-                <p>' . $agent->name . '</p>
-                <p>' . $agent->email . '</p>
                 </td>';
                 }
                 else{
@@ -695,7 +720,7 @@ class ShipmentController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','agent','status','user_id'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','user_id'])
         ->addIndexColumn()
         ->make(true);
 

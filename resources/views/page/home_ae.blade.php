@@ -37,7 +37,7 @@
                 <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
 
                 <li><a href="/login" class="nav-link">تسجيل الدخول</a></li>
-                <li><a href="/register" class="nav-link">تسجيل</a></li>
+                <li><a href="/ar-register" class="nav-link">تسجيل</a></li>
 
                 <li><a href="/home" class="nav-link">English</a></li>
             </ul>
@@ -64,7 +64,7 @@
 
                                     <li><a href="/login" class="nav-link">تسجيل الدخول
                                     </a></li>
-                                    <li><a href="/register" class="nav-link">تسجيل</a></li>
+                                    <li><a href="/ar-register" class="nav-link">تسجيل</a></li>
 
                                     <li><a href="/home" class="nav-link">English</a></li>
                                 </ul>

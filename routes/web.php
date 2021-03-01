@@ -223,7 +223,7 @@ Route::group(['prefix' => 'admin'],function(){
     //shipment
     Route::get('/shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'Shipment']);
     Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
-    Route::POST('/get-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
+    Route::POST('/get-shipment/{status}', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
 
     Route::get('/new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'newShipment']);
     Route::get('/special-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'specialShipment']);

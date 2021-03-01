@@ -30,12 +30,39 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
-                  <!-- <div class="card-header">
-                    <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
-                    <i class="bx bx-plus"></i>
-                    <span>New Users</span>
-                    </button>
-                  </div> -->
+                <form action="/admin/excel-shipment-report" method="post" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="card-header">
+                    <div class="row">
+                        
+                        <div class="form-group col-md-3">
+                            <label>{{$language[100][Auth::guard('admin')->user()->lang]}}</label>
+                            <select id="shipment_status" name="shipment_status" class="form-control">
+                              <option value="20">All Data</option>
+                              <option value="0">New Request</option>
+                              <option value="1">Pickup Assigned</option>
+                              <option value="2">Package Collected</option>
+                              <option value="3">Pickup Exception</option>
+                              <option value="4">Transit In</option>
+                              <option value="6">Transit Out</option>
+                              <option value="7">In the Van for Delivery</option>
+                              <option value="8">Shipment delivered</option>
+                              <option value="9">Delivery Exception</option>
+                              <option value="10">Cancel Shipment</option>
+                              <!-- <option value="11">Shipment Hold</option> -->
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-2">
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
+                            </button> <br>
+                            <!-- <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
+                            </button> -->
+                        </div>
+                    </div>
+                    
+                  </div>
+                  </form>
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="display" id="datatable">
@@ -187,7 +214,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-shipment",
+        "url": "/admin/get-shipment/20",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -204,6 +231,14 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'action', name: 'action' },
     ]
 });
+
+$('#search').click(function(){
+    var shipment_status = $('#shipment_status').val();
+    var new_url = '/admin/get-shipment-report/'+shipment_status;
+    orderPageTable.ajax.url(new_url).load();
+    //orderPageTable.draw();
+});
+
 function PrintLabel(id){
   $.ajax({
     url : '/admin/print-label/'+id,
