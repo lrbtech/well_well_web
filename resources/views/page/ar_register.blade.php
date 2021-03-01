@@ -97,24 +97,33 @@
 
 		                    	<div class="wizard-header">
 		                        	<h3 class="wizard-title">
-		                        	   Build Your Profile
+		                        	   بناء ملف التعريف الخاص بك
+
 		                        	</h3>
-									<h5>This information will let us know more about you.</h5>
+									<h5>ستتيح لنا هذه المعلومات معرفة المزيد عنك
+.</h5>
 		                    	</div>
 								<div class="wizard-navigation">
 									<ul>
-			                            <li><a href="#account" data-toggle="tab">Choose Account</a></li>
-                                        <li><a href="#profile" data-toggle="tab">Basic Profile</a></li>
-                                        <li><a href="#contact" data-toggle="tab">Contact Information</a></li>
-                                        <li><a href="#notes" data-toggle="tab">Notes</a></li>
-			                            <li><a href="#terms" data-toggle="tab">Terms and Conditions</a></li>
-			                            <li><a href="#signature" data-toggle="tab">Signature</a></li>
+			                            <li><a href="#account" data-toggle="tab">اختر حساب
+</a></li>
+                                        <li><a href="#profile" data-toggle="tab">لمحة أساسية
+</a></li>
+                                        <li><a href="#contact" data-toggle="tab">معلومات الاتصال
+</a></li>
+                                        <li><a href="#notes" data-toggle="tab">ملاحظات
+</a></li>
+			                            <li><a href="#terms" data-toggle="tab">الأحكام والشروط
+</a></li>
+			                            <li><a href="#signature" data-toggle="tab">التوقيع
+</a></li>
 			                        </ul>
 								</div>
 
 		                        <div class="tab-content">
                                 <div class="tab-pane" id="account">
-		                                <h4 class="info-text"> Please Select your Busisness Type </h4>
+		                                <h4 class="info-text"> يرجى تحديد نوع العمل الخاص بك
+ </h4>
 		                                <div class="row">
 		                                    <div class="col-sm-10 col-sm-offset-1">
 		                                        <div class="col-sm-6">
@@ -123,7 +132,8 @@
 		                                                <div class="icon">
 		                                                    <i class="fa fa-user-o"></i>
 		                                                </div>
-		                                                <h6>Individual Business</h6>
+		                                                <h6>الأعمال الفردية
+</h6>
 		                                            </div>
 		                                        </div>
 		                                        <div class="col-sm-6">
@@ -132,7 +142,8 @@
 		                                                <div class="icon">
 		                                                   <i class="fa fa-briefcase" aria-hidden="true"></i>
 		                                                </div>
-		                                                <h6>Comercial Business</h6>
+		                                                <h6>الأعمال التجارية
+</h6>
 		                                            </div>
 		                                        </div>
 		                                        <!-- <div class="col-sm-4">
@@ -149,7 +160,8 @@
 		                            </div>
 		                            <div class="tab-pane" id="profile">
 		                              <div class="row">
-		                                	<h4 class="info-text"> Let's start with the basic information </h4>
+		                                	<h4 class="info-text"> لنبدأ بالمعلومات الأساسية
+ </h4>
 		                                	<!-- <div class="col-sm-4 col-sm-offset-1">
 		                                    	<div class="picture-container">
 		                                        	<div class="picture">
@@ -165,7 +177,8 @@
                                         				<img src="/assets/login/assets/img/default-avatar.png" class="picture-src" id="wizardPicturePreview3" title=""/>
 		                                            	<input type="file" id="wizard-picture3" name="profile_image">
 		                                        	</div>
-		                                        	<h6>Choose Profile Image <small>(jpg, jpeg, png)</small></h6>
+		                                        	<h6>اختر صورة الملف الشخصي
+ <small>(jpg, jpeg, png)</small></h6>
 		                                    	</div>
 		                                	</div>
 		                                	<div class="col-sm-4">
@@ -175,7 +188,8 @@
 
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">First Name <small>(required)</small></label>
+			                                          <label class="control-label">الاسم الاول (مطلوب)
+</small></label>
 			                                          <input name="first_name" id="first_name" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -186,7 +200,8 @@
 													<i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-													  <label class="control-label">Last Name <small>(required)</small></label>
+													  <label class="control-label">نشاط اسم مطلوب)
+</label>
 													  <input name="last_name" id="last_name" type="text" class="form-control">
 													</div>
 												</div>
@@ -197,7 +212,7 @@
 														<i class="fa fa-address-card-o fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-													  <label class="control-label">Business Name <small>(required)</small></label>
+													  <label class="control-label">اسم العمل (مطلوب)</small></label>
 													  <input name="business_name" id="business_name" type="text" class="form-control">
 													</div>
 												</div>
@@ -209,7 +224,8 @@
 														<i class="material-icons">email</i>
 													</span>
 													<div class="form-group label-floating">
-													  <label class="control-label">Email <small>(required)</small></label>
+													  <label class="control-label">البريد الإلكتروني (مطلوب)
+</label>
 													  <input id="email" name="email" type="email" class="form-control">
 													</div>
 												</div>
@@ -221,7 +237,8 @@
 														<i class="material-icons">password</i>
 													</span>
 													<div class="form-group label-floating">
-													  <label class="control-label">Password <small>(required)</small></label>
+													  <label class="control-label">كلمة المرور مطلوبة)
+</label>
 													  <input id="password" name="password" type="password" class="form-control">
 													</div>
 												</div>
@@ -233,7 +250,8 @@
 														<i class="material-icons">password</i>
 													</span>
 													<div class="form-group label-floating">
-													  <label class="control-label">Confirm Password <small>(required)</small></label>
+													  <label class="control-label">تأكيد كلمة المرور (مطلوب)
+</label>
 													  <input id="password_confirmation" name="password_confirmation" type="password" class="form-control">
 													</div>
 												</div>
@@ -246,7 +264,8 @@
 													<i class="fa fa-mobile fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label style="margin-left: 60px;" class="control-label">Mobile <small>(required)</small></label>
+			                                          <label style="margin-left: 60px;" class="control-label">المحمول (مطلوب)
+</label>
                                                       <!-- <input name="mobile" id="mobile" type="text" class="form-control"> -->
                                                       <div class="input-group">
                                                         <span class="input-group-addon">+971</span>
@@ -262,7 +281,7 @@
 														<i class="fa fa-phone fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Landline <small>(optional)</small></label>
+			                                          <label class="control-label">الخط الأرضي (اختياري)</label>
 			                                          <input name="landline" id="landline" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -274,7 +293,7 @@
 														<i class="fa fa-globe fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Website <small>(optional)</small></label>
+			                                          <label class="control-label">صفحة انترنت (اختياري)</label>
 			                                          <input name="website" id="website" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -286,7 +305,8 @@
 														<i class="fa fa-id-card-o fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Emirates ID <small>(required)</small></label>
+			                                          <label class="control-label">الهوية الإماراتية (مطلوب)
+</label>
 			                                          <input name="emirates_id" id="emirates_id" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -298,7 +318,7 @@
 														<i class="fa fa-id-card-o fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Trade License <small>(optional)</small></label>
+			                                          <label class="control-label">الرخصة التجارية (اختياري)</label>
 			                                          <input name="trade_license" id="trade_license" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -322,7 +342,8 @@
                                         				<img src="/assets/images/folder.png" class="picture-src" id="wizardPicturePreview" style="padding: 20px" title=""/>
 		                                            	<input type="file" id="wizard-picture" name="emirates_id_file">
 		                                        	</div>
-		                                        	<h6>Choose Emirates ID File <small>(jpg, jpeg, png)</small></h6>
+		                                        	<h6>اختر ملف هوية الإمارات
+ <small>(jpg, jpeg, png)</small></h6>
 		                                    	</div>
                                             </div>
                                             
@@ -332,7 +353,7 @@
                                         				<img src="/assets/images/folder.png" class="picture-src" id="wizardPicturePreview1" style="padding: 20px" title=""/>
 		                                            	<input type="file" id="wizard-picture1" name="trade_license_file">
 		                                        	</div>
-		                                        	<h6>Choose Trade License File <small>(jpg, jpeg, png)</small></h6>
+		                                        	<h6>اختر ملف الرخصة التجارية <small>(jpg, jpeg, png)</small></h6>
 		                                    	</div>
                                             </div>
                                             
@@ -342,7 +363,7 @@
                                         				<img src="/assets/images/folder.png" class="picture-src" id="wizardPicturePreview2" style="padding: 20px" title=""/>
 		                                            	<input type="file" id="wizard-picture2" name="vat_certificate_file">
 		                                        	</div>
-		                                        	<h6>Choose Vat Certification File <small>(jpg, jpeg, png)</small></h6>
+		                                        	<h6>اختر ملف تصديق ضريبة القيمة المضافة <small>(jpg, jpeg, png)</small></h6>
 		                                    	</div>
                                             </div>
                                             
@@ -365,20 +386,25 @@
                                     
                                     <div class="tab-pane" id="contact">
 		                              <div class="row">
-		                                	<h4 class="info-text"> Contact Information</h4>
+		                                	<h4 class="info-text"> معلومات الاتصال
+</h4>
 		                                	<div class="col-sm-4">
-                                                <label class="control-label">Country</label>
+                                                <label class="control-label">دولة
+</label>
                                                 <select name="country_id" id="country_id" class="form-control">
-                                                    <option disabled="" selected="">Choose Country</option>
+                                                    <option disabled="" selected="">Choose Country
+</option>
                                                     @foreach($country as $row)
                                                     <option value="{{$row->id}}"> {{$row->country_name_english}} </option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-sm-4">
-                                                <label class="control-label">City</label>
+                                                <label class="control-label">مدينة
+</label>
                                                 <select onChange="applyMyLocation(this);" name="city_id" id="city_id" class="form-control">
-                                                    <option disabled="" selected="">Choose City</option>
+                                                    <option disabled="" selected="">اختر المدينة
+</option>
                                                     @foreach($city as $row)
                                                     <option value="{{$row->id}}"> {{$row->city}} </option>
                                                     @endforeach
@@ -387,7 +413,8 @@
                                             <div class="col-sm-4">
                                                 <label class="control-label">Area</label>
                                                 <select onChange="applyMyLocationCity(this);" name="area_id" id="area_id" class="form-control">
-                                                    <option disabled="" selected="">Choose City</option>
+                                                    <option disabled="" selected="">اختر المدينة
+</option>
                                                     @foreach($area as $row)
                                                     <option value="{{$row->id}}"> {{$row->city}} </option>
                                                     @endforeach
@@ -397,7 +424,8 @@
                                             <div class="col-sm-3">
                                                 <!-- <label class="control-label">Address Type</label> -->
                                                 <select name="address_type" id="address_type" class="form-control">
-                                                    <option disabled="" selected="">Choose Address Type</option>
+                                                    <option disabled="" selected="">اختر نوع العنوان
+</option>
                                                     <option value="1">Home</option>
                                                     <option value="2">Office</option>
                                                     <option value="3">Other</option>
@@ -410,7 +438,8 @@
 														<i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Contact Name <small>(required)</small></label>
+			                                          <label class="control-label">اسم جهة الاتصال (مطلوب)
+</label>
 			                                          <input name="contact_name" id="contact_name" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -422,7 +451,8 @@
 														<i class="fa fa-mobile fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Contact Mobile <small>(required)</small></label>
+			                                          <label class="control-label">الاتصال بالهاتف المحمول (مطلوب)
+</label>
 			                                          <input name="contact_mobile" id="contact_mobile" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -434,7 +464,8 @@
 														<i class="fa fa-phone fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Contact Landline <small>(optional)</small></label>
+			                                          <label class="control-label">الاتصال بالهاتف الأرضي (اختياري)
+</label>
 			                                          <input name="contact_landline" id="contact_landline" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -447,7 +478,8 @@
 														<i class="fa fa-facebook fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Facebook URL <small>(optional)</small></label>
+			                                          <label class="control-label">عنوان URL على Facebook (اختياري)
+</label>
 			                                          <input name="facebook_url" id="facebook_url" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -459,7 +491,8 @@
 														<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Twitter URL <small>(optional)</small></label>
+			                                          <label class="control-label">Twitter URL (اختياري)
+</label>
 			                                          <input name="twitter_url" id="twitter_url" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -471,7 +504,8 @@
 														<i class="fa fa-instagram fa-2x" aria-hidden="true"></i>
 													</span>
 													<div class="form-group label-floating">
-			                                          <label class="control-label">Instagram URL <small>(optional)</small></label>
+			                                          <label class="control-label">عنوان URL لـ Instagram (اختياري)
+</label>
 			                                          <input name="instagram_url" id="instagram_url" type="text" class="form-control">
 			                                        </div>
 												</div>
@@ -480,7 +514,8 @@
                                             
                                             <div class="col-sm-12">
                                                 <div class="form-group">
-                                                    <label>Enter a location</label>
+                                                    <label>أدخل موقعًا
+</label>
                                                     <input id="searchInput" name="searchInput" class="input-controls form-control" type="text" placeholder="Enter a location">
                                                 </div>
                                             </div>
@@ -490,20 +525,23 @@
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <label>Address</label>
+                                                    <label>تبوك
+</label>
                                                     <input id="address" name="address" class="form-control"></input>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <label>Latitude</label>
+                                                    <label>خط العرض
+</label>
                                                     <input readonly type="text" id="latitude" name="latitude" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <label>Longitude</label>
+                                                    <label>خط الطول
+</label>
                                                     <input readonly type="text" id="longitude" name="longitude" class="form-control">
                                                 </div>
                                             </div>
@@ -531,14 +569,15 @@
 		                                    <!-- <h4 class="info-text"> No.</h4> -->
 		                                    <div class="col-sm-6 col-sm-offset-1">
 	                                    		<div class="form-group">
-		                                            <label>Notes</label>
+		                                            <label>ملاحظات
+</label>
 		                                            <textarea name="description" id="description" class="form-control" placeholder="" rows="6"></textarea>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-4">
 		                                    	<div class="form-group">
-		                                            <label class="control-label">Example</label>
-		                                            <p class="description">"We would like to know your business nature to support you at the best, drop some details regarding your process in logistics will make a note of it, & make sure the best serves you."</p>
+		                                            <label class="control-label">مثال</label>
+		                                            <p class="description">"نود أن نعرف طبيعة عملك لدعمك في أحسن الأحوال ، وإسقاط بعض التفاصيل المتعلقة بعمليتك في مجال الخدمات اللوجستية ، وسوف نقوم بتدوين ذلك ، والتأكد من أن الأفضل يخدمك."</p>
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -546,7 +585,8 @@
 		                            
 		                        <div class="tab-pane" id="terms">
 		                                <div class="row">
-										<h4 class="info-text"> Terms and Condition</h4>
+										<h4 class="info-text"> الأحكام والشروط
+</h4>
 										<div class="col-sm-1"></div>
 		                                <div style="display: block;height: 300px;overflow-y: scroll;" class="col-sm-10">
                                         
@@ -575,7 +615,8 @@
 
                                 <div class="tab-pane" id="signature">
 		                                <div class="row">
-                                        <h4 class="info-text"> Signature</h4>
+                                        <h4 class="info-text"> التوقيع
+</h4>
                                             {{-- <div class="col-sm-2"></div> --}}
 		                                	<div class="col-sm-12">
                                                 <!-- <div class="col-12">

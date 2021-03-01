@@ -136,7 +136,7 @@ $('#search').click(function(){
     }else{
       tdate = '1';
     }
-    var new_url = '/admin/get-payments-in-report/'+fdate+'/'+tdate;
+    var new_url = '/user/get-payments-in-report/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });
