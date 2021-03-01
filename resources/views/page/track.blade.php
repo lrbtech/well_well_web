@@ -306,6 +306,11 @@
                                     <td>{{date('d-m-Y H:m a',strtotime($shipment->created_at))}}</td>
                                     <td>Shipment Created</td>
                                 </tr>
+                                @else 
+                                <tr>
+                                <td>{{date('d-m-Y',strtotime($shipment->cancel_request_date))}} {{date('H:m a',strtotime($shipment->cancel_request_time))}}</td>
+                                    <td>Shipment Canceled</td>
+                                </tr>
                                 @endif
                             </tbody>
                         </table>
