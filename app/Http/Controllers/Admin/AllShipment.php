@@ -1603,8 +1603,9 @@ class AllShipment extends Controller
             $shipment = shipment::where('hold_status',1)->orderBy('id', 'DESC')->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',1)->orderBy('id', 'DESC')->get();
+            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',1)->orderBy('id', 'DESC')->get();
         }
+
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
