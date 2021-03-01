@@ -370,11 +370,7 @@ visibility: visible;
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
 
-                    <!-- <div class="form-group">
-                      <label class="col-form-label">Notes </label>
-                      <textarea class="form-control" name="notes" id="notes"></textarea>
-                    </div> -->
-                    <br>
+                   <br>
                         @foreach($system_logs as $row)
                         <div class="col-sm-12 show_from_address">
                             <div class="media-body">
@@ -391,13 +387,44 @@ visibility: visible;
                   </div>
                 </div>
               </div>
+
+              <div class="col-sm-12">
+                <div class="card">
+                <div class="card-header">
+                    <h5>Shipment Notes</h5>
+                  </div>
+                  <div class="card-body megaoptions-border-space-sm">
+
+                    <div class="form-group">
+                      <label class="col-form-label">Notes </label>
+                      <textarea class="form-control" name="notes" id="notes"></textarea>
+                    </div>
+                    <br>
+                        @foreach($shipment_notes as $row)
+                        <div class="col-sm-12 show_from_address">
+                            <div class="media-body">
+                              <h6 class="mt-0 mega-title-badge">
+                                <span class="badge badge-primary pull-right digits">
+                                  {{$row->created_at}}
+                                </span>
+                              </h6>
+                              <p>{{$row->notes}}</p>
+                            </div>
+                        </div>
+                        @endforeach
+
+                  </div>
+                </div>
+              </div>
               
                 
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-footer text-right">
                     <button onclick="SaveShipment()" class="btn btn-primary m-r-15" type="button">Save Notes</button>
+                    <a href="/admin/shipment">
                     <button class="btn btn-light" type="button">Cancel</button>
+                    </a>
                   </div>
                 </div>
               </div>

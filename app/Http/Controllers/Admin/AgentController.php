@@ -8,7 +8,9 @@ use App\Models\agent;
 use App\Models\city;
 use App\Models\language;
 use Hash;
+use Auth;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use App\Http\Controllers\Admin\logController;
 
 class AgentController extends Controller
 {
@@ -123,6 +125,10 @@ class AgentController extends Controller
             }
         }
         $agent->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email,"Add Courier'.$agent->agent_id.'");
+
         return response()->json('successfully save'); 
     }
     public function updateAgent(Request $request){
@@ -233,6 +239,10 @@ class AgentController extends Controller
         }
         
         $agent->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email,"Edit Courier'.$agent->agent_id.'");
+
         return response()->json('successfully update'); 
     }
 
@@ -253,6 +263,10 @@ class AgentController extends Controller
         $agent = agent::find($id);
         $agent->status = $status;
         $agent->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Courier'.$agent->agent_id.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 }

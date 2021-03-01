@@ -29,6 +29,7 @@ use Auth;
 use DB;
 use Mail;
 use PDF;
+use App\Http\Controllers\Admin\logController;
 
 class ShipmentController extends Controller
 {
@@ -110,6 +111,9 @@ class ShipmentController extends Controller
         $shipment_notes->admin_id = Auth::guard('admin')->user()->id;
         $shipment_notes->notes = $request->notes;
         $shipment_notes->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Shipment Notes '.$shipment_notes->shipment_id.'");
 
         return response()->json('successfully save'); 
     }
@@ -229,6 +233,14 @@ class ShipmentController extends Controller
         $shipment->total = $request->total;
         $shipment->reference_no = $request->reference_no;
         $shipment->save();
+
+        if($request->special_cod_enable == 1){
+        $user = User::find($request->user_id);
+        $cod=$request->special_cod - $request->cod_amount;
+        $user->total = $user->total + $cod;
+        $user->save();
+        }
+
         $system_logs = new system_logs;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';

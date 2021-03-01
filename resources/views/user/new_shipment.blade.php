@@ -265,7 +265,7 @@ visibility: visible;
                               </div>
                               <div class="form-group col-md-4">
                                 <label class="col-form-label">Reference No</label>
-                                <input class="form-control" id="reference_no" name="reference_no" type="number" min="1" >
+                                <input class="form-control" id="reference_no" name="reference_no" type="text" >
                               </div>
                             </div>
 
@@ -632,7 +632,7 @@ visibility: visible;
             
             <div class="form-group col-md-6">
               <label class="col-form-label">Select City</label>
-              <select id="city_id" name="city_id" class="form-control">
+              <select onChange="applyMyLocation(this);" id="city_id" name="city_id" class="form-control">
                   <option value="">SELECT City</option>
                   @foreach($city as $row)
                   <option value="{{$row->id}}">{{$row->city}}</option>
@@ -642,7 +642,7 @@ visibility: visible;
 
             <div class="form-group col-md-6">
               <label class="col-form-label">Select Area</label>
-              <select id="area_id" name="area_id" class="form-control">
+              <select onChange="applyMyLocationCity(this);" id="area_id" name="area_id" class="form-control">
                   <option value="">SELECT Area</option>
                   @foreach($area as $row)
                   <option value="{{$row->id}}">{{$row->city}}</option>
@@ -728,6 +728,20 @@ visibility: visible;
 <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
 
 <script>
+function applyMyLocation(sel){
+    select_location='';
+    var id = $('#city_id').val();
+    $('#searchInput').val($( "#city_id option:selected" ).text()); 
+    $('#searchInput').focus(); 
+    select_location = $( "#city_id option:selected" ).text();
+}
+function applyMyLocationCity(sel){
+if(select_location !=''){
+    $('#searchInput').val( select_location+' '+$( "#area_id option:selected" ).text()); 
+    $('#searchInput').focus(); 
+}
+select_location = $( "#city_id option:selected" ).text();
+}
 /* script */
 function initialize() {
    var latlng = new google.maps.LatLng(24.453884,54.3773438);

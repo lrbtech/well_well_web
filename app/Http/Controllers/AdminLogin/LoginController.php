@@ -5,7 +5,7 @@ namespace App\Http\Controllers\AdminLogin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
-
+use App\Http\Controllers\Admin\logController;
 
 class LoginController extends Controller
 {
@@ -31,6 +31,8 @@ class LoginController extends Controller
       // Attempt to log the user in
       if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
         // if successful, then redirect to their intended location
+        $logController = new logController();
+        $logController->createLog($request->email,"login");
         return redirect()->intended(route('admin.dashboard'));
       }
 
@@ -39,7 +41,10 @@ class LoginController extends Controller
     }
 
     public function logout(){
-      Auth::guard('admin')->logout();
-      return redirect('/admin/login');
+      $logController = new logController();
+      if($logController->createLog(Auth::guard('admin')->email,"logout")){
+        Auth::guard('admin')->logout();
+        return redirect('/admin/login');
+      }
     }
 }

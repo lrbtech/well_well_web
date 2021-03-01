@@ -377,7 +377,7 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="control-label">City</label>
-                                                <select name="city_id" id="city_id" class="form-control">
+                                                <select onChange="applyMyLocation(this);" name="city_id" id="city_id" class="form-control">
                                                     <option disabled="" selected="">Choose City</option>
                                                     @foreach($city as $row)
                                                     <option value="{{$row->id}}"> {{$row->city}} </option>
@@ -386,7 +386,7 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="control-label">Area</label>
-                                                <select name="area_id" id="area_id" class="form-control">
+                                                <select onChange="applyMyLocationCity(this);" name="area_id" id="area_id" class="form-control">
                                                     <option disabled="" selected="">Choose City</option>
                                                     @foreach($area as $row)
                                                     <option value="{{$row->id}}"> {{$row->city}} </option>
@@ -644,6 +644,22 @@
      <script src="{{ asset('assets/toastr/toastr.min.js')}}" type="text/javascript"></script>
     <script>
 /* script */
+
+function applyMyLocation(sel){
+    select_location='';
+    var id = $('#city_id').val();
+    $('#searchInput').val($( "#city_id option:selected" ).text()); 
+    $('#searchInput').focus(); 
+    select_location = $( "#city_id option:selected" ).text();
+}
+function applyMyLocationCity(sel){
+if(select_location !=''){
+    $('#searchInput').val( select_location+' '+$( "#area_id option:selected" ).text()); 
+    $('#searchInput').focus(); 
+}
+select_location = $( "#city_id option:selected" ).text();
+}
+
 function initialize() {
    var latlng = new google.maps.LatLng(24.453884,54.3773438);
     var map = new google.maps.Map(document.getElementById('map'), {

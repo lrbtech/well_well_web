@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
                 $q->where('s.status', 0);
                 $q->where('s.sender_id','!=',0);
                 $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-                $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
+                $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
                 $today_pickup_request = $q->count();
 
                 $q1 =DB::table('shipments as s');
@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
                 $q1->where('s.status', 0);
                 $q1->where('s.sender_id','!=',0);
                 $q1->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-                $q1->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
+                $q1->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
                 $future_pickup_request = $q1->count();
 
                 $new_shipment_request = shipment::where('status',0)->where('sender_id','!=',0)->orderBy('id','DESC')->count();
@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
                 $q->where('s.status', 0);
                 $q->where('s.sender_id','!=',0);
                 $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-                $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")]);
+                $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")]);
                 $today_pickup_request = $q->count();
 
                 $q1 =DB::table('shipments as s');
@@ -75,7 +75,7 @@ class AppServiceProvider extends ServiceProvider
                 $q1->where('s.status', 0);
                 $q1->where('s.sender_id','!=',0);
                 $q1->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-                $q1->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
+                $q1->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
                 $future_pickup_request = $q1->count();
 
                 $new_shipment_request = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('sender_id','!=',0)->where('status',0)->orderBy('id','DESC')->count();

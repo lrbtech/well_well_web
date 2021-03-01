@@ -9,6 +9,9 @@ use App\Models\fleet_management;
 use App\Models\vehicle_group;
 use App\Models\agent;
 use App\Models\vehicle_type;
+use App\Http\Controllers\Admin\logController;
+use Auth;
+
 class FleetManagement extends Controller
 {
     public function getVehicleType(){
@@ -24,6 +27,11 @@ class FleetManagement extends Controller
         $vehicle_type = vehicle_type::find($id);
         $vehicle_type->status = 1;
         $vehicle_type->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Vehicle Type : '.$vehicle_type->vehicle_type.'");
+
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
     public function updateVehicleType(Request $request){
@@ -31,6 +39,10 @@ class FleetManagement extends Controller
         $vehicle_type->status = 0;
         $vehicle_type->vehicle_type = $request->vehicle_type;
         $vehicle_type->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Update Vehicle Type : '.$vehicle_type->vehicle_type.'");
+
         return response()->json(['message'=>'Successfully Update'],200); 
     }
     public function createVehicleType(Request $request){
@@ -38,6 +50,10 @@ class FleetManagement extends Controller
         $vehicle_type->status = 0;
         $vehicle_type->vehicle_type = $request->vehicle_type;
         $vehicle_type->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Vehicle Type : '.$vehicle_type->vehicle_type.'");
+
         return response()->json(['message'=>'Successfully Create'],200); 
     }
 
@@ -55,6 +71,10 @@ class FleetManagement extends Controller
         $vehicle_group = vehicle_group::find($id);
         $vehicle_group->status = 1;
         $vehicle_group->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Vehicle Group : '.$vehicle_group->vehicle_group.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
     public function updateVehicleGroup(Request $request){
@@ -62,6 +82,10 @@ class FleetManagement extends Controller
         $vehicle_group->status = 0;
         $vehicle_group->vehicle_group = $request->vehicle_group;
         $vehicle_group->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Vehicle Group : '.$vehicle_group->vehicle_group.'");
+
         return response()->json(['message'=>'Successfully Update'],200); 
     }
     public function createVehicleGroup(Request $request){
@@ -69,6 +93,10 @@ class FleetManagement extends Controller
         $vehicle_group->status = 0;
         $vehicle_group->vehicle_group = $request->vehicle_group;
         $vehicle_group->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Vehicle Group : '.$vehicle_group->vehicle_group.'");
+
         return response()->json(['message'=>'Successfully Create'],200); 
     }
 
@@ -90,6 +118,10 @@ class FleetManagement extends Controller
         $fleet_management = fleet_management::find($id);
         $fleet_management->status = 1;
         $fleet_management->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Fleet Management : '.$fleet_management->make.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
     public function updateFleet(Request $request){
@@ -114,6 +146,10 @@ class FleetManagement extends Controller
         $fleet_management->service_date = $request->service_date;
         $fleet_management->agent_id = $request->agent_id;
         $fleet_management->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Fleet Management : '.$fleet_management->make.'");
+
         return response()->json(['message'=>'Successfully Update'],200); 
     }
     public function createFleet(Request $request){
@@ -140,6 +176,10 @@ class FleetManagement extends Controller
         $fleet_management->agent_id = $request->agent_id;
         $fleet_management->status = 0;
         $fleet_management->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Fleet Management : '.$fleet_management->make.'");
+
         return response()->json(['message'=>'Successfully Create'],200); 
     }
 

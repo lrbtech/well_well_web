@@ -51,6 +51,9 @@ class CreateUsersTable extends Migration
             $table->string('accounts_user_id')->nullable();  
             $table->string('accounts_date_time')->nullable();
             $table->string('lang')->default('english');
+            $table->string('total')->default('0');
+            $table->string('paid')->default('0');
+            $table->string('balance')->default('0');
             $table->rememberToken();
             $table->timestamps();
         });

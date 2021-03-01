@@ -189,7 +189,7 @@
                                 </div>
                                 <div class="cat-cap">
                                     <h5>WELL PROTECT</h5>
-                                    <p>You no longer have to worry about lost or damaged shipments. With Well Protect, you can shop all your goods with ease and have all of your shipments protected against loss or damage.</p>
+                                    <p>You no longer have to worry about lost or damaged shipments. With Well Protect, you can ship all your goods with ease and have all of your shipments protected against loss or damage.</p>
                                 </div>
                             </div>
                         </div>
@@ -393,7 +393,18 @@
                             </div>
                             <div class="info-caption">
                                 <p>Contact Us</p>
-                                <span>+971 56 994 9049</span>
+                                <span>+02 444 2254</span>
+                            </div>
+                        </div>
+                         <div class="single-info mb-4">
+                            <div class="info-icon">
+                                <img src="/assets/images/whatsapp.png" height="25" width="25" alt="">
+                            </div>
+                            <div class="info-caption">
+                    
+  
+                                <span dir="ltr">+05 044 24579 </span>
+                                {{-- <span> <img src="/assets/images/whatsapp.png" width="20px"></span> --}}
                             </div>
                         </div>
                         <div class="single-info mb-4">
@@ -437,10 +448,10 @@
                 <div class="col-md-3">
                     <h2 class="footer-heading mb-4">USEFUL LINK</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Service</a></li>
-                        <li><a href="#">Contact </a></li>
+                        <li><a href="#home-section">Home</a></li>
+                        <li><a href="#about-section">About Us</a></li>
+                        <li><a href="#service-solution">Service</a></li>
+                        <li><a href="#contact">Contact </a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -448,9 +459,10 @@
                     <ul class="list-unstyled">
                         <li><a href="#">
                                 Silver Wave Tower, Abu Dhabi City</a></li>
-                        <li><a href="#">+971 56 994 9409</a></li>
+                     
+                        <li><a href="#">+02 444 2254</a></li>
+                        <li><a href="#">+971 5044 24579 <img src="/assets/images/whatsapp.png" width="20px"></a></li>
                         <li><a href="#">info@wellwell.ae</a></li>
-
                     </ul>
 
                     <!-- <h2 class="footer-heading mb-4">Follow Us</h2>
@@ -469,7 +481,7 @@
                     <div class="border-top pt-3">
                         <p class="copyright mb-0"><small>
 
-                                Copyright 2021 © <strong>WellWell</strong>
+                               Copyright 2021 © <strong>WellWell</strong><br> Crafted With <img src="/assets/images/heart.png" width="30px"> <a href="https://lrbinfotech.com" target="_blank">LRB INFOTECH</a>
 
                             </small></p>
                     </div>

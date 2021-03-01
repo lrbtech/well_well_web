@@ -85,6 +85,7 @@
         }
 
 </style>
+{!! htmlScriptTagJsApi() !!}
 </head>
 
 <body>
@@ -103,10 +104,10 @@
 	    </a> -->
 
         <!--  Made With Material Kit  -->
-        <a href="/login" class="made-with-mk">
+        {{-- <a href="/login" class="made-with-mk">
             <div class="brand">Go</div>
             <div class="made-with"> to/assets Login </div>
-        </a>
+        </a> --}}
 
 <!--   Big container   -->
 <div class="container">
@@ -156,7 +157,7 @@
             <div class="col-sm-4">
                 <label class="control-label">City</label>
                 <div class="form-group is-empty">
-                    <select name="from_city_id" id="from_city_id" class="form-control" aria-required="true">
+                    <select name="from_city_id" id="from_city_id" class="form-control" aria-required="true" onChange="applyMyLocation(this);">
                         <option disabled="" selected="">Choose City</option>
                         @foreach($city as $row)
                         <option value="{{$row->id}}"> {{$row->city}} </option>
@@ -168,7 +169,7 @@
             <div class="col-sm-4">
                 <label class="control-label">Area</label>
                 <div class="form-group is-empty">
-                    <select name="from_area_id" id="from_area_id" class="form-control" aria-required="true">
+                    <select name="from_area_id" id="from_area_id" class="form-control" aria-required="true" onChange="applyMyLocationCity(this);">
                         <option disabled="" selected="">Choose City</option>
                         @foreach($area as $row)
                         <option value="{{$row->id}}"> {{$row->city}} </option>
@@ -290,7 +291,7 @@
             </div>
             <div class="col-sm-4">
                 <label class="control-label">City</label>
-                <select name="to_city_id" id="to_city_id" class="form-control">
+                <select onChange="applyMyLocation1(this);" name="to_city_id" id="to_city_id" class="form-control">
                     <option disabled="" selected="">Choose City</option>
                     @foreach($city as $row)
                     <option value="{{$row->id}}"> {{$row->city}} </option>
@@ -299,7 +300,7 @@
             </div>
             <div class="col-sm-4">
                 <label class="control-label">Area</label>
-                <select name="to_area_id" id="to_area_id" class="form-control">
+                <select onChange="applyMyLocationCity1(this);" name="to_area_id" id="to_area_id" class="form-control">
                     <option disabled="" selected="">Choose City</option>
                     @foreach($area as $row)
                     <option value="{{$row->id}}"> {{$row->city}} </option>
@@ -431,7 +432,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label class="col-form-label">Reference No</label>
-                    <input class="form-control" id="reference_no" name="reference_no" type="number" min="1" >
+                    <input class="form-control" id="reference_no" name="reference_no" type="text" >
                 </div>
             </div>
             <div class="row">
@@ -616,11 +617,11 @@
                     </div>
                 </div>
 
-                <div class="col-sm-6">
+                <!-- <div class="col-sm-6">
                     <div class="form-group">
                     <div class="g-recaptcha" data-sitekey="6Leqf2kaAAAAAOsMu55pgblKCMKFIabdfDik1_kP"></div>
                     </div>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -678,15 +679,16 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/toastr/toastr.css')}}">
 
 <script>
-    /* script */
+
     var from_lat='24.453884';
     var from_lng='54.3773438';
     var to_lat='24.453884';
     var to_lng='54.3773438';
 
-
-$('#from_city_id').change(function(){
+var select_location='';
+$("#from_city_id").change(function(){
   var id = $('#from_city_id').val();
+//   console.log(id);
   $.ajax({
     url : '/get-area/'+id,
     type: "GET",
@@ -697,6 +699,63 @@ $('#from_city_id').change(function(){
     }
   });
 });
+
+function applyMyLocation(sel){
+    select_location='';
+    var id = $('#from_city_id').val();
+    // console.log($( "#from_city_id option:selected" ).text());
+  $('#searchInput').val($( "#from_city_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
+$('#searchInput').focus(); 
+select_location = $( "#from_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
+    
+// }
+}
+function applyMyLocationCity(sel){
+//     var id = $('#from_city_id').val();
+//     // console.log($( "#from_city_id option:selected" ).text());
+//   $('#searchInput').val($( "#from_area_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
+if(select_location !=''){
+      $('#searchInput').val( select_location+' '+$( "#from_area_id option:selected" ).text()); 
+// select_location = select_location+' '+$( "#from_area_id option:selected" ).text();
+    $('#searchInput').focus(); 
+}
+select_location = $( "#from_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
+    
+// }
+}
+
+
+function applyMyLocation1(sel){
+    select_location='';
+    var id = $('#to_city_id').val();
+    // console.log($( "#from_city_id option:selected" ).text());
+  $('#searchInput1').val($( "#to_city_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
+$('#searchInput1').focus(); 
+select_location = $( "#to_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
+    
+// }
+}
+function applyMyLocationCity1(sel){
+//     var id = $('#from_city_id').val();
+//     // console.log($( "#from_city_id option:selected" ).text());
+//   $('#searchInput').val($( "#from_area_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
+if(select_location !=''){
+      $('#searchInput1').val( select_location+' '+$( "#to_area_id option:selected" ).text()); 
+// select_location = select_location+' '+$( "#from_area_id option:selected" ).text();
+    $('#searchInput1').focus(); 
+}
+select_location = $( "#to_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
+    
+// }
+}
 
 function get_from_latlng(id){
     window.from_lat;
@@ -859,6 +918,8 @@ function get_to_latlng(id){
     }
 
     function bindDataToForm(address, lat, lng) {
+        console.log('address');
+        console.log(address);
         document.getElementById('from_address').value = address;
         document.getElementById('from_latitude').value = lat;
         document.getElementById('from_longitude').value = lng;

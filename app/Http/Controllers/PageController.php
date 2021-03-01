@@ -23,6 +23,7 @@ use App\Models\language;
 use App\Models\ship_now_mobile_verify;
 use App\Models\system_logs;
 use App\Models\weeks;
+use App\Models\guest_user;
 use Mail;
 use Hash;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -308,12 +309,12 @@ class PageController extends Controller
     public function saveMobileVerify(Request $request){
 
         $this->validate($request, [
-            'g-recaptcha-response' => 'required|captcha',
+            //'g-recaptcha-response' => 'required|captcha',
             'shipment_date'=>'required',
             'shipment_from_time'=>'required',
           ],[
-            'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
-            'g-recaptcha-response.captcha' => 'Captcha error! try again later or contact site admin.',
+            //'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+            //'g-recaptcha-response.captcha' => 'Captcha error! try again later or contact site admin.',
         ]);
 
         $randomid = mt_rand(1000,9999); 
@@ -430,6 +431,19 @@ class PageController extends Controller
         $shipment->total = $request->total;
         $shipment->reference_no = $request->reference_no;
         $shipment->save();
+
+        $guest_user = new guest_user;
+        $guest_user->city_id = $request->from_city_id;
+        $guest_user->area_id = $request->from_area_id;
+        $guest_user->country_id = $request->from_country_id;
+        $guest_user->name = $request->from_name;
+        $guest_user->mobile = $request->from_mobile;
+        $guest_user->landline = $request->from_landline;
+        $guest_user->latitude = $request->from_latitude;
+        $guest_user->longitude = $request->from_longitude;
+        $guest_user->address1 = $request->from_address;
+        $guest_user->shipment_id = $shipment->id;
+        $guest_user->save();
 
         $system_logs = new system_logs;
         $system_logs->_id = $shipment->id;

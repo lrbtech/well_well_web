@@ -590,6 +590,19 @@
               </li>
               @endif
 
+
+              <li>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-graph3"></i><span>Settlement Report</span></a>
+                <ul class="iconbar-mainmenu custom-scrollbar">
+                  <li class="iconbar-header">Settlement Report</li>
+                  
+                  <li class="payments-in-report"><a class="payments-in-report" href="/admin/payments-in-report">Payments In Report</a></li> 
+                  
+                  <li class="payments-out-report"><a class="payments-out-report" href="/admin/payments-out-report">Payments Out Report</a></li> 
+
+                </ul>
+              </li>
+
               @if(Auth::guard('admin')->user()->country == 'on' || Auth::guard('admin')->user()->area == 'on' || Auth::guard('admin')->user()->city == 'on' || Auth::guard('admin')->user()->package_category == 'on' || Auth::guard('admin')->user()->exception_category == 'on' || Auth::guard('admin')->user()->station == 'on' || Auth::guard('admin')->user()->financial_settings == 'on' || Auth::guard('admin')->user()->common_price == 'on' || Auth::guard('admin')->user()->languages == 'on' || Auth::guard('admin')->user()->system_logs == 'on')
 
               <li>
@@ -630,10 +643,12 @@
                   <li class="weeks"><a class="weeks" href="/admin/weeks">Working Hours</a></li>
 
                   <li class="languages"><a class="languages" href="/admin/languages">{{$language[200][Auth::guard('admin')->user()->lang]}}</a></li>
+                  <li class="languages"><a class="languages" href="/admin/user-logs">{{$language[201][Auth::guard('admin')->user()->lang]}}</a></li>
 
                   @if(Auth::guard('admin')->user()->system_logs == 'on')
-                  <li class="system-logs"><a class="system-logs" href="/admin/system-logs">{{$language[201][Auth::guard('admin')->user()->lang]}}</a></li>
+                  <li class="system-logs"><a class="system-logs" href="/admin/system-logs">{{$language[298][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
+                   <li class="languages"><a class="languages" href="/admin/user-logs">{{$language[300][Auth::guard('admin')->user()->lang]}}</a></li>
                 </ul>
               </li>
               @endif

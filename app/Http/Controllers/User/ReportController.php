@@ -20,6 +20,7 @@ use App\Models\add_rate_item;
 use App\Models\agent;
 use App\Models\station;
 use App\Models\language;
+use App\Models\user_settlement;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -363,6 +364,82 @@ class ReportController extends Controller
         ->addIndexColumn()
         ->make(true);
 
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+
+    public function PaymentsInReport(){
+        $language = language::all();
+        return view('user.payments_in',compact('language'));
+    }
+
+    public function settlementDetails(){
+        $language = language::all();
+        $user_settlement = user_settlement::where('user_id',Auth::user()->id)->get();
+        return view('user.settlement_details',compact('language','user_settlement'));
+    }
+
+    public function getPaymentsInReport($fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
+        
+        $i =DB::table('shipments as s');
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            $i->whereBetween('s.delivery_date', [$fdate1, $tdate1]);
+        }
+        $i->where('s.sender_id', Auth::user()->id);
+        $i->where('s.special_cod_enable', 1);
+        $i->where('s.status', 8);
+        $i->groupBy('s.sender_id');
+        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.cod_amount) as admin_fees") , DB::raw("s.sender_id") ]);
+        $shipment = $i->get();
+
+        return Datatables::of($shipment)
+            ->addColumn('user_details', function ($shipment) {
+                $user = User::find($shipment->sender_id);
+                return '<td>
+                <p>Customer Id : '.$user->customer_id.'</p>
+                <p>Name : '.$user->first_name.' '.$user->last_name.'</p>
+                </td>';
+            })
+
+            ->addColumn('no_of_shipments', function ($shipment) {
+                return '<td>
+                <p>'.$shipment->no_of_shipments.'</p>
+                </td>';
+            })
+
+            ->addColumn('total_value', function ($shipment) {
+                return '<td>
+                <p>AED ' . $shipment->special_cod . '</p>
+                </td>';
+            })
+
+            ->addColumn('admin_fees', function ($shipment) {
+                return '<td>
+                <p>AED ' . $shipment->admin_fees . '</p>
+                </td>';
+            })
+
+            ->addColumn('payable_value', function ($shipment) {
+                $settlement = $shipment->special_cod - $shipment->admin_fees;
+                return '<td>
+                <p>AED ' . $settlement . '</p>
+                </td>';
+            })
+
+            ->addColumn('settlement_value', function ($shipment) {
+                $user = User::find($shipment->sender_id);
+                return '<td>
+                <p>AED ' . $user->paid . '</p>
+                </td>';
+            })
+            
+            
+        ->rawColumns(['user_details','no_of_shipments', 'total_value', 'admin_fees','settlement_value','payable_value'])
+        ->addIndexColumn()
+        ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
     }
 

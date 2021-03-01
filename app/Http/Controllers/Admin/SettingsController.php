@@ -23,6 +23,7 @@ use App\Models\weeks;
 use Hash;
 use Auth;
 use DB;
+use App\Http\Controllers\Admin\logController;
 
 class SettingsController extends Controller
 {
@@ -49,6 +50,9 @@ class SettingsController extends Controller
             $weeks->save();
         }
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Schedule time");
+
         return response()->json('Successfully Update'); 
     }
 
@@ -74,6 +78,9 @@ class SettingsController extends Controller
         $settings->cod_amount = $request->cod_amount;
         $settings->save();
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Financial Settings");
+
         return response()->json('successfully update'); 
     }
 
@@ -87,7 +94,8 @@ class SettingsController extends Controller
         $settings = settings::find($request->id);
         $settings->terms_and_conditions = $request->editor1;
         $settings->save();
-
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Terms and Conditions");
         return back();
         //return response()->json('successfully update'); 
     }
@@ -112,6 +120,10 @@ class SettingsController extends Controller
 			    $common_price->save();
 	    	}
         }
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Common Price");
+
         return response()->json('successfully save'); 
     }
 
@@ -134,6 +146,9 @@ class SettingsController extends Controller
         $drop_point->longitude = $request->longitude;
         $drop_point->save();
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Drop Point '.$drop_point->drop_point_name.'");
+
         return response()->json('successfully save'); 
     }
     public function updateDropPoint(Request $request){
@@ -153,6 +168,9 @@ class SettingsController extends Controller
         $drop_point->latitude = $request->latitude;
         $drop_point->longitude = $request->longitude;
         $drop_point->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Drop Point '.$drop_point->drop_point_name.'");
 
         return response()->json('successfully update'); 
     }
@@ -174,6 +192,10 @@ class SettingsController extends Controller
     public function deleteDropPoint($id){
         $drop_point = drop_point::find($id);
         $drop_point->delete();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Drop Point '.$drop_point->drop_point_name.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -188,6 +210,9 @@ class SettingsController extends Controller
         $package_category->category = $request->category;
         $package_category->save();
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Package Category '.$package_category->category.'");
+
         return response()->json('successfully save'); 
     }
     public function updatepackageCategory(Request $request){
@@ -200,6 +225,9 @@ class SettingsController extends Controller
         $package_category = package_category::find($request->id);
         $package_category->category = $request->category;
         $package_category->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Package Category '.$package_category->category.'");
 
         return response()->json('successfully update'); 
     }
@@ -219,6 +247,10 @@ class SettingsController extends Controller
         $package_category = package_category::find($id);
         $package_category->status = $status;
         $package_category->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Package Category '.$package_category->category.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -234,6 +266,9 @@ class SettingsController extends Controller
         $exception_category->category = $request->category;
         $exception_category->save();
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Exception Category '.$exception_category->category.'");
+
         return response()->json('successfully save'); 
     }
     public function updateExceptionCategory(Request $request){
@@ -246,6 +281,9 @@ class SettingsController extends Controller
         $exception_category = exception_category::find($request->id);
         $exception_category->category = $request->category;
         $exception_category->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Exception Category '.$exception_category->category.'");
 
         return response()->json('successfully update'); 
     }
@@ -265,6 +303,10 @@ class SettingsController extends Controller
         $exception_category = exception_category::find($id);
         $exception_category->status = $status;
         $exception_category->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Exception Category '.$exception_category->category.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -280,6 +322,9 @@ class SettingsController extends Controller
         $station->station = $request->station;
         $station->save();
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Station '.$station->station.'");
+
         return response()->json('successfully save'); 
     }
     public function updateStation(Request $request){
@@ -292,6 +337,9 @@ class SettingsController extends Controller
         $station = station::find($request->id);
         $station->station = $request->station;
         $station->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Station '.$station->station.'");
 
         return response()->json('successfully update'); 
     }
@@ -311,6 +359,10 @@ class SettingsController extends Controller
         $station = station::find($id);
         $station->status = $status;
         $station->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Station '.$station->station.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -348,6 +400,10 @@ class SettingsController extends Controller
                 $admin->save();
  
                 return response()->json(['message' => 'Password Updated Successfully!' , 'status' => 1], 200);
+
+                $logController = new logController();
+                $logController->createLog(Auth::guard('admin')->user()->email," Password Changed");
+
             }
  
             else{

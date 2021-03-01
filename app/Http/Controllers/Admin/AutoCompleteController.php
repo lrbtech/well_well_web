@@ -18,6 +18,7 @@ use App\Models\add_rate_item;
 use App\Models\settings;
 use DB;
 use Auth;
+use App\Http\Controllers\Admin\logController;
 class AutoCompleteController extends Controller
 {
     public function __construct()

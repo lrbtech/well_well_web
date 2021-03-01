@@ -19,6 +19,7 @@ use App\Models\add_rate_item;
 use App\Models\role;
 use App\Models\language;
 use Auth;
+use App\Http\Controllers\Admin\logController;
 
 
 class HomeController extends Controller

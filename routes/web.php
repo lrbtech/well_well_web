@@ -126,6 +126,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/edit-role/{id}', [App\Http\Controllers\Admin\UserController::class, 'editRole']);
     Route::get('/delete-role/{id}', [App\Http\Controllers\Admin\UserController::class, 'deleteRole']);
 
+    //admin roles
+    Route::get('/admin-roles', [App\Http\Controllers\Admin\UserController::class, 'adminRole']);
+    Route::get('/admin-create-roles', [App\Http\Controllers\Admin\UserController::class, 'createAdminRole']);
     //country
 	Route::get('/country', [App\Http\Controllers\Admin\CityController::class, 'Country']);
     Route::POST('/save-country', [App\Http\Controllers\Admin\CityController::class, 'saveCountry']);
@@ -338,10 +341,20 @@ Route::group(['prefix' => 'admin'],function(){
 
 
     //report
-    Route::get('/payments-in-report', [App\Http\Controllers\Admin\ReportController::class, 'PaymentsInReport']);
-    Route::POST('/get-payments-in-report/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getPaymentsInReport']);
+    Route::get('/payments-in-report', [App\Http\Controllers\Admin\SettlementController::class, 'PaymentsInReport']);
+    Route::POST('/get-payments-in-report/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getPaymentsInReport']);
 
-    Route::POST('/excel-payments-in-report', [App\Http\Controllers\Admin\ReportController::class, 'excelPaymentsInReport']);
+    Route::POST('/agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'agentSettlement']);
+
+    Route::POST('/excel-payments-in-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsInReport']);
+
+
+    Route::get('/payments-out-report', [App\Http\Controllers\Admin\SettlementController::class, 'PaymentsOutReport']);
+    Route::POST('/get-payments-out-report/{user}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getPaymentsOutReport']);
+
+    Route::POST('/user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'userSettlement']);
+
+    Route::POST('/excel-payments-out-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsOutReport']);
     
     //languages modules
     Route::get('/languages', [App\Http\Controllers\Admin\SettingsController::class, 'languageTable']);
@@ -359,8 +372,9 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/search-from-address/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'searchFromAddress']);
     Route::get('/search-to-address/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'searchToAddress']);
-
-    //System Logs
+    
+    //user Logs
+    Route::get('/user-logs', [App\Http\Controllers\Admin\logController::class, 'logView']);
 
 
     //fleet management
@@ -447,6 +461,11 @@ Route::group(['prefix' => 'user'],function(){
 
     Route::get('/revenue-report', [App\Http\Controllers\User\ReportController::class, 'RevenueReport']);
     Route::POST('/get-revenue-report/{date1}/{date2}', [App\Http\Controllers\User\ReportController::class, 'getRevenueReport']);
+
+    Route::get('/payments-in-report', [App\Http\Controllers\User\ReportController::class, 'PaymentsInReport']);
+    Route::POST('/get-payments-in-report/{date1}/{date2}', [App\Http\Controllers\User\ReportController::class, 'getPaymentsInReport']);
+
+    Route::get('/settlement-details', [App\Http\Controllers\User\ReportController::class, 'settlementDetails']);
 
 });
 

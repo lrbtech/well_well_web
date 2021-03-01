@@ -8,6 +8,7 @@ use App\Models\drop_point;
 use App\Models\country;
 use App\Models\city;
 use App\Models\shipment_category;
+use App\Models\agent_settlement;
 use App\Models\package_category;
 use App\Models\manage_address;
 use App\Models\shipment;
@@ -30,6 +31,7 @@ use App\Exports\ShipmentExport;
 use App\Exports\RevenueExport;
 use App\Exports\AgentExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Admin\logController;
 
 class ReportController extends Controller
 {
@@ -587,6 +589,9 @@ class ReportController extends Controller
         return Excel::download(new AgentExport($agent_id,$fdate,$tdate), 'agentreport.xlsx');
         //return (new BookingExport($fdate,$tdate))->download('report.xlsx');
     }
+
+
+
 
 
 }

@@ -22,6 +22,8 @@ use App\Models\revenue_exception_log;
 use App\Models\system_logs;
 use App\Models\complaint;
 use App\Models\language;
+use App\Http\Controllers\Admin\logController;
+use Auth;
 
 class ComplaintController extends Controller
 {
@@ -44,6 +46,11 @@ class ComplaintController extends Controller
         $complaint->complaint_category = $request->complaint_category;
         $complaint->description = $request->description;
         $complaint->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Save Complaint Track ID : '.$complaint->track_id.'");
+
+
         return response()->json('successfully save'); 
     }
     public function updatecomplaint(Request $request){
@@ -60,6 +67,10 @@ class ComplaintController extends Controller
         $complaint->complaint_category = $request->complaint_category;
         $complaint->description = $request->description;
         $complaint->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Complaint Track ID : '.$complaint->track_id.'");
+
         return response()->json('successfully update'); 
     }
 
@@ -79,6 +90,10 @@ class ComplaintController extends Controller
         $complaint = complaint::find($id);
         $complaint->status = $status;
         $complaint->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Complaint Track ID : '.$complaint->track_id.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 }

@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="/assets/website/bootstrap.css">
     <link rel="stylesheet" href="/assets/website/aos.css">
     <link rel="stylesheet" href="/assets/website/style.css">
+    <style>
+
+    </style>
 </head>
 
 
@@ -87,7 +90,8 @@
                                 <div class="row">
                                     <div class="col-xl-9 col-lg-9 aos-init" data-aos="fade-left" data-aos-delay="">
                                         <div class="hero__caption">
-                                            <h1>آمنة &amp; موثوق <span>جمارك</span> حلول!</h1>
+                                            {{-- <h1>آمنة &amp; موثوق <span>جمارك</span> حلول!</h1> --}}
+                                            <h1>حلول لوجستية آمنة وموثوقة </h1>
                                         </div>
 
                                         <form action="#" class="search-box">
@@ -95,13 +99,13 @@
                                                 <input autocomplete="off" name="track_id" id="track_id" type="text" placeholder="Your Tracking ID" tabindex="0">
                                             </div>
                                             <div class="search-form">
-                                                <a onclick="Tracking()" href="#" tabindex="0">Track &amp;
-                                                    Trace</a>
+                                                <a onclick="Tracking()" href="#" tabindex="0">تتبع الشحنة</a>
                                             </div>
                                         </form>
 
                                         <div class="hero-pera">
-                                            <p>للاستعلام عن حالة الطلب</p>
+                                            <p>الاستعلام عن حالة الشحنة.</p>
+                                            {{-- <p>الاستعلام عن حالة الشحنة.</p> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -155,8 +159,10 @@
                         <div class="col-lg-12">
 
                             <div class="section-tittle text-center mb-50">
-                                <span>ميزة الخدمات</span>
-                                <h2>بماذا نحن متميزون؟</h2>
+                                <span>مــــــــــا</span>
+                                <h2>يميزنا عن الآخرين</h2>
+                                {{-- <span>ميزة الخدمات</span>
+                                <h2>بماذا نحن متميزون؟</h2> --}}
                             </div>
                         </div>
                     </div>
@@ -169,7 +175,11 @@
                                 <div class="cat-cap">
                                     <h5>
                                         الاستجابة المستمرة خلال 24/7</h5>
-                                    <p>دعمنا اللوجستي والفني من قبلنا موجود دائمًا، لتلبية احتياجاتك واستفساراتك على مدار الاربعة وعشرين ساعة في الاسبوع. لا تتردد بالاتصال بنا في أيوقت تحتاج فيه إلى المساعدة بشأن شحنتك، أو حتى مجرد سؤال، فنحن هنا لمساعدتك</p>
+                                    {{-- <p>خدمة عملاء على مدار الساعة / طوال الأسبوع
+
+                                        فريق خدمة العملاء لدينا متوفر على مدار الساعة، طوال أيام الأسبوع لتلبية احتياجاتك </p> --}}
+                                        <p>فريق خدمة العملاء لدينا متوفر على مدار الساعة، طوال أيام الأسبوع لتلبية احتياجاتك والإجابة على أي استفسارات وتقديم الدعم الفني واللوجستي في أي وقت تحتاج فيه للمساعدة.
+</p>
                                 </div>
                             </div>
                         </div>
@@ -181,8 +191,10 @@
                                 <div class="cat-cap">
                                     <h5>
                                         التسليم في الوقت المحدد</h5>
-                                    <p>وذلك من خلال توفير أسطول التوصيل مع الفريق المرسل من المحترفين، حيث أخذنا على عاتقنا مسؤولية تسليم البضائع الخاصة بك دائمًا في الوقت المحدد باستخدام كافة التقنيات المتاحة في السوق، من نظام المرسال المتطور إلى برنامج
-                                        تدريب السائق الفريد لدينا</p>
+                                    {{-- <p>لقد آخذنا على عاتقنا مسؤولية تسليم الشحنات الخاصة بك في الوقت المحدد وذلك من خلال موظفينا المحترفين وأسطول التوصيل الخاص بنا، هذا بالإضافة إلى استخدام أحدث التقنيات 
+                                        في عالم التوصيل والشحن.</p> --}}
+                                        <p>لقد آخذنا على عاتقنا مسؤولية تسليم الشحنات الخاصة بك في الوقت المحدد وذلك من خلال موظفينا المحترفين وأسطول التوصيل الخاص بنا، بالإضافة إلى استخدام أحدث التقنيات في عالم التوصيل والشحن.
+</p>
                                 </div>
                             </div>
                         </div>
@@ -193,8 +205,11 @@
                                 </div>
                                 <div class="cat-cap">
                                     <h5>ميزة “Well protect”</h5>
-                                    <p>لم يعد هناك ما يدعو للقلق بشأن الطرود والشحنات المفقودة أو التالفة. حيث تمنحك ميزة ” Well protect” من ول ول اكسبرس خدمة الحماية من التلف أو الضياع أثناء التسوق وسهولة الاطلاع على البضائع الخاصة بك.</p>
-                                </div>
+                                    {{-- <p>تشعر بالقلق بشأن فقد أو تلف الطرود والشحنات؟ ، مع خدمة
+                                        "Well Protect" من ول ول اكسبرس، لن يعود هناك داعي للقلق مرة أخرى حيث تستطيع شحن طرودك بسهولة وراحة بال، ونحن نقوم بحمايتها من التلف والضياع.</p> --}}
+                                <p>تشعر بالقلق بشأن فقد أو تلف الطرود والشحنات؟ ، مع خدمة "Well Protect" من ول ول اكسبرس، لن يعود هناك داعي للقلق مرة أخرى حيث تستطيع شحن طرودك بسهولة وراحة بال، ونحن نقوم بحمايتها من التلف والضياع.
+</p>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -221,12 +236,12 @@
 
                                 <div class="section-tittle mb-35">
                                     <span>من نحن</span>
-                                    <h2>نحن شركة ويل ويل</h2>
+                                    <h2>نؤمن أن نجاح عملائنا هو سر نجاحنا</h2>
                                 </div>
                                 <p>نؤمن أن نجاح عملائنا هو سر نجاحنا</p>
-                                <p>تهدف شركة ويل ويل اكسبرس إلى تقديم مجموعة من الحلول الخدمية المرنة، التي من خلالها تلبي كافة الاحتياجات في مجال الشحن الداخلي والدولي والخدمات اللوجستية، كذلك دعم العملاء لتحسين مستوى النمو التجاري والتوسع بأعمالهم، وذلك
-                                    من خلال فريق عمل مختص ومدرب لتولي جميع المتطلبات الاستثنائية.</p>
-                                <p style="text-align: justify;">أما بالنسبة لعملائنا الذين لا يملكون حسابًا في WELL WELL Express ، فلدينا مجموعة من الحلول المصممة خصيصًا لتلبية متطلباتهم في كل من الشحن المحلي والدولي.
+                                <p>تهدف شركة ويل ويل للشحن إلى تقديم مجموعة متنوعة ومرنة من الحلول الخدمية، التي نلبي من خلالها كافة الاحتياجات في مجالات الشحن الداخلي والدولي والخدمات اللوجستية. هذا بالإضافة إلى دعم عملائنا في تحسين مستوى النمو التجاري والتوسع بأعمالهم، وذلك من 
+                                    خلال فريق عملنا المختص والمدرب لتولي جميع المتطلبات الشحن.</p>
+                                <p style="text-align: justify;">أما بالنسبة لعملائنا الذين لا يملكوأما بالنسبة لعملائنا الذين لا يملكون حسابًا في WELL WELL Express ، الحلول المصممة خصيصًا لتلبية متطلباتهم في كل من الشحن المحلي والدولي.
                                 </p>
 
                             </div>
@@ -260,7 +275,7 @@
                                     </div>
                                     <div class="blog-caption">
                                         <h4>خدمة WELLDOM</h4>
-                                        <p mb-0>مصممة لمجموعة كاملة من حلول الشحن المحلية</p>
+                                        <p mb-0>مجموعة متكاملة من حلول الشحن المحلية.</p>
 
                                     </div>
                                 </div>
@@ -274,7 +289,7 @@
                                     </div>
                                     <div class="blog-caption">
                                         <h4>خدمة WELLLINK</h4>
-                                        <p mb-0>مصممة لمجموعة كاملة من حلول الشحن الدولي.</p>
+                                        <p mb-0>مجموعة متكاملة من حلول الشحن الدولي.</p>
 
                                     </div>
                                 </div>
@@ -395,8 +410,22 @@
                                 <img src="/assets/website/call.png" height="25" width="25" alt="">
                             </div>
                             <div class="info-caption">
-                                <p>اتصل بنا</p>
-                                <span>+971 56 994 9049</span>
+                                {{-- <p>اتصل بنا</p> --}}
+                                <span dir="ltr">+02 444 2254 </span>
+  
+                                {{-- <span><img src="/assets/images/whatsapp.png" width="20px">+05 044 24579 </span> --}}
+                                {{-- <span> <img src="/assets/images/whatsapp.png" width="20px"></span> --}}
+                            </div>
+                        </div>
+                        <div class="single-info mb-4">
+                            <div class="info-icon">
+                                <img src="/assets/images/whatsapp.png" height="25" width="25" alt="">
+                            </div>
+                            <div class="info-caption">
+                    
+  
+                                <span dir="ltr">+05 044 24579 </span>
+                                {{-- <span> <img src="/assets/images/whatsapp.png" width="20px"></span> --}}
                             </div>
                         </div>
                         <div class="single-info mb-4">
@@ -404,7 +433,7 @@
                                 <img src="/assets/website/clock.png" height="35" width="35" alt="">
                             </div>
                             <div class="info-caption">
-                                <p>ساعات العمل</p>
+                                {{-- <p>ساعات العمل</p> --}}
                                 <span>السبت - الخميس 8 صباحا حتى 6 مساءا</span>
                             </div>
                         </div>
@@ -413,7 +442,8 @@
                                 <img src="/assets/website/location.png" height="30" width="30" alt="">
                             </div>
                             <div class="info-caption">
-                                موقعك <span>برج سيلفر ويف ، مدينة أبوظبي</span>
+                               	{{-- الموقع --}}
+                                   <span>برج سيلفر ويف ، مدينة أبوظبي</span>
                             </div>
                         </div>
                     </div>
@@ -440,10 +470,11 @@
                 <div class="col-md-3">
                     <h2 class="footer-heading mb-4">روابط مفيدة</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#">الرئيسية</a></li>
-                        <li><a href="#">من نحن</a></li>
-                        <li><a href="#">خدماتنا</a></li>
-                        <li><a href="#">اتصل بنا </a></li>
+                          
+                        <li><a href="#home-section">الرئيسية</a></li>
+                        <li><a href="#about-section">من نحن</a></li>
+                        <li><a href="#service-solution">خدماتنا</a></li>
+                        <li><a href="#contact">اتصل بنا </a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -451,7 +482,8 @@
                     <ul class="list-unstyled">
                         <li><a href="#">
                             برج سيلفر ويف ، مدينة أبوظبي</a></li>
-                        <li><a href="#">+971 56 994 9409</a></li>
+                        <li><a href="#" dir="ltr">+02 444 2254</a></li>
+                        <li><a href="#" dir="ltr">+971 5044 24579 <img src="/assets/images/whatsapp.png" width="20px"></a></li>
                         <li><a href="#">info@wellwell.ae</a></li>
 
                     </ul>
@@ -472,7 +504,7 @@
                     <div class="border-top pt-3">
                         <p class="copyright mb-0"><small>
 
-                                Copyright 2021 © <strong>WellWell</strong>
+                                Copyright 2021 © <strong>WellWell</strong><br> Crafted With <img src="/assets/images/heart.png" width="30px"> <a href="https://lrbinfotech.com" target="_blank">LRB INFOTECH</a>
 
                             </small></p>
                     </div>

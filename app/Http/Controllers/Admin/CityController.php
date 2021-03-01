@@ -8,6 +8,8 @@ use App\Models\country;
 use App\Models\city;
 use App\Models\language;
 use App\Models\station;
+use App\Http\Controllers\Admin\logController;
+use Auth;
 
 class CityController extends Controller
 {
@@ -29,6 +31,10 @@ class CityController extends Controller
         $city->lng = $request->lng;
         $city->parent_id = 0;
         $city->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Save City'.$city->city.'");
+
         return response()->json('successfully save'); 
     }
     public function updateCity(Request $request){
@@ -44,6 +50,10 @@ class CityController extends Controller
         $city->lng = $request->lng;
         $city->parent_id = 0;
         $city->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit City'.$city->city.'");
+
         return response()->json('successfully update'); 
     }
 
@@ -64,6 +74,10 @@ class CityController extends Controller
         $city = city::find($id);
         $city->status = $status;
         $city->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete City'.$city->city.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -80,6 +94,8 @@ class CityController extends Controller
         $city->remote_area = $request->remote_area;
         $city->parent_id = $request->parent_id;
         $city->save();
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Save Area'.$city->city.'");
         return response()->json('successfully save'); 
     }
 
@@ -95,6 +111,8 @@ class CityController extends Controller
         $city->remote_area = $request->remote_area;
         $city->parent_id = $request->parent_id;
         $city->save();
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit City'.$city->city.'");
         return response()->json('successfully update'); 
     }
 
@@ -115,6 +133,8 @@ class CityController extends Controller
         $city = city::find($id);
         $city->status = $status;
         $city->save();
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete City'.$city->city.'");
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -148,6 +168,8 @@ class CityController extends Controller
         }
 
         $country->save();
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Save Country'.$country->country_name_english.'");
         return response()->json('successfully save'); 
     }
 
@@ -182,6 +204,10 @@ class CityController extends Controller
             }
         }
         $country->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Country'.$country->country_name_english.'");
+
         return response()->json('successfully update'); 
     }
 
@@ -200,6 +226,10 @@ class CityController extends Controller
         $country = country::find($id);
         $country->status = $status;
         $country->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Country'.$country->country_name_english.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 }

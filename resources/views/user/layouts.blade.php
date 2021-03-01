@@ -282,6 +282,8 @@
               <ul id="sm-1614352107947391-8" role="group" aria-hidden="true" aria-labelledby="sm-1614352107947391-7" aria-expanded="false" class="sm-nowrap" style="width: auto; min-width: 10em; display: none; max-width: 20em; top: auto; left: 0px; margin-left: 0px; margin-top: 0px;">
                 <li><a href="/user/shipment-report">Shipment Report</a></li>
                 <li><a href="/user/revenue-report">Revenue Report</a></li>
+                <li><a href="/user/payments-in-report">Payments In Report</a></li>
+                <li><a href="/user/settlement-details">Settlement Deatils</a></li>
               </ul>
             </li>
 

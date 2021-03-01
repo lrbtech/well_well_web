@@ -261,7 +261,7 @@ visibility: visible;
                               </div>
                               <div class="form-group col-md-4">
                                 <label class="col-form-label">Reference No</label>
-                                <input class="form-control" id="reference_no" name="reference_no" type="number" min="1" >
+                                <input class="form-control" id="reference_no" name="reference_no" type="text" >
                               </div>
                             </div>
 
@@ -646,7 +646,7 @@ visibility: visible;
             
             <div class="form-group col-md-6">
               <label class="col-form-label">Select City</label>
-              <select id="city_id" name="city_id" class="form-control">
+              <select onChange="applyMyLocation(this);" id="city_id" name="city_id" class="form-control">
                   <option value="">SELECT City</option>
                   @foreach($city as $row)
                   <option value="{{$row->id}}">{{$row->city}}</option>
@@ -656,7 +656,7 @@ visibility: visible;
 
             <div class="form-group col-md-6">
               <label class="col-form-label">Select Area</label>
-              <select id="area_id" name="area_id" class="form-control">
+              <select onChange="applyMyLocationCity(this);" id="area_id" name="area_id" class="form-control">
                   <option value="">SELECT Area</option>
                   @foreach($area as $row)
                   <option value="{{$row->id}}">{{$row->city}}</option>
@@ -741,7 +741,39 @@ visibility: visible;
 <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
 
 <script>
+function applyMyLocation(sel){
+    select_location='';
+    var id = $('#city_id').val();
+    $('#searchInput').val($( "#city_id option:selected" ).text()); 
+    $('#searchInput').focus(); 
+    select_location = $( "#city_id option:selected" ).text();
+}
+function applyMyLocationCity(sel){
+if(select_location !=''){
+    $('#searchInput').val( select_location+' '+$( "#area_id option:selected" ).text()); 
+    $('#searchInput').focus(); 
+}
+select_location = $( "#city_id option:selected" ).text();
+}
 /* script */
+$(document).ready(function(){
+    if ( $('#shipment_date').prop('type') != 'date' ) $('#shipment_date').datepicker({ language: "en"});
+  //   if ( $('#shipment_from_time').prop('type') != 'time' ) $('#shipment_from_time').datepicker({
+  //      language: "en",
+  //  timepicker: true,
+  //     datepicker: false,
+  //     format: 'H:i',
+  //     locale: 'nl',
+  //     value: new Date('<%= params[:pickup_date] %>' + ' ' + '<%= params[:pickup_time] %>'),
+  //     minDate: 0, // ignore days in the past
+  //     allowTimes: [
+  //       '08:00', '09:00', '10:00',
+  //       '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'
+  //     ]
+  // });
+    // if ( $('#shipment_from_time').prop('type') != 'time' ) $('#shipment_from_time').timepicker();
+    $('#shipment_from_time').clockpicker({ twelvehour: true })
+});
 function initialize() {
    var latlng = new google.maps.LatLng(24.453884,54.3773438);
     var map = new google.maps.Map(document.getElementById('map'), {

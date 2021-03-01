@@ -26,7 +26,7 @@
                     <tr>
                       <td valign="top" width="50%" style="color:#000; padding: 20px 10px 20px 40px; background: #EDEDED; border-right: 2px solid white;">
                         <h3 style="font-size: 13px;">
-                            <label id="tmp_billing_address_label">Total Shipment Values</label><br>
+                            <label id="tmp_billing_address_label">Today Shipment Values</label><br>
                             <label id="tmp_billing_address_label">{{$shipment_data['total_shipment_value']}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
@@ -64,7 +64,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
+                <!-- <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
                   <thead style="text-transform: uppercase;color:#fff; padding: 10px 10px 10px 10px; background: #2d87ba; border-right: 2px solid white;">
                     <tr>
                       <td style="font-weight:bold;border-bottom:2px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="10%">No</td>
@@ -101,7 +101,7 @@
                     </tr>
                     @endforeach
                   </tbody>
-                </table>
+                </table> -->
 
 
 <style media="print">

@@ -904,41 +904,21 @@ class ApiController extends Controller
             $shipment->collect_cod_amount = $request->cod_amount;
             $shipment->delivery_notes = $request->delivery_notes;
 
+            $agent->total_payment = $agent->total_payment + $request->cod_amount;
+            $agent->save();
+
             $shipment->receiver_signature = 'data:image/png;base64,'.$request->receiver_signature;
-            $shipment->receiver_signature_name = $request->signature_name;
+            // $shipment->receiver_signature_name = $request->signature_name;
+
             $shipment->signature_person_name = $request->signature_person_name;
             $shipment->delivery_address = $request->delivery_address;
 
-            //     if($request->receiver_id_copy!=""){                
-            //         $image = $request->receiver_id_copy;
-            //         $image_name = $request->receiver_id_copy_name;
-            //         $filename1='';
-            //         foreach(explode('.', $image_name) as $info){
-            //             $filename1 = $info;
-            //         }
-            //         $fileName = rand() . '.' . $filename1;
-    
-            //         $realImage = base64_decode($image);
-            //         file_put_contents(public_path().'/upload_files/'.$fileName, $realImage);    
-            //     $shipment->receiver_id_copy =  $fileName;
-    
-            //   }
-            // }
-
-
             $shipment->save();
-
 
             $all = shipment::find($request->shipment_id);
             $user = User::find($all->sender_id);
             $package_category = package_category::all();
             $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->get();
-            // if(!empty($user)){
-            //     Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
-            //         $message->to($user->email)->subject('Well Well Express - Delivery Completed');
-            //         $message->from('info@lrbinfotech.com','Well Well Express');
-            //     });
-            // }
             
 
            // return response()->json($shipment);
@@ -1118,28 +1098,24 @@ class ApiController extends Controller
             $check2 = shipment::where('order_id',$request->barcode)->first();
             $shipment_id='';
             if(!empty($check1)){
-                if($check1->status != '10'){
-                    $shipment_id = $check1->shipment_id;
-                }
-                else{
-                    return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
-                }
+                $shipment_id = $check1->shipment_id;
             }
             elseif(!empty($check2)){
-                if($check2->status != '10'){
-                    $shipment_id = $check2->id;
-                }
-                else{
-                    return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
-                }
+                $shipment_id = $check2->id;
             }
             $shipment = shipment::find($shipment_id);
             $data = array(
             'no_of_packages'=> (int)$shipment->no_of_packages,
             'shipment_id'=>$shipment->order_id,
             'id'=>$shipment->id,
-            'status'=>$shipment->status,
+            'status'=>'',
             );
+            if($shipment->hold_status == 1){
+                $data['status']='5';
+            }
+            else{
+                $data['status']=$shipment->status;
+            }
             $datas[]=$data;
             // return response()->json([
             // 'no_of_packages'=>$shipment->no_of_packages,
@@ -1249,22 +1225,64 @@ class ApiController extends Controller
 
     public function getTodayData($id){
         $today = date('Y-m-d');
-        $total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
+        //$total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
 
-        $total_shipment_value = shipment::where('date', $today)->get()->sum("total");
+        $total_shipment_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("total");
 
-        $collected_value = shipment::where('date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
+        $collected_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
 
-        $on_pickup = shipment::where('pickup_assign_date',$today)->where('pickup_agent_id',$id)->where('status',1)->count();
+        $i =DB::table('shipments');
+        $i->where('shipments.pickup_agent_id', $id);
+        $i->orWhere('shipments.package_collect_agent_id', $id);
+        $i->orWhere('shipments.pickup_exception_id', $id);
+        $i->orWhere('shipments.package_collect_agent_id', $id);
+        $i->orWhere('shipments.transit_in_id', $id);
+        $i->orWhere('shipments.revenue_exception_id', $id);
+        $i->orWhere('shipments.transit_out_id', $id);
+        $i->orWhere('shipments.package_at_station_id', $id);
+        $i->orWhere('shipments.van_scan_id', $id);
+        $i->orWhere('shipments.delivery_agent_id', $id);
+        $i->orWhere('shipments.delivery_exception_id', $id);
+        $shipment = $i->get();
 
-        $pickup = shipment::where('package_collect_date',$today)->where('pickup_agent_id',$id)->where('status',2)->count();
+        $on_pickup = 0;
+        $pickup = 0;
+        $exception = 0;
+        $hub=0;
+        $delivery=0;
+        $completed = 0;
+        $total_shipment = 0;
 
-        $exception = shipment::where('exception_assign_date',$today)->where('pickup_agent_id',$id)->where('status',3)->count();
-
-        $hub = shipment::where('transit_in_date',$today)->where('transit_in_id',$id)->where('status',4)->count();
-
-        $delivery = shipment::where('van_scan_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
-        $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();
+        foreach($shipment as $row){
+            if($row->status == 1 && $row->pickup_agent_id == $id && $row->pickup_assign_date == $today){
+                $on_pickup++;
+            }
+            elseif($row->status == 2 && $row->pickup_agent_id == $id && $row->package_collect_date == $today){
+                $pickup++;
+            }
+            elseif($row->status == 3 && $row->pickup_agent_id == $id && $row->exception_assign_date == $today){
+                $exception++;
+            }
+            elseif($row->status == 4 && $row->pickup_agent_id == $id && $row->transit_in_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 6 && $row->pickup_agent_id == $id && $row->transit_out_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 11 && $row->pickup_agent_id == $id && $row->transit_in_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 12 && $row->transit_out_id == $id && $row->transit_out_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 7 && $row->van_scan_id == $id && $row->van_scan_date == $today){
+                $delivery++;
+            }
+            elseif($row->status == 8 && $row->delivery_agent_id == $id && $row->delivery_date == $today){
+                $completed++;
+            }
+        }
+        $total_shipment = $on_pickup + $pickup + $exception + $hub + $delivery + $completed;
 
         $data = array(
             'total_shipment' => $total_shipment,
@@ -1332,24 +1350,66 @@ class ApiController extends Controller
     public function printTodayData($id){
 
         $today = date('Y-m-d');
-        $total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
+        //$total_shipment = shipment::where('date',$today)->where('pickup_agent_id',$id)->orWhere('delivery_agent_id',$id)->count();
 
-        $total_shipment_value = shipment::where('date', $today)->get()->sum("total");
+        $total_shipment_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("total");
 
-        $collected_value = shipment::where('date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
+        $collected_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("special_cod");
 
-        $on_pickup = shipment::where('pickup_assign_date',$today)->where('pickup_agent_id',$id)->where('status',1)->count();
+        $i =DB::table('shipments');
+        $i->where('shipments.pickup_agent_id', $id);
+        $i->orWhere('shipments.package_collect_agent_id', $id);
+        $i->orWhere('shipments.pickup_exception_id', $id);
+        $i->orWhere('shipments.package_collect_agent_id', $id);
+        $i->orWhere('shipments.transit_in_id', $id);
+        $i->orWhere('shipments.revenue_exception_id', $id);
+        $i->orWhere('shipments.transit_out_id', $id);
+        $i->orWhere('shipments.package_at_station_id', $id);
+        $i->orWhere('shipments.van_scan_id', $id);
+        $i->orWhere('shipments.delivery_agent_id', $id);
+        $i->orWhere('shipments.delivery_exception_id', $id);
+        $shipment = $i->get();
 
-        $pickup = shipment::where('package_collect_date',$today)->where('pickup_agent_id',$id)->where('status',2)->count();
+        $on_pickup = 0;
+        $pickup = 0;
+        $exception = 0;
+        $hub=0;
+        $delivery=0;
+        $completed = 0;
+        $total_shipment = 0;
 
-        $exception = shipment::where('exception_assign_date',$today)->where('pickup_agent_id',$id)->where('status',3)->count();
+        foreach($shipment as $row){
+            if($row->status == 1 && $row->pickup_assign_date == $today){
+                $on_pickup++;
+            }
+            elseif($row->status == 2 && $row->package_collect_date == $today){
+                $pickup++;
+            }
+            elseif($row->status == 3 && $row->exception_assign_date == $today){
+                $exception++;
+            }
+            elseif($row->status == 4 && $row->transit_in_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 6 && $row->transit_out_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 11 && $row->transit_in_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 12 && $row->transit_out_date == $today){
+                $hub++;
+            }
+            elseif($row->status == 7 && $row->van_scan_date == $today){
+                $delivery++;
+            }
+            elseif($row->status == 8 && $row->delivery_date == $today){
+                $completed++;
+            }
+        }
+        $total_shipment = $on_pickup + $pickup + $exception + $hub + $delivery + $completed;
 
-        $hub = shipment::where('transit_in_date',$today)->where('transit_in_id',$id)->where('status',4)->count();
-
-        $delivery = shipment::where('van_scan_date',$today)->where('delivery_agent_id',$id)->where('status',7)->count();
-        $completed = shipment::where('delivery_date',$today)->where('delivery_agent_id',$id)->where('status',8)->count();
-
-        $shipment_new = shipment::where('date','=',$today)->get();
+        $shipment_new = shipment::where('date','=',$today)->get();     
         
         $datas =array();
         foreach ($shipment_new as $key => $value) {

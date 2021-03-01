@@ -44,9 +44,9 @@
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
                         <div class="form-group col-md-3">
-                            <label>{{$language[75][Auth::guard('admin')->user()->lang]}}</label>
+                            <label>Select Courier</label>
                           <select id="agent_id" name="agent_id" class="form-control">
-                            <option value="agent">{{$language[76][Auth::guard('admin')->user()->lang]}}</option>
+                            <option value="agent">Select Courier</option>
                             @foreach($agent as $row)
                             <option value="{{$row->id}}">{{$row->name}}</option>
                             @endforeach
@@ -56,8 +56,8 @@
                         <div class="form-group col-md-3">
                             <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
                             </button> <br>
-                            <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
-                            </button>
+                            <!-- <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
+                            </button> -->
                         </div>
                     </div>
                     
@@ -73,8 +73,7 @@
                             <th>No of Shipment</th>
                             <th>Total Value</th>
                             <th>Collected Value</th>
-                            <th>Settlement Value</th>
-                            <th>Remaining Value</th>
+                            <th>OverAll Settlement Value</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -95,6 +94,40 @@
         </div>
 
 
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="popup-modal" tabindex="-1" role="dialog" aria-labelledby="popup-modal" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-grey-dark-5">
+                <h6 class="modal-title " id="modal-title">Add New</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <input type="hidden" name="delivery_agent_id" id="delivery_agent_id">
+
+                    <div class="form-group">
+                      <label>Settlement Value</label>
+                      <input type="text" id="settlement_value" name="settlement_value" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Upload Slip</label>
+                      <input type="file" id="image" name="image" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <button onclick="SaveSettlement()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Save Settlement</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Bootstrap Modal -->  
 
 @endsection
 @section('extra-js')
@@ -117,13 +150,11 @@ var orderPageTable = $('#datatable').DataTable({
     },
     "columns": [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        { data: 'order_id', name: 'order_id' },
-        { data: 'shipment_date', name: 'shipment_date' },
-        { data: 'shipment_mode', name: 'shipment_mode' },
-        { data: 'from_address', name: 'from_address' },
-        { data: 'to_address', name: 'to_address' },
-        { data: 'total', name: 'total' },
-        { data: 'status', name: 'status' },
+        { data: 'agent_details', name: 'agent_details' },
+        { data: 'no_of_shipments', name: 'no_of_shipments' },
+        { data: 'total_value', name: 'total_value' },
+        { data: 'collected_value', name: 'collected_value' },
+        { data: 'settlement_value', name: 'settlement_value' },
         { data: 'action', name: 'action' },
     ]
 });
@@ -153,39 +184,44 @@ $('#search').click(function(){
       tdate = '1';
     }
     var agent_id = $('#agent_id').val();
-    var new_url = '/admin/get-agent-report/'+agent_id+'/'+fdate+'/'+tdate;
+    var new_url = '/admin/get-payments-in-report/'+agent_id+'/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });
 
-function PrintLabel(id){
-  $.ajax({
-    url : '/admin/print-label/'+id,
-    type: "GET",
-    dataType: "JSON",
-    success: function(data)
-    {
-        var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
-        var is_chrome = Boolean(mywindow.chrome);
-        mywindow.document.write(data.html);
-        mywindow.document.close(); 
-        if (is_chrome) {
-            setTimeout(function() {
-            mywindow.focus(); 
-            mywindow.print(); 
-            mywindow.close();
-            window.location.href="/admin/payments-in-report";
-            }, 250);
-        } else {
-            mywindow.focus(); 
-            mywindow.print(); 
-            mywindow.close();
-            window.location.href="/admin/payments-out-report";
-        }
-        //PrintDiv(data);
-        
-    }
-  });
+
+
+
+function Settlement(id){
+    var r = confirm("Are you sure");
+    if (r == true) {
+      $('#delivery_agent_id').val(id);
+      $('#popup-modal').modal('show');
+    } 
+}
+
+function SaveSettlement(){
+  var formData = new FormData($('#form')[0]);
+    $.ajax({
+      url : '/admin/agent-settlement',
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      dataType: "JSON",
+      success: function(data)
+      {                
+          $("#form")[0].reset();
+          $('#popup-modal').modal('hide');
+          toastr.success(data, 'Successfully Save');
+          location.reload();
+      },error: function (data) {
+          var errorData = data.responseJSON.errors;
+          $.each(errorData, function(i, obj) {
+            toastr.error(obj[0]);
+          });
+      }
+    });
 }
 
 

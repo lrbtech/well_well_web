@@ -9,7 +9,9 @@ use App\Models\role;
 use App\Models\language;
 use App\Models\station;
 use Hash;
+use Auth;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use App\Http\Controllers\Admin\logController;
 
 class UserController extends Controller
 {
@@ -122,6 +124,10 @@ class UserController extends Controller
         //$admin->dashboard = $request->dashboard;
 
         $admin->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create New Employee '.$admin->employee_id.'");
+
         return response()->json('successfully save'); 
     }
     public function updateUser(Request $request){
@@ -224,6 +230,10 @@ class UserController extends Controller
         //$admin->dashboard = $request->dashboard;
 
         $admin->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Employee '.$admin->employee_id.'");
+
         return response()->json('successfully update'); 
     }
 
@@ -242,10 +252,13 @@ class UserController extends Controller
     
     public function deleteUser($id){
         $user = admin::find($id);
-            $old_image = "upload_files/".$user->profile_image;
-            if (file_exists($old_image)) {
-                @unlink($old_image);
-            }
+            // $old_image = "upload_files/".$user->profile_image;
+            // if (file_exists($old_image)) {
+            //     @unlink($old_image);
+            // }
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Employee '.$user->employee_id.'");
+
         $user->delete();
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
@@ -287,6 +300,14 @@ class UserController extends Controller
         $user = role::find($id);
         $user->delete();
         return response()->json(['message'=>'Successfully Delete'],200); 
+    }
+
+    public function adminRole(){
+        return view('admin.admin_role');
+    }
+    public function createAdminRole(){
+        $language = language::all();
+        return view('admin.create_role',compact('language'));
     }
 
 }

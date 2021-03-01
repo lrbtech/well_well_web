@@ -14,6 +14,7 @@ use App\Models\settings;
 use App\Models\language;
 use Auth;
 use Mail;
+use App\Http\Controllers\Admin\logController;
 
 class CustomerController extends Controller
 {
@@ -111,6 +112,9 @@ class CustomerController extends Controller
         $customer->registration_date_time = date('Y-m-d H:i:s');
         $customer->save();
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Verify the Registration team : '.$customer->customer_id.'");
+
         return response()->json('successfully save'); 
     }
 
@@ -143,6 +147,9 @@ class CustomerController extends Controller
         $add_rate->special_service_15_to_20_kg_price = $request->special_service_15_to_20_kg_price;
         $add_rate->special_service_20_to_1000_kg_price = $request->special_service_20_to_1000_kg_price;
         $add_rate->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Add Rate Card : '.$request->customer_id.'");
 
         return response()->json('successfully save'); 
     }
@@ -178,6 +185,8 @@ class CustomerController extends Controller
       $add_rate->special_service_20_to_1000_kg_price = $request->special_service_20_to_1000_kg_price;
       $add_rate->save();
 
+      $logController = new logController();
+      $logController->createLog(Auth::guard('admin')->user()->email," Edit Rate Card : '.$request->customer_id.'");
               
       return response()->json('successfully save'); 
   }
@@ -193,6 +202,9 @@ class CustomerController extends Controller
         $message->to($all->email)->subject('Well Well Express - Your Account Price');
         $message->from('info@lrbtech.com','Well Well Express');
     });
+
+    $logController = new logController();
+    $logController->createLog(Auth::guard('admin')->user()->email," Send Mail Rate Card to Customer : '.$customer->customer_id.'");
               
     return response()->json('successfully send'); 
   }
@@ -210,6 +222,9 @@ class CustomerController extends Controller
             $message->from('info@lrbinfotech.com','Well Well Express');
         });
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Verify to Accounts Team : '.$customer->customer_id.'");
+
         return response()->json('successfully save'); 
     }
 
@@ -220,6 +235,9 @@ class CustomerController extends Controller
         $customer->sales_user_id = Auth::guard('admin')->user()->role_id;
         $customer->sales_date_time = date('Y-m-d H:i:s');
         $customer->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Verify to Sales Team : '.$customer->customer_id.'");
 
         return response()->json('successfully save'); 
     }

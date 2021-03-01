@@ -9,6 +9,7 @@ use App\Models\agent;
 use App\Models\language;
 use Hash;
 use Auth;
+use App\Http\Controllers\Admin\logController;
 
 class NotificationController extends Controller
 {
@@ -41,6 +42,9 @@ class NotificationController extends Controller
         }
         $push_notification->save();
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Push Notification : '.$push_notification->title.'");
+
         return response()->json('successfully save'); 
     }
 
@@ -66,6 +70,9 @@ class NotificationController extends Controller
         $push_notification->agent_ids = $agent_id;
         }
         $push_notification->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Create Push & Send Notification : '.$push_notification->title.'");
 
         $this->sendNotification($push_notification->id);
         return response()->json('successfully save'); 
@@ -93,6 +100,9 @@ class NotificationController extends Controller
         $push_notification->agent_ids = $agent_id;
         }
         $push_notification->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Push Notification : '.$push_notification->title.'");
 
         return response()->json('successfully update'); 
     }
@@ -122,6 +132,9 @@ class NotificationController extends Controller
 
         $this->sendNotification($push_notification->id);
 
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit & Send Push Notification : '.$push_notification->title.'");
+
         return response()->json('successfully update'); 
     }
 
@@ -140,6 +153,10 @@ class NotificationController extends Controller
     public function deleteNotification($id){
         $push_notification = push_notification::find($id);
         $push_notification->delete();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Delete Push Notification : '.$push_notification->title.'");
+
         return response()->json(['message'=>'Successfully Delete'],200); 
     }
 
@@ -147,6 +164,9 @@ class NotificationController extends Controller
     public function sendNotification($id){
         //$body = "Pickup date/time : ".$request->pickup_date.'/'.$request->pickup_time.' Delivery Type :'.$request->delivery_option;
         $push_notification = push_notification::find($id);
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Send Push Notification : '.$push_notification->title.'");
 
         if($push_notification->send_to == '1'){
             $agent = agent::where('firebase_key','!=',null)->get();
