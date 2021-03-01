@@ -129,10 +129,10 @@
 </div>
 <div class="wizard-navigation" dir="rtl">
     <ul>
-        <li><a href="#shipfrom" data-toggle="tab">Ship From</a></li>
-        <li><a href="#shipto" data-toggle="tab">Ship To</a></li>
-        <li><a href="#shipdetail" data-toggle="tab">Shipment Detail</a></li>
-        <li><a href="#billing" data-toggle="tab">Billings</a></li>
+        <li><a href="#shipfrom" data-toggle="tab">الشحن من</a></li>
+        <li><a href="#shipto" data-toggle="tab">سافر على متن سفينة ل</a></li>
+        <li><a href="#shipdetail" data-toggle="tab">تفاصيل الشحنة</a></li>
+        <li><a href="#billing" data-toggle="tab">بيلينغز</a></li>
 
     </ul>
 </div>
@@ -143,10 +143,12 @@
         <div class="row">
             <!-- <h4 class="info-text"> Let's start with the basic information </h4> -->
             <div class="col-sm-4">
-                <label class="control-label">Country</label>
+                <label class="control-label">دولة
+</label>
                 <div class="form-group is-empty">
                     <select name="from_country_id" id="from_country_id" class="form-control">
-                        <option disabled="" selected="">Choose Country</option>
+                        <option disabled="" selected="">اختر الدولة
+</option>
                         @foreach($country as $row)
                         <option value="{{$row->id}}"> {{$row->country_name_english}} </option>
                         @endforeach
@@ -155,10 +157,12 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <label class="control-label">City</label>
+                <label class="control-label">مدينة
+</label>
                 <div class="form-group is-empty">
                     <select name="from_city_id" id="from_city_id" class="form-control" aria-required="true" onChange="applyMyLocation(this);">
-                        <option disabled="" selected="">Choose City</option>
+                        <option disabled="" selected="">اختر المدينة
+</option>
                         @foreach($city as $row)
                         <option value="{{$row->id}}"> {{$row->city}} </option>
                         @endforeach
@@ -167,10 +171,12 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <label class="control-label">Area</label>
+                <label class="control-label">منطقة
+</label>
                 <div class="form-group is-empty">
                     <select name="from_area_id" id="from_area_id" class="form-control" aria-required="true" onChange="applyMyLocationCity(this);">
-                        <option disabled="" selected="">Choose City</option>
+                        <option disabled="" selected="">اختر المدينة
+</option>
                         @foreach($area as $row)
                         <option value="{{$row->id}}"> {{$row->city}} </option>
                         @endforeach
@@ -195,8 +201,7 @@
                         <i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">Name
-                            <small>(required)</small></label>
+                        <label class="control-label">الاسم (مطلوب)</label>
                         <input autocomplete="off" name="from_name" id="from_name" type="text" class="form-control">
                     </div>
                 </div>
@@ -208,8 +213,8 @@
                         <i class="material-icons">email</i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">Email
-                            <small>(required)</small></label>
+                        <label class="control-label">البريد الإلكتروني (مطلوب)
+</label>
                         <input id="from_email" name="from_email" type="email" class="form-control">
                     </div>
                 </div>
@@ -221,8 +226,8 @@
                         <i class="fa fa-mobile fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label style="margin-left: 60px;" class="control-label">Mobile
-                            <small>(required)</small></label>
+                        <label style="margin-left: 60px;" class="control-label">المحمول (مطلوب)
+</label>
                         <!-- <input name="mobile" id="mobile" type="text" class="form-control"> -->
                         <div class="input-group">
                             <span class="input-group-addon">+971</span>
@@ -238,8 +243,7 @@
                         <i class="fa fa-phone fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">Landline
-                            <small>(optional)</small></label>
+                        <label class="control-label">الخط الأرضي (اختياري)</label>
                         <input name="from_landline" id="from_landline" type="text" class="form-control">
                     </div>
                 </div>
@@ -247,7 +251,8 @@
 
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label>Enter a location</label>
+                    <label>أدخل موقعًا
+</label>
                     <input id="searchInput" name="searchInput" class="input-controls form-control" type="text" placeholder="Enter a location">
                 </div>
             </div>
@@ -257,20 +262,23 @@
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Address</label>
+                    <label>تبوك
+</label>
                     <input autocomplete="false" id="from_address" name="from_address" class="form-control"></input>
                 </div>
             </div>
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Latitude</label>
+                    <label>خط العرض
+</label>
                     <input readonly type="text" id="from_latitude" name="from_latitude" class="form-control">
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Longitude</label>
+                    <label>خط الطول
+</label>
                     <input readonly type="text" id="from_longitude" name="from_longitude" class="form-control">
                 </div>
             </div>
@@ -279,29 +287,36 @@
 
     <div class="tab-pane" id="shipto">
         <div class="row">
-            <!-- <h4 class="info-text"> Contact Information</h4> -->
+            <!-- <h4 class="info-text"> معلومات الاتصال
+</h4> -->
             <div class="col-sm-4">
-                <label class="control-label">Country</label>
+                <label class="control-label">دولة
+</label>
                 <select name="to_country_id" id="to_country_id" class="form-control">
-                    <option disabled="" selected="">Choose Country</option>
+                    <option disabled="" selected="">اختر الدولة
+</option>
                     @foreach($country as $row)
                     <option value="{{$row->id}}"> {{$row->country_name_english}} </option>
                     @endforeach
                 </select>
             </div>
             <div class="col-sm-4">
-                <label class="control-label">City</label>
+                <label class="control-label">مدينة
+</label>
                 <select onChange="applyMyLocation1(this);" name="to_city_id" id="to_city_id" class="form-control">
-                    <option disabled="" selected="">Choose City</option>
+                    <option disabled="" selected="">اختر المدينة
+</option>
                     @foreach($city as $row)
                     <option value="{{$row->id}}"> {{$row->city}} </option>
                     @endforeach
                 </select>
             </div>
             <div class="col-sm-4">
-                <label class="control-label">Area</label>
+                <label class="control-label">منطقة
+</label>
                 <select onChange="applyMyLocationCity1(this);" name="to_area_id" id="to_area_id" class="form-control">
-                    <option disabled="" selected="">Choose City</option>
+                    <option disabled="" selected="">اختر المدينة
+</option>
                     @foreach($area as $row)
                     <option value="{{$row->id}}"> {{$row->city}} </option>
                     @endforeach
@@ -324,8 +339,8 @@
                         <i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">Contact Name
-                            <small>(required)</small></label>
+                        <label class="control-label">اسم جهة الاتصال (مطلوب)
+</label>
                         <input autocomplete="off" name="to_name" id="to_name" type="text" class="form-control">
                     </div>
                 </div>
@@ -337,8 +352,8 @@
                         <i class="fa fa-mobile fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">Contact Mobile
-                            <small>(required)</small></label>
+                        <label class="control-label">الاتصال بالهاتف المحمول (مطلوب)
+</label>
                         <input autocomplete="off" name="to_mobile" id="to_mobile" type="text" class="form-control">
                     </div>
                 </div>
@@ -350,8 +365,8 @@
                         <i class="fa fa-phone fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">Contact Landline
-                            <small>(optional)</small></label>
+                        <label class="control-label">الاتصال بالهاتف الأرضي (اختياري)
+</label>
                         <input name="to_landline" id="to_landline" type="text" class="form-control">
                     </div>
                 </div>
@@ -359,7 +374,8 @@
 
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label>Enter a location</label>
+                    <label>أدخل موقعًا
+</label>
                     <input id="searchInput1" name="searchInput1" class="input-controls form-control" type="text" placeholder="Enter a location">
                 </div>
             </div>
@@ -369,20 +385,23 @@
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Address</label>
+                    <label>تبوك
+</label>
                     <input autocomplete="off" id="to_address" name="to_address" class="form-control"></input>
                 </div>
             </div>
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Latitude</label>
+                    <label>خط العرض
+</label>
                     <input readonly type="text" id="to_latitude" name="to_latitude" class="form-control">
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Longitude</label>
+                    <label>خط الطول
+</label>
                     <input readonly type="text" id="to_longitude" name="to_longitude" class="form-control">
                 </div>
             </div>
@@ -418,47 +437,47 @@
             </div>
         </div> -->
         <div class="parent">
-            <h4><strong>Package and Shipment Detail</strong></h4>
+            <h4><strong>تفاصيل الحزمة والشحن</strong></h4>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">Number of Packages</label>
+                    <label class="col-form-label">عدد الحزم</label>
                     <input class="form-control" id="no_of_packages" name="no_of_packages" type="number" min="1">
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">Declared Value</label>
+                    <label class="col-form-label">القيمة المعلنة</label>
                     <input class="form-control" id="declared_value" name="declared_value" type="number">
                     <input type="hidden" name="same_data" id="same_data">
                 </div>
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">Reference No</label>
+                    <label class="col-form-label">رقم المرجع</label>
                     <input class="form-control" id="reference_no" name="reference_no" type="text" >
                 </div>
             </div>
             <div class="row">
                 
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">Category</label>
+                    <label class="col-form-label">فئة</label>
                     <select class="form-control" id="category1" name="category[]">
-                        <option value="">SELECT</option>
+                        <option value="">تحديد</option>
                         @foreach($package_category as $row)
                         <option value="{{$row->id}}">{{$row->category}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">Description</label>
+                    <label class="col-form-label">وصف</label>
                     <input type="text" class="form-control" id="description1" name="description[]">
                 </div>
                 
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">Actual Weight</label>
+                    <label class="col-form-label">الوزن الفعلي</label>
                     <input class="form-control" id="weight1" name="weight[]" type="number" min="1">
                 </div>
 
                 <div class="form-group col-md-10">
                     <div class="col-md-12">
-                        <label class="col-form-label">Dimensions&nbsp;&nbsp;[Length&nbsp;x&nbsp;Width&nbsp;x&nbsp;Height] (cm) = Dimension Weight</label>
+                        <label class="col-form-label">الأبعاد & nbsp؛ & nbsp؛ [الطول & nbsp؛ x & nbsp؛ العرض & nbsp؛ x & nbsp؛ الارتفاع] (سم) = وزن البعد</label>
                         <div class="input-group">
                             <span class="input-group-text">
                                 <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length1" style="max-width: 100px;">
@@ -472,7 +491,7 @@
                                 <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height1" style="max-width: 100px;">
                             </span>
                             <span class="input-group-text">
-                                <input style="max-width: 100px;" onclick="getPrice(1)" type="button" class="btn btn-fill btn-success btn-wd" value="Get Dim Weight" />
+                                <input style="max-width: 100px;" onclick="getPrice(1)" type="button" class="btn btn-fill btn-success btn-wd" value="احصل على وزن خافت" />
                             </span>
                             <span class="input-group-text">=</span>
                             <span class="input-group-text">
@@ -483,7 +502,7 @@
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label class="col-form-label">Chargeable Weight</label>
+                    <label class="col-form-label">الوزن المحمّل</label>
                     <input readonly="" class="form-control" id="chargeable_weight1" name="chargeable_weight[]" type="text">
                 </div>
             </div>
@@ -493,13 +512,13 @@
 
     <div class="tab-pane" id="billing">
         <!-- <div class="parent">
-            <h4><strong>Return Package Cost</strong></h4>
+            <h4><strong>تكلفة حزمة العودة</strong></h4>
             <div class="row">
                 <div class="col-sm-6">
                     <label class="radio">
                         <input type="radio" name="w" value="1">
                         <span>
-                            <h5 class="mb-0"><strong>Yes</strong></h5>
+                            <h5 class="mb-0"><strong>نعم</strong></h5>
 
 
                         </span>
@@ -509,7 +528,7 @@
                     <label class="radio">
                         <input type="radio" name="w" value="2">
                         <span>
-                            <h5 class="mb-0"><strong>No</strong></h5>
+                            <h5 class="mb-0"><strong>لا</strong></h5>
 
                         </span>
                     </label>
@@ -517,37 +536,37 @@
             </div>
         </div> -->
         <div class="parent">
-            <h4><strong>Shipment Type</strong></h4>
+            <h4><strong>نوع الشحن</strong></h4>
             <div class="row">
                 <div class="col-md-4">
-                    <label>Pickup Date</label>
+                    <label>اختر تاريخا</label>
                     <input min="<?php echo date('Y-m-d', strtotime("+0 days")); ?>" max="<?php echo date('Y-m-d', strtotime("+60 days")); ?>" class="form-control" id="shipment_date" name="shipment_date" type="date">
                 </div>
 
                 <div class="col-md-4">
-                    <label>Pickup Time</label>
+                    <label>اختار المعاد</label>
                     <select class="form-control" id="shipment_from_time" name="shipment_from_time">
-                        <option value="">Select Time</option>
+                        <option value="">حدد الوقت</option>
                     </select>
                 </div>
 
                 <div class="col-md-4">
-                    <label>Pickup Time</label>
+                    <label>اختار المعاد</label>
                     <input readonly="" class="form-control" id="shipment_to_time" name="shipment_to_time" type="text">
                 </div>
             </div>
         </div>
 
         <div class="parent">
-            <h4><strong>Cash on Delivery</strong></h4>
+            <h4><strong>الدفع عند الاستلام</strong></h4>
             <div class="row">
                 <div class="col-md-6">
-                    <label>Cash on Delivery</label>
+                    <label>الدفع عند الاستلام</label>
                     <input id="special_cod_enable1" type="checkbox" name="special_cod_enable" value="1">
                 </div>
 
                 <div class="col-md-6 show_special_cod">
-                    <label>How Much Amount to Be Collected?</label>
+                    <label>كم المبلغ الذي سيتم تحصيله؟</label>
                     <input class="form-control" id="special_cod" name="special_cod" type="text">
                 </div>
 
@@ -555,11 +574,11 @@
         </div>
 
         <div class="parent">
-            <h4><strong>Billing Details</strong></h4>
+            <h4><strong>تفاصيل الفاتورة</strong></h4>
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Shipment Price (Total Weight = <span id="total_weight_label">0</span> Kg)</label>
+                        <label>سعر الشحن (الوزن الكلي = <span id="total_weight_label">0</span> Kg)</label>
                         <input type="hidden" name="total_weight" id="total_weight">
                         <input readonly class="form-control" name="shipment_price" id="shipment_price" type="text">
                     </div>
@@ -567,7 +586,7 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Insurance <span id="insurance_percentage_label">{{$settings->insurance_percentage}}</span>%</label>
+                        <label>تأمين <span id="insurance_percentage_label">{{$settings->insurance_percentage}}</span>%</label>
                         <input value="{{$settings->insurance_percentage}}" readonly name="insurance_percentage" id="insurance_percentage" type="hidden">
                         <input readonly class="form-control" name="insurance_amount" id="insurance_amount" type="text">
                     </div>
@@ -575,7 +594,7 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Cash on Delivery</label>
+                        <label>الدفع عند الاستلام</label>
                         <input value="{{$settings->cod_amount}}" name="cod_price" id="cod_price" type="hidden">
                         <input readonly class="form-control" value="0" name="cod_amount" id="cod_amount" type="text">
                     </div>
@@ -583,14 +602,14 @@
                 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Sub Total</label>
+                        <label>المجموع الفرعي</label>
                         <input readonly id="sub_total" name="sub_total" class="form-control"></input>
                     </div>
                 </div>
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>VAT <span id="vat_percentage_label">{{$settings->vat_percentage}}</span>%</label>
+                        <label>ضريبة القيمة المضافة <span id="vat_percentage_label">{{$settings->vat_percentage}}</span>%</label>
                         <input value="{{$settings->vat_percentage}}" readonly name="vat_percentage" id="vat_percentage" type="hidden">
                         <input readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
                     </div>
@@ -598,7 +617,7 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Postal Charge <span id="postal_charge_percentage_label">{{$settings->postal_charge_percentage}}</span>%</label>
+                        <label>رسوم البريد <span id="postal_charge_percentage_label">{{$settings->postal_charge_percentage}}</span>%</label>
                         <input value="{{$settings->postal_charge_percentage}}" readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
                         <input readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
                     </div>
@@ -606,13 +625,13 @@
 
                 <!-- <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Cash on Delivery</label>
+                        <label>الدفع عند الاستلام</label>
                         <input readonly id="cod_amount" name="cod_amount" class="form-control"></input>
                     </div>
                 </div> -->
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Total</label>
+                        <label>مجموع</label>
                         <input readonly id="total" name="total" class="form-control"></input>
                     </div>
                 </div>
@@ -631,7 +650,7 @@
 <div class="wizard-footer">
     <div class="pull-right">
         <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next' />
-        <input id="save" onclick="Send()" type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' />
+        <input id="save" onclick="Send()" type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='ينهي' />
     </div>
 
     <div class="pull-left">

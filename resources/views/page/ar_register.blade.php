@@ -392,7 +392,8 @@
                                                 <label class="control-label">دولة
 </label>
                                                 <select name="country_id" id="country_id" class="form-control">
-                                                    <option disabled="" selected="">Choose Country
+                                                    <option disabled="" selected="">اختر الدولة
+
 </option>
                                                     @foreach($country as $row)
                                                     <option value="{{$row->id}}"> {{$row->country_name_english}} </option>
@@ -631,7 +632,7 @@
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
-                                                        <center><input class="btn btn-primary glow" id="btnClearSign" type="button" value="Clear" onclick="init_Sign_Canvas()" /></center>
+                                                        <center><input class="btn btn-primary glow" id="btnClearSign" type="button" value="واضح"وonclick="init_Sign_Canvas()" /></center>
                                                     </div>
                                                 </div>
                                             </div>
