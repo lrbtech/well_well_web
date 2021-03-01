@@ -256,13 +256,13 @@
                                     <td>In the Van for Delivery <b>{{$to_station->station}}</b></td>
                                 </tr>
                                 @endif
-                                @if($shipment->status <= 12 && $shipment->status > 6)
+                                @if(6 <= $shipment->status && 12 >= $shipment->status)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->transit_out_date))}} {{date('H:m a',strtotime($shipment->transit_out_time))}}</td>
                                     <td>Transit Out <b>{{$to_station->station}}</b></td>
                                 </tr>
                                 @endif
-                                @if($shipment->status <= 11 && $shipment->status > 6)
+                                @if(6 <= $shipment->status && 11 >= $shipment->status)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->transit_in_date))}} {{date('H:m a',strtotime($shipment->transit_in_time))}}</td>
                                     <td>Transit In <b>{{$to_station->station}}</b></td>
