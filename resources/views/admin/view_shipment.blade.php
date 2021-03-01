@@ -162,6 +162,20 @@ visibility: visible;
                                 <img src="{{$shipment->receiver_signature}}" class="picture-src" id="wizardPicturePreview" style="padding: 20px" title="">
                                 </label>
                             </div>
+
+                            <div class="form-group col-md-6">
+                                <label class="col-form-label">Receiver Signature Name</label><br>
+                                <label class="col-form-label">
+                                {{$shipment->signature_person_name}}
+                                </label>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label class="col-form-label">Delivery Address</label><br>
+                                <label class="col-form-label">
+                                {{$shipment->delivery_address}}
+                                </label>
+                            </div>
                             @endif
 
                         </div>
