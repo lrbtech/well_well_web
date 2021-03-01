@@ -1613,7 +1613,7 @@ class AllShipment extends Controller
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
             })
             ->addColumn('shipment_time', function ($shipment) {
-                return '<td>'.date('h:i a',strtotime($shipment->cancel_request_time)).'</td>';
+                return '<td>'.date('h:i a',strtotime($shipment->shipment_from_time)).'</td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
                 $special_service='';
@@ -1630,7 +1630,7 @@ class AllShipment extends Controller
             })
             ->addColumn('shipment_date', function ($shipment) {
                 return '<td>
-                <p>' . date("d-m-Y",strtotime($shipment->cancel_request_date)) . '</p>
+                <p>' . date("d-m-Y",strtotime($shipment->shipment_date)) . '</p>
                 </td>';
             })
             ->addColumn('from_address', function ($shipment) {
