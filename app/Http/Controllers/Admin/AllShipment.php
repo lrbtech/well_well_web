@@ -1033,12 +1033,28 @@ class AllShipment extends Controller
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
-                if($shipment->status == 4){
-                    return '<p>Transit In '.$from_station->station.'</p>';
+                $agent = agent::find($shipment->package_collect_agent_id);
+                if(!empty($agent)){
+                    if($shipment->status == 4){
+                        return '<p>Transit In '.$from_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
+                    elseif($shipment->status == 11){
+                        return '<p>Transit In '.$to_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
                 }
-                elseif($shipment->status == 11){
-                    return '<p>Transit In '.$to_station->station.'</p>';
+                else{
+                    if($shipment->status == 4){
+                        return '<p>Transit In '.$from_station->station.'</p>';
+                    }
+                    elseif($shipment->status == 11){
+                        return '<p>Transit In '.$to_station->station.'</p>';
+                    }
                 }
+                
             })
             ->addColumn('action', function ($shipment) {
                 $output='';
@@ -1148,11 +1164,26 @@ class AllShipment extends Controller
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
-                if($shipment->status == 6){
-                    return '<p>Transit Out '.$from_station->station.'</p>';
+                $agent = agent::find($shipment->package_collect_agent_id);
+                if(!empty($agent)){
+                    if($shipment->status == 6){
+                        return '<p>Transit Out '.$from_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
+                    elseif($shipment->status == 12){
+                        return '<p>Transit Out '.$to_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
                 }
-                elseif($shipment->status == 12){
-                    return '<p>Transit Out '.$to_station->station.'</p>';
+                else{
+                    if($shipment->status == 6){
+                        return '<p>Transit Out '.$from_station->station.'</p>';
+                    }
+                    elseif($shipment->status == 12){
+                        return '<p>Transit Out '.$to_station->station.'</p>';
+                    }
                 }
             })
             ->addColumn('action', function ($shipment) {
