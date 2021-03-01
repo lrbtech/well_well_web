@@ -234,7 +234,7 @@ var orderPageTable = $('#datatable').DataTable({
 
 $('#search').click(function(){
     var shipment_status = $('#shipment_status').val();
-    var new_url = '/admin/get-shipment-report/'+shipment_status;
+    var new_url = '/admin/get-shipment/'+shipment_status;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });
