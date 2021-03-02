@@ -164,7 +164,6 @@ class PendingController extends Controller
             $shipment->total = $temp_shipment->total;
             $shipment->reference_no = $temp_shipment->reference_no;
             $shipment->save();
-            
             if($temp_shipment->special_cod_enable == 1){
                 $user = User::find($temp_shipment->sender_id);
                 $cod= (float)($temp_shipment->special_cod) - (float)($temp_shipment->cod_amount);

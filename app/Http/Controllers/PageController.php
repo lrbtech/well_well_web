@@ -587,4 +587,22 @@ class PageController extends Controller
     }
 
 
+    public function deleteDublicateData(){ 
+        $shipment_package = shipment_package::all();
+        $shipment = shipment::all();
+        // foreach($shipment_package as $row){
+        //     $shipment=shipment::find($row->id)
+        //     if($row)
+        // }
+            foreach($shipment_package as $ship){
+                $data = shipment::where('id',$shipment_id->id)->get();
+                if(count($data)>0){
+
+                }else{
+                    shipment::find($ship->id)->delete();
+                }
+            }
+
+    }
+
 }

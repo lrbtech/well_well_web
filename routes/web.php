@@ -72,6 +72,9 @@ Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::clas
 Route::get('/get-available-time/{date}', [App\Http\Controllers\PageController::class, 'getAvailableTime']);
 
 
+Route::get('/delete-dublicate-data', [App\Http\Controllers\PageController::class, 'deleteDublicateData']);
+
+
 Route::group(['prefix' => 'admin'],function(){
 
 	Route::get('/login', [App\Http\Controllers\AdminLogin\LoginController::class, 'showLoginForm'])->name('admin.login');
