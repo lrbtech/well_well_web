@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
                 $q->where('s.sender_id','!=',0);
                 $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
                 $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
-                $today_pickup_request = $q->count();
+                $today_pickup_request1 = $q->get();
 
                 $q1 =DB::table('shipments as s');
                 $q1->where('s.shipment_date','!=',$today);
@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
                 $q1->where('s.sender_id','!=',0);
                 $q1->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
                 $q1->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
-                $future_pickup_request = $q1->count();
+                $future_pickup_request1 = $q1->get();
 
                 $new_shipment_request = shipment::where('status',0)->where('sender_id','!=',0)->orderBy('id','DESC')->count();
 
@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
                 $q->where('s.sender_id','!=',0);
                 $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
                 $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")]);
-                $today_pickup_request = $q->count();
+                $today_pickup_request1 = $q->get();
 
                 $q1 =DB::table('shipments as s');
                 $q1->where('s.from_station_id', Auth::guard('admin')->user()->station_id);
@@ -78,18 +78,18 @@ class AppServiceProvider extends ServiceProvider
                 $q1->where('s.sender_id','!=',0);
                 $q1->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
                 $q1->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
-                $future_pickup_request = $q1->count();
+                $future_pickup_request1 = $q1->get();
 
                 $new_shipment_request = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('sender_id','!=',0)->where('status',0)->orderBy('id','DESC')->count();
 
                 $guest_pickup_request = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('sender_id',0)->where('status',0)->orderBy('id','DESC')->count();
             }
-            // foreach($future_pickup_request1 as $row){
-            //     $future_pickup_request++;
-            // }
-            // foreach($today_pickup_request1 as $row){
-            //     $today_pickup_request++;
-            // }
+            foreach($future_pickup_request1 as $row){
+                $future_pickup_request++;
+            }
+            foreach($today_pickup_request1 as $row){
+                $today_pickup_request++;
+            }
             $view->with(compact('role_get','today_pickup_request','new_shipment_request','future_pickup_request','guest_pickup_request'));
         });
     }
