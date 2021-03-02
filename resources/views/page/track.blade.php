@@ -237,83 +237,85 @@
                         <table class="table">
 
                             <tbody>
-                                @if($shipment->status >= 9 && $shipment->status < 11 && $shipment->status != 10)
+                            @if($shipment->status != 10)
+                                @if($shipment->status == 9 && $shipment->status < 11 && $shipment->status != 10)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->delivery_exception_assign_date))}} {{date('H:m a',strtotime($shipment->delivery_exception_assign_time))}}</td>
                                     <td>
-                                    {{$shipment->delivery_eception_category}}<br>
-                                    {{$shipment->delivery_eception_remark}}
+                                    {{$shipment->delivery_exception_category}}<br>
+                                    {{$shipment->delivery_exception_remark}}
                                     </td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 8 && $shipment->status < 11 && $shipment->status != 10)
+                                @if($shipment->status >= 8 && $shipment->status < 11 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->delivery_date))}} {{date('H:m a',strtotime($shipment->delivery_time))}}</td>
                                     <td>Shipment Delivered</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 7 && $shipment->status < 11 && $shipment->status != 10)
+                                @if($shipment->status >= 7 && $shipment->status < 11 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->van_scan_date))}} {{date('H:m a',strtotime($shipment->van_scan_time))}}</td>
                                     <td>In the Van for Delivery</td>
                                 </tr>
                                 @endif
-                                @if(6 < $shipment->status && 12 == $shipment->status && $shipment->status != 10)
+                                @if(6 < $shipment->status && 12 == $shipment->status && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->transit_out_date))}} {{date('H:m a',strtotime($shipment->transit_out_time))}}</td>
                                     <td>Transit Out <b>{{$to_station->station}}</b></td>
                                 </tr>
                                 @endif
-                                @if(6 < $shipment->status && 11 == $shipment->status && $shipment->status != 10)
+                                @if(6 < $shipment->status && 11 == $shipment->status && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->transit_in_date))}} {{date('H:m a',strtotime($shipment->transit_in_time))}}</td>
                                     <td>Transit In <b>{{$to_station->station}}</b></td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 6 && $shipment->status != 10)
+                                @if($shipment->status >= 6 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->transit_out_date))}} {{date('H:m a',strtotime($shipment->transit_out_time))}}</td>
                                     <td>Transit Out <b>{{$from_station->station}}</b></td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 4 && $shipment->status != 10)
+                                @if($shipment->status >= 4 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->transit_in_date))}} {{date('H:m a',strtotime($shipment->transit_in_time))}}</td>
                                     <td>Transit In <b>{{$from_station->station}}</b></td>
                                 </tr>
                                 @endif
-                                @if($shipment->status == 3 && $shipment->status != 10)
+                                @if($shipment->status == 3 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->exception_assign_date))}} {{date('H:m a',strtotime($shipment->exception_assign_time))}}</td>
                                     <td>
-                                    {{$shipment->eception_category}}<br>
-                                    {{$shipment->eception_remark}}
+                                    {{$shipment->exception_category}}<br>
+                                    {{$shipment->exception_remark}}
                                     </td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 2 && $shipment->status != 10)
+                                @if($shipment->status >= 2 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->package_collect_date))}} {{date('H:m a',strtotime($shipment->package_collect_time))}}</td>
-                                    <td>Packaege Collected</td>
+                                    <td>Package Collected</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 1 && $shipment->status != 10)
+                                @if($shipment->status >= 1 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->pickup_assign_date))}} {{date('H:m a',strtotime($shipment->pickup_assign_time))}}</td>
                                     <td>Schedule for Pickup</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status >= 0 && $shipment->status != 10)
+                                @if($shipment->status >= 0 && $shipment->status != 10 && $shipment->status != 9)
                                 <tr>
                                     <td>{{date('d-m-Y H:m a',strtotime($shipment->created_at))}}</td>
                                     <td>Shipment Created</td>
                                 </tr>
-                                @else 
-                                <tr>
-                                <td>{{date('d-m-Y',strtotime($shipment->cancel_request_date))}} {{date('H:m a',strtotime($shipment->cancel_request_time))}}</td>
-                                    <td>Shipment Canceled</td>
-                                </tr>
                                 @endif
+                            @else 
+                            <tr>
+                            <td>{{date('d-m-Y',strtotime($shipment->cancel_request_date))}} {{date('H:m a',strtotime($shipment->cancel_request_time))}}</td>
+                                <td>Shipment Canceled</td>
+                            </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>

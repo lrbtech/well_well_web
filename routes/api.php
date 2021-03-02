@@ -60,3 +60,10 @@ Route::post('/package-at-station', [App\Http\Controllers\ApiController::class, '
 Route::post('/update-pickup', [App\Http\Controllers\ApiController::class, 'updatePickup']);
 Route::post('/update-delivery', [App\Http\Controllers\ApiController::class, 'updateDelivery']);
 Route::post('/delivery-exception', [App\Http\Controllers\ApiController::class, 'deliveryException']);
+
+
+
+
+//user
+Route::post('/tracking', [App\Http\Controllers\UserApiController::class, 'Tracking']);
+Route::get('/track-history/{id}', [App\Http\Controllers\UserApiController::class, 'trackHistory']);
