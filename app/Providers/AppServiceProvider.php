@@ -36,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
             $future_pickup_request = 0;
             $new_shipment_request = 0;
             $guest_pickup_request = 0;
+            $today_pickup_request1=0;
+            $future_pickup_request1=0;
             if(Auth::guard('admin')->user()->station_id == '0'){
                 $today = date('Y-m-d');
                 $q =DB::table('shipments as s');
