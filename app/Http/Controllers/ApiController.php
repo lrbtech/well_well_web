@@ -922,7 +922,7 @@ class ApiController extends Controller
             $shipment->credit_verification_code = $request->credit_verification_code;
             }
 
-            $shipment->collect_cod_amount = $request->cod_amount;
+            $shipment->collect_cod_amount = (float)$request->cod_amount;
             $shipment->delivery_notes = $request->delivery_notes;
 
             $agent->total_payment = (float)$agent->total_payment + (float)$request->cod_amount;
