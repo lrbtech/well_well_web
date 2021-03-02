@@ -234,11 +234,18 @@ class ShipmentController extends Controller
         $shipment->reference_no = $request->reference_no;
         $shipment->save();
 
+        // if($request->special_cod_enable == 1){
+        // $user = User::find($request->user_id);
+        // $cod=$request->special_cod - $request->cod_amount;
+        // $user->total = $user->total + $cod;
+        // $user->save();
+        // }
+
         if($request->special_cod_enable == 1){
-        $user = User::find($request->user_id);
-        $cod=$request->special_cod - $request->cod_amount;
-        $user->total = $user->total + $cod;
-        $user->save();
+            $user = User::find($request->user_id);
+            $cod= (float)($request->special_cod) - (float)($request->cod_amount);
+            $user->total = $user->total + $cod;
+            $user->save();
         }
 
         $system_logs = new system_logs;
