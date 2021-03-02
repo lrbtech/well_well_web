@@ -925,7 +925,7 @@ class ApiController extends Controller
             $shipment->collect_cod_amount = $request->cod_amount;
             $shipment->delivery_notes = $request->delivery_notes;
 
-            $agent->total_payment = $agent->total_payment + $request->cod_amount;
+            $agent->total_payment = (float)$agent->total_payment + (float)$request->cod_amount;
             $agent->save();
 
             $shipment->receiver_signature = 'data:image/png;base64,'.$request->receiver_signature;
