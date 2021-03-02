@@ -297,13 +297,13 @@
                                     <td>Packaege Collected</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status > 1 && $shipment->status != 10)
+                                @if($shipment->status >= 1 && $shipment->status != 10)
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->pickup_assign_date))}} {{date('H:m a',strtotime($shipment->pickup_assign_time))}}</td>
                                     <td>Schedule for Pickup</td>
                                 </tr>
                                 @endif
-                                @if($shipment->status > 0 && $shipment->status != 10)
+                                @if($shipment->status >= 0 && $shipment->status != 10)
                                 <tr>
                                     <td>{{date('d-m-Y H:m a',strtotime($shipment->created_at))}}</td>
                                     <td>Shipment Created</td>
