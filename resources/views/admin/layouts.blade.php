@@ -565,7 +565,7 @@
                   <li class="agent"><a class="agent" href="/admin/get-fleet">vehicle Management</a></li> 
                   <li class="agent"><a class="agent" href="/admin/get-vehicle-group">vehicle Group </a></li> 
                   <li class="agent"><a class="agent" href="/admin/get-vehicle-type">Type of vehicle </a></li> 
-                  <li class="agent"><a class="agent" href="/admin/get-remainder">Remainder </a></li> 
+                  {{-- <li class="agent"><a class="agent" href="/admin/get-remainder">Remainder </a></li>  --}}
          
                 </ul>
               </li>

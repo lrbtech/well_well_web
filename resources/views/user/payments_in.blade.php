@@ -34,17 +34,17 @@
                   <div class="card-header">
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
+                            <label>{{$language[117][Auth::user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
+                            <label>{{$language[118][Auth::user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
 
                         <div class="form-group col-md-3">
-                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::user()->lang]}}
                             </button> <br>
                             <!-- <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
                             </button> -->
