@@ -594,8 +594,8 @@ class PageController extends Controller
         //     $shipment=shipment::find($row->id)
         //     if($row)
         // }
-            foreach($shipment_package as $ship){
-                $data = shipment::where('id',$shipment_id->id)->get();
+            foreach($shipment as $ship){
+                $data = shipment_package::where('shipment_id',$ship->id)->get();
                 if(count($data)>0){
 
                 }else{
