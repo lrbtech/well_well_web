@@ -935,7 +935,7 @@ class ApiController extends Controller
             }
 
             $cod_amount=0;
-            if($request->cod_amount != ''){
+            if(isset($request->cod_amount)){
                 $cod_amount = (float)$request->cod_amount;
                 $shipment->collect_cod_amount = (float)$cod_amount;
                 $shipment->delivery_notes = $request->delivery_notes;
