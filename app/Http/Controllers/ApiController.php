@@ -950,7 +950,7 @@ class ApiController extends Controller
                     if($shipment->sender_id != 0){
                         $user = User::find($shipment->sender_id);
                         $cod=0;
-                        if($shipment->special_cod != ''){
+                        if($shipment->special_cod != 'null'){
                             $cod= (float)($shipment->special_cod) - (float)($shipment->cod_amount);
                         }
                         $user->total = $user->total + $cod;
