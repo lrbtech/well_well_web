@@ -8,6 +8,7 @@ use App\Models\drop_point;
 use App\Models\country;
 use App\Models\city;
 use App\Models\shipment_category;
+use App\Models\exception_category;
 use App\Models\package_category;
 use App\Models\manage_address;
 use App\Models\shipment;
@@ -88,8 +89,9 @@ class AllShipment extends Controller
             $q->select('a.*');
             $agent = $q->get();
         }
+        $exception_category = exception_category::where('status',0)->get();
         $language = language::all();
-        return view('admin.pickup_exception',compact('agent','language'));
+        return view('admin.pickup_exception',compact('agent','language','exception_category'));
     }
 
     public function PackageCollected(){
@@ -128,7 +130,8 @@ class AllShipment extends Controller
             $agent = $q->get();
         }
         $language = language::all();
-        return view('admin.delivery_exception',compact('agent','language'));
+        $exception_category = exception_category::where('status',0)->get();
+        return view('admin.delivery_exception',compact('agent','language','exception_category'));
     }
 
     public function ShipmentDelivered(){

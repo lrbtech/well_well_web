@@ -33,12 +33,22 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
-                  <!-- <div class="card-header">
-                    <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
-                    <i class="bx bx-plus"></i>
-                    <span>New Users</span>
-                    </button>
-                  </div> -->
+                <div class="row">
+                  <div class="form-group col-md-3">
+                      <label>Exception Category</label>
+                      <select id="shipment_status" name="shipment_status" class="form-control">
+                        <option value="category">All Data</option>
+                        @foreach($exception_category as $row)
+                        <option>{{$row->category}}</option>
+                        @endforeach
+                      </select>
+                  </div>
+
+                  <div class="form-group col-md-2">
+                      <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
+                      </button> <br>
+                  </div>
+                </div>
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="display" id="datatable">

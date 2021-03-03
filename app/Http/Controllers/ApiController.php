@@ -1100,7 +1100,7 @@ class ApiController extends Controller
 
 
         if(count($check1)>0){
-            if($check1[0]->status != '8'){
+            //if($check1[0]->status != '8'){
                 if($check1[0]->status != '10'){
                     $data = array(
                     'id'=>$check1[0]->id,
@@ -1115,9 +1115,9 @@ class ApiController extends Controller
                 }else{
                     return response()->json(['message' => 'Shipment Canceled','status'=>401], 401);
                 }
-            }else{
-                return response()->json(['message' => 'Shipment Already Delivered','status'=>401], 401);
-            }
+            // }else{
+            //     return response()->json(['message' => 'Shipment Already Delivered','status'=>401], 401);
+            // }
         }else{
             return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
         }
@@ -1140,37 +1140,29 @@ class ApiController extends Controller
             $q->select('s.status','sp.*');
             $check1 = $q->first();
             $check2 = shipment::where('order_id',$request->barcode)->first();
-            if($check1->status != '8'){
-                if($check2->status != '8'){
-                    $shipment_id='';
-                    if(!empty($check1)){
-                        $shipment_id = $check1->shipment_id;
-                    }
-                    elseif(!empty($check2)){
-                        $shipment_id = $check2->id;
-                    }
-                    $shipment = shipment::find($shipment_id);
-                    $data = array(
-                    'no_of_packages'=> (int)$shipment->no_of_packages,
-                    'shipment_id'=>$shipment->order_id,
-                    'id'=>$shipment->id,
-                    'status'=>'',
-                    );
-                    if($shipment->hold_status == 1){
-                        $data['status']='5';
-                    }
-                    else{
-                        $data['status']=$shipment->status;
-                    }
-                    $datas[]=$data;
-                    
-                    return response()->json($datas);
-                }else{
-                    return response()->json(['message' => 'Shipment Already Delivered','status'=>401], 401);
+                $shipment_id='';
+                if(!empty($check1)){
+                    $shipment_id = $check1->shipment_id;
                 }
-            }else{
-                return response()->json(['message' => 'Shipment Already Delivered','status'=>401], 401);
-            }
+                elseif(!empty($check2)){
+                    $shipment_id = $check2->id;
+                }
+                $shipment = shipment::find($shipment_id);
+                $data = array(
+                'no_of_packages'=> (int)$shipment->no_of_packages,
+                'shipment_id'=>$shipment->order_id,
+                'id'=>$shipment->id,
+                'status'=>'',
+                );
+                if($shipment->hold_status == 1){
+                    $data['status']='5';
+                }
+                else{
+                    $data['status']=$shipment->status;
+                }
+                $datas[]=$data;
+                
+                return response()->json($datas);
         
         }catch (\Exception $e) {
             return response()->json($e);

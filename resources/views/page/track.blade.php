@@ -109,7 +109,7 @@
                     @elseif($shipment->status == 2)
                         <span>Packaege Collected</span>
                     @elseif($shipment->status == 3)
-                        <span>Pickup Exception</span>
+                        <span>Schedule for Pickup</span>
                     @elseif($shipment->status == 4)
                         <span>Transit In <b>{{$from_station->station}}</b></span>
                     @elseif($shipment->status == 6)
@@ -123,7 +123,7 @@
                     @elseif($shipment->status == 8)
                         <span>Shipment Delivered</span>
                     @elseif($shipment->status == 9)
-                        <span>Delivery Exception</span>
+                        <span>In the Van for Delivery</span>
                     @elseif($shipment->status == 10)
                         <span>Shipment Canceled</span>
                     @endif
@@ -244,8 +244,7 @@
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->delivery_exception_assign_date))}} {{date('H:m a',strtotime($shipment->delivery_exception_assign_time))}}</td>
                                     <td>
-                                    {{$shipment->delivery_exception_category}}<br>
-                                    {{$shipment->delivery_exception_remark}}
+                                    <td>In the Van for Delivery</td>
                                     </td>
                                 </tr>
                                 @endif
@@ -302,8 +301,7 @@
                                 <tr>
                                     <td>{{date('d-m-Y',strtotime($shipment->exception_assign_date))}} {{date('H:m a',strtotime($shipment->exception_assign_time))}}</td>
                                     <td>
-                                    {{$shipment->exception_category}}<br>
-                                    {{$shipment->exception_remark}}
+                                    <td>Schedule for Pickup</td>
                                     </td>
                                 </tr>
                                 @endif

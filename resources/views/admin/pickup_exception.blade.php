@@ -46,6 +46,22 @@
                         <div class="form-group col-md-3">
                             <button id="save" class="btn btn-primary btn-block mr-10" type="button">{{$language[77][Auth::guard('admin')->user()->lang]}}</button>
                         </div>
+                        <div class="form-group col-md-3">
+                            <label>Exception Category</label>
+                            <select id="shipment_status" name="shipment_status" class="form-control">
+                              <option value="category">All Data</option>
+                              @foreach($exception_category as $row)
+                              <option>{{$row->category}}</option>
+                              @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-2">
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
+                            </button> <br>
+                            <!-- <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
+                            </button> -->
+                        </div>
                     </div>
                   </div>
                   <div class="card-body">
