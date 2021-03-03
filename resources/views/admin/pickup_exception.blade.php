@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label>Exception Category</label>
-                            <select id="shipment_status" name="shipment_status" class="form-control">
+                            <select id="category" name="category" class="form-control">
                               <option value="category">All Data</option>
                               @foreach($exception_category as $row)
                               <option>{{$row->category}}</option>
@@ -149,7 +149,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-pickup-exception",
+        "url": "/admin/get-pickup-exception/category",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -194,7 +194,7 @@ $(document).on('click','#save', function(){
             success:function(data){
               toastr.success(data);
               //window.location.href="/admin/new-shipment-request";
-              var new_url = '/admin/get-new-shipment-request';
+              var new_url = '/admin/get-pickup-exception/category';
               orderPageTable.ajax.url(new_url).load();
             }
         })
@@ -222,7 +222,7 @@ $(document).on('click','#assignagent', function(){
             success:function(data){
               toastr.success(data);
               //window.location.href="/admin/new-shipment-request";
-              var new_url = '/admin/get-new-shipment-request';
+              var new_url = '/admin/get-pickup-exception/category';
               orderPageTable.ajax.url(new_url).load();
             }
         })
@@ -280,6 +280,13 @@ function PrintLabel(id){
   });
 }
 
+
+$('#search').click(function(){
+    var category = $('#category').val();
+    var new_url = '/admin/get-pickup-exception/'+category;
+    orderPageTable.ajax.url(new_url).load();
+    //orderPageTable.draw();
+});
 
 </script>
 @endsection

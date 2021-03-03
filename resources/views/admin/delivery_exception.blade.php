@@ -36,7 +36,7 @@
                 <div class="row">
                   <div class="form-group col-md-3">
                       <label>Exception Category</label>
-                      <select id="shipment_status" name="shipment_status" class="form-control">
+                      <select id="category" name="category" class="form-control">
                         <option value="category">All Data</option>
                         @foreach($exception_category as $row)
                         <option>{{$row->category}}</option>
@@ -102,7 +102,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-delivery-exception",
+        "url": "/admin/get-delivery-exception/category",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -151,7 +151,12 @@ function PrintLabel(id){
   });
 }
 
-
+$('#search').click(function(){
+    var category = $('#category').val();
+    var new_url = '/admin/get-delivery-exception/'+category;
+    orderPageTable.ajax.url(new_url).load();
+    //orderPageTable.draw();
+});
 
 </script>
 @endsection

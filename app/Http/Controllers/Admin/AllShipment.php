@@ -755,12 +755,31 @@ class AllShipment extends Controller
 
 
 
-    public function getPickupException(){
+    public function getPickupException($category){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',3)->orderBy('id', 'DESC')->where('hold_status',0)->get();
+            //$shipment = shipment::where('status',3)->orderBy('id', 'DESC')->where('hold_status',0)->get();
+            $i =DB::table('shipments');
+            if ( $category != 'category' )
+            {
+                $i->where('shipments.exception_category', $category);
+            }
+            $i->where('shipments.status',3);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',3)->orderBy('id', 'DESC')->where('hold_status',0)->get();
+            //$shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',3)->orderBy('id', 'DESC')->where('hold_status',0)->get();
+            $i =DB::table('shipments');
+            if ( $category != 'category' )
+            {
+                $i->where('shipments.exception_category', $category);
+            }
+            $i->where('shipments.status',3);
+            $i->where('shipments.hold_status',0);
+            $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
 
         return Datatables::of($shipment)
@@ -1424,19 +1443,41 @@ class AllShipment extends Controller
     }
 
 
-    public function getDeliveryException(){
+    public function getDeliveryException($category){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            //$shipment = shipment::where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $i =DB::table('shipments');
+            if ( $category != 'category' )
+            {
+                $i->where('shipments.delivery_exception_category', $category);
+            }
+            $i->where('shipments.status',9);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
         else{
             // $shipment = shipment::where('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
-            $shipment = DB::table('shipments')
-            ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
-                    ['status','9']])
-            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
-                    ['status','9']])
-            ->where('hold_status',0)->orderBy('id', 'DESC')
-            ->get();
+            // $shipment = DB::table('shipments')
+            // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
+            //         ['status','9']])
+            // ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+            //         ['status','9']])
+            // ->where('hold_status',0)->orderBy('id', 'DESC')
+            // ->get();
+
+            $i =DB::table('shipments');
+            if ( $category != 'category' )
+            {
+                $i->where('shipments.delivery_exception_category', $category);
+            }
+            $i->where([['shipments.from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['shipments.status','9']]);
+            $i->orWhere([['shipments.to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['shipments.status','9']]);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
 
         return Datatables::of($shipment)

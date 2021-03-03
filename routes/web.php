@@ -296,7 +296,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-future-pickup-request', [App\Http\Controllers\Admin\AllShipment::class, 'getFuturePickupRequest']);
 
     Route::get('/pickup-exception', [App\Http\Controllers\Admin\AllShipment::class, 'PickupException']);
-    Route::POST('/get-pickup-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getPickupException']);
+    Route::POST('/get-pickup-exception/{category}', [App\Http\Controllers\Admin\AllShipment::class, 'getPickupException']);
 
     Route::get('/package-collected', [App\Http\Controllers\Admin\AllShipment::class, 'PackageCollected']);
     Route::POST('/get-package-collected', [App\Http\Controllers\Admin\AllShipment::class, 'getPackageCollected']);
@@ -311,7 +311,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-ready-for-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'getReadyForDelivery']);
 
     Route::get('/delivery-exception', [App\Http\Controllers\Admin\AllShipment::class, 'DeliveryException']);
-    Route::POST('/get-delivery-exception', [App\Http\Controllers\Admin\AllShipment::class, 'getDeliveryException']);
+    Route::POST('/get-delivery-exception/{category}', [App\Http\Controllers\Admin\AllShipment::class, 'getDeliveryException']);
 
     Route::get('/shipment-delivered', [App\Http\Controllers\Admin\AllShipment::class, 'ShipmentDelivered']);
     Route::POST('/get-shipment-delivered', [App\Http\Controllers\Admin\AllShipment::class, 'getShipmentDelivered']);
