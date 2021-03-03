@@ -934,18 +934,22 @@ class ApiController extends Controller
             $shipment->credit_verification_code = $request->credit_verification_code;
             }
 
-            $shipment->collect_cod_amount = (float)$request->cod_amount;
-            $shipment->delivery_notes = $request->delivery_notes;
+            $cod_amount=0;
+            if($request->cod_amount != ''){
+                $cod_amount = (float)$request->cod_amount;
+                $shipment->collect_cod_amount = (float)$cod_amount;
+                $shipment->delivery_notes = $request->delivery_notes;
 
-            $agent->total_payment = (float)$agent->total_payment + (float)$request->cod_amount;
-            $agent->save();
+                $agent->total_payment = (float)$agent->total_payment + (float)$cod_amount;
+                $agent->save();
 
-            if($shipment->special_cod_enable == 1){
-                if($shipment->sender_id != 0){
-                    $user = User::find($shipment->sender_id);
-                    $cod= (float)($shipment->special_cod) - (float)($shipment->cod_amount);
-                    $user->total = $user->total + $cod;
-                    $user->save();
+                if($shipment->special_cod_enable == 1){
+                    if($shipment->sender_id != 0){
+                        $user = User::find($shipment->sender_id);
+                        $cod= (float)($shipment->special_cod) - (float)($shipment->cod_amount);
+                        $user->total = $user->total + $cod;
+                        $user->save();
+                    }
                 }
             }
 

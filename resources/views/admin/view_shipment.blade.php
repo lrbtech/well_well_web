@@ -376,7 +376,7 @@ visibility: visible;
                               <input value="{{$shipment->insurance_amount}}" readonly class="form-control" name="insurance_amount" id="insurance_amount" type="text">
                             </div>
                           </div>
-                          
+
                           @if($shipment->special_cod_enable == 1)
                           <div class="form-group row">
                             <label class="col-sm-6 col-form-label">Cash on Delivery </label>
