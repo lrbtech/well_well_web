@@ -379,7 +379,7 @@ class ApiController extends Controller
         if(!empty($to_station)){
             $data['to_station'] = $to_station->station;
         }
-        if($shipment->special_cod_enable == '1'){
+        if($shipment->special_cod_enable == '1' && $shipment->special_cod != 'null' && $shipment->special_cod != ''){
             $data['special_cod'] = $shipment->special_cod;
         }
         if($shipment->postal_charge_percentage != 'null'){
