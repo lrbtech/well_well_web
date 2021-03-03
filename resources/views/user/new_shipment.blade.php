@@ -420,7 +420,7 @@ visibility: visible;
 
                         <div class="col-sm-6 show_special_cod">
                             <label>How Much Amount to Be Collected?</label>
-                            <input class="form-control" id="special_cod" name="special_cod" type="text">
+                            <input class="form-control" id="special_cod" name="special_cod" type="number">
                         </div>
 
                         
