@@ -1119,7 +1119,7 @@ function SaveShipment(){
       processData: false,
       dataType: "JSON",
       success: function(data)
-      {                
+      {      
           $("#shipping_form")[0].reset();
           $('#address_modal').modal('hide');
           

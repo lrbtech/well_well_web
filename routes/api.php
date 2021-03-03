@@ -63,6 +63,11 @@ Route::post('/delivery-exception', [App\Http\Controllers\ApiController::class, '
 
 
 
+//order api
+
+Route::post('/ext/order/get-area', [App\Http\Controllers\OrderApiController::class, 'getArea']);
+Route::post('/ext/order/create-order', [App\Http\Controllers\OrderApiController::class, 'createOrder']);
+
 
 //user
 Route::post('/user-login', [App\Http\Controllers\ApiController::class, 'userLogin']);

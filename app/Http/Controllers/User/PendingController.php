@@ -163,21 +163,16 @@ class PendingController extends Controller
             $shipment->cod_amount = $temp_shipment->cod_amount;
             $shipment->total = $temp_shipment->total;
             $shipment->reference_no = $temp_shipment->reference_no;
+            $shipment->identical = $temp_shipment->identical;
             $shipment->save();
-
-            // if($temp_shipment->special_cod_enable == 1){
-            //     $user = User::find($temp_shipment->sender_id);
-            //     $cod= (float)($temp_shipment->special_cod) - (float)($temp_shipment->cod_amount);
-            //     $user->total = $user->total + $cod;
-            //     $user->save();
-            // }
                         
             $system_logs = new system_logs;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = Auth::user()->email;
-            $system_logs->remark = 'New Shipment Created by Customer';
+            $system_logs->remark = 'New Shipment Created by Customer '.Auth::user()->first_name . Auth::user()->last_name;
             $system_logs->save();
+
             $temp_shipment_package = temp_shipment_package::where('temp_id', $temp_shipment->id)->get();
             foreach ($temp_shipment_package as $temp) {
                 do {

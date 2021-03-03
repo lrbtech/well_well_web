@@ -159,15 +159,8 @@ class ShipmentController extends Controller
         $shipment->cod_amount = $request->cod_amount;
         $shipment->total = $request->total;
         $shipment->reference_no = $request->reference_no;
-        $shipment->save();
-
-        // $system_logs = new system_logs;
-        // $system_logs->_id = $shipment->id;
-        // $system_logs->category = 'shipment';
-        // $system_logs->to_id = Auth::user()->email;
-        // $system_logs->remark = 'New Shipment Created by Customer';
-        // $system_logs->save();
-        
+        $shipment->identical = $request->same_data;
+        $shipment->save();     
 
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 

@@ -232,28 +232,16 @@ class ShipmentController extends Controller
         $shipment->cod_amount = $request->cod_amount;
         $shipment->total = $request->total;
         $shipment->reference_no = $request->reference_no;
+        $shipment->identical = $request->same_data;
         $shipment->save();
-
-        // if($request->special_cod_enable == 1){
-        // $user = User::find($request->user_id);
-        // $cod=$request->special_cod - $request->cod_amount;
-        // $user->total = $user->total + $cod;
-        // $user->save();
-        // }
-
-        // if($request->special_cod_enable == 1){
-        //     $user = User::find($request->user_id);
-        //     $cod= (float)($request->special_cod) - (float)($request->cod_amount);
-        //     $user->total = $user->total + $cod;
-        //     $user->save();
-        // }
 
         $system_logs = new system_logs;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::guard('admin')->user()->email;
-        $system_logs->remark = 'New Shipment Created by Employee';
+        $system_logs->remark = 'New Shipment Created to '.Auth::guard('admin')->user()->name;
         $system_logs->save();
+
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
