@@ -588,7 +588,7 @@ class ApiController extends Controller
         $shipment->vat_amount = $vat_amount;
         $shipment->insurance_percentage = $settings->insurance_percentage;
         $shipment->insurance_amount = $insurance_amount;
-        $shipment->cod_amount = $request->cod_amount;
+        $shipment->cod_amount = $shipment->cod_amount;
         $shipment->total = $total;
         
         $shipment->revenue_exception_id = $request->agent_id;
@@ -643,6 +643,9 @@ class ApiController extends Controller
         $shipment->vat_amount = $vat_amount;
         $shipment->insurance_percentage = $settings->insurance_percentage;
         $shipment->insurance_amount = $insurance_amount;
+        if($shipment->special_cod_enable == 1){
+            $shipment->cod_amount = $settings->cod_amount;
+        }
         $shipment->total = $total;
         
         $shipment->revenue_exception_id = $request->agent_id;
@@ -946,7 +949,10 @@ class ApiController extends Controller
                 if($shipment->special_cod_enable == 1){
                     if($shipment->sender_id != 0){
                         $user = User::find($shipment->sender_id);
-                        $cod= (float)($shipment->special_cod) - (float)($shipment->cod_amount);
+                        $cod=0;
+                        if($shipment->special_cod != ''){
+                            $cod= (float)($shipment->special_cod) - (float)($shipment->cod_amount);
+                        }
                         $user->total = $user->total + $cod;
                         $user->save();
                     }
