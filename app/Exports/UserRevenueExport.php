@@ -52,6 +52,7 @@ class UserRevenueExport implements FromCollection, ShouldAutoSize , WithHeadings
             $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
         }
         $i->where('shipments.sender_id',Auth::user()->id);
+        $i->where('shipments.status',8);
         $i->orderBy('shipments.id','DESC');
         $shipment = $i->get();
         return $shipment;

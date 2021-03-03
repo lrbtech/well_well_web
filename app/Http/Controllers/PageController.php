@@ -469,7 +469,7 @@ class PageController extends Controller
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = $request->from_name .'/'. $request->from_mobile;
-        $system_logs->remark = 'New Shipment Created by Guest';
+        $system_logs->remark = 'New Shipment Created by Guest '.$request->from_name;
         $system_logs->save();
 
         if($request->same_data == '0'){

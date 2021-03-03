@@ -66,9 +66,10 @@ class ApiController extends Controller
         $data =array();
         $datas =array();
         foreach ($shipment as $key => $value) {
+            $shipment_package = shipment_package::where('shipment_id',$value->id)->get();
             $data = array(
                 'id' => $value->id,
-                'order_id' => $value->order_id,
+                'order_id' => $shipment_package[0]->sku_value,
                 'shipment_mode' => $value->shipment_mode,
                 'shipment_date' => $value->shipment_date,
                 'shipment_from_time' => $value->shipment_from_time,
@@ -126,9 +127,10 @@ class ApiController extends Controller
         $data =array();
         $datas =array();
         foreach ($shipment as $key => $value) {
+            $shipment_package = shipment_package::where('shipment_id',$value->id)->get();
             $data = array(
                 'id' => $value->id,
-                'order_id' => $value->order_id,
+                'order_id' => $shipment_package[0]->sku_value,
                 'shipment_mode' => $value->shipment_mode,
                 'shipment_date' => $value->shipment_date,
                 'shipment_from_time' => $value->shipment_from_time,
@@ -239,9 +241,11 @@ class ApiController extends Controller
     public function getPickupDetails($id){
         $shipment = shipment::find($id);
         $data =array();
+        $shipment_package = shipment_package::where('shipment_id',$id)->get();
+
         $data = array(
             'id' => $shipment->id,
-            'order_id' => $shipment->order_id,
+            'order_id' => $shipment_package[0]->sku_value,
             'shipment_mode' => $shipment->shipment_mode,
             'shipment_date' => $shipment->shipment_date,
             'shipment_from_time' => $shipment->shipment_from_time,
@@ -331,10 +335,11 @@ class ApiController extends Controller
 
     public function getDeliveryDetails($id){
         $shipment = shipment::find($id);
+        $shipment_package = shipment_package::where('shipment_id',$id)->get();
 
         $data = array(
             'id' => $shipment->id,
-            'order_id' => $shipment->order_id,
+            'order_id' => $shipment_package[0]->sku_value,
             'shipment_mode' => $shipment->shipment_mode,
             'shipment_date' => $shipment->shipment_date,
             'shipment_from_time' => $shipment->shipment_from_time,
@@ -602,13 +607,20 @@ class ApiController extends Controller
             }
         }
 
+        $insurance_amount = 0;
+        $cod_amount = 0;
+        $vat_amount = 0;
+        $postal_charge = 0;
 
         $shipment->shipment_price = $price;
         $settings = settings::find('1');
         $insurance_amount = ($settings->insurance_percentage/100) * $shipment->declared_value;
 
+        if($shipment->special_cod_enable == 1){
+            $cod_amount = $settings->cod_amount;
+        }
 
-        $sub_total = $price + $insurance_amount;
+        $sub_total = $price + $insurance_amount + $cod_amount;
 
         $vat_amount = ($settings->vat_percentage/100) * $sub_total;
     
@@ -928,6 +940,15 @@ class ApiController extends Controller
             $agent->total_payment = (float)$agent->total_payment + (float)$request->cod_amount;
             $agent->save();
 
+            if($shipment->special_cod_enable == 1){
+                if($shipment->sender_id != 0){
+                    $user = User::find($shipment->sender_id);
+                    $cod= (float)($shipment->special_cod) - (float)($shipment->cod_amount);
+                    $user->total = $user->total + $cod;
+                    $user->save();
+                }
+            }
+
             $shipment->receiver_signature = 'data:image/png;base64,'.$request->receiver_signature;
             // $shipment->receiver_signature_name = $request->signature_name;
 
@@ -1023,9 +1044,7 @@ class ApiController extends Controller
                     return response()->json(['message' => 'Status Not Available','status'=>400], 400);
                 }
             }
-
-
-        
+       
             }else{
                 return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
             }
@@ -1081,19 +1100,23 @@ class ApiController extends Controller
 
 
         if(count($check1)>0){
-            if($check1[0]->status != '10'){
-                $data = array(
-                'id'=>$check1[0]->id,
-                'barcode_package'=>$check1[0]->sku_value,
-                'weight'=>$check1[0]->weight,
-                'length'=>$check1[0]->length,
-                'width'=>$check1[0]->width,
-                'height'=>$check1[0]->height,
-                );
-                $datas[]=$data;
-                return response()->json($datas, 200);
+            if($check1[0]->status != '8'){
+                if($check1[0]->status != '10'){
+                    $data = array(
+                    'id'=>$check1[0]->id,
+                    'barcode_package'=>$check1[0]->sku_value,
+                    'weight'=>$check1[0]->weight,
+                    'length'=>$check1[0]->length,
+                    'width'=>$check1[0]->width,
+                    'height'=>$check1[0]->height,
+                    );
+                    $datas[]=$data;
+                    return response()->json($datas, 200);
+                }else{
+                    return response()->json(['message' => 'Shipment Canceled','status'=>401], 401);
+                }
             }else{
-                return response()->json(['message' => 'Shipment Canceled','status'=>500], 500);
+                return response()->json(['message' => 'Shipment Already Delivered','status'=>401], 401);
             }
         }else{
             return response()->json(['message' => 'Shipment Not Available','status'=>403], 403);
@@ -1117,34 +1140,37 @@ class ApiController extends Controller
             $q->select('s.status','sp.*');
             $check1 = $q->first();
             $check2 = shipment::where('order_id',$request->barcode)->first();
-            $shipment_id='';
-            if(!empty($check1)){
-                $shipment_id = $check1->shipment_id;
+            if($check1->status != '8'){
+                if($check2->status != '8'){
+                    $shipment_id='';
+                    if(!empty($check1)){
+                        $shipment_id = $check1->shipment_id;
+                    }
+                    elseif(!empty($check2)){
+                        $shipment_id = $check2->id;
+                    }
+                    $shipment = shipment::find($shipment_id);
+                    $data = array(
+                    'no_of_packages'=> (int)$shipment->no_of_packages,
+                    'shipment_id'=>$shipment->order_id,
+                    'id'=>$shipment->id,
+                    'status'=>'',
+                    );
+                    if($shipment->hold_status == 1){
+                        $data['status']='5';
+                    }
+                    else{
+                        $data['status']=$shipment->status;
+                    }
+                    $datas[]=$data;
+                    
+                    return response()->json($datas);
+                }else{
+                    return response()->json(['message' => 'Shipment Already Delivered','status'=>401], 401);
+                }
+            }else{
+                return response()->json(['message' => 'Shipment Already Delivered','status'=>401], 401);
             }
-            elseif(!empty($check2)){
-                $shipment_id = $check2->id;
-            }
-            $shipment = shipment::find($shipment_id);
-            $data = array(
-            'no_of_packages'=> (int)$shipment->no_of_packages,
-            'shipment_id'=>$shipment->order_id,
-            'id'=>$shipment->id,
-            'status'=>'',
-            );
-            if($shipment->hold_status == 1){
-                $data['status']='5';
-            }
-            else{
-                $data['status']=$shipment->status;
-            }
-            $datas[]=$data;
-            // return response()->json([
-            // 'no_of_packages'=>$shipment->no_of_packages,
-            // 'shipment_id'=>$shipment->order_id,
-            // 'id'=>$shipment->id,
-            // 'status'=>$shipment->status,
-            // ], 200);
-            return response()->json($datas);
         
         }catch (\Exception $e) {
             return response()->json($e);

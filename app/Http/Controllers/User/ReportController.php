@@ -311,6 +311,7 @@ class ReportController extends Controller
             $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
         }
         $i->where('shipments.sender_id',Auth::user()->id);
+        $i->where('shipments.status',8);
         $i->orderBy('shipments.id','DESC');
         $shipment = $i->get();
 

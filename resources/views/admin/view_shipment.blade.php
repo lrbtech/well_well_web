@@ -284,6 +284,11 @@ visibility: visible;
                         <table style="color: #fff !important;" class="table">
                           <thead>
                             <tr>
+                                <th>No of Packages : {{$shipment->no_of_packages}}</th>
+                                <th>Reference No : {{$shipment->reference_no}}</th>
+                                <th></th>
+                            </tr>
+                            <tr>
                                 <th>Category</th>
                                 <th>Info</th>
                                 <th>Chargeable Weight</th>
@@ -313,6 +318,47 @@ visibility: visible;
                     <hr>
                     <br>
 
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <!-- <h5>Special Services</h5><span>(optional) </span> -->
+                  </div>
+                    <div class="card-body megaoptions-border-space-sm">
+                      <div class="row">
+                        
+                        <div class="col-sm-6">
+                          <div class="card">
+                            <div class="media p-20">
+                              <div class="checkbox checkbox-secondary mr-3">
+                                @if($shipment->special_cod_enable == 1)
+                                <input checked id="special_cod_enable1" type="checkbox" name="special_cod_enable" value="1">
+                                @else 
+                                <input id="special_cod_enable1" type="checkbox" name="special_cod_enable" value="1">
+                                @endif
+                                <label for="special_cod_enable1"></label>
+                                
+                              </div>
+                              <div class="media-body">
+                                <h6 class="mt-0 mega-title-badge">{{$language[53][Auth::guard('admin')->user()->lang]}}
+                                  <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
+                                </h6>
+                                <p>({{$language[54][Auth::guard('admin')->user()->lang]}})</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6 show_special_cod">
+                            <label>How Much Amount to Be Collected?</label>
+                            <input value="{{$shipment->special_cod}}" class="form-control" id="special_cod" name="special_cod" type="text">
+                        </div>
+
+                        
+                      </div>
+                    </div>
+                </div>
+              </div>    
+
                     <div class="row">
                       <div class="col">
 
@@ -330,6 +376,8 @@ visibility: visible;
                               <input value="{{$shipment->insurance_amount}}" readonly class="form-control" name="insurance_amount" id="insurance_amount" type="text">
                             </div>
                           </div>
+                          
+                          @if($shipment->special_cod_enable == 1)
                           <div class="form-group row">
                             <label class="col-sm-6 col-form-label">Cash on Delivery </label>
                             <div class="col-sm-6">
@@ -338,6 +386,7 @@ visibility: visible;
                               <input value="{{$shipment->cod_amount}}" readonly class="form-control" name="cod_amount" id="cod_amount" type="text">
                             </div>
                           </div>
+                          @endif
 
                           <div class="form-group row">
                             <label class="col-sm-6 col-form-label">Sub Total </label>

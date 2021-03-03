@@ -65,5 +65,20 @@ Route::post('/delivery-exception', [App\Http\Controllers\ApiController::class, '
 
 
 //user
+Route::post('/user-login', [App\Http\Controllers\ApiController::class, 'userLogin']);
+
 Route::post('/tracking', [App\Http\Controllers\UserApiController::class, 'Tracking']);
 Route::get('/track-history/{id}', [App\Http\Controllers\UserApiController::class, 'trackHistory']);
+
+Route::get('/get-city', [App\Http\Controllers\UserApiController::class, 'getCity']);
+Route::get('/get-area/{id}', [App\Http\Controllers\UserApiController::class, 'getArea']);
+
+Route::get('/get-package-category', [App\Http\Controllers\UserApiController::class, 'getPackageCategory']);
+
+Route::post('/save-shipnow', [App\Http\Controllers\UserApiController::class, 'saveShipNow']);
+Route::post('/save-shipnow-package', [App\Http\Controllers\UserApiController::class, 'saveShipNowPackage']);
+
+Route::post('/save-mobile-verify', [App\Http\Controllers\UserApiController::class, 'saveMobileVerify']);
+Route::get('/verify-otp/{mobile}/{otp}', [App\Http\Controllers\UserApiController::class, 'verifyOtp']);
+
+Route::get('/get-shipping-price/{weight}/{declared_value}/{cod_enable}', [App\Http\Controllers\UserApiController::class, 'getShippingPrice']);

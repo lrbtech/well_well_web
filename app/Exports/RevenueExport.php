@@ -50,6 +50,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         {
             $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
         }
+        $i->where('shipments.status',8);
         $i->orderBy('shipments.id','DESC');
         $shipment = $i->get();
         return $shipment;

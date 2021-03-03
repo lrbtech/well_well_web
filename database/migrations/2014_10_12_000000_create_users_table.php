@@ -54,6 +54,7 @@ class CreateUsersTable extends Migration
             $table->string('total')->default('0');
             $table->string('paid')->default('0');
             $table->string('balance')->default('0');
+            $table->string('firebase_key')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
