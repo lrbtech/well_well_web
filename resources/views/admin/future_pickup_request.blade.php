@@ -203,7 +203,7 @@ $(document).on('click','#assignagent', function(){
     });
     if(order_id.length > 0){
         $.ajax({
-            url:"/admin/checkbox-assign-agent",
+            url:"/admin/bulk-checkbox-assign-agent",
             method:"GET",
             data:{id:order_id,agent_id:agent_id},
             success:function(data){
