@@ -193,28 +193,27 @@ $(document).on('click','#save', function(){
 });
 
 $(document).on('click','#assignagent', function(){
-    var order_id=[];
-    var agent_id = $('#agent_id').val();
-
+  var order_id=[];
+  var agent_id = $('#agent_id').val();
   if(agent_id != ''){
     $(".order_checkbox:checked").each(function(){
         order_id.push($(this).val());
     });
     if(order_id.length > 0){
-        $.ajax({
-            url:"/admin/bulk-checkbox-assign-agent",
-            method:"GET",
-            data:{id:order_id,agent_id:agent_id},
-            success:function(data){
-              toastr.success(data);
-              //window.location.href="/admin/new-shipment-request";
-              var new_url = '/admin/get-today-pickup-request';
-              orderPageTable.ajax.url(new_url).load();
-              $('#agent-model').modal('hide');
-            }
-        })
+      $.ajax({
+        url:"/admin/bulk-checkbox-assign-agent",
+        method:"GET",
+        data:{id:order_id,agent_id:agent_id},
+        success:function(data){
+          toastr.success(data);
+          //window.location.href="/admin/new-shipment-request";
+          var new_url = '/admin/get-today-pickup-request';
+          orderPageTable.ajax.url(new_url).load();
+          $('#agent-model').modal('hide');
+        }
+      })
     }else{
-        toastr.error("Please select atleast one Checkbox");
+      toastr.error("Please select atleast one Checkbox");
     }
   }else{
     toastr.error("Please select Agent");
