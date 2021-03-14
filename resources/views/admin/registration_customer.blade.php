@@ -88,8 +88,12 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                  @if($role_get->new_customer_edit == 'on')
                                     <a onclick="updateStatus({{$row->id}},2)" class="dropdown-item" href="#">Approved</a>
+                                  @endif
+                                  @if($role_get->new_customer_delete == 'on')
                                     <a onclick="updateStatus({{$row->id}},1)" class="dropdown-item" href="#">Denied</a>
+                                  @endif
                                     <a class="dropdown-item" href="/admin/view-profile/{{$row->id}}">View Profile</a>
                                 </div>
                             </td>

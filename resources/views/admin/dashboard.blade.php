@@ -34,15 +34,12 @@
           <div class="container-fluid">
             <div class="row">
           
-            @if($role_get->id == 2 || $role_get->id == 3 || $role_get->id == 4)
-            @elseif($role_get->id == 5)
+            @if($role_get->dashboard != 'on')
             @else 
               <div class="col-lg-12">
                 <div class="row ecommerce-chart-card">
                   
-                 
-                  
-              
+                               
 
               <div class="col-sm-6 col-xl-3 col-lg-6 box-col-6">
                 <div class="card gradient-info o-hidden">
@@ -132,7 +129,7 @@
                       <div class="align-self-center text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>
                       <div class="media-body"><span class="m-0">{{$language[6][Auth::guard('admin')->user()->lang]}}</span>
                         {{-- <span>AED</span> --}}
-                        <h5 class="mb-0">AED {{$current_month_value}}</h5>
+                        <h5 class="mb-0">AED {{round($current_month_value,2)}}</h5>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag icon-bg"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                       </div>
                     </div>
@@ -149,7 +146,7 @@
                             </div>
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
-                                <h6 class="f-w-100 m-l-10">{{$total_shipment}}</h6>
+                                <h6 class="f-w-100 m-l-10"><?php echo round($total_shipment,2); ?></h6>
                                 <h4 class="mb-0 f-w-700 m-l-10">{{$language[5][Auth::guard('admin')->user()->lang]}}</h4>
                               </div>
                             </div>
@@ -169,7 +166,7 @@
                             </div>
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
-                                <h6 class="f-w-100 m-l-10">AED {{$current_month_value}}</h6>
+                                <h6 class="f-w-100 m-l-10">AED <?php echo round($current_month_value,2); ?></h6>
                                 <h4 class="mb-0 f-w-700 m-l-10">{{$language[6][Auth::guard('admin')->user()->lang]}}</h4>
                               </div>
                             </div>
@@ -271,7 +268,14 @@
                           @foreach($shipment as $row)
                           <tr>
                             <td>
-                              <h5 class="default-text mb-0 f-w-700 f-18">#{{$row->order_id}}</h5>
+                              <h5 class="default-text mb-0 f-w-700 f-18">
+                              @foreach($shipment_package as $key => $packages)
+                                @if($row->id == $packages->shipment_id)
+                                #{{$packages->sku_value}}
+                                <?php break; ?>
+                                @endif
+                              @endforeach
+                              </h5>
                             </td>
                             <td>
                               <h5 class="default-text mb-0 f-w-700 f-18">
@@ -282,36 +286,36 @@
                                 @endif
                               </h5>
                             </td>
-                            <td class="f-w-700">AED {{$row->total}}</td>
+                            <td class="f-w-700">AED {{round($row->total,2)}}</td>
                             <td>
                               <h6 class="mb-0">
                               <?php
                               if($row->status == 0){
-                                echo 'Pending';
+                                echo '<button class="btn btn-shadow-primary">Pending</button>';
                               }
                               elseif($row->status == 1){
-                                  echo 'Approved';
+                                  echo '<button class="btn btn-shadow-primary">Approved</button>';
                               }
                               elseif($row->status == 2){
-                                  echo 'Package Collected';
+                                  echo '<button class="btn btn-shadow-primary">Package Collected</button>';
                               }
                               elseif($row->status == 3){
-                                  echo 'Exception';
+                                  echo '<button class="btn btn-shadow-primary">Exception</button>';
                               }
                               elseif($row->status == 4){
-                                  echo 'Received Station Hub';
+                                  echo '<button class="btn btn-shadow-primary">Received Station Hub</button>';
                               }
                               elseif($row->status == 5){
-                                  echo 'Assign Agent to Transit Out (Hub)';
+                                  echo '<button class="btn btn-shadow-primary">Assign Agent to Transit Out (Hub)</button>';
                               }
                               elseif($row->status == 6){
-                                  echo 'Other Transit in Received (Hub)';
+                                  echo '<button class="btn btn-shadow-primary">Other Transit in Received (Hub)</button>';
                               }
                               elseif($row->status == 7){
-                                  echo 'Assign Agent to Delivery';
+                                  echo '<button class="btn btn-shadow-primary">Assign Agent to Delivery</button>';
                               }
                               elseif($row->status == 8){
-                                  echo 'Shipment delivered';
+                                  echo '<button class="btn btn-shadow-primary">Shipment delivered</button>';
                               }
                               ?>
                               </h6>

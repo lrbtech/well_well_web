@@ -253,8 +253,9 @@ class CustomerController extends Controller
 
         $customer = User::find($id);
         $settings = settings::find(1);
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
         
-        return view('admin.profile',compact('rate','rate_item','customer','country','city','area','settings','language'));
+        return view('admin.profile',compact('rate','rate_item','customer','country','city','area','settings','language','role_get'));
     }
 
 

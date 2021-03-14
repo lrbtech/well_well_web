@@ -23,6 +23,7 @@ use App\Models\role;
 use App\Models\language;
 use App\Models\system_logs;
 use App\Models\weeks;
+use App\Models\complaint;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -81,7 +82,14 @@ class ShipmentController extends Controller
         $to_address =manage_address::find($shipment->to_address);
         $language = language::all();
 
-        return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs'));
+        $arraytrackid=array();
+        foreach($shipment_package as $row){
+            $arraytrackid[] = $row->sku_value;
+        }
+
+        $complaint = complaint::whereIn('track_id',$arraytrackid)->get();
+
+        return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs','complaint'));
     }
 
     public function viewShipment($id){
@@ -102,7 +110,14 @@ class ShipmentController extends Controller
         $to_address =manage_address::find($shipment->to_address);
         $language = language::all();
 
-        return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs'));
+        $arraytrackid=array();
+        foreach($shipment_package as $row){
+            $arraytrackid[] = $row->sku_value;
+        }
+
+        $complaint = complaint::whereIn('track_id',$arraytrackid)->get();
+
+        return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs','complaint'));
     }
 
     public function saveShipmentNotes(Request $request){
@@ -242,6 +257,9 @@ class ShipmentController extends Controller
         $system_logs->remark = 'New Shipment Created to '.Auth::guard('admin')->user()->name;
         $system_logs->save();
 
+        $arrayshipment = array();
+        $arrayshipment[] = $shipment->id;
+
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
@@ -293,8 +311,122 @@ class ShipmentController extends Controller
                 }
             }
         }
-        //return response()->json('successfully save'); 
-        return $this->printLabel($shipment->id);
+
+        if($request->return_package_cost == 1){
+            $order_id1 = IdGenerator::generate($config);
+
+            $from_address = manage_address::find($request->to_address);
+            $from_station = city::find($from_address->city_id);
+
+            $to_address = manage_address::find($request->from_address);
+            $to_station = city::find($to_address->city_id);
+
+            $shipment1 = new shipment;
+            $shipment1->order_id = $order_id1;
+            $shipment1->date = date('Y-m-d');
+            $shipment1->sender_id = $request->user_id;
+            $shipment1->shipment_type = $request->shipment_type;
+            $shipment1->shipment_date = date('Y-m-d',strtotime($request->shipment_date));
+            $shipment1->shipment_from_time = $request->shipment_from_time;
+            $shipment1->shipment_to_time = $request->shipment_to_time;
+            $shipment1->from_address = $request->to_address;
+            $shipment1->to_address = $request->from_address;
+            $shipment1->from_station_id = $from_station->station_id;
+            $shipment1->to_station_id = $to_station->station_id;
+            $shipment1->shipment_mode = $request->shipment_mode;
+            $shipment1->special_service = $request->special_service;
+            $shipment1->special_service_description = $request->special_service_description;
+            $shipment1->return_package_cost = $request->return_package_cost;
+            $shipment1->special_cod_enable = $request->special_cod_enable;
+            $shipment1->special_cod = $request->special_cod;
+            $shipment1->no_of_packages = $request->no_of_packages;
+            $shipment1->declared_value = $request->declared_value;
+            $shipment1->total_weight = $request->total_weight;
+            $shipment1->shipment_price = $request->shipment_price;
+            $shipment1->postal_charge_percentage = $request->postal_charge_percentage;
+            $shipment1->postal_charge = $request->postal_charge;
+            $shipment1->sub_total = $request->sub_total;
+            $shipment1->vat_percentage = $request->vat_percentage;
+            $shipment1->vat_amount = $request->vat_amount;
+            $shipment1->insurance_percentage = $request->insurance_percentage;
+            $shipment1->insurance_amount = $request->insurance_amount;
+            $shipment1->before_total = $request->before_total;
+            $shipment1->cod_amount = $request->cod_amount;
+            $shipment1->total = $request->total;
+            $shipment1->reference_no = $request->reference_no;
+            $shipment1->identical = $request->same_data;
+            $shipment1->save();
+
+            $arrayshipment[] = $shipment1->id;
+
+            $system_logs = new system_logs;
+            $system_logs->_id = $shipment1->id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = Auth::guard('admin')->user()->email;
+            $system_logs->remark = 'New Shipment Created to '.Auth::guard('admin')->user()->name;
+            $system_logs->save();
+
+            if($request->same_data == '0'){
+                for ($x=0; $x<count($_POST['weight']); $x++) 
+                {
+                    do {
+                        $sku_value = mt_rand( 1000000000, 9999999999 );
+                    } 
+                    while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+
+                    $shipment_package = new shipment_package;
+                    $shipment_package->sku_value = $sku_value;
+                    $shipment_package->shipment_id = $shipment1->id;
+                    $shipment_package->category = $_POST['category'][$x];
+                // $shipment_package->reference_no = $_POST['reference_no'][$x];
+                    $shipment_package->description = $_POST['description'][$x];
+                    $shipment_package->weight = $_POST['weight'][$x];
+                    $shipment_package->length = $_POST['length'][$x];
+                    $shipment_package->width = $_POST['width'][$x];
+                    $shipment_package->height = $_POST['height'][$x];
+                    $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
+
+                    if($_POST['weight'][$x]!=""){
+                        $shipment_package->save();
+                    }
+                }
+            }
+            else{
+                for ($y=1; $y<=$request->no_of_packages; $y++){
+                    for ($x=0; $x<count($_POST['weight']); $x++) 
+                    {
+                        do {
+                            $sku_value = mt_rand( 1000000000, 9999999999 );
+                        } 
+                        while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                        $shipment_package = new shipment_package;
+                        $shipment_package->sku_value = $sku_value;
+                        $shipment_package->shipment_id = $shipment1->id;
+                        $shipment_package->category = $_POST['category'][$x];
+                        //$shipment_package->reference_no = $_POST['reference_no'][$x];
+                        $shipment_package->description = $_POST['description'][$x];
+                        $shipment_package->weight = $_POST['weight'][$x];
+                        $shipment_package->length = $_POST['length'][$x];
+                        $shipment_package->width = $_POST['width'][$x];
+                        $shipment_package->height = $_POST['height'][$x];
+                        $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
+
+                        if($_POST['weight'][$x]!=""){
+                            $shipment_package->save();
+                        }
+                    }
+                }
+            }
+        }
+        //echo($arrayshipment);
+        if($request->return_package_cost == 1){
+            return $this->bulkPrintLabel($arrayshipment,$request->user_id);
+        }
+        else{
+            //return response()->json('successfully save'); 
+            return $this->printLabel($shipment->id);
+        }
+        
     }
 
 
@@ -470,7 +602,9 @@ class ShipmentController extends Controller
         return response()->json('successfully update'); 
     }
 
-    public function getShipment($status){
+    public function getShipment($status,$fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
         if(Auth::guard('admin')->user()->station_id == '0'){
             $i =DB::table('shipments');
             if ( $status != 20 )
@@ -486,6 +620,10 @@ class ShipmentController extends Controller
                 else{
                     $i->where('shipments.status', $status);
                 }
+            }
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
             }
             $i->where('shipments.hold_status',0);
             $i->orderBy('shipments.id','DESC');
@@ -507,6 +645,10 @@ class ShipmentController extends Controller
                 else{
                     $i->where('shipments.status', $status);
                 }
+            }
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
             }
             $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
             $i->orWhere('shipments.to_station_id',Auth::guard('admin')->user()->station_id);
@@ -875,6 +1017,32 @@ class ShipmentController extends Controller
         return response()->json(['html'=>$view]);
     }
 
+    public function bulkPrintLabel($id,$sender_id){
+        $shipment = shipment::whereIn('id', $id)->get();
+        $shipment_package = shipment_package::whereIn('shipment_id',$id)->get();
+
+        $shipment_count = shipment_package::whereIn('shipment_id',$id)->count();
+
+        $all_shipments = DB::table("shipment_packages as sp")
+        ->whereIn("sp.shipment_id",$id)
+        ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
+        ->join('stations as st', 'st.id', '=', 's.to_station_id')
+        ->join('manage_addresses as fa', 'fa.id', '=', 's.from_address')
+        ->join('manage_addresses as ta', 'ta.id', '=', 's.to_address')
+        ->select('s.*','sp.shipment_id','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station','fa.city_id as from_city','fa.area_id as from_area','ta.city_id','ta.area_id','ta.address1','ta.address2','ta.address3','ta.contact_name','ta.contact_mobile','ta.contact_landline')
+        //->groupBy("users.id")
+        ->get();
+
+        $country = country::all();
+        $package_category = package_category::all();
+        $user = User::find($sender_id);
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+        $view = view('print.bulkprintlabel',compact('shipment','shipment_package','country','city','area','shipment_count','all_shipments','package_category','user'))->render();
+
+        return response()->json(['html'=>$view]);
+    }
+
     public function printInvoice($id){
         $shipment = shipment::find($id);
         $shipment_package = shipment_package::where('shipment_id',$id)->get();
@@ -909,6 +1077,7 @@ class ShipmentController extends Controller
 
         $check1 = shipment_package::where('sku_value',$request->search_input)->first();
         $check2 = shipment::where('order_id',$request->search_input)->first();
+        $check3 = shipment::where('reference_no',$request->search_input)->first();
         $shipment_id='';
         if(!empty($check1)){
             $shipment_id = $check1->shipment_id;
@@ -916,12 +1085,48 @@ class ShipmentController extends Controller
         elseif(!empty($check2)){
             $shipment_id = $check2->id;
         }
+        elseif(!empty($check3)){
+            $shipment_id = $check3->id;
+        }
 
+        $country = country::all();
+        $agent = agent::all();
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+
+        $shipment =shipment::find($shipment_id);
+        
+
+        if(!empty($shipment)){
+            $user =User::find($shipment->sender_id);
+            $shipment_package = shipment_package::where('shipment_id',$shipment_id)->get();
+            $shipment_notes = shipment_notes::where('shipment_id',$shipment_id)->get();
+
+            $system_logs = system_logs::where('_id',$shipment_id)->where('category','shipment')->get();
+
+            $from_address =manage_address::find($shipment->from_address);
+            $to_address =manage_address::find($shipment->to_address);
+            $language = language::all();
+
+            $arraytrackid=array();
+            foreach($shipment_package as $row){
+                $arraytrackid[] = $row->sku_value;
+            }
+
+            $complaint = complaint::whereIn('track_id',$arraytrackid)->get();
+
+            return view('admin.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs','complaint'));
+        }
+        else{
+            $shipment_logs = system_logs::where('_id',$shipment_id)->orderBy('id', 'DESC')->get();
+            return view('admin.shipment_track',compact('language','shipment_logs','id'));
+        }
 
         //$shipment = shipment::where('order_id',$request->search_input)->first();
-        $shipment_logs = system_logs::where('_id',$shipment_id)->orderBy('id', 'DESC')->get();
+        //$shipment_logs = system_logs::where('_id',$shipment_id)->orderBy('id', 'DESC')->get();
         //return response()->json($shipment_logs);
-      return view('admin.shipment_track',compact('language','shipment_logs','id'));
+      //return view('admin.shipment_track',compact('language','shipment_logs','id'));
     }
 
 

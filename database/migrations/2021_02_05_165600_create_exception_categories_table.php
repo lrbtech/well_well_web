@@ -15,7 +15,8 @@ class CreateExceptionCategoriesTable extends Migration
     {
         Schema::create('exception_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('category')->nullable();  
+            $table->string('category')->nullable();
+            $table->string('exception_status')->default('0');  
             $table->string('status')->default('0');
             $table->timestamps();
         });

@@ -8,6 +8,7 @@ use App\Models\country;
 use App\Models\city;
 use App\Models\language;
 use App\Models\station;
+use App\Models\role;
 use App\Http\Controllers\Admin\logController;
 use Auth;
 
@@ -62,7 +63,8 @@ class CityController extends Controller
         $country_id = $id;
         $station = station::all();
         $language = language::all();
-        return view('admin.city',compact('city','country_id','station','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.city',compact('city','country_id','station','language','role_get'));
     }
 
     public function editCity($id){
@@ -121,7 +123,8 @@ class CityController extends Controller
         $country_id = $country_id;
         $parent_id = $id;
         $language = language::all();
-        return view('admin.area',compact('area','country_id','parent_id','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.area',compact('area','country_id','parent_id','language','role_get'));
     }
 
     public function editArea($id){
@@ -214,7 +217,8 @@ class CityController extends Controller
     public function Country(){
         $country = country::all();
         $language = language::all();
-        return view('admin.country',compact('country','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.country',compact('country','language','role_get'));
     }
 
     public function editCountry($id){

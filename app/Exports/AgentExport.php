@@ -198,7 +198,7 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
         }
         elseif($shipment->status == 11){
             $status='
-            Shipemnt Hold
+            Transit In
             ';
         }
 
@@ -233,6 +233,80 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
 
         $shipment_details = 'No of Packages : ' .$shipment->no_of_packages . 
         'Total Weight ' .$shipment->total_weight . ' Kg';
+
+        $pickup_assigned='';
+        if($shipment->pickup_agent_id != ''){
+            $agent = agent::find($shipment->pickup_agent_id);
+            $pickup_assigned=$agent->agent_id .' '. $agent->name;
+        }
+
+        $pickup_exception='';
+        if($shipment->pickup_exception_id != ''){
+            $agent = agent::find($shipment->pickup_exception_id);
+            $pickup_exception=$agent->agent_id .' '. $agent->name;
+        }
+
+        $package_collect='';
+        if($shipment->package_collect_agent_id != ''){
+            $agent = agent::find($shipment->package_collect_agent_id);
+            $package_collect=$agent->agent_id .' '. $agent->name;
+        }
+
+        $from_transit_in='';
+        if($shipment->transit_in_id != ''){
+            $agent = agent::find($shipment->transit_in_id);
+            $from_transit_in=$agent->agent_id .' '. $agent->name;
+        }
+
+        $to_transit_in='';
+        if($shipment->transit_in_id1 != ''){
+            $agent = agent::find($shipment->transit_in_id1);
+            $to_transit_in=$agent->agent_id .' '. $agent->name;
+        }
+
+        $from_transit_out='';
+        if($shipment->transit_out_id != ''){
+            $agent = agent::find($shipment->transit_out_id);
+            $from_transit_out=$agent->agent_id .' '. $agent->name;
+        }
+
+        $to_transit_out='';
+        if($shipment->transit_out_id1 != ''){
+            $agent = agent::find($shipment->transit_out_id1);
+            $to_transit_out=$agent->agent_id .' '. $agent->name;
+        }
+
+        $from_package_at_station='';
+        if($shipment->package_at_station_id != ''){
+            $agent = agent::find($shipment->package_at_station_id);
+            $from_package_at_station=$agent->agent_id .' '. $agent->name;
+        }
+
+        $to_package_at_station='';
+        if($shipment->package_at_station_id1 != ''){
+            $agent = agent::find($shipment->package_at_station_id1);
+            $to_package_at_station=$agent->agent_id .' '. $agent->name;
+        }
+
+        $van_scan='';
+        if($shipment->van_scan_id != ''){
+            $agent = agent::find($shipment->van_scan_id);
+            $van_scan=$agent->agent_id .' '. $agent->name;
+        }
+
+        $delivery_exception='';
+        if($shipment->delivery_exception_id != ''){
+            $agent = agent::find($shipment->delivery_exception_id);
+            $delivery_exception=$agent->agent_id .' '. $agent->name;
+        }
+
+        $delivery='';
+        if($shipment->delivery_agent_id != ''){
+            $agent = agent::find($shipment->delivery_agent_id);
+            $delivery=$agent->agent_id .' '. $agent->name;
+        }
+
+
         
         return [
             $shipment_package[0]->sku_value,
@@ -244,8 +318,18 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             $shipment_details,
             $ship_from,
             $ship_to,
-            'AED '.$shipment->total,
-            $status,
+            $pickup_assigned,
+            $pickup_exception,
+            $package_collect,
+            $from_transit_in,
+            $to_transit_in,
+            $from_transit_out,
+            $to_transit_out,
+            $from_package_at_station,
+            $to_package_at_station,
+            $van_scan,
+            $delivery_exception,
+            $delivery,
         ];
     }
 
@@ -262,8 +346,18 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             'Shipment Details',
             'Ship From',
             'Ship To',
-            'Total',
-            'Status',
+            'Pickup Assigned',
+            'Pickup Exception',
+            'Package Collected',
+            'From Transit In',
+            'To Transit In',
+            'From Transit Out',
+            'To Transit Out',
+            'From Package At Station',
+            'To Package At Station',
+            'Van for Delivery',
+            'Delivery Exception',
+            'Shipment Delivered',
         ];
     }
 

@@ -73,8 +73,6 @@
                             <th>User Details</th>
                             <th>No of Shipment</th>
                             <th>Total COD Value</th>
-                            <th>Commission</th>
-                            <th>Payable Amount</th>
                             <th>OverAll Paid Amount</th>
                             <th>Action</th>
                           </tr>
@@ -110,10 +108,14 @@
                 <form id="form" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <input type="hidden" name="sender_id" id="sender_id">
+                    <div class="form-group">
+                      <label>Date</label>
+                      <input type="date" id="date" name="date" class="form-control">
+                    </div>
 
                     <div class="form-group">
                       <label>Settlement Value</label>
-                      <input type="text" id="settlement_value" name="settlement_value" class="form-control">
+                      <input type="number" id="settlement_value" name="settlement_value" class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -158,8 +160,6 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'user_details', name: 'user_details' },
         { data: 'no_of_shipments', name: 'no_of_shipments' },
         { data: 'total_value', name: 'total_value' },
-        { data: 'admin_fees', name: 'admin_fees' },
-        { data: 'payable_value', name: 'payable_value' },
         { data: 'settlement_value', name: 'settlement_value' },
         { data: 'action', name: 'action' },
     ]

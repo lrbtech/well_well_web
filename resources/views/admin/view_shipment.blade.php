@@ -451,6 +451,55 @@ visibility: visible;
                 </div>
               </div>
 
+              @if(!empty($complaint))
+              <div class="col-sm-12">
+                <div class="card">
+                <div class="card-header">
+                    <h5>Shipment Complaints</h5>
+                  </div>
+                  <div class="card-body megaoptions-border-space-sm">
+
+                   <br>
+                      @foreach($complaint as $key => $row)
+                      <div class="col-sm-12 show_from_address">
+                          <div class="media-body">
+                            <h6 class="mt-0 mega-title-badge">
+                              <span class="badge badge-primary pull-right digits">
+                                {{$row->created_at}}
+                              </span>
+                            </h6>
+                            <p>Name : {{$row->name}}  Mobile : {{$row->mobile}}  Email : {{$row->email}}</p>
+                            <p>
+                            Damage : @if($row->damage_category == 1)
+                            Outer Package Damage
+                            @elseif($row->damage_category == 2)
+                            Inner Package Damage
+                            @elseif($row->damage_category == 3)
+                            Inside Package Damage
+                            @endif
+
+
+                            Complaint : @if($row->complaint_category == 1)
+                            Rude Behaviour
+                            @elseif($row->complaint_category == 2)
+                            Billing Charge
+                            @elseif($row->complaint_category == 3)
+                            Wrong Shipment
+                            @elseif($row->complaint_category == 4)
+                            Loss of Packages
+                            @elseif($row->complaint_category == 5)
+                            C.O.D Issues
+                            @endif
+                            </p>
+                            <p>{{$row->description}}</p>
+                          </div>
+                      </div>
+                      @endforeach
+                  </div>
+                </div>
+              </div>
+              @endif
+
               <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">

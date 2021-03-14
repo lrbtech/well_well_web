@@ -11,6 +11,28 @@
     <link rel="stylesheet" href="/assets/website/bootstrap.css">
     <link rel="stylesheet" href="/assets/website/aos.css">
     <link rel="stylesheet" href="/assets/website/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .btn-social.facebook {
+    background-color: #3b5999;
+}
+.btn-social.btn-social-o {
+    color: #fff;
+    padding: 6px 15px;
+}
+.btn-social.twitter {
+    background-color: #55acee;
+}
+.btn-social.linkedin {
+    background-color: #0077b5;
+}
+.btn-social.instagram {
+    background-color: #d91cac;
+}
+.btn-social.youtube {
+    background-color: #cc181e;
+}
+</style>
 </head>
 
 
@@ -50,7 +72,7 @@
                         </div>
                         <div class="col-12">
                             <nav class="site-navigation text-right ml-auto " role="navigation">
-                                <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+                                <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-xl-block">
                                     <li><a href="#home-section" class="nav-link active">Home</a></li>
                                     <li><a href="#about-section" class="nav-link">About Us</a></li>
                                     <li><a href="/track/1" class="nav-link">Track</a></li>
@@ -205,11 +227,11 @@
                         <div class="col-lg-6 col-md-12 aos-init" data-aos="fade-right" data-aos-delay="">
                             <div class="about-img ">
                                 <div class="about-font-img">
-                                    <img src="/web_site_image/home-page-image-1 (1).png" alt="">
+                                    <img src="/web_site_image/home-page-image-1 (1).png" alt="" class="w-100">
                                 </div>
-                                <div class="about-back-img d-none d-lg-block">
+                                <!-- <div class="about-back-img d-none d-lg-block">
                                     <img src="/web_site_image/home-page-image-1 (1).png" alt="">
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12 aos-init" data-aos="fade-left" data-aos-delay="">
@@ -393,7 +415,7 @@
                             </div>
                             <div class="info-caption">
                                 <p>Contact Us</p>
-                                <span>+02 444 2254</span>
+                                <span>02 444 2254</span>
                             </div>
                         </div>
                          <div class="single-info mb-4">
@@ -401,9 +423,9 @@
                                 <img src="/assets/images/whatsapp.png" height="25" width="25" alt="">
                             </div>
                             <div class="info-caption">
-                    
+                            <p>Whatsapp</p>
   
-                                <span dir="ltr">+05 044 24579 </span>
+                                <span dir="ltr">05 044 24579 </span>
                                 {{-- <span> <img src="/assets/images/whatsapp.png" width="20px"></span> --}}
                             </div>
                         </div>
@@ -423,6 +445,30 @@
                             <div class="info-caption">
                                 Location <span>Silver Wave Tower, Abu Dhabi City</span>
                             </div>
+                        </div>
+                        <br>
+                        <div class="single-info">
+                            <p>
+                                <a target="_blank" href="{{$settings->facebook_url}}"><button class="btn btn-social btn-social-o facebook mr-1">
+                                    <i class="fa fa-facebook-f"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->twitter_url}}"><button class="btn btn-social btn-social-o twitter mr-1">
+                                    <i class="fa fa-twitter"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->linkedin_url}}"><button class="btn btn-social btn-social-o linkedin mr-1">
+                                    <i class="fa fa-linkedin"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->instagram_url}}"><button class="btn btn-social btn-social-o instagram mr-1">
+                                    <i class="fa fa-instagram"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->youtube_url}}"><button class="btn btn-social btn-social-o youtube mr-1">
+                                    <i class="fa fa-youtube"></i>
+                                </button></a>
+                            </p>
                         </div>
                     </div>
 
@@ -457,12 +503,17 @@
                 <div class="col-md-4">
                     <h2 class="footer-heading mb-4">CONTACT US</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#">
-                                Silver Wave Tower, Abu Dhabi City</a></li>
+                        <li>
+                        <a href="#">
+                        Silver Wave Tower, Abu Dhabi City
+                        </a>
+                        </li>
                      
-                        <li><a href="#">+02 444 2254</a></li>
-                        <li><a href="#">+971 5044 24579 <img src="/assets/images/whatsapp.png" width="20px"></a></li>
-                        <li><a href="#">info@wellwell.ae</a></li>
+                        <li><a href="#">02 444 2254</a></li>
+                        <li><a target="_blank" title="Contact Us On WhatsApp" href="https://web.whatsapp.com/send?phone=971504424579" dir="ltr">
+                        971 5044 24579 <img src="/assets/images/whatsapp.png" width="20px">
+                        </a></li>
+                        <li><a href = "mailto: info@wellwell.ae">info@wellwell.ae</a></li>
                     </ul>
 
                     <!-- <h2 class="footer-heading mb-4">Follow Us</h2>

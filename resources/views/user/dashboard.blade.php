@@ -43,7 +43,7 @@
                             </div>
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
-                                <h6 class="f-w-100 m-l-10">{{$total_shipment}}</h6>
+                                <h6 class="f-w-100 m-l-10"><?php echo round($total_shipment,2); ?></h6>
                                 <h4 class="mb-0 f-w-700 m-l-10">{{$language[70][Auth::user()->lang]}} <br>{{$language[18][Auth::user()->lang]}}</h4>
                               </div>
                             </div>
@@ -103,7 +103,7 @@
                             </div>
                             <div class="sale-chart">   
                               <div class="media-body m-l-40">
-                                <h6 class="f-w-100 m-l-10">AED {{$current_month_value}}</h6>
+                                <h6 class="f-w-100 m-l-10">AED {{round($current_month_value,2)}}</h6>
                                 <h4 class="mb-0 f-w-700 m-l-10">{{$language[142][Auth::user()->lang]}} <br>{{$language[143][Auth::user()->lang]}}</h4>
                               </div>
                             </div>
@@ -145,7 +145,14 @@
                           @foreach($shipment as $row)
                           <tr>
                             <td>
-                              <h5 class="default-text mb-0 f-w-700 f-18">#{{$row->order_id}}</h5>
+                              <h5 class="default-text mb-0 f-w-700 f-18">
+                              @foreach($shipment_package as $key => $packages)
+                                @if($row->id == $packages->shipment_id)
+                                #{{$packages->sku_value}}
+                                <?php break; ?>
+                                @endif
+                              @endforeach
+                              </h5>
                             </td>
                             <td>
                               <h5 class="default-text mb-0 f-w-700 f-18">
@@ -156,7 +163,7 @@
                                 @endif
                               </h5>
                             </td>
-                            <td class="f-w-700">AED {{$row->total}}</td>
+                            <td class="f-w-700">AED {{round($row->total,2)}}</td>
                             <td class="f-w-700">
                               <h6 class="mb-0">
                               <?php

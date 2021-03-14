@@ -32,10 +32,12 @@
                 <div class="card">
                   <div class="card-header">
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
+                    @if($role_get->complaint_request_create == 'on')
                     <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
                     <span>New Complaint Request</span>
                     </button>
+                    @endif
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -69,7 +71,9 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$language[16][Auth::guard('admin')->user()->lang]}}</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($role_get->complaint_request_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">{{$language[225][Auth::guard('admin')->user()->lang]}}</a>
+                                    @endif
                                     <!-- @if($row->status == 0)
                                       <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">{{$language[226][Auth::guard('admin')->user()->lang]}}</a>
                                     @else 

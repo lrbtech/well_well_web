@@ -88,12 +88,14 @@ class PageController extends Controller
 
     public function Home()
     {
-        return view('page.home');
+        $settings = settings::find(1);
+        return view('page.home',compact('settings'));
     }
 
     public function HomeArabic()
     {
-        return view('page.home_ae');
+        $settings = settings::find(1);
+        return view('page.home_ae',compact('settings'));
     }
 
     public function Track($id)
@@ -108,6 +110,7 @@ class PageController extends Controller
             $shipment_id = $check2->id;
         }
 
+        $settings = settings::find(1);
 
         $country = country::all();
         $agent = agent::all();
@@ -123,10 +126,45 @@ class PageController extends Controller
         $to_station = station::find($shipment->to_station_id);
         $from_address =manage_address::find($shipment->from_address);
         $to_address =manage_address::find($shipment->to_address);
-        return view('page.track',compact('package_category','city','area','shipment','user','shipment_package','from_address','to_address','id','from_station','to_station'));
+        return view('page.track',compact('package_category','city','area','shipment','user','shipment_package','from_address','to_address','id','from_station','to_station','settings'));
         }
         else{
-            return view('page.track',compact('shipment','id'));
+            return view('page.track',compact('shipment','id','settings'));
+        }
+    }
+
+
+    public function TrackArabic($id)
+    {
+        $check1 = shipment_package::where('sku_value',$id)->first();
+        $check2 = shipment::where('order_id',$id)->first();
+        $shipment_id='';
+        if(!empty($check1)){
+            $shipment_id = $check1->shipment_id;
+        }
+        elseif(!empty($check2)){
+            $shipment_id = $check2->id;
+        }
+
+        $settings = settings::find(1);
+        $country = country::all();
+        $agent = agent::all();
+        $package_category = package_category::all();
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+
+        $shipment =shipment::find($shipment_id);
+        if(!empty($shipment)){
+        $user =User::find($shipment->sender_id);
+        $shipment_package = shipment_package::where('shipment_id',$shipment_id)->get();
+        $from_station = station::find($shipment->from_station_id);
+        $to_station = station::find($shipment->to_station_id);
+        $from_address =manage_address::find($shipment->from_address);
+        $to_address =manage_address::find($shipment->to_address);
+        return view('page.track',compact('package_category','city','area','shipment','user','shipment_package','from_address','to_address','id','from_station','to_station','settings'));
+        }
+        else{
+            return view('page.track_ae',compact('shipment','id','settings'));
         }
     }
 
@@ -442,6 +480,7 @@ class PageController extends Controller
         $shipment->shipment_price = $request->shipment_price;
         $shipment->postal_charge_percentage = $request->postal_charge_percentage;
         $shipment->postal_charge = $request->postal_charge;
+        $shipment->cod_amount = $request->cod_amount;
         $shipment->sub_total = $request->sub_total;
         $shipment->vat_percentage = $request->vat_percentage;
         $shipment->vat_amount = $request->vat_amount;
@@ -533,8 +572,8 @@ class PageController extends Controller
         //$this->send_sms($request->to_mobile,$to_msg);
         
         ship_now_mobile_verify::where('mobile',$request->from_mobile)->delete();
-        return response()->json('successfully save'); 
-        //return $this->printLabel($shipment->id);
+        //return response()->json('successfully save'); 
+        return $this->printLabel($shipment->id);
     }
 
 
@@ -603,6 +642,33 @@ class PageController extends Controller
                 }
             }
 
+    }
+
+
+    public function printLabel($id){
+        $shipment = shipment::find($id);
+        $shipment_package = shipment_package::where('shipment_id',$id)->get();
+
+        $shipment_count = shipment_package::where('shipment_id',$id)->count();
+
+        $all_shipments = DB::table("shipment_packages as sp")
+        ->where("sp.shipment_id",$id)
+        ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
+        ->join('stations as st', 'st.id', '=', 's.to_station_id')
+        ->select('s.*','sp.*','st.*')
+        //->groupBy("users.id")
+        ->get();
+
+        $country = country::all();
+        $package_category = package_category::all();
+        $user = User::find($shipment->sender_id);
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+        $from_address = manage_address::find($shipment->from_address);
+        $to_address = manage_address::find($shipment->to_address);
+        $view = view('print.printlabel',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','package_category','user'))->render();
+
+        return response()->json(['html'=>$view]);
     }
 
 }

@@ -57,7 +57,6 @@
                               <option value="8">Shipment delivered</option>
                               <option value="9">Delivery Exception</option>
                               <option value="10">Cancel Shipment</option>
-                              <option value="11">Shipment Hold</option>
                             </select>
                         </div>
 

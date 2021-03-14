@@ -57,7 +57,7 @@
                             <td>{{$key + 1}}</td>
                             <td>{{$row->country_code}}</td>
                             <td>
-                            @if(Auth::guard('admin')->user()->city == 'on')
+                            @if($role_get->country_create == 'on')
                             <a href="/admin/city/{{$row->id}}">{{$row->country_name_english}}</a>
                             @else 
                             {{$row->country_name_english}}
@@ -77,15 +77,15 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$language[16][Auth::guard('admin')->user()->lang]}}</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                @if(Auth::guard('admin')->user()->country_edit == '0')
+                                    @if($role_get->country_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">{{$language[225][Auth::guard('admin')->user()->lang]}}</a>
                                     @endif
-                                    @if(Auth::guard('admin')->user()->country_delete == '0')
-                                    @if($row->status == 0)
-                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">{{$language[226][Auth::guard('admin')->user()->lang]}}</a>
-                                    @else 
-                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">{{$language[227][Auth::guard('admin')->user()->lang]}}</a>
-                                    @endif
+                                    @if($role_get->country_delete == 'on')
+                                      @if($row->status == 0)
+                                        <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">{{$language[226][Auth::guard('admin')->user()->lang]}}</a>
+                                      @else 
+                                        <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">{{$language[227][Auth::guard('admin')->user()->lang]}}</a>
+                                      @endif
                                     @endif
                                 </div>
                             </td>

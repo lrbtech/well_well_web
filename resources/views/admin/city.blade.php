@@ -53,7 +53,7 @@
                         <tr>
                             <td>{{$key + 1}}</td>
                             <td>
-                            @if(Auth::guard('admin')->user()->area == 'on')
+                            @if($role_get->country_create == 'on')
                             <a href="/admin/area/{{$row->id}}/{{$country_id}}">{{$row->city}}</a>
                             @else 
                             {{$row->city}}
@@ -69,15 +69,15 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                @if(Auth::guard('admin')->user()->city_edit == 'on')
+                                    @if($role_get->country_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
                                     @endif
-                                    @if(Auth::guard('admin')->user()->city_delete == '0')
-                                    @if($row->status == 0)
-                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
-                                    @else 
-                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">Active</a>
-                                    @endif
+                                    @if($role_get->country_delete == 'on')
+                                      @if($row->status == 0)
+                                        <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
+                                      @else 
+                                        <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">Active</a>
+                                      @endif
                                     @endif
                                 </div>
                             </td>

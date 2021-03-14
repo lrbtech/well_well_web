@@ -30,18 +30,20 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
-                  <!-- <div class="card-header">
-                    <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
-                    <i class="bx bx-plus"></i>
-                    <span>New Users</span>
-                    </button>
-                  </div> -->
+                  <div class="card-header">
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                          <button id="print" class="btn btn-primary btn-block mr-10" type="button">Print</button>
+                      </div>
+                    </div>
+                  </div>
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th></th>
                             <th>Tracking ID</th>
                             <th>{{$language[59][Auth::user()->lang]}}</th>
                             <th>{{$language[145][Auth::user()->lang]}}</th>
@@ -122,6 +124,7 @@ var orderPageTable = $('#datatable').DataTable({
     },
     "columns": [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'checkbox', name: 'checkbox' },
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_type', name: 'shipment_type' },
@@ -163,6 +166,41 @@ function PrintLabel(id){
     }
   });
 }
+
+$(document).on('click','#print', function(){
+    var order_id=[];
+    $(".order_checkbox:checked").each(function(){
+        order_id.push($(this).val());
+    });
+    if(order_id.length > 0){
+        $.ajax({
+            url:"/user/bulk-print-label",
+            method:"GET",
+            data:{id:order_id},
+            success:function(data){
+              var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
+              var is_chrome = Boolean(mywindow.chrome);
+              mywindow.document.write(data.html);
+              mywindow.document.close(); 
+              if (is_chrome) {
+                  setTimeout(function() {
+                  mywindow.focus(); 
+                  mywindow.print(); 
+                  mywindow.close();
+                  window.location.href="/user/shipment";
+                  }, 250);
+              } else {
+                  mywindow.focus(); 
+                  mywindow.print(); 
+                  mywindow.close();
+                  window.location.href="/user/shipment";
+              }
+            }
+        })
+    }else{
+        toastr.error("Please select atleast one Checkbox");
+    }
+});
 
 function activeholdshipment(id){
   var r = confirm("Are you sure");

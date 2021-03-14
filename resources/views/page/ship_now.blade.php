@@ -432,7 +432,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label class="col-form-label">Reference No</label>
-                    <input class="form-control" id="reference_no" name="reference_no" type="text" >
+                    <input class="form-control" id="reference_no" name="reference_no" type="number" >
                 </div>
             </div>
             <div class="row">
@@ -538,7 +538,7 @@
             </div>
         </div>
 
-        <div class="parent">
+        <!-- <div class="parent">
             <h4><strong>Cash on Delivery</strong></h4>
             <div class="row">
                 <div class="col-md-6">
@@ -548,11 +548,11 @@
 
                 <div class="col-md-6 show_special_cod">
                     <label>How Much Amount to Be Collected?</label>
-                    <input class="form-control" id="special_cod" name="special_cod" type="text">
+                    <input class="form-control" id="special_cod" name="special_cod" type="number">
                 </div>
 
             </div>
-        </div>
+        </div> -->
 
         <div class="parent">
             <h4><strong>Billing Details</strong></h4>
@@ -573,13 +573,13 @@
                     </div>
                 </div>
 
-                <div class="col-sm-6">
+                <!-- <div class="col-sm-6">
                     <div class="form-group">
                         <label>Cash on Delivery</label>
                         <input value="{{$settings->cod_amount}}" name="cod_price" id="cod_price" type="hidden">
                         <input readonly class="form-control" value="0" name="cod_amount" id="cod_amount" type="text">
                     </div>
-                </div>
+                </div> -->
                 
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -1361,20 +1361,20 @@ function getPrice(count){
   
 }
 
-$('.show_special_cod').hide();
-$('#special_cod_enable1').click(function(){
-  if ($(this).is(':checked')) {
-    //$(this).prop('checked',false);
-    //alert("is checked");
-    $('.show_special_cod').show();
-    getvalue();
-  } else {
-    //$(this).prop('checked',true);
-    //alert("not checked");
-    $('.show_special_cod').hide();
-    getvalue();
-  }
-});
+// $('.show_special_cod').hide();
+// $('#special_cod_enable1').click(function(){
+//   if ($(this).is(':checked')) {
+//     //$(this).prop('checked',false);
+//     //alert("is checked");
+//     $('.show_special_cod').show();
+//     getvalue();
+//   } else {
+//     //$(this).prop('checked',true);
+//     //alert("not checked");
+//     $('.show_special_cod').hide();
+//     getvalue();
+//   }
+// });
 
 function getvalue() {
   var no_of_packages = Number($('#no_of_packages').val());
@@ -1606,8 +1606,8 @@ $('#special_cod').change(function(){
   var declared_value = Number($("#declared_value").val());
   var special_cod = Number($("#special_cod").val());
   if (declared_value != '') {
-    if (special_cod > declared_value) {
-      alert('COD value should be less then declared value of the package');
+    if (declared_value > special_cod) {
+      alert('COD value should be More Or Equal declared value of the package');
       $("#special_cod").val('');
       $("#special_cod").focus();
     }
@@ -1618,21 +1618,21 @@ $('#special_cod').change(function(){
   }
 });
 
-$('#declared_value').change(function(){
-    var declared_value = Number($("#declared_value").val());
-  var special_cod = Number($("#special_cod").val());
-  if (declared_value != '') {
-    if (special_cod > declared_value) {
-      alert('COD value should be less then declared value of the package');
-      $("#special_cod").val('');
-      $("#special_cod").focus();
-    }
-  }
-  else{
-    alert('Enter Declared Value'); 
-    $("#declared_value").focus();
-  }
-});
+// $('#declared_value').change(function(){
+//   var declared_value = Number($("#declared_value").val());
+//   var special_cod = Number($("#special_cod").val());
+//   if (declared_value != '') {
+//     if (declared_value > special_cod) {
+//       alert('COD value should be More Or Equal declared value of the package');
+//       $("#special_cod").val('');
+//       $("#special_cod").focus();
+//     }
+//   }
+//   else{
+//     alert('Enter Declared Value'); 
+//     $("#declared_value").focus();
+//   }
+// });
 
 function Send(){
     var formData = new FormData($('#form')[0]);
@@ -1716,7 +1716,23 @@ function Save(){
                 confirmButtonText: 'Ok!'
             }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/home';
+                var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
+                var is_chrome = Boolean(mywindow.chrome);
+                mywindow.document.write(data.html);
+                mywindow.document.close(); 
+                if (is_chrome) {
+                    setTimeout(function() {
+                    mywindow.focus(); 
+                    mywindow.print(); 
+                    mywindow.close();
+                    window.location.href="/home";
+                    }, 250);
+                } else {
+                    mywindow.focus(); 
+                    mywindow.print(); 
+                    mywindow.close();
+                    window.location.href="/home";
+                }
             }
             })
         },error: function (data) {

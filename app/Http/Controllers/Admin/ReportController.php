@@ -21,6 +21,7 @@ use App\Models\add_rate_item;
 use App\Models\agent;
 use App\Models\station;
 use App\Models\language;
+use App\Models\role;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -243,16 +244,9 @@ class ReportController extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
-                if($shipment->status == 8){
-                    return '<td>
-                    <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
-                    </td>';
-                }
-                else{
-                    return '<td>
-                    <p><a onclick="PrintLabel('.$shipment->id.')" href="#">Print</a></p>
-                    </td>';
-                }
+                return '<td>
+                <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
+                </td>';
             })
             
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status'])
@@ -295,21 +289,11 @@ class ReportController extends Controller
 
 
     public function getRevenueReport($fdate,$tdate){
-
-        // $fdate = date('Y-m-d', strtotime($fdate));
-        // $tdate = date('Y-m-d', strtotime($tdate));
-
-        // if($fdate != '1970-01-01' && $tdate != '1970-01-01'){
-        //     $shipment = shipment::whereBetween('date', [$fdate, $tdate])->orderBy('id','DESC')->get();
-        // }else{
-        //     $shipment = shipment::orderBy('id','desc')->get();
-        // }
-
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
         $i =DB::table('shipments');
-        if($fdate != '1970-01-01' && $tdate != '1970-01-01')
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
             $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
         }
@@ -319,7 +303,8 @@ class ReportController extends Controller
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
-                return '<td>#'.$shipment->order_id.'</td>';
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->first();
+                return '<td>#'.$shipment_package->sku_value.'</td>';
             })
             
             ->addColumn('total_weight', function ($shipment) {
@@ -455,6 +440,8 @@ class ReportController extends Controller
                 </td>';
             })
             ->addColumn('status', function ($shipment) {
+                $to_station = station::find($shipment->to_station_id);
+                $from_station = station::find($shipment->from_station_id);
                 if($shipment->status == 0){
                     return 'Ready for Pickup';
                 }
@@ -484,37 +471,16 @@ class ReportController extends Controller
                     </td>';
                 }
                 elseif($shipment->status == 4){
-                    $from_station = station::find($shipment->from_station_id);
-                    $agent = agent::find($shipment->transit_in_id);
-                    if(!empty($agent)){
-                        return '
-                        <p>Transit In '.$from_station->station.'</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
-                    }
-                    else{
-                        return '
-                        <p>Transit In '.$from_station->station.'</p>'
-                       ;
-                    }
-                }
-                elseif($shipment->status == 5){
-                    return 'Assign Agent to Transit Out (Hub)';
+                    return '<p>Transit In '.$from_station->station.'</p>';
                 }
                 elseif($shipment->status == 6){
-                    $to_station = station::find($shipment->to_station_id);
-                    $agent = agent::find($shipment->transit_out_id);
-                    if(!empty($agent)){
-                        return '
-                        <p>Transit Out '.$to_station->station.'</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
-                    }
-                    else{
-                        return '
-                        <p>Transit Out '.$to_station->station.'</p>'
-                       ;
-                    }
+                    return '<p>Transit Out '.$from_station->station.'</p>';
+                }
+                elseif($shipment->status == 11){
+                    return '<p>Transit In '.$to_station->station.'</p>';
+                }
+                elseif($shipment->status == 12){
+                    return '<p>Transit Out '.$to_station->station.'</p>';
                 }
                 elseif($shipment->status == 7){
                     $agent = agent::find($shipment->delivery_agent_id);
@@ -553,27 +519,15 @@ class ReportController extends Controller
                 }
                 elseif($shipment->status == 10){
                     return '<td>
-                    <p>Canceled</p>
+                    <p>Shipment Cancel</p>
                     <p>' . $shipment->cancel_remark . '</p>
                     </td>';
                 }
-                elseif($shipment->status == 11){
-                    return '
-                    <p>Shipemnt Hold</p>
-                    ';
-                }
             })
             ->addColumn('action', function ($shipment) {
-                if($shipment->status == 8){
-                    return '<td>
-                    <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
-                    </td>';
-                }
-                else{
-                    return '<td>
-                    <p><a onclick="PrintLabel('.$shipment->id.')" href="#">Print</a></p>
-                    </td>';
-                }
+                return '<td>
+                <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
+                </td>';
             })
             
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status'])

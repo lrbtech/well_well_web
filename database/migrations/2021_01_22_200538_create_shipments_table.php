@@ -36,6 +36,7 @@ class CreateShipmentsTable extends Migration
             $table->string('collect_cod_amount')->nullable();
             $table->string('cod_type')->nullable();
             $table->string('credit_verification_code')->nullable();
+            $table->string('last_four_digit')->nullable();
             $table->string('return_package_cost')->nullable();
             $table->string('shipment_mode')->nullable();
             $table->string('no_of_packages')->nullable(); 
@@ -56,6 +57,7 @@ class CreateShipmentsTable extends Migration
             $table->string('total')->nullable();
             $table->string('cancel_fees')->nullable();
             $table->string('status')->default('0'); 
+            $table->string('invoice_status')->default('0'); 
             $table->string('hold_status')->default('0'); 
 
             $table->string('pickup_agent_id')->nullable();
@@ -89,6 +91,10 @@ class CreateShipmentsTable extends Migration
             $table->string('transit_in_date')->nullable();
             $table->string('transit_in_time')->nullable();
 
+            $table->string('transit_in_id1')->nullable();
+            $table->string('transit_in_date1')->nullable();
+            $table->string('transit_in_time1')->nullable();
+
             $table->string('revenue_exception_id')->nullable();
             $table->string('revenue_exception_date')->nullable();
             $table->string('revenue_exception_time')->nullable();
@@ -97,9 +103,17 @@ class CreateShipmentsTable extends Migration
             $table->string('transit_out_date')->nullable();
             $table->string('transit_out_time')->nullable();
 
+            $table->string('transit_out_id1')->nullable();
+            $table->string('transit_out_date1')->nullable();
+            $table->string('transit_out_time1')->nullable();
+
             $table->string('package_at_station_id')->nullable();
             $table->string('package_at_station_date')->nullable();
             $table->string('package_at_station_time')->nullable();
+
+            $table->string('package_at_station_id1')->nullable();
+            $table->string('package_at_station_date1')->nullable();
+            $table->string('package_at_station_time1')->nullable();
 
             $table->string('van_scan_id')->nullable();
             $table->string('van_scan_date')->nullable();
@@ -121,8 +135,12 @@ class CreateShipmentsTable extends Migration
             $table->string('delivery_exception_solved_date')->nullable();
             $table->string('delivery_exception_solved_time')->nullable();
 
+            $table->string('delivery_reschedule')->default('0');
+            $table->string('delivery_reschedule_date')->nullable();
+
             $table->string('receiver_id_copy')->nullable();
             $table->TEXT('cancel_remark')->nullable();
+            $table->string('cancel_pay')->default('0');
             $table->string('cancel_request_date')->nullable();
             $table->string('cancel_request_time')->nullable();
             $table->string('canceled_date')->nullable();

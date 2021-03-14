@@ -38,7 +38,7 @@
                                 <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
                                     <li><a href="/home/#home-section" class="nav-link">Home</a></li>
                                     <li><a href="/home/#about-section" class="nav-link">About Us</a></li>
-                                    <li><a href="track/1" class="nav-link active">Track</a></li>
+                                    <li><a href="/track/1" class="nav-link active">Track</a></li>
                                     <li><a href="/ship-now" class="nav-link">Ship</a></li>
 
                                     <li><a href="/home/#service-solution" class="nav-link">Solution & Services</a></li>
@@ -240,13 +240,89 @@
 
                             <tbody>
                             @if($shipment->status != 10)
-                                @if($shipment->status == 9 && $shipment->status < 11 && $shipment->status != 10)
-                                <tr>
-                                    <td>{{date('d-m-Y',strtotime($shipment->delivery_exception_assign_date))}} {{date('H:m a',strtotime($shipment->delivery_exception_assign_time))}}</td>
-                                    <td>
-                                    <td>In the Van for Delivery</td>
-                                    </td>
-                                </tr>
+                                @if($shipment->status == 9)
+
+                                    @if($shipment->status >= 8 && $shipment->status < 11 && $shipment->status != 10 )
+                                    @if(!empty($shipment->delivery_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->delivery_date))}} {{date('H:m a',strtotime($shipment->delivery_time))}}</td>
+                                        <td>Shipment Delivered</td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if($shipment->status >= 7 && $shipment->status < 11 && $shipment->status != 10 )
+                                    @if(!empty($shipment->van_scan_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->van_scan_date))}} {{date('H:m a',strtotime($shipment->van_scan_time))}}</td>
+                                        <td>In the Van for Delivery</td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if(6 < $shipment->status && 12 == $shipment->status && $shipment->status != 10 )
+                                    @if(!empty($shipment->transit_out_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->transit_out_date))}} {{date('H:m a',strtotime($shipment->transit_out_time))}}</td>
+                                        <td>Transit Out <b>{{$to_station->station}}</b></td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if(6 < $shipment->status && 11 == $shipment->status && $shipment->status != 10 )
+                                    @if(!empty($shipment->transit_in_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->transit_in_date))}} {{date('H:m a',strtotime($shipment->transit_in_time))}}</td>
+                                        <td>Transit In <b>{{$to_station->station}}</b></td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if($shipment->status >= 6 && $shipment->status != 10 )
+                                    @if(!empty($shipment->transit_out_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->transit_out_date))}} {{date('H:m a',strtotime($shipment->transit_out_time))}}</td>
+                                        <td>Transit Out <b>{{$from_station->station}}</b></td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if($shipment->status >= 4 && $shipment->status != 10 )
+                                    @if(!empty($shipment->transit_in_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->transit_in_date))}} {{date('H:m a',strtotime($shipment->transit_in_time))}}</td>
+                                        <td>Transit In <b>{{$from_station->station}}</b></td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if($shipment->status == 3 && $shipment->status != 10 )
+                                    @if(!empty($shipment->exception_assign_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->exception_assign_date))}} {{date('H:m a',strtotime($shipment->exception_assign_time))}}</td>
+                                        <td>
+                                        <td>Schedule for Pickup</td>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if($shipment->status >= 2 && $shipment->status != 10 )
+                                    @if(!empty($shipment->package_collect_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->package_collect_date))}} {{date('H:m a',strtotime($shipment->package_collect_time))}}</td>
+                                        <td>Package Collected</td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if($shipment->status >= 1 && $shipment->status != 10)
+                                    @if(!empty($shipment->pickup_assign_date))
+                                    <tr>
+                                        <td>{{date('d-m-Y',strtotime($shipment->pickup_assign_date))}} {{date('H:m a',strtotime($shipment->pickup_assign_time))}}</td>
+                                        <td>Schedule for Pickup</td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if($shipment->status >= 0 && $shipment->status != 10)
+                                    <tr>
+                                        <td>{{date('d-m-Y H:m a',strtotime($shipment->created_at))}}</td>
+                                        <td>Shipment Created</td>
+                                    </tr>
+                                    @endif
+
                                 @endif
                                 @if($shipment->status >= 8 && $shipment->status < 11 && $shipment->status != 10 && $shipment->status != 9)
                                 @if(!empty($shipment->delivery_date))
@@ -410,10 +486,10 @@
                 <div class="col-md-3">
                     <h2 class="footer-heading mb-4">USEFUL LINK</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Service</a></li>
-                        <li><a href="#">Contact </a></li>
+                        <li><a href="#home-section">Home</a></li>
+                        <li><a href="#about-section">About Us</a></li>
+                        <li><a href="#service-solution">Service</a></li>
+                        <li><a href="#contact">Contact </a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -421,9 +497,12 @@
                     <ul class="list-unstyled">
                         <li><a href="#">
                                 Silver Wave Tower, Abu Dhabi City</a></li>
-                        <li><a href="#">+971 56 994 9409</a></li>
-                        <li><a href="#">info@wellwell.ae</a></li>
-
+                     
+                        <li><a href="#">02 444 2254</a></li>
+                        <li><a target="_blank" title="Contact Us On WhatsApp" href="https://web.whatsapp.com/send?phone=971504424579" dir="ltr">
+                        971 5044 24579 <img src="/assets/images/whatsapp.png" width="20px">
+                        </a></li>
+                        <li><a href = "mailto: info@wellwell.ae">info@wellwell.ae</a></li>
                     </ul>
 
                     <!-- <h2 class="footer-heading mb-4">Follow Us</h2>
@@ -442,7 +521,7 @@
                     <div class="border-top pt-3">
                         <p class="copyright mb-0"><small>
 
-                                Copyright 2021 © <strong>WellWell</strong>
+                               Copyright 2021 © <strong>WellWell</strong><br> Crafted With <img src="/assets/images/heart.png" width="30px"> <a href="https://lrbinfotech.com" target="_blank">LRB INFOTECH</a>
 
                             </small></p>
                     </div>

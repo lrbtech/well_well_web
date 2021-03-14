@@ -31,6 +31,7 @@
               <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">
+                  @if($role_get->guest_pickup_request_edit == 'on')
                     <div class="row">
 
                         <div class="col-md-3">
@@ -47,6 +48,7 @@
                             <button id="save" class="btn btn-primary btn-block mr-10" type="button">{{$language[77][Auth::guard('admin')->user()->lang]}}</button>
                         </div>
                     </div>
+                  @endif
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -206,8 +208,9 @@ $(document).on('click','#assignagent', function(){
             success:function(data){
               toastr.success(data);
               //window.location.href="/admin/new-shipment-request";
-              var new_url = '/admin/get-new-shipment-request';
+              var new_url = '/admin/get-guest-pickup-request';
               orderPageTable.ajax.url(new_url).load();
+              $('#agent-model').modal('hide');
             }
         })
     }else{

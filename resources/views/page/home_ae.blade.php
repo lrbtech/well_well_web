@@ -11,17 +11,37 @@
     <link rel="stylesheet" href="/assets/website/bootstrap.css">
     <link rel="stylesheet" href="/assets/website/aos.css">
     <link rel="stylesheet" href="/assets/website/style.css">
-    <style>
 
-    </style>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .btn-social.facebook {
+    background-color: #3b5999;
+}
+.btn-social.btn-social-o {
+    color: #fff;
+    padding: 6px 15px;
+}
+.btn-social.twitter {
+    background-color: #55acee;
+}
+.btn-social.linkedin {
+    background-color: #0077b5;
+}
+.btn-social.instagram {
+    background-color: #d91cac;
+}
+.btn-social.youtube {
+    background-color: #cc181e;
+}
+</style>
 </head>
 
 
 <body class="body_rtl" data-spy="scroll" data-target=".site-navbar-target" data-offset="300" data-aos-easing="slide" data-aos-duration="800" data-aos-delay="0">
 
     <div class="site-wrap" id="home-section">
-        <nav class="header__nav nav-bar sidebar_toggle">
-            <div class="toggle-menu">
+        <nav class="header__nav nav-bar sidebar_toggle rtl-sidebar">
+            <div class="toggle-menu" style="left: 20px; right: auto;">
                 <div class="line line1"></div>
                 <div class="line line2"></div>
                 <div class="line line3"></div>
@@ -29,7 +49,7 @@
             <ul class="nav-list">
                 <li><a href="#home-section" class="nav-link active">الرئيسية</a></li>
                 <li><a href="#about-section" class="nav-link">من نحن</a></li>
-                <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
+                <li><a href="/track-ae/1" class="nav-link">تتبع الطلب</a></li>
                 <li><a href="/ar-ship-now" class="nav-link">الشحن</a></li>
 
                 <li><a href="#service-solution" class="nav-link">الحلول والخدمات</a></li>
@@ -42,6 +62,7 @@
                 <li><a href="/home" class="nav-link">English</a></li>
             </ul>
         </nav> 
+
         <div id="sticky-wrapper" class="sticky-wrapper" style="height: 74.7px;">
             <header class="site-navbar js-sticky-header site-navbar-target" role="banner" style="">
                 <div class="container">
@@ -52,10 +73,10 @@
                         </div>
                         <div class="col-12">
                             <nav class="site-navigation text-right ml-auto " role="navigation">
-                                <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+                                <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-xl-block">
                                     <li><a href="#home-section" class="nav-link active">الرئيسية</a></li>
                                     <li><a href="#about-section" class="nav-link">من نحن</a></li>
-                                    <li><a href="/track/1" class="nav-link">تتبع الطلب</a></li>
+                                    <li><a href="/track-ae/1" class="nav-link">تتبع الطلب</a></li>
                                     <li><a href="/ar-ship-now" class="nav-link">الشحن</a></li>
 
                                     <li><a href="#service-solution" class="nav-link">الحلول والخدمات</a></li>
@@ -224,11 +245,11 @@
                         <div class="col-lg-6 col-md-12 aos-init" data-aos="fade-right" data-aos-delay="">
                             <div class="about-img ">
                                 <div class="about-font-img">
-                                    <img src="/web_site_image/home-page-image-1 (1).png" alt="">
+                                    <img src="/web_site_image/home-page-image-1 (1).png" alt="" class="w-100">
                                 </div>
-                                <div class="about-back-img d-none d-lg-block">
+                                <!-- <div class="about-back-img d-none d-lg-block">
                                     <img src="/web_site_image/home-page-image-1 (1).png" alt="">
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12 aos-init" data-aos="fade-left" data-aos-delay="">
@@ -411,7 +432,7 @@
                             </div>
                             <div class="info-caption">
                                 {{-- <p>اتصل بنا</p> --}}
-                                <span dir="ltr">+02 444 2254 </span>
+                                <span dir="ltr">02 444 2254 </span>
   
                                 {{-- <span><img src="/assets/images/whatsapp.png" width="20px">+05 044 24579 </span> --}}
                                 {{-- <span> <img src="/assets/images/whatsapp.png" width="20px"></span> --}}
@@ -424,7 +445,7 @@
                             <div class="info-caption">
                     
   
-                                <span dir="ltr">+05 044 24579 </span>
+                                <span dir="ltr">05 044 24579 </span>
                                 {{-- <span> <img src="/assets/images/whatsapp.png" width="20px"></span> --}}
                             </div>
                         </div>
@@ -445,6 +466,30 @@
                                	{{-- الموقع --}}
                                    <span>برج سيلفر ويف ، مدينة أبوظبي</span>
                             </div>
+                        </div>
+                        <br>
+                        <div class="single-info">
+                            <p>
+                                <a target="_blank" href="{{$settings->facebook_url}}"><button class="btn btn-social btn-social-o facebook mr-1">
+                                    <i class="fa fa-facebook-f"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->twitter_url}}"><button class="btn btn-social btn-social-o twitter mr-1">
+                                    <i class="fa fa-twitter"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->linkedin_url}}"><button class="btn btn-social btn-social-o linkedin mr-1">
+                                    <i class="fa fa-linkedin"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->instagram_url}}"><button class="btn btn-social btn-social-o instagram mr-1">
+                                    <i class="fa fa-instagram"></i>
+                                </button></a>
+
+                                <a target="_blank" href="{{$settings->youtube_url}}"><button class="btn btn-social btn-social-o youtube mr-1">
+                                    <i class="fa fa-youtube"></i>
+                                </button></a>
+                            </p>
                         </div>
                     </div>
 
@@ -482,9 +527,11 @@
                     <ul class="list-unstyled">
                         <li><a href="#">
                             برج سيلفر ويف ، مدينة أبوظبي</a></li>
-                        <li><a href="#" dir="ltr">+02 444 2254</a></li>
-                        <li><a href="#" dir="ltr">+971 5044 24579 <img src="/assets/images/whatsapp.png" width="20px"></a></li>
-                        <li><a href="#">info@wellwell.ae</a></li>
+                        <li><a href="#" dir="ltr">02 444 2254</a></li>
+                        <li><a target="_blank" title="Contact Us On WhatsApp" href="https://web.whatsapp.com/send?phone=971504424579" dir="ltr">
+                        971 5044 24579 <img src="/assets/images/whatsapp.png" width="20px">
+                        </a></li>
+                        <li><a href = "mailto: info@wellwell.ae">info@wellwell.ae</a></li>
 
                     </ul>
 

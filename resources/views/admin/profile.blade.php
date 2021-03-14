@@ -140,7 +140,7 @@
                         </div>
                       </div>
             </div>
-            @if(Auth::guard('admin')->user()->role_id == 0 || Auth::guard('admin')->user()->role_id == 1)
+            @if($role_get->sales_team_edit == 'on' || $role_get->accounts_team_edit == 'on' || $role_get->new_customer_edit == 'on' || $role_get->all_customer_edit == 'on')
             <div class="card-header">
               <button onclick="addRate({{$customer->id}})" class="btn btn-primary" type="button">Edit Sales Price</button>
               <div class="card-options"><a class="card-options-collapse" href="#" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-toggle="card-remove"><i class="fe fe-x"></i></a></div>

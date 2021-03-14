@@ -10,7 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>Payments In <span>Report </span></h2> 
+                  <h2>Courier Team COD <span>Settlement </span></h2> 
                   <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -110,13 +110,23 @@
                 <input type="hidden" name="delivery_agent_id" id="delivery_agent_id">
 
                     <div class="form-group">
-                      <label>Settlement Value</label>
-                      <input type="text" id="settlement_value" name="settlement_value" class="form-control">
+                      <label>Date</label>
+                      <input type="date" id="date" name="date" class="form-control">
+                      <input value="1" type="hidden" id="mode" name="mode" class="form-control">
                     </div>
 
+                    <!-- <div class="form-group">
+                      <label>Payment Mode</label>
+                      <select id="mode" name="mode" class="form-control">
+                      <option value="">SELECT</option>
+                      <option value="1">COD</option>
+                      <option value="2">GUEST</option>
+                      </select>
+                    </div> -->
+
                     <div class="form-group">
-                      <label>Upload Slip</label>
-                      <input type="file" id="image" name="image" class="form-control">
+                      <label>Amount</label>
+                      <input type="number" id="amount" name="amount" class="form-control">
                     </div>
 
                     <div class="form-group">

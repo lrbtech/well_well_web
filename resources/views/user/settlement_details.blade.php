@@ -35,16 +35,16 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Date & Time</th>
+                            <th>Date</th>
                             <th>Paid Amount</th>
-                            <th>Image</th>
+                            <th>Slip Image</th>
                           </tr>
                         </thead>
                         <tbody>
                         @foreach($user_settlement as $key => $row)
                         <tr>
                             <td>{{$key + 1}}</td>
-                            <td>{{date("d-m-Y",strtotime($row->created_at))}}</td>
+                            <td>{{date("d-m-Y",strtotime($row->date))}}</td>
                             <td>{{$row->amount}} AED</td>
                             </td>
                             <td>

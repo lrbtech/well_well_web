@@ -33,7 +33,7 @@
                 <div class="card">
                   <div class="card-header">
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
-                    @if(Auth::guard('admin')->user()->exception_category_create == 'on')
+                    @if($role_get->exception_category_create == 'on')
                     <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
                     <span>{{$language[128][Auth::guard('admin')->user()->lang]}}</span>
@@ -47,6 +47,7 @@
                           <tr>
                             <th>#</th>
                             <th>{{$language[127][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>Exception Status</th>
                             <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
@@ -57,6 +58,13 @@
                             <td>{{$key+1}}</td>
                             <td>{{$row->category}}</td>
                             <td>
+                            @if($row->exception_status == 0)
+                            Pickup
+                            @else 
+                            Delivery
+                            @endif
+                            </td>
+                            <td>
                             @if($row->status == 0)
                             {{$language[227][Auth::guard('admin')->user()->lang]}}
                             @else 
@@ -66,16 +74,18 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$language[16][Auth::guard('admin')->user()->lang]}}</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                @if(Auth::guard('admin')->user()->exception_category_edit == 'on')
+                                  @if($row->id != 7)
+                                    @if($role_get->exception_category_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">{{$language[225][Auth::guard('admin')->user()->lang]}}</a>
                                     @endif
-                                    @if(Auth::guard('admin')->user()->exception_category_delete == '0')
-                                    @if($row->status == 0)
-                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">{{$language[226][Auth::guard('admin')->user()->lang]}}</a>
-                                    @else 
-                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">{{$language[227][Auth::guard('admin')->user()->lang]}}</a>
+                                    @if($role_get->exception_category_delete == 'on')
+                                      @if($row->status == 0)
+                                        <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">{{$language[226][Auth::guard('admin')->user()->lang]}}</a>
+                                      @else 
+                                        <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">{{$language[227][Auth::guard('admin')->user()->lang]}}</a>
+                                      @endif
                                     @endif
-                                    @endif
+                                  @endif
                                 </div>
                             </td>
                           </tr>
@@ -111,6 +121,17 @@
             <div class="form-group col-md-12">
               <label class="col-form-label">{{$language[228][Auth::guard('admin')->user()->lang]}}</label>
               <input autocomplete="off" type="text" id="category" name="category" class="form-control">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12">
+              <label class="col-form-label">Exeption Status</label>
+              <select id="exception_status" name="exception_status" class="form-control">
+              <option value="">SELECT</option>
+              <option value="0">Pickup</option>
+              <option value="1">Delievry</option>
+              </select>
             </div>
         </div>
 
@@ -201,6 +222,7 @@ function Edit(id){
       $('#modal-title').text('Update Exception Category');
       $('#save').text('Save Change');
       $('input[name=category]').val(data.category);
+      $('select[name=exception_status]').val(data.exception_status);
       $('input[name=id]').val(id);
 
       $('#popup_modal').modal('show');

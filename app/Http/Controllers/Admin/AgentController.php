@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\agent;
 use App\Models\city;
 use App\Models\language;
+use App\Models\role;
 use Hash;
 use Auth;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -251,7 +252,8 @@ class AgentController extends Controller
         $language = language::all();
         $city = city::where('parent_id',0)->get();
         $area = city::where('parent_id','!=',0)->get();
-        return view('admin.agent',compact('agent','city','area','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.agent',compact('agent','city','area','language','role_get'));
     }
 
     public function editAgent($id){

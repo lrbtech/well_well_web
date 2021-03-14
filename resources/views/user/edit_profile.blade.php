@@ -65,7 +65,6 @@
           </div>
         </div>
         <div class="col-lg-8">
-          <form class="card theme-form">
             <div class="card-header">
               <h4 class="card-title mb-0">{{$language[149][Auth::user()->lang]}}</h4>
               <div class="card-options"><a class="card-options-collapse" href="#" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-toggle="card-remove"><i class="fe fe-x"></i></a></div>
@@ -87,13 +86,13 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="form-label">{{$language[154][Auth::user()->lang]}}</label>
-                    <input class="form-control" type="text" value="{{$customer->emirates_id}}" id="emirates_id" name="emirates_id">
+                    <input readonly class="form-control" type="text" value="{{$customer->emirates_id}}" id="emirates_id" name="emirates_id">
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
                   <div class="form-group">
                     <label class="form-label">{{$language[155][Auth::user()->lang]}}</label>
-                    <input class="form-control" type="text" value="{{$customer->trade_license}}" id="trade_license" name="trade_license">
+                    <input readonly class="form-control" type="text" value="{{$customer->trade_license}}" id="trade_license" name="trade_license">
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
@@ -111,27 +110,16 @@
                 <!-- <div class="col-md-12 text-right">
                   <button class="btn btn-primary btn-pill" type="submit">Update Profile</button>
                 </div> -->
+
                 <div class="col-sm-6 col-md-4">
                   <div class="form-group">
-                    <label class="form-label">{{$language[158][Auth::user()->lang]}}</label>
-                    <input class="form-control" type="file" name="emirates_id_file" id="emirates_id_file">
+                    <label class="form-label">Profile Image</label>
+                    <input class="form-control" type="file" name="profile_image" id="profile_image">
                   </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                  <div class="form-group">
-                    <label class="form-label">{{$language[159][Auth::user()->lang]}}</label>
-                    <input class="form-control" type="file" name="vat_certificate_file" id="vat_certificate_file">
-                  </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                  <div class="form-group">
-                    <label class="form-label">{{$language[160][Auth::user()->lang]}}</label>
-                    <input class="form-control" type="file" name="trade_license_file" id="trade_license_file">
-                  </div>
-                </div>
+
               </div>
             </div>
-          </form>
         </div>
         <div class="col-md-12">
           <div class="card">
@@ -199,12 +187,13 @@ function Save(){
           $("#form")[0].reset();
           toastr.success(data, 'Successfully Save');
           location.reload();
+          console.log(data);
       },error: function (data) {
           var errorData = data.responseJSON.errors;
           $.each(errorData, function(i, obj) {
           toastr.error(obj[0]);
-    });
-  }
+          });
+      }
   });
 }
 </script>

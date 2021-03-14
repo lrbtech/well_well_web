@@ -24,6 +24,7 @@ use Mail;
 use PDF;
 use DB;
 
+
 class ApiController extends Controller
 {
     public function __construct()
@@ -31,6 +32,54 @@ class ApiController extends Controller
         date_default_timezone_set("Asia/Dubai");
         date_default_timezone_get();
     }
+
+    public function sendNotificationAgent($msg,$agent_id){
+        $agent = agent::find($agent_id);
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS =>"{\r\n\"to\":\"$agent->firebase_key\",\r\n \"notification\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$msg\",\r\n  \"title\" : \"\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n },\r\n \"data\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$msg\",\r\n  \"title\" : \"\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n }\r\n}",
+        CURLOPT_HTTPHEADER => array(
+            "Authorization: key=AAAA8MuJ8ds:APA91bG2jOF4RQMoEu_sThruub8PeCu6SYjOOBA1Ba1TNd561DK9OPfqnEZS1GlD5BFfDvDsZBwkbCltNbfNU0Z3IO1emZniEYGuGPSmeNkd8XHz-3xqQ4gB_wbLaDKghMvUJqFYoy5T",
+            "Content-Type: application/json"
+        ),
+        ));
+        
+        $response = curl_exec($curl);
+        curl_close($curl);
+    }
+
+    public function sendNotificationUser($msg,$user_id){
+        $user = User::find($user_id);
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS =>"{\r\n\"to\":\"$user->firebase_key\",\r\n \"notification\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$msg\",\r\n  \"title\" : \"\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n },\r\n \"data\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$msg\",\r\n  \"title\" : \"\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n }\r\n}",
+        CURLOPT_HTTPHEADER => array(
+            "Authorization: key=AAAAlESNo9M:APA91bHKOmvgPs5gn_Gtbtgr0k5PogtXfMIgQmF7bA7X9Uy3VsNnVbSX-AOiETPeEplQiDaoDBFACzYxw7y6w77bjvg6CscQ5riG_U9burGBv1b2fO_XI1Mtyyozl57Rvfz0KM4Z16K6",
+            "Content-Type: application/json"
+        ),
+        ));
+        
+        $response = curl_exec($curl);
+        curl_close($curl);
+    }
+
+
     public function agentLogin(Request $request){
         $exist = agent::where('email',$request->email)->where('status',0)->get();
         if(count($exist)>0){
@@ -81,12 +130,19 @@ class ApiController extends Controller
                 'area' => '',
                 'name' => '',
                 'mobile' => '',
+                'user_type' => '',
             );
             $address = manage_address::find($value->from_address);
             $city = city::find($address->city_id);
             $area = city::find($address->area_id);
 
             $user = User::find($value->sender_id);
+            if($value->sender_id != 0){
+                $data['user_type']=1;
+            }
+            else{
+                $data['user_type']=0;
+            }
             if(!empty($user)){
                 if($user->user_type == '0'){
                     $data['name'] = $user->first_name . $user->last_name;
@@ -109,7 +165,7 @@ class ApiController extends Controller
             if(!empty($address->address3)){
                 $data['address3'] = $address->address3;
             }
-            if(empty($city)){
+            if(!empty($city)){
                 $data['city'] = $city->city;
             }
             if(!empty($area)){
@@ -169,7 +225,7 @@ class ApiController extends Controller
             if(!empty($address->address3)){
                 $data['address3'] = $address->address3;
             }
-            if(empty($city)){
+            if(!empty($city)){
                 $data['city'] = $city->city;
             }
             if(!empty($area)){
@@ -272,7 +328,15 @@ class ApiController extends Controller
             'insurance_percentage' => '',
             'insurance_amount' => '',
             'cod_amount' => '',
+            'user_type'=>'',
         );
+        
+        if($shipment->sender_id != 0){
+            $data['user_type']=1;
+        }
+        else{
+            $data['user_type']=0;
+        }
         if($shipment->pdf_print != 'null'){
             $data['printpdf'] = $shipment->pdf_print;
         }
@@ -696,13 +760,22 @@ class ApiController extends Controller
     public function updatePickup(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
+            $agent = agent::find($request->agent_id);
+            
             if($request->status == 0){
-                $shipment->status = 2;
+                $shipment->status=2;
                 $shipment->package_collect_agent_id = $request->agent_id;
                 $shipment->package_collect_date = date('Y-m-d');
                 $shipment->package_collect_time = date('H:i:s');
 
-                $agent = agent::find($request->agent_id);
+                if($shipment->sender_id == 0){
+                    $shipment->collect_cod_amount = $shipment->total;
+                    $agent->total_guest = (float)$agent->total_guest + $shipment->total;
+                    $agent->save();
+                }
+
+                $shipment->save();
+                
                 $system_logs = new system_logs;
                 $system_logs->_id = $request->shipment_id;
                 $system_logs->category = 'shipment';
@@ -718,8 +791,8 @@ class ApiController extends Controller
                 $shipment->pickup_exception_id = $request->agent_id;
                 $shipment->exception_assign_date = date('Y-m-d');
                 $shipment->exception_assign_time = date('H:i:s');
+                $shipment->save();
 
-                $agent = agent::find($request->agent_id);
                 $system_logs = new system_logs;
                 $system_logs->_id = $request->shipment_id;
                 $system_logs->category = 'shipment';
@@ -727,9 +800,15 @@ class ApiController extends Controller
                 $system_logs->remark = 'Pickup Exception by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
                 $system_logs->save();
             }
-            $shipment->save();
 
-           // return response()->json($shipment);
+            $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            
+            $msg= "Track ID : ".$shipment_package->sku_value." Package Collected";
+            $this->sendNotificationAgent($msg,$agent->id);
+            if($shipment->sender_id != 0){
+            $user_notification = User::find($shipment->sender_id);
+            $this->sendNotificationUser($msg,$user_notification->id);
+            }
             return response()->json(
                 ['message' => 'Update Successfully',
                 'shipment_id'=>$shipment->id,
@@ -745,28 +824,21 @@ class ApiController extends Controller
             $shipment = shipment::find($request->shipment_id);
             $agent = agent::find($request->agent_id);
             $city = city::find($agent->city_id);
-            //if($shipment->status == 2){
-            if($shipment->from_station_id == $city->station_id){
-                $shipment->status = 4;
-            }
-            elseif($shipment->to_station_id == $city->station_id){
-                $shipment->status = 11;
-            }
-            // }
-            // else{
-            //     if($shipemnt->to_station_id == $city->station_id){
-            //         $shipment->status = 11;
-            //     }
-            //     else{
-            //         $shipment->status = 4;
-            //     }
-            // }
-            $shipment->transit_in_id = $request->agent_id;
-            $shipment->transit_in_date = date('Y-m-d');
-            $shipment->transit_in_time = date('H:i:s');
-            $shipment->save();
-            
 
+            if($request->station == 0){
+                $shipment->status = 4;
+                $shipment->transit_in_id = $request->agent_id;
+                $shipment->transit_in_date = date('Y-m-d');
+                $shipment->transit_in_time = date('H:i:s');
+                $shipment->save();
+            }
+            elseif($request->station == 1){
+                $shipment->status = 11;
+                $shipment->transit_in_id1 = $request->agent_id;
+                $shipment->transit_in_date = date('Y-m-d');
+                $shipment->transit_in_time = date('H:i:s');
+                $shipment->save();
+            }
             
             $system_logs = new system_logs;
             $system_logs->_id = $request->shipment_id;
@@ -782,6 +854,14 @@ class ApiController extends Controller
             }
             $system_logs->save();
 
+            $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            $msg= "Track ID : ".$shipment_package->sku_value." Transit In Collected";
+            $this->sendNotificationAgent($msg,$agent->id);
+            if($shipment->sender_id != 0){
+            $user_notification = User::find($shipment->sender_id);
+            $this->sendNotificationUser($msg,$user_notification->id);
+            }
+
            // return response()->json($shipment);
             return response()->json(
                 ['message' => 'Update Successfully',
@@ -796,22 +876,18 @@ class ApiController extends Controller
         try{
             $shipment = shipment::find($request->shipment_id);
             
-            // if($shipment->status == 4){
-            //     $shipment->status = 6;
-            // }
-            // else{
-            //     $shipment->status = 12;
-            // }
             $agent = agent::find($request->agent_id);
             $city = city::find($agent->city_id);
-            //if($shipment->status == 2){
-            if($shipment->from_station_id == $city->station_id){
+           
+            if($request->station == 0){
                 $shipment->status = 6;
+                $shipment->transit_out_id = $request->agent_id;
             }
-            elseif($shipment->to_station_id == $city->station_id){
+            elseif($request->station == 1){
                 $shipment->status = 12;
+                $shipment->transit_out_id1 = $request->agent_id;
             }
-            $shipment->transit_out_id = $request->agent_id;
+
             $shipment->transit_out_date = date('Y-m-d');
             $shipment->transit_out_time = date('H:i:s');
             $shipment->save();
@@ -832,6 +908,13 @@ class ApiController extends Controller
             
             $system_logs->save();
 
+            $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            $msg= "Track ID : ".$shipment_package->sku_value." Transit Out Collected";
+            $this->sendNotificationAgent($msg,$agent->id);
+            if($shipment->sender_id != 0){
+            $user_notification = User::find($shipment->sender_id);
+            $this->sendNotificationUser($msg,$user_notification->id);
+            }
 
            // return response()->json($shipment);
             return response()->json(
@@ -847,34 +930,51 @@ class ApiController extends Controller
     public function packageAtStation(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
-            // $shipment->transit_out_id = $request->agent_id;
-            // $shipment->transit_out_date = date('Y-m-d');
-            // $shipment->transit_out_time = date('H:i:s');
-            $shipment->package_at_station_id = $request->agent_id;
+            
+            $agent = agent::find($request->agent_id);
+            $city = city::find($agent->city_id);
+            if($request->station == 0){
+                $shipment->status = 13;
+                $shipment->package_at_station_id = $request->agent_id;
+            }
+            elseif($request->station == 1){
+                $shipment->status = 14;
+                $shipment->package_at_station_id1 = $request->agent_id;
+            }
+            // if($shipment->from_station_id == $city->station_id){
+            //     $shipment->status = 13;
+            //     $shipment->package_at_station_id = $request->agent_id;
+            // }
+            // elseif($shipment->to_station_id == $city->station_id){
+            //     $shipment->status = 14;
+            //     $shipment->package_at_station_id1 = $request->agent_id;
+            // }
+
             $shipment->package_at_station_date = date('Y-m-d');
             $shipment->package_at_station_time = date('H:i:s');
-            if($shipment->status == 6){
-                $shipment->status = 4;
-            }
-            else{
-                $shipment->status = 11;
-            }
             $shipment->save();
 
-            $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
             $to_station = station::find($shipment->to_station_id);
             $from_station = station::find($shipment->from_station_id);
-            if($shipment->status == 4){
+            if($shipment->status == 13){
                 $system_logs->remark = 'Package At Station to '.$from_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
             }
             else{
                 $system_logs->remark = 'Package At Station to '.$to_station->station.' by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
             }
             $system_logs->save();
+
+            $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            $msg= "Track ID : ".$shipment_package->sku_value." Package At Station Collected";
+            $this->sendNotificationAgent($msg,$agent->id);
+            if($shipment->sender_id != 0){
+            $user_notification = User::find($shipment->sender_id);
+            $this->sendNotificationUser($msg,$user_notification->id);
+            }
 
            // return response()->json($shipment);
             return response()->json(
@@ -904,6 +1004,14 @@ class ApiController extends Controller
             $system_logs->to_id = $agent->email;
             $system_logs->remark = 'Van Scan by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
             $system_logs->save();
+
+            $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            $msg= "Track ID : ".$shipment_package->sku_value." Van Scan Successfully";
+            $this->sendNotificationAgent($msg,$agent->id);
+            if($shipment->sender_id != 0){
+            $user_notification = User::find($shipment->sender_id);
+            $this->sendNotificationUser($msg,$user_notification->id);
+            }
 
            // return response()->json($shipment);
             return response()->json(
@@ -935,6 +1043,7 @@ class ApiController extends Controller
             $shipment->cod_type = $request->cod_type;
             if($request->cod_type == 'Credit Card'){
             $shipment->credit_verification_code = $request->credit_verification_code;
+            $shipment->last_four_digit = $request->last_four_digit;
             }
 
             $cod_amount=0;
@@ -943,7 +1052,7 @@ class ApiController extends Controller
                 $shipment->collect_cod_amount = (float)$cod_amount;
                 $shipment->delivery_notes = $request->delivery_notes;
 
-                $agent->total_payment = (float)$agent->total_payment + (float)$cod_amount;
+                $agent->total_cod = (float)$agent->total_cod + (float)$cod_amount;
                 $agent->save();
 
                 if($shipment->special_cod_enable == 1){
@@ -951,7 +1060,7 @@ class ApiController extends Controller
                         $user = User::find($shipment->sender_id);
                         $cod=0;
                         if($shipment->special_cod != 'null' && $shipment->special_cod != ''){
-                            $cod= (float)($shipment->special_cod) - (float)($shipment->cod_amount);
+                            $cod= (float)($shipment->special_cod);
                         }
                         $user->total = $user->total + $cod;
                         $user->save();
@@ -971,6 +1080,15 @@ class ApiController extends Controller
             $user = User::find($all->sender_id);
             $package_category = package_category::all();
             $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->get();
+
+
+            $shipment_package1 = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            $msg= "Track ID : ".$shipment_package1->sku_value." Delivered Successfully";
+            $this->sendNotificationAgent($msg,$agent->id);
+            if($shipment->sender_id != 0){
+            $user_notification = User::find($shipment->sender_id);
+            $this->sendNotificationUser($msg,$user_notification->id);
+            }
             
 
            // return response()->json($shipment);
@@ -989,6 +1107,10 @@ class ApiController extends Controller
             
             $shipment->status = 9;
             $shipment->delivery_exception_id = $request->agent_id;
+            if($request->category == 'Reschedule Delivery'){
+                $shipment->delivery_reschedule = 1;
+                $shipment->delivery_reschedule_date = $request->date;
+            }
             $shipment->delivery_exception_category = $request->category;
             $shipment->delivery_exception_remark = $request->remark;
             $shipment->delivery_exception_assign_date = date('Y-m-d');
@@ -1060,8 +1182,8 @@ class ApiController extends Controller
             }
         
         }catch (\Exception $e) {
-            return response()->json($e);
-            return response()->json(['message' => 'Shipment Not Available','status'=>200], 200);
+            //return response()->json($e);
+            return response()->json(['message' => 'Shipment Not Available','status'=>400], 400);
         }
     }
 
@@ -1092,7 +1214,7 @@ class ApiController extends Controller
         
         
         }catch (\Exception $e) {
-            return response()->json($e);
+            //return response()->json($e);
             return response()->json(['message' => 'Shipment Not Available','status'=>400], 400);
         }
     }
@@ -1134,7 +1256,7 @@ class ApiController extends Controller
         
         
         }catch (\Exception $e) {
-            return response()->json($e);
+           // return response()->json($e);
             return response()->json(['message' => 'Shipment Not Available','status'=>400], 400);
         }
     }
@@ -1158,12 +1280,21 @@ class ApiController extends Controller
                     $shipment_id = $check2->id;
                 }
                 $shipment = shipment::find($shipment_id);
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->first();
                 $data = array(
                 'no_of_packages'=> (int)$shipment->no_of_packages,
                 'shipment_id'=>$shipment->order_id,
+                'tracking_id'=>$shipment_package->sku_value,
                 'id'=>$shipment->id,
                 'status'=>'',
+                'user_type'=>'',
                 );
+                if($shipment->sender_id != 0){
+                    $data['user_type']=1;
+                }
+                else{
+                    $data['user_type']=0;
+                }
                 if($shipment->hold_status == 1){
                     $data['status']='5';
                 }
@@ -1175,8 +1306,8 @@ class ApiController extends Controller
                 return response()->json($datas);
         
         }catch (\Exception $e) {
-            return response()->json($e);
-            return response()->json(['message' => 'Shipment Not Available','status'=>200], 200);
+            //return response()->json($e);
+            return response()->json(['message' => 'Shipment Not Available','status'=>400], 400);
         }
     }
 
@@ -1213,8 +1344,8 @@ class ApiController extends Controller
     }
 
 
-    public function exceptionCategory(){
-        $exception_category = exception_category::all();
+    public function exceptionCategory($status){
+        $exception_category = exception_category::where('exception_status',$status)->where('status',0)->get();
         $datas =array();
         foreach ($exception_category as $key => $value) {
             $datas[] = $value->category;
@@ -1333,10 +1464,11 @@ class ApiController extends Controller
         }
         $total_shipment = $on_pickup + $pickup + $exception + $hub + $delivery + $completed;
 
+
         $data = array(
             'total_shipment' => $total_shipment,
-            'total_shipment_value' => (int)$total_shipment_value,
-            'collected_value' => $collected_value,
+            'total_shipment_value' => 0,
+            'collected_value' => (int)$collected_value,
             'on_pickup' => $on_pickup,
             'pickup' => $pickup,
             'exception' => $exception,
@@ -1528,7 +1660,24 @@ class ApiController extends Controller
 
     }
 
-
+public function dummyRecordCreate($count){
+    $data = array(
+        'status'=>0,
+        'weight'=>0,
+        'length'=>0,
+        'width'=>0,
+        'height'=>0,
+        'dim'=>0,
+        'chargeable_weight'=>0,
+        'category'=>'',
+        'description'=>''
+    );
+    $datas =array();
+    for($i=0;$i<$count;$i++){
+        $datas[]=$data;
+    }
+     return response()->json($datas); 
+}
 
 
 }

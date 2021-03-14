@@ -151,10 +151,37 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
                ;
             }
         }
-        elseif($shipment->status == 5){
-            $status='Assign Agent to Transit Out (Hub)';
+        elseif($shipment->status == 11){
+            $to_station = station::find($shipment->to_station_id);
+            $agent = agent::find($shipment->transit_in_id);
+            if(!empty($agent)){
+                $status='
+                Transit In '.$to_station->station.'
+                Agent ID '.$agent->agent_id.''
+               ;
+            }
+            else{
+                $status='
+                Transit In '.$to_station->station.''
+               ;
+            }
         }
         elseif($shipment->status == 6){
+            $from_station = station::find($shipment->from_station_id);
+            $agent = agent::find($shipment->transit_out_id);
+            if(!empty($agent)){
+                $status='
+                Transit Out '.$from_station->station.'
+                Agent ID '.$agent->agent_id.''
+               ;
+            }
+            else{
+                $status='
+                Transit Out '.$from_station->station.''
+               ;
+            }
+        }
+        elseif($shipment->status == 12){
             $to_station = station::find($shipment->to_station_id);
             $agent = agent::find($shipment->transit_out_id);
             if(!empty($agent)){
@@ -205,11 +232,6 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $status='
             Canceled
             ' . $shipment->cancel_remark . '
-            ';
-        }
-        elseif($shipment->status == 11){
-            $status='
-            Shipemnt Hold
             ';
         }
 

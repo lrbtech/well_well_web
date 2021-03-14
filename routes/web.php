@@ -48,6 +48,7 @@ Route::get('/home', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home-arabic', [App\Http\Controllers\PageController::class, 'HomeArabic']);
 Route::get('/track/{id}', [App\Http\Controllers\PageController::class, 'Track']);
+Route::get('/track-ae/{id}', [App\Http\Controllers\PageController::class, 'TrackArabic']);
 
 Route::get('/ship-now', [App\Http\Controllers\PageController::class, 'shipNow']);
 Route::get('/ar-ship-now', [App\Http\Controllers\PageController::class, 'arShipNow']);
@@ -72,7 +73,7 @@ Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::clas
 Route::get('/get-available-time/{date}', [App\Http\Controllers\PageController::class, 'getAvailableTime']);
 
 
-Route::get('/delete-dublicate-data', [App\Http\Controllers\PageController::class, 'deleteDublicateData']);
+//Route::get('/delete-dublicate-data', [App\Http\Controllers\PageController::class, 'deleteDublicateData']);
 
 
 Route::group(['prefix' => 'admin'],function(){
@@ -129,11 +130,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/save-role', [App\Http\Controllers\Admin\UserController::class, 'saveRole']);
     Route::POST('/update-role', [App\Http\Controllers\Admin\UserController::class, 'updateRole']);
     Route::get('/edit-role/{id}', [App\Http\Controllers\Admin\UserController::class, 'editRole']);
-    Route::get('/delete-role/{id}', [App\Http\Controllers\Admin\UserController::class, 'deleteRole']);
+    Route::get('/delete-role/{id}/{status}', [App\Http\Controllers\Admin\UserController::class, 'deleteRole']);
+    Route::get('/create-role', [App\Http\Controllers\Admin\UserController::class, 'createRole']);
 
-    //admin roles
-    Route::get('/admin-roles', [App\Http\Controllers\Admin\UserController::class, 'adminRole']);
-    Route::get('/admin-create-roles', [App\Http\Controllers\Admin\UserController::class, 'createAdminRole']);
     //country
 	Route::get('/country', [App\Http\Controllers\Admin\CityController::class, 'Country']);
     Route::POST('/save-country', [App\Http\Controllers\Admin\CityController::class, 'saveCountry']);
@@ -211,10 +210,14 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/notification-delete/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'deleteNotification']);
     Route::get('/notification-send/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'sendNotification']);
     Route::get('/get-notification-agent/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'getNotificationAgent']);
+    Route::get('/get-notification-user/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'getNotificationUser']);
 
     //settings
     Route::get('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'Settings']);
     Route::POST('/update-settings', [App\Http\Controllers\Admin\SettingsController::class, 'updateSettings']);
+
+    Route::get('/social-media-link', [App\Http\Controllers\Admin\SettingsController::class, 'SocialMediaLink']);
+    Route::POST('/update-social-media-link', [App\Http\Controllers\Admin\SettingsController::class, 'updateSocialMediaLink']);
 
     //settings
     Route::get('/terms-and-conditions', [App\Http\Controllers\Admin\SettingsController::class, 'TermsAndConditions']);
@@ -226,7 +229,7 @@ Route::group(['prefix' => 'admin'],function(){
     //shipment
     Route::get('/shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'Shipment']);
     Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
-    Route::POST('/get-shipment/{status}', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
+    Route::POST('/get-shipment/{status}/{date1}/{date2}', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
 
     Route::get('/new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'newShipment']);
     Route::get('/special-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'specialShipment']);
@@ -276,9 +279,12 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/change-password', [App\Http\Controllers\Admin\SettingsController::class, 'changePassword']);
     Route::POST('/change-password', [App\Http\Controllers\Admin\SettingsController::class, 'updateChangePassword']);
 
+    Route::get('/change-profile-image', [App\Http\Controllers\Admin\SettingsController::class, 'ChangeProfileImage']);
+    Route::POST('/change-profile-image', [App\Http\Controllers\Admin\SettingsController::class, 'updateChangeProfileImage']);
+
 
     Route::get('/schedule-for-pickup', [App\Http\Controllers\Admin\AllShipment::class, 'ScheduleForPickup']);
-    Route::POST('/get-schedule-for-pickup', [App\Http\Controllers\Admin\AllShipment::class, 'getScheduleForPickup']);
+    Route::POST('/get-schedule-for-pickup/{date1}/{date2}', [App\Http\Controllers\Admin\AllShipment::class, 'getScheduleForPickup']);
 
     Route::get('/new-shipment-request', [App\Http\Controllers\Admin\AllShipment::class, 'NewShipmentRequest']);
     Route::POST('/get-new-shipment-request', [App\Http\Controllers\Admin\AllShipment::class, 'getNewShipmentRequest']);
@@ -299,13 +305,16 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-pickup-exception/{category}', [App\Http\Controllers\Admin\AllShipment::class, 'getPickupException']);
 
     Route::get('/package-collected', [App\Http\Controllers\Admin\AllShipment::class, 'PackageCollected']);
-    Route::POST('/get-package-collected', [App\Http\Controllers\Admin\AllShipment::class, 'getPackageCollected']);
+    Route::POST('/get-package-collected/{date1}/{date2}', [App\Http\Controllers\Admin\AllShipment::class, 'getPackageCollected']);
 
     Route::get('/transit-in', [App\Http\Controllers\Admin\AllShipment::class, 'TransitIn']);
     Route::POST('/get-transit-in', [App\Http\Controllers\Admin\AllShipment::class, 'getTransitIn']);
 
     Route::get('/transit-out', [App\Http\Controllers\Admin\AllShipment::class, 'TransitOut']);
     Route::POST('/get-transit-out', [App\Http\Controllers\Admin\AllShipment::class, 'getTransitOut']);
+
+    Route::get('/package-at-station', [App\Http\Controllers\Admin\AllShipment::class, 'PackageAtStation']);
+    Route::POST('/get-package-at-station', [App\Http\Controllers\Admin\AllShipment::class, 'getPackageAtStation']);
 
     Route::get('/ready-for-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'ReadyForDelivery']);
     Route::POST('/get-ready-for-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'getReadyForDelivery']);
@@ -314,7 +323,13 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-delivery-exception/{category}', [App\Http\Controllers\Admin\AllShipment::class, 'getDeliveryException']);
 
     Route::get('/shipment-delivered', [App\Http\Controllers\Admin\AllShipment::class, 'ShipmentDelivered']);
-    Route::POST('/get-shipment-delivered', [App\Http\Controllers\Admin\AllShipment::class, 'getShipmentDelivered']);
+    Route::POST('/get-shipment-delivered/{date1}/{date2}', [App\Http\Controllers\Admin\AllShipment::class, 'getShipmentDelivered']);
+
+    Route::get('/today-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'TodayDelivery']);
+    Route::POST('/get-today-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'getTodayDelivery']);
+
+    Route::get('/future-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'FutureDelivery']);
+    Route::POST('/get-future-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'getFutureDelivery']);
 
     Route::get('/cancel-request', [App\Http\Controllers\Admin\AllShipment::class, 'CancelRequest']);
     Route::POST('/get-cancel-request', [App\Http\Controllers\Admin\AllShipment::class, 'getCancelRequest']);
@@ -349,6 +364,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/payments-in-report', [App\Http\Controllers\Admin\SettlementController::class, 'PaymentsInReport']);
     Route::POST('/get-payments-in-report/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getPaymentsInReport']);
 
+    Route::get('/courier-team-guest-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'CourierTeamGuestSettlement']);
+    Route::POST('/get-courier-team-guest-settlement/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getCourierTeamGuestSettlement']);
+
     Route::POST('/agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'agentSettlement']);
 
     Route::POST('/excel-payments-in-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsInReport']);
@@ -360,7 +378,16 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'userSettlement']);
 
     Route::POST('/excel-payments-out-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsOutReport']);
-    
+
+    Route::get('/accounts-team-report', [App\Http\Controllers\Admin\SettlementController::class, 'AccountsTeamReport']);
+    Route::POST('/get-accounts-team-report', [App\Http\Controllers\Admin\SettlementController::class, 'getAccountsTeamReport']);
+    Route::POST('/accounts-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'accountsSettlement']);
+
+
+    Route::get('/view-agent-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewAgentSettlement']);
+    Route::get('/view-user-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewUserSettlement']);
+    Route::get('/view-accounts-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewAccountsSettlement']);
+
     //languages modules
     Route::get('/languages', [App\Http\Controllers\Admin\SettingsController::class, 'languageTable']);
     Route::get('/fetch_language', [App\Http\Controllers\Admin\SettingsController::class, 'fetchLanguage']);
@@ -386,23 +413,44 @@ Route::group(['prefix' => 'admin'],function(){
     //fleet-vehicle type management
     Route::get('/get-vehicle-type', [App\Http\Controllers\Admin\FleetManagement::class, 'getVehicleType']);
     Route::get('/edit-vehicle-type/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'editVehicleType']);
-    Route::get('/delete-vehicle-type/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteVehicleType']);
+    Route::get('/delete-vehicle-type/{id}/{status}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteVehicleType']);
     Route::POST('/create-vehicle-type', [App\Http\Controllers\Admin\FleetManagement::class, 'createVehicleType']);
     Route::POST('/update-vehicle-type', [App\Http\Controllers\Admin\FleetManagement::class, 'updateVehicleType']);
     //fleet vehicle group
     Route::get('/get-vehicle-group', [App\Http\Controllers\Admin\FleetManagement::class, 'getVehicleGroup']);
     Route::get('/edit-vehicle-group/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'editVehicleGroup']);
-    Route::get('/delete-vehicle-group/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteVehicleGroup']);
+    Route::get('/delete-vehicle-group/{id}/{status}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteVehicleGroup']);
     Route::POST('/create-vehicle-group', [App\Http\Controllers\Admin\FleetManagement::class, 'createVehicleGroup']);
     Route::POST('/update-vehicle-group', [App\Http\Controllers\Admin\FleetManagement::class, 'updateVehicleGroup']);
     //fleet management
     Route::get('/get-fleet', [App\Http\Controllers\Admin\FleetManagement::class, 'getFleet']);
     Route::get('/edit-fleet/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'editFleet']);
-    Route::get('/delete-fleet/{id}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteFleet']);
+    Route::get('/delete-fleet/{id}/{status}', [App\Http\Controllers\Admin\FleetManagement::class, 'deleteFleet']);
     Route::POST('/create-fleet', [App\Http\Controllers\Admin\FleetManagement::class, 'createFleet']);
     Route::POST('/update-fleet', [App\Http\Controllers\Admin\FleetManagement::class, 'updateFleet']);
     //remainder
     Route::get('/get-remainder', [App\Http\Controllers\Admin\FleetManagement::class, 'getRemainder']);
+
+
+    Route::get('/generate-invoice', [App\Http\Controllers\Admin\InvoiceController::class, 'GenerateInvoice']);
+    Route::POST('/get-generate-invoice/{user_type}/{date1}/{date2}', [App\Http\Controllers\Admin\InvoiceController::class, 'getGenerateInvoice']);
+
+    Route::POST('/create-generate-invoice', [App\Http\Controllers\Admin\InvoiceController::class, 'createGenerateInvoice']);
+
+    Route::get('/guest-generate-invoice', [App\Http\Controllers\Admin\InvoiceController::class, 'GuestGenerateInvoice']);
+    Route::POST('/get-guest-generate-invoice/{date1}/{date2}', [App\Http\Controllers\Admin\InvoiceController::class, 'getGuestGenerateInvoice']);
+
+    Route::POST('/create-guest-generate-invoice', [App\Http\Controllers\Admin\InvoiceController::class, 'createGuestGenerateInvoice']);
+
+    Route::get('/invoice-history', [App\Http\Controllers\Admin\InvoiceController::class, 'InvoiceHistory']);
+    Route::POST('/get-invoice-history/{user_type}/{date1}/{date2}', [App\Http\Controllers\Admin\InvoiceController::class, 'getInvoiceHistory']);
+
+    Route::get('/invoice-print/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'InvoicePrint']);
+
+    Route::get('new-invoice-payment/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'newInvoicePayment']);
+    Route::POST('save-invoice-payment', [App\Http\Controllers\Admin\InvoiceController::class, 'saveInvoicePayment']);
+    Route::get('view-invoice-payment/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'viewInvoicePayment']);
+
 });
 
 
@@ -429,6 +477,8 @@ Route::group(['prefix' => 'user'],function(){
 
     Route::get('/print-label/{id}', [App\Http\Controllers\User\ShipmentController::class, 'printLabel']);
     Route::get('/print-invoice/{id}', [App\Http\Controllers\User\ShipmentController::class, 'printInvoice']);
+
+    Route::get('/bulk-print-label', [App\Http\Controllers\User\ShipmentController::class, 'bulkPrintLabel']);
 
 
     Route::get('/get-area-price/{weight}/{to_address}/{shipment_mode}/{special_service}', [App\Http\Controllers\User\ShipmentController::class, 'getAreaPrice']);
@@ -471,6 +521,12 @@ Route::group(['prefix' => 'user'],function(){
     Route::POST('/get-payments-in-report/{date1}/{date2}', [App\Http\Controllers\User\ReportController::class, 'getPaymentsInReport']);
 
     Route::get('/settlement-details', [App\Http\Controllers\User\ReportController::class, 'settlementDetails']);
+
+    Route::get('/invoice-history', [App\Http\Controllers\User\InvoiceController::class, 'InvoiceHistory']);
+    Route::POST('/get-invoice-history/{date1}/{date2}', [App\Http\Controllers\User\InvoiceController::class, 'getInvoiceHistory']);
+
+    Route::get('/invoice-print/{id}', [App\Http\Controllers\User\InvoiceController::class, 'InvoicePrint']);
+    Route::get('view-invoice-payment/{id}', [App\Http\Controllers\User\InvoiceController::class, 'viewInvoicePayment']);
 
 });
 

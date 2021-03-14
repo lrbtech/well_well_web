@@ -62,8 +62,6 @@
                             <th>User Details</th>
                             <th>No of Shipment</th>
                             <th>Total COD Value</th>
-                            <th>Commission</th>
-                            <th>Payable Amount</th>
                             <th>OverAll Paid Amount</th>
                           </tr>
                         </thead>
@@ -107,8 +105,6 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'user_details', name: 'user_details' },
         { data: 'no_of_shipments', name: 'no_of_shipments' },
         { data: 'total_value', name: 'total_value' },
-        { data: 'admin_fees', name: 'admin_fees' },
-        { data: 'payable_value', name: 'payable_value' },
         { data: 'settlement_value', name: 'settlement_value' },
     ]
 });

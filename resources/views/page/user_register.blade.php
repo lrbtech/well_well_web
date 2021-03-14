@@ -933,6 +933,9 @@ $(document).ready(function () {
                 minlength:15,
                 maxlength:15,
             },
+            trade_license:{
+                required: true,
+            },
             emirates_id_file:{
                 required: true,
                 extension: "pdf|jpg|jpeg|png",
@@ -944,7 +947,7 @@ $(document).ready(function () {
                 //filesize: 1000000   //max size 1 mb
             },
             trade_license_file:{
-                //required: true,
+                required: true,
                 extension: "pdf|jpg|jpeg|png",
                // filesize: 1000000   //max size 1 mb
             },

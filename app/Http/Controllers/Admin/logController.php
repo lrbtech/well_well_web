@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\user_log;
 use App\Models\language;
+use App\Models\role;
 use Auth;
 class logController extends Controller
 {

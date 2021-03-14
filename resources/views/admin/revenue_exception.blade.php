@@ -36,7 +36,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Tracking ID</th>
+                            <th>{{$language[326][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[208][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[209][Auth::guard('admin')->user()->lang]}} * {{$language[210][Auth::guard('admin')->user()->lang]}} * {{$language[211][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[212][Auth::guard('admin')->user()->lang]}}</th>

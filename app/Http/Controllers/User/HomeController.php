@@ -32,8 +32,10 @@ class HomeController extends Controller
         $cldate = date('Y-m-d',strtotime('last day of this month'));
         $language = language::all();
         $shipment = shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'desc')->take('5')->get();
+        $shipment_package = shipment_package::orderBy('id', 'desc')->get();
+
         $current_month_value = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
-        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language'));
+        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package'));
     }
     
 }

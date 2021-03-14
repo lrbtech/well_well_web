@@ -88,7 +88,7 @@ visibility: visible;
                           <input class="form-control" id="user_search" name="user_search" type="text">
                         </div>
 
-                        <div class="col-sm-12 show_from_address">
+                        <div class="col-sm-12">
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label class="col-form-label">{{$language[21][Auth::guard('admin')->user()->lang]}}</label>
@@ -261,7 +261,7 @@ visibility: visible;
                               </div>
                               <div class="form-group col-md-4">
                                 <label class="col-form-label">Reference No</label>
-                                <input class="form-control" id="reference_no" name="reference_no" type="text" >
+                                <input class="form-control" id="reference_no" name="reference_no" type="number" >
                               </div>
                             </div>
 
@@ -708,10 +708,18 @@ visibility: visible;
                 <label>Enter a location</label>
                 <input id="searchInput" class="input-controls form-control" type="text" placeholder="Enter a location">
                 <div class="map" id="map" style="width: 100%; height: 300px;"></div>
-                <input readonly type="hidden" id="latitude" name="latitude" class="form-control">
-                <input readonly type="hidden" id="longitude" name="longitude" class="form-control">
             </div>
         </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="col-form-label">Latitude</label>
+                <input readonly type="text" id="latitude" name="latitude" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+                <label class="col-form-label">Longitude</label>
+                <input readonly type="text" id="longitude" name="longitude" class="form-control">
+            </div>
+        </div>   
 
         </form>
         </div>
@@ -925,6 +933,12 @@ $( "#user_search" ).autocomplete({
               $("#postal_charge_percentage_label").html(data.settings.postal_charge_percentage);  
               get_from_address(contact_id);
               get_to_address(contact_id);
+              if(data.user.address_id != ''){
+                getFromAddress(data.user.address_id);
+              }
+              else{
+                $('.show_from_address').html('');
+              }
             }
         });
     }       
@@ -1234,8 +1248,8 @@ $('#special_cod').change(function(){
   var declared_value = Number($("#declared_value").val());
   var special_cod = Number($("#special_cod").val());
   if (declared_value != '') {
-    if (special_cod > declared_value) {
-      alert('COD value should be less then declared value of the package');
+    if (declared_value > special_cod) {
+      alert('COD value should be More Or Equal declared value of the package');
       $("#special_cod").val('');
       $("#special_cod").focus();
     }
@@ -1246,21 +1260,21 @@ $('#special_cod').change(function(){
   }
 });
 
-$('#declared_value').change(function(){
-  var declared_value = Number($("#declared_value").val());
-  var special_cod = Number($("#special_cod").val());
-  if (declared_value != '') {
-    if (special_cod > declared_value) {
-      alert('COD value should be less then declared value of the package');
-      $("#special_cod").val('');
-      $("#special_cod").focus();
-    }
-  }
-  else{
-    alert('Enter Declared Value'); 
-    $("#declared_value").focus();
-  }
-});
+// $('#declared_value').change(function(){
+//   var declared_value = Number($("#declared_value").val());
+//   var special_cod = Number($("#special_cod").val());
+//   if (declared_value != '') {
+//     if (declared_value > special_cod) {
+//       alert('COD value should be More Or Equal declared value of the package');
+//       $("#special_cod").val('');
+//       $("#special_cod").focus();
+//     }
+//   }
+//   else{
+//     alert('Enter Declared Value'); 
+//     $("#declared_value").focus();
+//   }
+// });
 
 function getvalue() {
   var no_of_packages = Number($('#no_of_packages').val());

@@ -19,6 +19,7 @@ class CreatePushNotificationsTable extends Migration
             $table->string('description')->nullable();
             $table->string('send_to')->nullable();
             $table->string('agent_ids')->nullable();
+            $table->string('customer_ids')->nullable();
             $table->string('expiry_date')->nullable();
             $table->string('status')->default('0');
             $table->timestamps();

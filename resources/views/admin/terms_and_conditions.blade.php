@@ -37,6 +37,13 @@
             </div> -->
             <div class="card-body">
               <div class="row">
+                <div class="form-group">
+                  <label class="form-label">Mobile Terms and Conditions</label>
+                  <textarea style="width:100%;" id="mobile_terms_english" name="mobile_terms_english" rows="10">{{$settings->mobile_terms_english}}</textarea>
+                </div>
+              </div>
+
+              <div class="row">
 
                 <div class="col-sm-12 col-md-12">
                 <textarea id="editor1" name="editor1" cols="30" rows="50">

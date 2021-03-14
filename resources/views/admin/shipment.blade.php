@@ -34,6 +34,15 @@
                   {{ csrf_field() }}
                   <div class="card-header">
                     <div class="row">
+                        <div class="form-group col-md-3">
+                            <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                        </div>
                         
                         <div class="form-group col-md-3">
                             <label>{{$language[100][Auth::guard('admin')->user()->lang]}}</label>
@@ -69,7 +78,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Tracking ID</th>
+                            <th>{{$language[326][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
@@ -214,7 +223,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-shipment/20",
+        "url": "/admin/get-shipment/20/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -233,8 +242,23 @@ var orderPageTable = $('#datatable').DataTable({
 });
 
 $('#search').click(function(){
+    //alert('hi');
+    var from_date = $('#from_date').val();
+    var to_date = $('#to_date').val();
+    var fdate;
+    var tdate;
+    if(from_date!=""){
+      fdate = from_date;
+    }else{
+      fdate = '1';
+    }
+    if(to_date!=""){
+      tdate = to_date;
+    }else{
+      tdate = '1';
+    }
     var shipment_status = $('#shipment_status').val();
-    var new_url = '/admin/get-shipment/'+shipment_status;
+    var new_url = '/admin/get-shipment/'+shipment_status+'/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });

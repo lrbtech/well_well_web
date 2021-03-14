@@ -39,7 +39,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Account ID</th> 
+                            <th>{{$language[203][Auth::guard('admin')->user()->lang]}}</th> 
                             <th>{{$language[11][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[12][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[13][Auth::guard('admin')->user()->lang]}}</th>
@@ -86,20 +86,33 @@
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                                 @if($row->status == 1)
+                                  @if($role_get->all_customer_edit == 'on')
                                     <a onclick="updateStatus({{$row->id}},2)" class="dropdown-item" href="#">Approved</a>
+                                  @endif 
+                                  @if($role_get->all_customer_delete == 'on')
                                     <a onclick="updateStatus({{$row->id}},1)" class="dropdown-item" href="#">Denied</a>
+                                  @endif
                                 @elseif($row->status == 2)
                                     <a onclick="viewRemark({{$row->id}})" class="dropdown-item" href="#">View Remark</a>
-                                    <a onclick="addRate({{$row->id}})" class="dropdown-item" href="#">Add RateCard</a>
-                                    
-                                    <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Approved</a>
+                                    @if($role_get->all_customer_edit == 'on')
+                                      <a onclick="addRate({{$row->id}})" class="dropdown-item" href="#">Add RateCard</a>
+                                    @endif
+                                    @if($role_get->all_customer_edit == 'on')
+                                      <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Approved</a>
+                                    @endif
                                 @elseif($row->status == 3)
-                                  <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
+                                  @if($role_get->all_customer_edit == 'on')
+                                    <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
+                                  @endif
                                 @elseif($row->status == 4)
-                                  <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Block User</a>
+                                  @if($role_get->all_customer_delete == 'on')
+                                    <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Block User</a>
+                                  @endif
                                 @endif
                                     @if($row->status >= 2)
-                                    <a onclick="sendMail({{$row->id}})" class="dropdown-item" href="#">Send Mail Rate Card</a>
+                                      @if($role_get->all_customer_edit == 'on')
+                                        <a onclick="sendMail({{$row->id}})" class="dropdown-item" href="#">Send Mail Rate Card</a>
+                                      @endif
                                     @endif
                                     <a class="dropdown-item" href="/admin/view-profile/{{$row->id}}">View Profile</a>
                                 </div>

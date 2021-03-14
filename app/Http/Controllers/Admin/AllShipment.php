@@ -44,7 +44,8 @@ class AllShipment extends Controller
     public function ScheduleForPickup(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.schedule_for_pickup',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.schedule_for_pickup',compact('agent','language','role_get'));
     }
 
     public function NewShipmentRequest(){
@@ -59,7 +60,8 @@ class AllShipment extends Controller
             $agent = $q->get();
         }
         $language = language::all();
-        return view('admin.new_shipment_request',compact('agent', 'language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.new_shipment_request',compact('agent', 'language','role_get'));
     }
 
 
@@ -75,7 +77,8 @@ class AllShipment extends Controller
             $agent = $q->get();
         }
         $language = language::all();
-        return view('admin.guest_pickup_request',compact('agent', 'language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.guest_pickup_request',compact('agent', 'language','role_get'));
     }
 
     public function PickupException(){
@@ -89,33 +92,45 @@ class AllShipment extends Controller
             $q->select('a.*');
             $agent = $q->get();
         }
-        $exception_category = exception_category::where('status',0)->get();
+        $exception_category = exception_category::where('exception_status',0)->where('status',0)->get();
         $language = language::all();
-        return view('admin.pickup_exception',compact('agent','language','exception_category'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.pickup_exception',compact('agent','language','exception_category','role_get'));
     }
 
     public function PackageCollected(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.package_collected',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.package_collected',compact('agent','language','role_get'));
     }
 
     public function TransitIn(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.transit_in',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.transit_in',compact('agent','language','role_get'));
     }
 
     public function TransitOut(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.transit_out',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.transit_out',compact('agent','language','role_get'));
+    }
+
+    public function PackageAtStation(){
+        $agent = agent::all();
+        $language = language::all();
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.package_at_station',compact('agent','language','role_get'));
     }
 
     public function ReadyForDelivery(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.ready_for_delivery',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.ready_for_delivery',compact('agent','language','role_get'));
     }
 
     public function DeliveryException(){
@@ -130,26 +145,44 @@ class AllShipment extends Controller
             $agent = $q->get();
         }
         $language = language::all();
-        $exception_category = exception_category::where('status',0)->get();
-        return view('admin.delivery_exception',compact('agent','language','exception_category'));
+        $exception_category = exception_category::where('exception_status',1)->where('status',0)->get();
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.delivery_exception',compact('agent','language','exception_category','role_get'));
     }
 
     public function ShipmentDelivered(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.shipment_delivered',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.shipment_delivered',compact('agent','language','role_get'));
+    }
+
+    public function TodayDelivery(){
+        $agent = agent::all();
+        $language = language::all();
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.today_delivery',compact('agent','language','role_get'));
+    }
+
+    public function FutureDelivery(){
+        $agent = agent::all();
+        $language = language::all();
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.future_delivery',compact('agent','language','role_get'));
     }
 
     public function CancelRequest(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.cancel_request',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.cancel_request',compact('agent','language','role_get'));
     }
 
     public function HoldRequest(){
         $agent = agent::all();
         $language = language::all();
-        return view('admin.hold_request',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.hold_request',compact('agent','language','role_get'));
     }
 
     public function TodayPickupRequest(){
@@ -164,7 +197,8 @@ class AllShipment extends Controller
             $agent = $q->get();
         }
         $language = language::all();
-        return view('admin.today_pickup_request',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.today_pickup_request',compact('agent','language','role_get'));
     }
 
     public function FuturePickupRequest(){
@@ -179,7 +213,8 @@ class AllShipment extends Controller
             $agent = $q->get();
         }
         $language = language::all();
-        return view('admin.future_pickup_request',compact('agent','language'));
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.future_pickup_request',compact('agent','language','role_get'));
     }
 
     public function checkboxAssignAgent(Request $request)
@@ -656,12 +691,31 @@ class AllShipment extends Controller
 
 
 
-    public function getScheduleForPickup(){
-        if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',1)->orderBy('id', 'DESC')->where('hold_status',0)->get();
+    public function getScheduleForPickup($fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
+        if(Auth::guard('admin')->user()->station_id == '0'){      
+            $i =DB::table('shipments');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.pickup_assign_date', [$fdate1, $tdate1]);
+            }
+            $i->where('shipments.status',1);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',1)->orderBy('id', 'DESC')->where('hold_status',0)->get();
+            $i =DB::table('shipments');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.pickup_assign_date', [$fdate1, $tdate1]);
+            }
+            $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
+            $i->where('shipments.status',1);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
 
         return Datatables::of($shipment)
@@ -671,6 +725,12 @@ class AllShipment extends Controller
             })
             ->addColumn('shipment_time', function ($shipment) {
                 return '<td>'.date('h:i a',strtotime($shipment->pickup_assign_time)).'</td>';
+            })
+            ->addColumn('total_weight', function ($shipment) {
+                return '<td>
+                <p>No of Packages : ' .$shipment->no_of_packages . '</p>
+                <p>Total Weight ' .$shipment->total_weight . ' Kg</p>
+                </td>';
             })
             ->addColumn('shipment_mode', function ($shipment) {
                 $special_service='';
@@ -746,7 +806,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','total_weight'])
         ->addIndexColumn()
         ->make(true);
 
@@ -878,12 +938,31 @@ class AllShipment extends Controller
 
 
 
-    public function getPackageCollected(){
+    public function getPackageCollected($fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',2)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $i =DB::table('shipments');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.package_collect_date', [$fdate1, $tdate1]);
+            }
+            $i->where('shipments.status',2);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
         else{
-            $shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',2)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $i =DB::table('shipments');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.package_collect_date', [$fdate1, $tdate1]);
+            }
+            $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
+            $i->where('shipments.status',2);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
 
         return Datatables::of($shipment)
@@ -1016,9 +1095,7 @@ class AllShipment extends Controller
                 return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
-                return '<td>
-                <p>' . date("d-m-Y",strtotime($shipment->transit_in_date)) . '</p>
-                </td>';
+                return '<td>'.date('d-m-Y',strtotime($shipment->transit_in_date)).'</td>';
             })
             ->addColumn('from_address', function ($shipment) {
                 $from_address = manage_address::find($shipment->from_address);
@@ -1026,11 +1103,20 @@ class AllShipment extends Controller
                 $from_area = city::find($from_address->area_id);
                 $from_station = station::find($shipment->from_station_id);
                 if(!empty($from_area)){
-                return '<td>
-                <p>' . $from_area->city . '</p>
-                <p>' . $from_city->city . '</p>
-                <p><b>Station :' . $from_station->station . '</b></p>
-                </td>';
+                    if($shipment->status == 4){
+                        return '<td>
+                        <p>' . $from_area->city . '</p>
+                        <p>' . $from_city->city . '</p>
+                        <p style="background-color:#008000;"><b>Station :' . $from_station->station . '</b></p>
+                        </td>';
+                    }
+                    else{
+                        return '<td>
+                        <p>' . $from_area->city . '</p>
+                        <p>' . $from_city->city . '</p>
+                        <p><b>Station :' . $from_station->station . '</b></p>
+                        </td>';
+                    }
                 }
                 else{
                     return '<td></td>';
@@ -1042,11 +1128,20 @@ class AllShipment extends Controller
                 $to_area = city::find($to_address->area_id);
                 $to_station = station::find($shipment->to_station_id);
                 if(!empty($to_area)){
-                return '<td>
-                <p>' . $to_area->city . '</p>
-                <p>' . $to_city->city . '</p>
-                <p><b>Station :' . $to_station->station . '</b></p>
-                </td>';
+                    if($shipment->status == 11){
+                        return '<td>
+                        <p>' . $to_area->city . '</p>
+                        <p>' . $to_city->city . '</p>
+                        <p style="background-color:#008000;"><b>Station :' . $to_station->station . '</b></p>
+                        </td>';
+                    }
+                    else{
+                        return '<td>
+                        <p>' . $to_area->city . '</p>
+                        <p>' . $to_city->city . '</p>
+                        <p><b>Station :' . $to_station->station . '</b></p>
+                        </td>';
+                    }
                 }
                 else{
                     return '<td></td>';
@@ -1055,7 +1150,13 @@ class AllShipment extends Controller
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
-                $agent = agent::find($shipment->transit_in_id);
+                
+                if($shipment->status == 4){
+                    $agent = agent::find($shipment->transit_in_id);
+                }
+                elseif($shipment->status == 11){
+                    $agent = agent::find($shipment->transit_in_id1);
+                }
                 if(!empty($agent)){
                     if($shipment->status == 4){
                         return '<p>Transit In '.$from_station->station.'</p>
@@ -1147,9 +1248,7 @@ class AllShipment extends Controller
                 return $special_service;
             })
             ->addColumn('shipment_date', function ($shipment) {
-                return '<td>
-                <p>' . date("d-m-Y",strtotime($shipment->transit_out_date)) . '</p>
-                </td>';
+                return '<td>'.date('d-m-Y',strtotime($shipment->transit_out_date)).'</td>';
             })
             ->addColumn('from_address', function ($shipment) {
                 $from_address = manage_address::find($shipment->from_address);
@@ -1157,11 +1256,20 @@ class AllShipment extends Controller
                 $from_area = city::find($from_address->area_id);
                 $from_station = station::find($shipment->from_station_id);
                 if(!empty($from_area)){
-                return '<td>
-                <p>' . $from_area->city . '</p>
-                <p>' . $from_city->city . '</p>
-                <p><b>Station :' . $from_station->station . '</b></p>
-                </td>';
+                    if($shipment->status == 6){
+                        return '<td>
+                        <p>' . $from_area->city . '</p>
+                        <p>' . $from_city->city . '</p>
+                        <p style="background-color:#008000;"><b>Station :' . $from_station->station . '</b></p>
+                        </td>';
+                    }
+                    else{
+                        return '<td>
+                        <p>' . $from_area->city . '</p>
+                        <p>' . $from_city->city . '</p>
+                        <p><b>Station :' . $from_station->station . '</b></p>
+                        </td>';
+                    }
                 }
                 else{
                     return '<td></td>';
@@ -1173,11 +1281,20 @@ class AllShipment extends Controller
                 $to_area = city::find($to_address->area_id);
                 $to_station = station::find($shipment->to_station_id);
                 if(!empty($to_area)){
-                return '<td>
-                <p>' . $to_area->city . '</p>
-                <p>' . $to_city->city . '</p>
-                <p><b>Station :' . $to_station->station . '</b></p>
-                </td>';
+                    if($shipment->status == 12){
+                        return '<td>
+                        <p>' . $to_area->city . '</p>
+                        <p>' . $to_city->city . '</p>
+                        <p style="background-color:#008000;"><b>Station :' . $to_station->station . '</b></p>
+                        </td>';
+                    }
+                    else{
+                        return '<td>
+                        <p>' . $to_area->city . '</p>
+                        <p>' . $to_city->city . '</p>
+                        <p><b>Station :' . $to_station->station . '</b></p>
+                        </td>';
+                    }
                 }
                 else{
                     return '<td></td>';
@@ -1186,7 +1303,13 @@ class AllShipment extends Controller
             ->addColumn('status', function ($shipment) {
                 $from_station = station::find($shipment->from_station_id);
                 $to_station = station::find($shipment->to_station_id);
-                $agent = agent::find($shipment->transit_out_id);
+                
+                if($shipment->status == 6){
+                    $agent = agent::find($shipment->transit_out_id);
+                }
+                elseif($shipment->status == 12){
+                    $agent = agent::find($shipment->transit_out_id1);
+                }
                 if(!empty($agent)){
                     if($shipment->status == 6){
                         return '<p>Transit Out '.$from_station->station.'</p>
@@ -1205,6 +1328,147 @@ class AllShipment extends Controller
                     }
                     elseif($shipment->status == 12){
                         return '<p>Transit Out '.$to_station->station.'</p>';
+                    }
+                }
+            })
+            ->addColumn('action', function ($shipment) {
+                // <a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        
+                    </div>
+                </td>';
+            })
+            
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
+        ->addIndexColumn()
+        ->make(true);
+
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+    public function getPackageAtStation(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $shipment = shipment::where('status',13)->orWhere('status',14)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+        }
+        else{
+            // $shipment = shipment::where('status',6)->orWhere('status',12)->where('from_station_id',Auth::guard('admin')->user()->station_id)->orWhere('to_station_id',Auth::guard('admin')->user()->station_id)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = DB::table('shipments')
+            ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','13']])
+            ->orWhere([['from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','14']])
+            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','13']])
+            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','14']])
+            ->where('hold_status',0)->orderBy('id', 'DESC')
+            ->get();
+        }
+
+        return Datatables::of($shipment)
+            ->addColumn('order_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('shipment_time', function ($shipment) {
+                return '<td>'.date('h:i a',strtotime($shipment->package_at_station_time)).'</td>';
+            })
+            ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
+                if ($shipment->shipment_mode == 2) {
+                    $special_service.='<p>Express</p>';
+                } else {
+                    $special_service.='<p>Standard</p>';
+                }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
+            })
+            ->addColumn('shipment_date', function ($shipment) {
+                return '<td>'.date('d-m-Y',strtotime($shipment->package_at_station_date)).'</td>';
+            })
+            ->addColumn('from_address', function ($shipment) {
+                $from_address = manage_address::find($shipment->from_address);
+                $from_city = city::find($from_address->city_id);
+                $from_area = city::find($from_address->area_id);
+                $from_station = station::find($shipment->from_station_id);
+                if(!empty($from_area)){
+                    if($shipment->status == 13){
+                        return '<td>
+                        <p>' . $from_area->city . '</p>
+                        <p>' . $from_city->city . '</p>
+                        <p style="background-color:#008000;"><b>Station :' . $from_station->station . '</b></p>
+                        </td>';
+                    }
+                    else{
+                        return '<td>
+                        <p>' . $from_area->city . '</p>
+                        <p>' . $from_city->city . '</p>
+                        <p><b>Station :' . $from_station->station . '</b></p>
+                        </td>';
+                    }
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('to_address', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $to_station = station::find($shipment->to_station_id);
+                if(!empty($to_area)){
+                    if($shipment->status == 14){
+                        return '<td>
+                        <p>' . $to_area->city . '</p>
+                        <p>' . $to_city->city . '</p>
+                        <p style="background-color:#008000;"><b>Station :' . $to_station->station . '</b></p>
+                        </td>';
+                    }
+                    else{
+                        return '<td>
+                        <p>' . $to_area->city . '</p>
+                        <p>' . $to_city->city . '</p>
+                        <p><b>Station :' . $to_station->station . '</b></p>
+                        </td>';
+                    }
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('status', function ($shipment) {
+                $from_station = station::find($shipment->from_station_id);
+                $to_station = station::find($shipment->to_station_id);
+                if($shipment->status == 13){
+                    $agent = agent::find($shipment->package_at_station_id);
+                }
+                elseif($shipment->status == 14){
+                    $agent = agent::find($shipment->package_at_station_id1);
+                }
+                if(!empty($agent)){
+                    if($shipment->status == 13){
+                        return '<p>Package At Station '.$from_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
+                    elseif($shipment->status == 14){
+                        return '<p>Package At Station '.$to_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
+                }
+                else{
+                    if($shipment->status == 13){
+                        return '<p>Package At Station '.$from_station->station.'</p>';
+                    }
+                    elseif($shipment->status == 14){
+                        return '<p>Package At Station '.$to_station->station.'</p>';
                     }
                 }
             })
@@ -1334,19 +1598,32 @@ class AllShipment extends Controller
     }
 
 
-    public function getShipmentDelivered(){
+    public function getShipmentDelivered($fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $shipment = shipment::where('status',8)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $i =DB::table('shipments');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.delivery_date', [$fdate1, $tdate1]);
+            }
+            $i->where('shipments.status',8);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
         }
         else{
-            // $shipment = shipment::where('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',8)->where('hold_status',0)->orderBy('id', 'DESC')->get();
-            $shipment = DB::table('shipments')
-            ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
-                    ['status','8']])
-            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
-                    ['status','8']])
-            ->where('hold_status',0)->orderBy('id', 'DESC')
-            ->get();
+            $i =DB::table('shipments');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.delivery_date', [$fdate1, $tdate1]);
+            }
+            $i->where([['shipments.from_station_id',Auth::guard('admin')->user()->station_id],['shipments.status','8']]);
+            $i->orWhere([['shipments.to_station_id',Auth::guard('admin')->user()->station_id],['shipments.status','8']]);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            
+            $shipment = $i->get();
         }
 
         return Datatables::of($shipment)
@@ -1457,15 +1734,6 @@ class AllShipment extends Controller
             $shipment = $i->get();
         }
         else{
-            // $shipment = shipment::where('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',9)->where('hold_status',0)->orderBy('id', 'DESC')->get();
-            // $shipment = DB::table('shipments')
-            // ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
-            //         ['status','9']])
-            // ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
-            //         ['status','9']])
-            // ->where('hold_status',0)->orderBy('id', 'DESC')
-            // ->get();
-
             $i =DB::table('shipments');
             if ( $category != 'category' )
             {
@@ -1558,6 +1826,209 @@ class AllShipment extends Controller
             })
             
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
+        ->addIndexColumn()
+        ->make(true);
+
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+    public function getTodayDelivery(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $today = date('Y-m-d');
+            $i =DB::table('shipments');
+            $i->where('shipments.delivery_reschedule',1);
+            $i->where('shipments.delivery_reschedule_date',$today);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
+        }
+        else{
+            $today = date('Y-m-d');
+            $i =DB::table('shipments');
+            $i->where([['shipments.from_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date',$today]]);
+            $i->orWhere([['shipments.to_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date',$today]]);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
+        }
+
+        return Datatables::of($shipment)
+            ->addColumn('order_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
+                if ($shipment->shipment_mode == 2) {
+                    $special_service.='<p>Express</p>';
+                } else {
+                    $special_service.='<p>Standard</p>';
+                }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
+            })
+            ->addColumn('shipment_date', function ($shipment) {
+                return '<td>
+                <p>' . date("d-m-Y",strtotime($shipment->delivery_reschedule_date)) . '</p>
+                </td>';
+            })
+            ->addColumn('from_address', function ($shipment) {
+                $from_address = manage_address::find($shipment->from_address);
+                $from_city = city::find($from_address->city_id);
+                $from_area = city::find($from_address->area_id);
+                $from_station = station::find($shipment->from_station_id);
+                if(!empty($from_area)){
+                return '<td>
+                <p>' . $from_area->city . '</p>
+                <p>' . $from_city->city . '</p>
+                <p><b>Station :' . $from_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('to_address', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $to_station = station::find($shipment->to_station_id);
+                if(!empty($to_area)){
+                return '<td>
+                <p>' . $to_area->city . '</p>
+                <p>' . $to_city->city . '</p>
+                <p><b>Station :' . $to_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('status', function ($shipment) {
+
+                if($shipment->status == 9){
+                    return '<td>
+                    <p>Delivery Exception</p>
+                    <p>' . $shipment->delivery_exception_category . '</p>
+                    <p>' . $shipment->delivery_exception_remark . '</p>
+                    </td>';
+                }
+            })
+            ->addColumn('action', function ($shipment) {
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                    </div>
+                </td>';
+            })
+            
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address', 'shipment_mode','action','status'])
+        ->addIndexColumn()
+        ->make(true);
+
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+
+    public function getFutureDelivery(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $today = date('Y-m-d');
+            $i =DB::table('shipments');
+            $i->where('shipments.delivery_reschedule',1);
+            $i->where('shipments.delivery_reschedule_date','!=',$today);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
+        }
+        else{
+            $today = date('Y-m-d');
+            $i =DB::table('shipments');
+            $i->where([['shipments.from_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date','!=',$today]]);
+            $i->orWhere([['shipments.to_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date','!=',$today]]);
+            $i->where('shipments.hold_status',0);
+            $i->orderBy('shipments.id','DESC');
+            $shipment = $i->get();
+        }
+
+        return Datatables::of($shipment)
+            ->addColumn('order_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
+                if ($shipment->shipment_mode == 2) {
+                    $special_service.='<p>Express</p>';
+                } else {
+                    $special_service.='<p>Standard</p>';
+                }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
+            })
+            ->addColumn('shipment_date', function ($shipment) {
+                return '<td>
+                <p>' . date("d-m-Y",strtotime($shipment->delivery_reschedule_date)) . '</p>
+                </td>';
+            })
+            ->addColumn('from_address', function ($shipment) {
+                $from_address = manage_address::find($shipment->from_address);
+                $from_city = city::find($from_address->city_id);
+                $from_area = city::find($from_address->area_id);
+                $from_station = station::find($shipment->from_station_id);
+                if(!empty($from_area)){
+                return '<td>
+                <p>' . $from_area->city . '</p>
+                <p>' . $from_city->city . '</p>
+                <p><b>Station :' . $from_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('to_address', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $to_station = station::find($shipment->to_station_id);
+                if(!empty($to_area)){
+                return '<td>
+                <p>' . $to_area->city . '</p>
+                <p>' . $to_city->city . '</p>
+                <p><b>Station :' . $to_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('status', function ($shipment) {
+
+                if($shipment->status == 9){
+                    return '<td>
+                    <p>Delivery Exception</p>
+                    <p>' . $shipment->delivery_exception_category . '</p>
+                    <p>' . $shipment->delivery_exception_remark . '</p>
+                    </td>';
+                }
+            })
+            ->addColumn('action', function ($shipment) {
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                    </div>
+                </td>';
+            })
+            
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address', 'shipment_mode','action','status'])
         ->addIndexColumn()
         ->make(true);
 

@@ -22,6 +22,7 @@ use App\Models\revenue_exception_log;
 use App\Models\system_logs;
 use App\Models\complaint;
 use App\Models\language;
+use App\Models\role;
 use App\Http\Controllers\Admin\logController;
 use Auth;
 
@@ -78,7 +79,8 @@ class ComplaintController extends Controller
         $complaint = complaint::orderBy('id','DESC')->get();
         $station = station::all();
         $language = language::all();
-        return view('admin.complaint',compact('complaint','station','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.complaint',compact('complaint','station','language','role_get'));
     }
 
     public function editcomplaint($id){

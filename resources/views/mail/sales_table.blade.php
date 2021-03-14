@@ -132,42 +132,6 @@
         <tr>
             <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
             @if(!empty($rate))
-              <table class="table card-table table-vcenter text-nowrap">
-                  <thead>
-                    <tr>
-                      <th>Insurance Percentage</th>
-                      <th>Cash on Delivery</th>
-                      <th>Vat Percentage</th>
-                      <th>Postal Charge Percentage</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  @if(!empty($rate))
-                    <tr>
-                      <td>
-                      @if($rate->insurance_enable == '1')
-                        {{$settings->insurance_percentage}} %
-                      @endif
-                      </td>
-                      <td>
-                      @if($rate->cod_enable == '1')
-                        {{$rate->cod_price}} AED
-                      @endif
-                    </td>
-                      <td>
-                      @if($rate->vat_enable == '1')
-                        {{$settings->vat_percentage}} %
-                      @endif
-                      </td>
-                      <td>
-                      @if($rate->postal_charge_enable == '1')
-                        {{$settings->postal_charge_percentage}} %
-                      @endif
-                      </td>
-                    </tr>
-                  @endif
-                  </tbody>
-                </table>
                 <table class="table card-table table-vcenter text-nowrap">
                   <thead>
                     <tr style="text-align: center;">
@@ -359,7 +323,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td bgcolor="#FFECD1" align="center" style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">Need more help?</h2>
+                            <!-- <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">Need more help?</h2> -->
                             <p style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">
                             For Any Changes on Price Please Contact our Customer Support : 024442254
                             </p>
@@ -368,7 +332,7 @@
                 </table>
             </td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
@@ -378,7 +342,7 @@
                     </tr>
                 </table>
             </td>
-        </tr>
+        </tr> -->
     </table>
 </body>
 

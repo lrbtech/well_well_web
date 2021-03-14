@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\push_notification;
 use App\Models\agent;
+use App\Models\User;
 use App\Models\language;
+use App\Models\role;
 use Hash;
 use Auth;
 use App\Http\Controllers\Admin\logController;
@@ -24,7 +26,7 @@ class NotificationController extends Controller
         ]);
 
         $agent_id='';
-        if($request->send_to == '2'){
+        if($request->send_to == '3'){
             $agent1;
             foreach($request->agent_id as $row){
                 $agent1[]=$row;
@@ -32,14 +34,27 @@ class NotificationController extends Controller
             $agent_id = collect($agent1)->implode(',');
         }
 
+        $customer_id='';
+        if($request->send_to == '4'){
+            $customer1;
+            foreach($request->customer_id as $row){
+                $customer1[]=$row;
+            }
+            $customer_id = collect($customer1)->implode(',');
+        }
+
         $push_notification = new push_notification;
         $push_notification->title = $request->title;
         $push_notification->description = $request->description;
         $push_notification->expiry_date = $request->expiry_date;
         $push_notification->send_to = $request->send_to;
-        if($request->send_to == '2'){
-        $push_notification->agent_ids = $agent_id;
+        if($request->send_to == '4'){
+            $push_notification->customer_ids = $customer_id;
         }
+        if($request->send_to == '3'){
+            $push_notification->agent_ids = $agent_id;
+        }
+
         $push_notification->save();
 
         $logController = new logController();
@@ -54,20 +69,31 @@ class NotificationController extends Controller
         ]);
 
         $agent_id='';
-        if($request->send_to == '2'){
+        if($request->send_to == '3'){
             $agent1;
             foreach($request->agent_id as $row){
                 $agent1[]=$row;
             }
             $agent_id = collect($agent1)->implode(',');
         }
+        $customer_id='';
+        if($request->send_to == '4'){
+            $customer1;
+            foreach($request->customer_id as $row){
+                $customer1[]=$row;
+            }
+            $customer_id = collect($customer1)->implode(',');
+        }
         $push_notification = new push_notification;
         $push_notification->title = $request->title;
         $push_notification->description = $request->description;
         $push_notification->expiry_date = $request->expiry_date;
         $push_notification->send_to = $request->send_to;
-        if($request->send_to == '2'){
-        $push_notification->agent_ids = $agent_id;
+        if($request->send_to == '4'){
+            $push_notification->customer_ids = $customer_id;
+        }
+        if($request->send_to == '3'){
+            $push_notification->agent_ids = $agent_id;
         }
         $push_notification->save();
 
@@ -84,20 +110,31 @@ class NotificationController extends Controller
         ]);
         
         $agent_id='';
-        if($request->send_to == '2'){
+        if($request->send_to == '3'){
             $agent1;
             foreach($request->agent_id as $row){
                 $agent1[]=$row;
             }
             $agent_id = collect($agent1)->implode(',');
         }
+        $customer_id='';
+        if($request->send_to == '4'){
+            $customer1;
+            foreach($request->customer_id as $row){
+                $customer1[]=$row;
+            }
+            $customer_id = collect($customer1)->implode(',');
+        }
         $push_notification = push_notification::find($request->id);
         $push_notification->title = $request->title;
         $push_notification->description = $request->description;
         $push_notification->expiry_date = $request->expiry_date;
         $push_notification->send_to = $request->send_to;
-        if($request->send_to == '2'){
-        $push_notification->agent_ids = $agent_id;
+        if($request->send_to == '4'){
+            $push_notification->customer_ids = $customer_id;
+        }
+        if($request->send_to == '3'){
+            $push_notification->agent_ids = $agent_id;
         }
         $push_notification->save();
 
@@ -113,20 +150,31 @@ class NotificationController extends Controller
         ]);
         
         $agent_id='';
-        if($request->send_to == '2'){
+        if($request->send_to == '3'){
             $agent1;
             foreach($request->agent_id as $row){
                 $agent1[]=$row;
             }
             $agent_id = collect($agent1)->implode(',');
         }
+        $customer_id='';
+        if($request->send_to == '4'){
+            $customer1;
+            foreach($request->customer_id as $row){
+                $customer1[]=$row;
+            }
+            $customer_id = collect($customer1)->implode(',');
+        }
         $push_notification = push_notification::find($request->id);
         $push_notification->title = $request->title;
         $push_notification->description = $request->description;
         $push_notification->expiry_date = $request->expiry_date;
         $push_notification->send_to = $request->send_to;
-        if($request->send_to == '2'){
-        $push_notification->agent_ids = $agent_id;
+        if($request->send_to == '4'){
+            $push_notification->customer_ids = $customer_id;
+        }
+        if($request->send_to == '3'){
+            $push_notification->agent_ids = $agent_id;
         }
         $push_notification->save();
 
@@ -141,8 +189,10 @@ class NotificationController extends Controller
     public function Notification(){
         $push_notification = push_notification::all();
         $agent = agent::all();
+        $user = User::where('status',4)->get();
         $language = language::all();
-        return view('admin.push_notification',compact('push_notification','agent','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.push_notification',compact('push_notification','agent','language','user','role_get'));
     }
 
     public function editNotification($id){
@@ -170,7 +220,7 @@ class NotificationController extends Controller
 
         if($push_notification->send_to == '1'){
             $agent = agent::where('firebase_key','!=',null)->get();
-            foreach($salon as $salon1){
+            foreach($agent as $agent1){
             $curl = curl_init();
             curl_setopt_array($curl, array(
             CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
@@ -181,9 +231,9 @@ class NotificationController extends Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS =>"{\r\n\"to\":\"$agent->firebase_key\",\r\n \"notification\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n },\r\n \"data\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n }\r\n}",
+            CURLOPT_POSTFIELDS =>"{\r\n\"to\":\"$agent1->firebase_key\",\r\n \"notification\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n },\r\n \"data\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n }\r\n}",
             CURLOPT_HTTPHEADER => array(
-                "Authorization: key=AAAAoZ2bbM0:APA91bF6daZlElRDd4EhxqKm3ThtWlEDugroa1a83scavpILHohGCZWUfN5DX7zsfRnZBHUWJF1rorEdvm4vAi6xxAuC9pSFfEnqZdy4_qkdQSVG23v6K7LADuBzQnrldACFpI9PnFoN",
+                "Authorization: key=AAAA8MuJ8ds:APA91bG2jOF4RQMoEu_sThruub8PeCu6SYjOOBA1Ba1TNd561DK9OPfqnEZS1GlD5BFfDvDsZBwkbCltNbfNU0Z3IO1emZniEYGuGPSmeNkd8XHz-3xqQ4gB_wbLaDKghMvUJqFYoy5T",
                 "Content-Type: application/json"
             ),
             ));
@@ -193,6 +243,30 @@ class NotificationController extends Controller
             }
         }
         elseif($push_notification->send_to == '2'){
+            $user = User::where('firebase_key','!=',null)->where('status',4)->get();
+            foreach($user as $user1){
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>"{\r\n\"to\":\"$user1->firebase_key\",\r\n \"notification\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n },\r\n \"data\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n }\r\n}",
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: key=AAAAlESNo9M:APA91bHKOmvgPs5gn_Gtbtgr0k5PogtXfMIgQmF7bA7X9Uy3VsNnVbSX-AOiETPeEplQiDaoDBFACzYxw7y6w77bjvg6CscQ5riG_U9burGBv1b2fO_XI1Mtyyozl57Rvfz0KM4Z16K6",
+                "Content-Type: application/json"
+            ),
+            ));
+            
+            $response = curl_exec($curl);
+            curl_close($curl);
+            }
+        }
+        elseif($push_notification->send_to == '3'){
             foreach(explode(',',$push_notification->agent_ids) as $agent_id){
             $agent = agent::find($agent_id);
             $curl = curl_init();
@@ -207,7 +281,31 @@ class NotificationController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS =>"{\r\n\"to\":\"$agent->firebase_key\",\r\n \"notification\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n },\r\n \"data\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n }\r\n}",
             CURLOPT_HTTPHEADER => array(
-                "Authorization: key=AAAAoZ2bbM0:APA91bF6daZlElRDd4EhxqKm3ThtWlEDugroa1a83scavpILHohGCZWUfN5DX7zsfRnZBHUWJF1rorEdvm4vAi6xxAuC9pSFfEnqZdy4_qkdQSVG23v6K7LADuBzQnrldACFpI9PnFoN",
+                "Authorization: key=AAAA8MuJ8ds:APA91bG2jOF4RQMoEu_sThruub8PeCu6SYjOOBA1Ba1TNd561DK9OPfqnEZS1GlD5BFfDvDsZBwkbCltNbfNU0Z3IO1emZniEYGuGPSmeNkd8XHz-3xqQ4gB_wbLaDKghMvUJqFYoy5T",
+                "Content-Type: application/json"
+            ),
+            ));
+            
+            $response = curl_exec($curl);
+            curl_close($curl);
+            }
+        }
+        elseif($push_notification->send_to == '4'){
+            foreach(explode(',',$push_notification->customer_ids) as $customer_id){
+            $user = User::find($customer_id);
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>"{\r\n\"to\":\"$user->firebase_key\",\r\n \"notification\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n },\r\n \"data\" : {\r\n  \"sound\" : \"default\",\r\n  \"body\" :  \"$push_notification->description\",\r\n  \"title\" : \"$push_notification->title\",\r\n  \"content_available\" : true,\r\n  \"priority\" : \"high\"\r\n }\r\n}",
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: key=AAAAlESNo9M:APA91bHKOmvgPs5gn_Gtbtgr0k5PogtXfMIgQmF7bA7X9Uy3VsNnVbSX-AOiETPeEplQiDaoDBFACzYxw7y6w77bjvg6CscQ5riG_U9burGBv1b2fO_XI1Mtyyozl57Rvfz0KM4Z16K6",
                 "Content-Type: application/json"
             ),
             ));
@@ -235,6 +333,27 @@ class NotificationController extends Controller
             }
             else{
                 $output .='<option value="'.$value->id.'">'.$value->name.'</option>'; 
+            }
+        }      
+        echo $output;
+    }
+
+    public function getNotificationUser($id){ 
+        $data  = push_notification::find($id);
+        $customer = User::all();
+    
+        $arraydata=array();
+        foreach(explode(',',$data->customer_ids) as $customer1){
+            $arraydata[]=$customer1;
+        }
+        $output = '';
+        foreach ($customer as $value){
+            if(in_array($value->id , $arraydata))
+            {
+                $output .='<option selected="true" value="'.$value->id.'">'.$value->first_name.' '.$value->last_name.'</option>'; 
+            }
+            else{
+                $output .='<option value="'.$value->id.'">'.$value->first_name.' '.$value->last_name.'</option>'; 
             }
         }      
         echo $output;

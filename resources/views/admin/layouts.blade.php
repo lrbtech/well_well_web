@@ -213,10 +213,19 @@
 
               <!-- <li><a class="right_side_toggle" href="#"><img class="img-fluid img-shadow-success" src="/assets/app-assets/images/dashboard/chat.png" alt=""></a></li> -->
 
-              <li class="onhover-dropdown"> <span class="media user-header"><img class="img-fluid" src="/assets/app-assets/images/dashboard/user.png" alt=""></span>
+              <li class="onhover-dropdown"> 
+                <span class="media user-header">
+                @if(Auth::guard('admin')->user()->profile_image != '')
+                  <img style="width:50px !important;" class="img-fluid" src="/upload_files/{{Auth::guard('admin')->user()->profile_image}}" alt="">
+                @else 
+                  <img style="width:50px !important;" class="img-fluid" src="/assets/app-assets/images/dashboard/user.png" alt="">
+                @endif
+                </span>
                 <ul class="onhover-show-div profile-dropdown">
                   <li class="gradient-primary">
-                    <h5 class="f-w-600 mb-0">{{ Auth::guard('admin')->user()->name }}</h5>
+                    <h5 class="f-w-600 mb-0">
+                    <a href="/admin/change-profile-image">{{ Auth::guard('admin')->user()->name }}</a>
+                    </h5>
                     <!-- <span>Web Designer</span> -->
                   </li>
                   <li><a href="/admin/change-password"><i data-feather="user"> </i>Change Password</a></li>
@@ -252,122 +261,6 @@
         <div class="iconsidebar-menu">
           <div class="sidebar">
             <ul class="iconMenu-bar custom-scrollbar">
-              {{-- <li><a class="bar-icons" href="javascript:void(0)">
-                  <!--img(src='/assets/app-assets/images/menu/home.png' alt='')--><i class="pe-7s-home"></i><span>General    </span></a>
-                <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Dashboard</li>
-                  <li><a href="index.html">Default</a></li>
-                  <li><a href="dashboard-crypto.html">Crypto</a></li>
-                  <li><a href="dashboard-ecommerce.html">Ecommerce</a></li>
-                  <li class="iconbar-header sub-header">Widgets</li>
-                  <li><a href="general-widget.html">General widget</a></li>
-                  <li><a href="chart-widget.html">Chart widget</a></li>
-                  <li class="iconbar-header sub-header">starter-kit</li>
-                  <li><a href="../starter-kit/index.html">starter-kit   </a></li>
-                </ul>
-              </li>
-              <li><a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-portfolio"></i><span>UI Kits</span></a>
-                <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Ui Elements</li>
-                  <li><a href="state-color.html">State color</a></li>
-                  <li><a href="typography.html">Typography</a></li>
-                  <li><a href="buttons.html">Buttons        </a></li>
-                  <li><a href="avatars.html">Avatars</a></li>
-                  <li><a href="helper-classes.html">helper classes</a></li>
-                  <li><a href="grid.html">Grid</a></li>
-                  <li><a href="tag-pills.html">Tag & pills</a></li>
-                  <li><a href="progress-bar.html">Progress</a></li>
-                  <li><a href="modal.html">Modal</a></li>
-                  <li><a href="alert.html">Alert</a></li>
-                  <li><a href="popover.html">Popover</a></li>
-                  <li><a href="tooltip.html">Tooltip</a></li>
-                  <li><a href="loader.html">Spinners</a></li>
-                  <li><a href="dropdown.html">Dropdown</a></li>
-                  <li><a href="tab-bootstrap.html">Bootstrap Tabs</a></li>
-                  <li><a href="tab-material.html">Line Tabs</a></li>
-                  <li><a href="according.html">Accordion</a></li>
-                  <li><a href="navs.html">Navs</a></li>
-                  <li><a href="list.html">Lists</a></li>
-                  <li><a href="scrollable.html">Scrollable</a></li>
-                  <li><a href="tree.html">Tree view</a></li>
-                  <li><a href="bootstrap-notify.html">Bootstrap Notify</a></li>
-                  <li><a href="rating.html">Rating</a></li>
-                  <li><a href="dropzone.html">dropzone</a></li>
-                  <li><a href="tour.html">Tour</a></li>
-                  <li><a href="sweet-alert2.html">SweetAlert2</a></li>
-                  <li><a href="modal-animated.html">Animated Modal</a></li>
-                  <li><a href="owl-carousel.html">Owl Carousel</a></li>
-                  <li><a href="ribbons.html">Ribbons</a></li>
-                  <li><a href="pagination.html">Pagination</a></li>
-                  <li><a href="steps.html">Steps</a></li>
-                  <li><a href="breadcrumb.html">Breadcrumb</a></li>
-                  <li><a href="range-slider.html">Range Slider</a></li>
-                  <li><a href="image-cropper.html">Image cropper</a></li>
-                  <li><a href="sticky.html">Sticky</a></li>
-                  <li class="iconbar-header sub-header">Icons</li>
-                  <li><a href="flag-icon.html">Flag icon</a></li>
-                  <li><a href="font-awesome.html">Fontawesome Icon</a></li>
-                  <li><a href="ico-icon.html">Ico Icon</a></li>
-                  <li><a href="themify-icon.html">Thimify Icon</a></li>
-                  <li><a href="feather-icon.html">Feather icon</a></li>
-                  <li><a href="whether-icon.html">Whether Icon</a></li>
-                  <li><a href="simple-line-icon.html">Simple line Icon</a></li>
-                  <li><a href="material-design-icon.html">Material Design Icon</a></li>
-                  <li><a href="pe7-icon.html">pe7 icon</a></li>
-                  <li><a href="typicons-icon.html">Typicons icon</a></li>
-                  <li><a href="ionic-icon.html">Ionic icon</a></li>
-                </ul>
-              </li> --}}
-              {{-- <li><span class="badge badge-pill badge-danger">Hot</span><a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-diamond"></i><span>Perk UI</span></a>
-                <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Animation</li>
-                  <li><a href="animate.html">Animate</a></li>
-                  <li><a href="scroll-reval.html">Scroll Reveal</a></li>
-                  <li><a href="AOS.html">AOS animation</a></li>
-                  <li><a href="tilt.html">Tilt Animation</a></li>
-                  <li><a href="wow.html">Wow Animation</a></li>
-                  <li class="iconbar-header sub-header">Menu Options</li>
-                  <li><a href="hide-on-scroll.html">Hide menu on Scroll</a></li>
-                  <li><a href="vertical.html">Vertical Menu</a></li>
-                  <li><a href="mega-menu.html">Mega Menu</a></li>
-                  <li><a href="fix-header.html">Fix header</a></li>
-                  <li><a href="fix-header&amp;sidebar.html">Fix Header & sidebar</a></li>
-                  <li class="iconbar-header sub-header">Cards</li>
-                  <li><a href="basic-card.html">Basic Card</a></li>
-                  <li><a href="theme-card.html">Theme Card</a></li>
-                  <li><a href="tabbed-card.html">Tabbed Card</a></li>
-                  <li><a href="dragable-card.html">Draggable Card</a></li>
-                  <li class="iconbar-header sub-header">Builders</li>
-                  <li> <a href="button-builder.html">Button Builder</a></li>
-                  <li><a href="form-builder-1.html">Form Builder</a></li>
-                </ul>
-              </li> --}}
-              {{-- <li><a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-note2"></i><span>Forms</span></a>
-                <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Form Controls</li>
-                  <li><a href="form-validation.html">Form Validation</a></li>
-                  <li><a href="base-input.html">Base Inputs</a></li>
-                  <li><a href="radio-checkbox-control.html">Checkbox & Radio</a></li>
-                  <li><a href="input-group.html">Input Groups</a></li>
-                  <li><a href="megaoptions.html">Mega Options</a></li>
-                  <li class="iconbar-header sub-header">Form Widgets</li>
-                  <li><a href="datepicker.html">Datepicker</a></li>
-                  <li><a href="time-picker.html">Timepicker</a></li>
-                  <li><a href="datetimepicker.html">Datetimepicker</a></li>
-                  <li><a href="daterangepicker.html">Daterangepicker</a></li>
-                  <li><a href="touchspin.html">Touchspin</a></li>
-                  <li><a href="select2.html">Select2</a></li>
-                  <li><a href="switch.html">Switch</a></li>
-                  <li><a href="typeahead.html">Typeahead</a></li>
-                  <li><a href="clipboard.html">Clipboard</a></li>
-                  <li class="iconbar-header sub-header">Form Layout</li>
-                  <li><a href="default-form.html">Default Forms</a></li>
-                  <li><a href="form-wizard.html">Form Wizard 1</a></li>
-                  <li><a href="form-wizard-two.html">Form Wizard 2</a></li>
-                  <li><a href="form-wizard-three.html">Form Wizard 3</a></li>
-                  <li><a href="form-wizard-four.html">Form Wizard 4</a></li>
-                </ul>
-              </li> --}}
 
               <!-- @if($role_get->id == 2 || $role_get->id == 3 || $role_get->id == 4)
               <li>
@@ -407,22 +300,22 @@
                 </ul> -->
               </li>
 
-              @if(Auth::guard('admin')->user()->view_customer == 'on' || Auth::guard('admin')->user()->new_customer == 'on' || Auth::guard('admin')->user()->sales_team == 'on' || Auth::guard('admin')->user()->accounts_team == 'on')
+              @if($role_get->all_customer == 'on' || $role_get->new_customer == 'on' || $role_get->sales_team == 'on' || $role_get->accounts_team == 'on')
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[8][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[8][Auth::guard('admin')->user()->lang]}}</li>
 
-                  @if(Auth::guard('admin')->user()->view_customer == 'on')
+                  @if($role_get->all_customer == 'on')
                   <li class="view-customer"><a class="view-customer" href="/admin/view-customer">{{$language[172][Auth::guard('admin')->user()->lang]}} {{$language[8][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
-                  @if(Auth::guard('admin')->user()->new_customer == 'on')
+                  @if($role_get->new_customer == 'on')
                   <li class="registration-customer"><a class="registration-customer" href="/admin/registration-customer">{{$language[169][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
-                  @if(Auth::guard('admin')->user()->sales_team == 'on')
+                  @if($role_get->sales_team == 'on')
                   <li class="sales-customer"><a class="sales-customer" href="/admin/sales-customer">{{$language[170][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
-                  @if(Auth::guard('admin')->user()->accounts_team == 'on')
+                  @if($role_get->accounts_team == 'on')
                   <li class="accounts-customer"><a class="accounts-customer" href="/admin/accounts-customer">{{$language[171][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
@@ -430,121 +323,140 @@
               </li>
               @endif
 
-              @if(Auth::guard('admin')->user()->new_shipment == 'on' || Auth::guard('admin')->user()->all_shipment == 'on' || Auth::guard('admin')->user()->cancel_request == 'on' || Auth::guard('admin')->user()->revenue_exception == 'on')
+              @if($role_get->create_shipment == 'on' || $role_get->create_special_shipment == 'on' || $role_get->all_shipment == 'on' || $role_get->revenue_exception == 'on' || $role_get->cancel_shipment == 'on' || $role_get->shipment_hold == 'on')
 
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-cart"></i><span>{{$language[18][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[18][Auth::guard('admin')->user()->lang]}}</li>
                   
-                  @if(Auth::guard('admin')->user()->new_shipment == 'on')
+                  @if($role_get->create_shipment == 'on')
                   <li class="new-shipment"><a class="new-shipment" href="/admin/new-shipment">{{$language[173][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
-                  <li class="special-shipment"><a class="special-shipment" href="/admin/special-shipment">Create Special Shipment</a></li>
+                  @if($role_get->create_special_shipment == 'on')
+                  <li class="special-shipment"><a class="special-shipment" href="/admin/special-shipment">{{$language[305][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
 
-                  @if(Auth::guard('admin')->user()->all_shipment == 'on')
+                  @if($role_get->all_shipment == 'on')
                   <li class="shipment"><a class="shipment" href="/admin/shipment">{{$language[174][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
 
-                  @if(Auth::guard('admin')->user()->revenue_exception == 'on')
+                  @if($role_get->revenue_exception == 'on')
                   <li class="revenue-exception"><a class="revenue-exception" href="/admin/revenue-exception">{{$language[175][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->cancel_request == 'on')
+                  @if($role_get->cancel_shipment == 'on')
                   <li class="cancel-request"><a class="cancel-request" href="/admin/cancel-request">{{$language[176][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
 
-                  <li class="hold-request"><a class="hold-request" href="/admin/hold-request">Shipment hold</a></li> 
+                  @if($role_get->shipment_hold == 'on')
+                  <li class="hold-request"><a class="hold-request" href="/admin/hold-request">{{$language[301][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
                 </ul>
               </li>
               @endif
 
-              @if(Auth::guard('admin')->user()->new_shipment_request == 'on' || Auth::guard('admin')->user()->today_pickup_request == 'on' || Auth::guard('admin')->user()->future_pickup_request == 'on' || Auth::guard('admin')->user()->schedule_for_pickup == 'on' || Auth::guard('admin')->user()->pickup_exception == 'on' || Auth::guard('admin')->user()->package_collected == 'on')
+              @if($role_get->new_pickup_request == 'on' || $role_get->guest_pickup_request == 'on' || $role_get->today_bulk_pickup_request == 'on' || $role_get->future_bulk_pickup_request == 'on' || $role_get->pickup_assigned == 'on' || $role_get->pickup_exception == 'on' || $role_get->package_collected == 'on')
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-cart"></i><span>{{$language[57][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[57][Auth::guard('admin')->user()->lang]}}</li>
-                  @if(Auth::guard('admin')->user()->new_shipment_request == 'on')
+                  <!-- @if($role_get->new_pickup_request == 'on')
                   <li class="new-shipment-request"><a class="new-shipment-request" href="/admin/new-shipment-request">{{$language[177][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$new_shipment_request}}</span>
+                  </a></li>
+                  @endif -->
+                  
+                  @if($role_get->guest_pickup_request == 'on')
+                  <li class="guest-pickup-request"><a class="guest-pickup-request" href="/admin/guest-pickup-request">{{$language[302][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$guest_pickup_request}}</span>
                   </a></li>
                   @endif
 
-                  <li class="guest-pickup-request"><a class="guest-pickup-request" href="/admin/guest-pickup-request">Guest Pickup Request <span class="badge-pill badge-danger">{{$guest_pickup_request}}</span>
-                  </a></li>
-
-                  @if(Auth::guard('admin')->user()->today_pickup_request == 'on')
-                  <li class="today-pickup-request"><a class="today-pickup-request" href="/admin/today-pickup-request">Today Bulk Pickup Request <span class="badge-pill badge-danger">{{$today_pickup_request}}</span>
+                  @if($role_get->today_bulk_pickup_request == 'on')
+                  <li class="today-pickup-request"><a class="today-pickup-request" href="/admin/today-pickup-request">{{$language[303][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$today_pickup_request}}</span>
                   </a></li> 
                   @endif
 
-                  @if(Auth::guard('admin')->user()->future_pickup_request == 'on')
-                  <li class="future-pickup-request"><a class="future-pickup-request" href="/admin/future-pickup-request">Future Bulk Pickup Request <span class="badge-pill badge-danger">{{$future_pickup_request}}</span>
+                  @if($role_get->future_bulk_pickup_request == 'on')
+                  <li class="future-pickup-request"><a class="future-pickup-request" href="/admin/future-pickup-request">{{$language[304][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$future_pickup_request}}</span>
                   </a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->schedule_for_pickup == 'on')
-                  <li class="schedule-for-pickup"><a class="schedule-for-pickup" href="/admin/schedule-for-pickup">{{$language[180][Auth::guard('admin')->user()->lang]}}
+                  @if($role_get->pickup_assigned == 'on')
+                  <li class="schedule-for-pickup"><a class="schedule-for-pickup" href="/admin/schedule-for-pickup">{{$language[180][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$pickup_assigned}}</span>
                   </a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->pickup_exception == 'on')
-                  <li class="pickup-exception"><a class="pickup-exception" href="/admin/pickup-exception">{{$language[181][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @if($role_get->pickup_exception == 'on')
+                  <li class="pickup-exception"><a class="pickup-exception" href="/admin/pickup-exception">{{$language[181][Auth::guard('admin')->user()->lang]}}
+                  <span class="badge-pill badge-danger">{{$pickup_exception}}</span></a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->package_collected == 'on')
-                  <li class="package-collected"><a class="package-collected" href="/admin/package-collected">{{$language[182][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @if($role_get->package_collected == 'on')
+                  <li class="package-collected"><a class="package-collected" href="/admin/package-collected">{{$language[182][Auth::guard('admin')->user()->lang]}}
+                  <span class="badge-pill badge-danger">{{$package_collected}}</span></a></li>
                   @endif
                 </ul>
               </li>
               @endif
 
-              @if(Auth::guard('admin')->user()->transit_in == 'on' || Auth::guard('admin')->user()->transit_out == 'on' )
+              @if($role_get->transit_in == 'on' || $role_get->transit_out == 'on' || $role_get->package_at_station == 'on')
 
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-network"></i><span>{{$language[183][Auth::guard('admin')->user()->lang]}}</span></a> 
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[183][Auth::guard('admin')->user()->lang]}}</li> 
-                  @if(Auth::guard('admin')->user()->transit_in == 'on')
-                  <li class="transit-in"><a class="transit-in" href="/admin/transit-in">{{$language[184][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @if($role_get->transit_in == 'on')
+                  <li class="transit-in"><a class="transit-in" href="/admin/transit-in">{{$language[184][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$transit_in}}</span></a></li> 
                   @endif
 
-                  @if(Auth::guard('admin')->user()->transit_out == 'on')
-                  <li class="transit-out"><a class="transit-out" href="/admin/transit-out">{{$language[185][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @if($role_get->transit_out == 'on')
+                  <li class="transit-out"><a class="transit-out" href="/admin/transit-out">{{$language[185][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$transit_out}}</span></a></li>
+                  @endif
+
+                  @if($role_get->package_at_station == 'on')
+                  <li class="package-at-station"><a class="package-at-station" href="/admin/package-at-station">{{$language[306][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$package_at_station}}</span></a></li>
                   @endif
                 </ul>
               </li>
               @endif
 
-              @if(Auth::guard('admin')->user()->ready_for_delivery == 'on' || Auth::guard('admin')->user()->delivery_exception == 'on' || Auth::guard('admin')->user()->shipment_delivered == 'on' )
+              @if($role_get->van_for_delivery == 'on' ||$role_get->delivery_exception == 'on' ||$role_get->shipment_delivered == 'on' ||$role_get->today_delivery == 'on' ||$role_get->future_delivery == 'on' )
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-cart"></i><span>{{$language[89][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[89][Auth::guard('admin')->user()->lang]}}</li>
-                  @if(Auth::guard('admin')->user()->ready_for_delivery == 'on')
-                  <li class="ready-for-delivery"><a class="ready-for-delivery" href="/admin/ready-for-delivery">{{$language[186][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @if($role_get->van_for_delivery == 'on')
+                  <li class="ready-for-delivery"><a class="ready-for-delivery" href="/admin/ready-for-delivery">{{$language[186][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$van_for_delivery}}</span></a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->delivery_exception == 'on')
-                   <li class="delivery-exception"><a class="delivery-exception" href="/admin/delivery-exception">{{$language[187][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @if($role_get->delivery_exception == 'on')
+                   <li class="delivery-exception"><a class="delivery-exception" href="/admin/delivery-exception">{{$language[187][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$delivery_exception}}</span></a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->shipment_delivered == 'on')
-                  <li class="shipment-delivered"><a class="shipment-delivered" href="/admin/shipment-delivered">{{$language[188][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @if($role_get->shipment_delivered == 'on')
+                  <li class="shipment-delivered"><a class="shipment-delivered" href="/admin/shipment-delivered">{{$language[188][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$shipment_delivered}}</span></a></li> 
+                  @endif
+
+                  @if($role_get->today_delivery == 'on')
+                  <li class="today-delivery"><a class="today-delivery" href="/admin/today-delivery">{{$language[328][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$today_delivery}}</span></a></li>
+                  @endif
+                  @if($role_get->future_delivery == 'on')
+                  <li class="future-delivery"><a class="future-delivery" href="/admin/future-delivery">{{$language[329][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$future_delivery}}</span></a></li>
                   @endif
                 </ul>
               </li>
               @endif
 
-              @if(Auth::guard('admin')->user()->agent == 'on' || Auth::guard('admin')->user()->employee == 'on')
+              @if($role_get->couriers == 'on' || $role_get->employees == 'on')
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-id"></i><span>{{$language[189][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[189][Auth::guard('admin')->user()->lang]}}</li>
-                  @if(Auth::guard('admin')->user()->agent == 'on')
+                  @if($role_get->couriers == 'on')
                   <li class="agent"><a class="agent" href="/admin/agent">{{$language[190][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
-                  @if(Auth::guard('admin')->user()->employee == 'on')
+                  @if($role_get->employees == 'on')
                   <li class="user"><a class="user" href="/admin/user">{{$language[191][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
                   <!-- <li class="role"><a class="role" href="/admin/role">Department</a></li> -->
@@ -553,102 +465,159 @@
               @endif
 
 
-              
+              @if($role_get->vehicle_create == 'on' || $role_get->vehicle_group == 'on' || $role_get->vehicle_type == 'on')
               <li>
                 <span class="badge badge-pill badge-danger">20</span>
                 <span class="badge badge-pill badge-warning">20</span>
               
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-car"></i><span>Fleet </span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-car"></i><span>{{$language[307][Auth::guard('admin')->user()->lang]}} </span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Fleet Management</li>
-                  
-                  <li class="agent"><a class="agent" href="/admin/get-fleet">vehicle Management</a></li> 
-                  <li class="agent"><a class="agent" href="/admin/get-vehicle-group">vehicle Group </a></li> 
-                  <li class="agent"><a class="agent" href="/admin/get-vehicle-type">Type of vehicle </a></li> 
+                  <li class="iconbar-header">{{$language[307][Auth::guard('admin')->user()->lang]}}</li>
+                  @if($role_get->vehicle_create == 'on')
+                  <li class="agent"><a class="agent" href="/admin/get-fleet">{{$language[310][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+                  @if($role_get->vehicle_group == 'on')
+                  <li class="agent"><a class="agent" href="/admin/get-vehicle-group">{{$language[308][Auth::guard('admin')->user()->lang]}} </a></li> 
+                  @endif
+                  @if($role_get->vehicle_type == 'on')
+                  <li class="agent"><a class="agent" href="/admin/get-vehicle-type">{{$language[309][Auth::guard('admin')->user()->lang]}} </a></li> 
+                  @endif
                   {{-- <li class="agent"><a class="agent" href="/admin/get-remainder">Remainder </a></li>  --}}
          
                 </ul>
               </li>
+              @endif
             
-
-
-
-
-              @if(Auth::guard('admin')->user()->shipment_report == 'on' || Auth::guard('admin')->user()->revenue_report == 'on' || Auth::guard('admin')->user()->agent_report == 'on' || Auth::guard('admin')->user()->user_report == 'on')
-              <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-graph3"></i><span>{{$language[99][Auth::guard('admin')->user()->lang]}}</span></a>
+              @if($role_get->generate_invoice == 'on' || $role_get->guest_generate_invoice == 'on' || $role_get->invoice_history == 'on')
+              <li>              
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-graph3"></i><span>{{$language[311][Auth::guard('admin')->user()->lang]}} </span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">{{$language[99][Auth::guard('admin')->user()->lang]}}</li>
-                  @if(Auth::guard('admin')->user()->shipment_report == 'on')
-                  <li class="shipment-report"><a class="shipment-report" href="/admin/shipment-report">{{$language[192][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  <li class="iconbar-header">{{$language[312][Auth::guard('admin')->user()->lang]}}</li>
+                  @if($role_get->generate_invoice == 'on')
+                  <li class="generate-invoice"><a class="generate-invoice" href="/admin/generate-invoice">{{$language[313][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
-                  @if(Auth::guard('admin')->user()->revenue_report == 'on')
-                   <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">{{$language[193][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @if($role_get->guest_generate_invoice == 'on')
+                  <li class="guest-generate-invoice"><a class="guest-generate-invoice" href="/admin/guest-generate-invoice">{{$language[314][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
-                  <li class="agent-report"><a class="agent-report" href="/admin/agent-report">Agent Report</a></li> 
+                  @if($role_get->invoice_history == 'on')
+                  <li class="invoice-history"><a class="invoice-history" href="/admin/invoice-history">{{$language[315][Auth::guard('admin')->user()->lang]}} </a></li> 
+                  @endif
+                  
                 </ul>
               </li>
               @endif
 
 
+              @if($role_get->shipment_report == 'on' || $role_get->revenue_report == 'on' || $role_get->agent_report == 'on')
               <li>
-                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-graph3"></i><span>Settlement Report</span></a>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-graph3"></i><span>{{$language[99][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
-                  <li class="iconbar-header">Settlement Report</li>
+                  <li class="iconbar-header">{{$language[99][Auth::guard('admin')->user()->lang]}}</li>
+                  @if($role_get->shipment_report == 'on')
+                  <li class="shipment-report"><a class="shipment-report" href="/admin/shipment-report">{{$language[192][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+                  @if($role_get->revenue_report == 'on')
+                   <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">{{$language[193][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+                  @if($role_get->agent_report == 'on')
+                  <li class="agent-report"><a class="agent-report" href="/admin/agent-report">{{$language[316][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+                </ul>
+              </li>
+              @endif
+
+              @if($role_get->courier_team_cod_settlement_report == 'on' || $role_get->courier_team_guest_settlement_report == 'on' || $role_get->accounts_team_settlement_report == 'on' || $role_get->payments_out_report == 'on')
+              <li>
+                <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-graph3"></i><span>{{$language[317][Auth::guard('admin')->user()->lang]}}</span></a>
+                <ul class="iconbar-mainmenu custom-scrollbar">
+                  <li class="iconbar-header">{{$language[317][Auth::guard('admin')->user()->lang]}}</li>
                   
-                  <li class="payments-in-report"><a class="payments-in-report" href="/admin/payments-in-report">Payments In Report</a></li> 
+                  @if($role_get->courier_team_cod_settlement_report == 'on')
+                  <li class="payments-in-report"><a class="payments-in-report" href="/admin/payments-in-report">{{$language[318][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+
+                  @if($role_get->courier_team_guest_settlement_report == 'on')
+                  <li class="courier-team-guest-settlement"><a class="courier-team-guest-settlement" href="/admin/courier-team-guest-settlement">{{$language[330][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
+
+                  @if($role_get->accounts_team_settlement_report == 'on')
+                  <li class="accounts-team-report"><a class="accounts-team-report" href="/admin/accounts-team-report">{{$language[319][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
                   
-                  <li class="payments-out-report"><a class="payments-out-report" href="/admin/payments-out-report">Payments Out Report</a></li> 
+                  @if($role_get->payments_out_report == 'on')
+                  <li class="payments-out-report"><a class="payments-out-report" href="/admin/payments-out-report">{{$language[320][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  @endif
 
                 </ul>
               </li>
+              @endif
 
-              @if(Auth::guard('admin')->user()->country == 'on' || Auth::guard('admin')->user()->area == 'on' || Auth::guard('admin')->user()->city == 'on' || Auth::guard('admin')->user()->package_category == 'on' || Auth::guard('admin')->user()->exception_category == 'on' || Auth::guard('admin')->user()->station == 'on' || Auth::guard('admin')->user()->financial_settings == 'on' || Auth::guard('admin')->user()->common_price == 'on' || Auth::guard('admin')->user()->languages == 'on' || Auth::guard('admin')->user()->system_logs == 'on')
+              @if($role_get->country == 'on' || $role_get->package_category == 'on' || $role_get->exception_category == 'on' || $role_get->complaint_request == 'on' || $role_get->station == 'on' || $role_get->financial_settings == 'on' || $role_get->common_price == 'on' || $role_get->terms_and_conditions == 'on' || $role_get->working_hours == 'on' || $role_get->languages == 'on' || $role_get->shipment_logs == 'on' || $role_get->system_logs == 'on' || $role_get->roles == 'on' || $role_get->system_logs == 'on' || $role_get->social_media_links == 'on')
 
               <li>
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-config"></i><span>{{$language[132][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[132][Auth::guard('admin')->user()->lang]}}</li>
-                  @if(Auth::guard('admin')->user()->country == 'on')
+                  @if($role_get->country == 'on')
                   <li class="country"><a class="country" href="/admin/country">{{$language[194][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
 
                   <!-- <li class="drop-point"><a class="drop-point" href="/admin/drop-point">Drop Point List</a></li> -->
-                  @if(Auth::guard('admin')->user()->package_category == 'on')
+                  @if($role_get->package_category == 'on')
                   <li class="package-category"><a class="package-category" href="/admin/package-category">{{$language[195][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
 
-                  @if(Auth::guard('admin')->user()->exception_category == 'on')
+                  @if($role_get->exception_category == 'on')
                   <li class="exception-category"><a class="exception-category" href="/admin/exception-category">{{$language[196][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
+                  
+                  @if($role_get->push_notification == 'on')
+                  <li class="push-notification"><a class="push-notification" href="/admin/push-notification">{{$language[321][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
 
-                  <!-- <li class="push-notification"><a class="push-notification" href="/admin/push-notification">Push Notification</a></li> -->
+                  @if($role_get->complaint_request == 'on')
+                  <li class="complaint"><a class="complaint" href="/admin/complaint">{{$language[322][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
 
-                  <li class="complaint"><a class="complaint" href="/admin/complaint">Complaint Request</a></li>
-
-                  @if(Auth::guard('admin')->user()->station == 'on')
+                  @if($role_get->station == 'on')
                   <li class="station"><a class="station" href="/admin/station">{{$language[197][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->financial_settings == 'on')
+                  @if($role_get->financial_settings == 'on')
                   <li class="settings"><a class="settings" href="/admin/settings">{{$language[198][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
-                  @if(Auth::guard('admin')->user()->common_price == 'on')
+                  @if($role_get->common_price == 'on')
                   <li class="common-price"><a class="common-price" href="/admin/common-price">{{$language[199][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
-                  <li class="terms-and-conditions"><a class="terms-and-conditions" href="/admin/terms-and-conditions">Terms and Conditions</a></li>
+                  @if($role_get->terms_and_conditions == 'on')
+                  <li class="terms-and-conditions"><a class="terms-and-conditions" href="/admin/terms-and-conditions">{{$language[323][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
 
-                  <li class="weeks"><a class="weeks" href="/admin/weeks">Working Hours</a></li>
+                  @if($role_get->social_media_links == 'on')
+                  <li class="social-media-link"><a class="social-media-link" href="/admin/social-media-link">{{$language[324][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+                  
+                  @if($role_get->working_hours == 'on')
+                  <li class="weeks"><a class="weeks" href="/admin/weeks">{{$language[325][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
 
+                  @if($role_get->languages == 'on')
                   <li class="languages"><a class="languages" href="/admin/languages">{{$language[200][Auth::guard('admin')->user()->lang]}}</a></li>
-                  <li class="languages"><a class="languages" href="/admin/user-logs">{{$language[201][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
 
-                  @if(Auth::guard('admin')->user()->system_logs == 'on')
+                  @if($role_get->shipment_logs == 'on')
+                  <li class="user-logs"><a class="user-logs" href="/admin/user-logs">{{$language[201][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
+
+                  @if($role_get->system_logs == 'on')
                   <li class="system-logs"><a class="system-logs" href="/admin/system-logs">{{$language[298][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
-                   <li class="languages"><a class="languages" href="/admin/user-logs">{{$language[300][Auth::guard('admin')->user()->lang]}}</a></li>
+
+                  @if($role_get->roles == 'on')
+                  <li class="role"><a class="role" href="/admin/role">{{$language[300][Auth::guard('admin')->user()->lang]}}</a></li>
+                  @endif
                 </ul>
               </li>
               @endif

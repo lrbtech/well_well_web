@@ -15,7 +15,9 @@ class CreateUserSettlementsTable extends Migration
     {
         Schema::create('user_settlements', function (Blueprint $table) {
             $table->id();
+            $table->string('date')->nullable();
             $table->string('user_id')->nullable();
+            $table->string('admin_id')->nullable();
             $table->string('amount')->nullable();
             $table->string('image')->nullable();
             $table->string('status')->default('0');

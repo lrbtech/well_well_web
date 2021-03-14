@@ -89,9 +89,13 @@
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                                 @if($row->status == 3)
+                                  @if($role_get->accounts_team_edit == 'on')
                                   <a onclick="updateAccountStatus({{$row->id}},4)" class="dropdown-item" href="#">Account Verfication Confirm</a>
+                                  @endif
                                 @elseif($row->status == 4)
+                                  @if($role_get->accounts_team_delete == 'on')
                                   <a onclick="updateSalesStatus({{$row->id}},3)" class="dropdown-item" href="#">Block User</a>
+                                  @endif
                                 @endif
                                     
                                     <a class="dropdown-item" href="/admin/view-profile/{{$row->id}}">View Profile</a>

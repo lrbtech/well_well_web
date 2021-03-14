@@ -202,7 +202,87 @@ class ShipmentController extends Controller
                 }
             }
         }
-        
+
+        if($request->return_package_cost == 1){
+            $from_address = manage_address::find($request->to_address);
+            $from_station = city::find($from_address->city_id);
+
+            $to_address = manage_address::find($request->from_address);
+            $to_station = city::find($to_address->city_id);
+
+            $shipment1 = new temp_shipment;
+            $shipment1->date = date('Y-m-d');
+            $shipment1->sender_id = Auth::user()->id;
+            $shipment1->shipment_type = $request->shipment_type;
+            $shipment1->from_address = $request->to_address;
+            $shipment1->to_address = $request->from_address;
+            $shipment1->from_station_id = $from_station->station_id;
+            $shipment1->to_station_id = $to_station->station_id;
+            $shipment1->shipment_mode = $request->shipment_mode;
+            //$shipment1->special_service = $request->special_service;
+            //$shipment1->special_service_description = $request->special_service_description;
+            $shipment1->return_package_cost = $request->return_package_cost;
+            $shipment1->special_cod_enable = $request->special_cod_enable;
+            $shipment1->special_cod = $request->special_cod;
+            $shipment1->no_of_packages = $request->no_of_packages;
+            $shipment1->declared_value = $request->declared_value;
+            $shipment1->total_weight = $request->total_weight;
+            $shipment1->shipment_price = $request->shipment_price;
+            $shipment1->postal_charge_percentage = $request->postal_charge_percentage;
+            $shipment1->postal_charge = $request->postal_charge;
+            $shipment1->sub_total = $request->sub_total;
+            $shipment1->vat_percentage = $request->vat_percentage;
+            $shipment1->vat_amount = $request->vat_amount;
+            $shipment1->insurance_percentage = $request->insurance_percentage;
+            $shipment1->insurance_amount = $request->insurance_amount;
+            $shipment1->before_total = $request->before_total;
+            $shipment1->cod_amount = $request->cod_amount;
+            $shipment1->total = $request->total;
+            $shipment1->reference_no = $request->reference_no;
+            $shipment1->identical = $request->same_data;
+            $shipment1->save();     
+
+            if($request->same_data == '0'){
+                for ($x=0; $x<count($_POST['weight']); $x++) 
+                {
+                    $shipment_package = new temp_shipment_package;
+                    $shipment_package->temp_id = $shipment1->id;
+                    $shipment_package->category = $_POST['category'][$x];
+                    //$shipment_package->reference_no = $_POST['reference_no'][$x];
+                    $shipment_package->description = $_POST['description'][$x];
+                    $shipment_package->weight = $_POST['weight'][$x];
+                    $shipment_package->length = $_POST['length'][$x];
+                    $shipment_package->width = $_POST['width'][$x];
+                    $shipment_package->height = $_POST['height'][$x];
+                    $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
+
+                    if($_POST['weight'][$x]!=""){
+                        $shipment_package->save();
+                    }
+                }
+            }
+            else{
+                for ($y=1; $y<=$request->no_of_packages; $y++){
+                    for ($x=0; $x<count($_POST['weight']); $x++) 
+                    {
+                        $shipment_package = new temp_shipment_package;
+                        $shipment_package->temp_id = $shipment1->id;
+                        $shipment_package->category = $_POST['category'][$x];
+                        //$shipment_package->reference_no = $_POST['reference_no'][$x];
+                        $shipment_package->description = $_POST['description'][$x];
+                        $shipment_package->weight = $_POST['weight'][$x];
+                        $shipment_package->length = $_POST['length'][$x];
+                        $shipment_package->width = $_POST['width'][$x];
+                        $shipment_package->height = $_POST['height'][$x];
+                        $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
+
+                        if($_POST['weight'][$x]!=""){
+                            $shipment_package->save();
+                        }
+                    }
+                }
+            }
+        }
         return response()->json('successfully save'); 
         //return $this->printLabel($shipment->id);
     }
@@ -240,6 +320,9 @@ class ShipmentController extends Controller
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('checkbox', function ($shipment) {
+                return '<td><input type="checkbox" name="order_checkbox[]" class="order_checkbox" value="' . $shipment->id . '"></td>';
             })
             ->addColumn('shipment_type', function ($shipment) {
                 if ($shipment->shipment_type == 1) {
@@ -374,7 +457,7 @@ class ShipmentController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_type', 'shipment_mode','action','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_type', 'shipment_mode','action','status','checkbox'])
         ->addIndexColumn()
         ->make(true);
 
@@ -386,6 +469,9 @@ class ShipmentController extends Controller
         $shipment->cancel_remark = $request->cancel_remark;
         $shipment->cancel_request_date = date('Y-m-d');
         $shipment->cancel_request_time = date('H:i:s');
+        if($shipment->status >= 2){
+            $shipment->cancel_pay = 1;
+        }
         $shipment->status = 10;
         $shipment->save();
 
@@ -408,7 +494,7 @@ class ShipmentController extends Controller
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::user()->email;
-        $system_logs->remark = 'Active Hold Shipment Created by Customer';
+        $system_logs->remark = 'Active Hold Shipment by Customer';
         $system_logs->save();
 
         return response()->json('successfully update'); 
@@ -423,7 +509,7 @@ class ShipmentController extends Controller
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::user()->email;
-        $system_logs->remark = 'Cancel Hold Shipment Created by Customer';
+        $system_logs->remark = 'Cancel Hold Shipment by Customer';
         $system_logs->save();
 
         return response()->json('successfully update'); 
@@ -537,11 +623,31 @@ class ShipmentController extends Controller
         $to_address = manage_address::find($shipment->to_address);
         $view = view('print.printlabel',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments','package_category','user'))->render();
 
-        // $pdf = PDF::loadView('print.printlabel',compact('shipment','shipment_package','country','city','area','from_address','to_address','shipment_count','all_shipments'));
-        // //$path = public_path('pdfprint/');
-        // $fileName =  $shipment->order_id . '.' . 'pdf' ;
-        // //$pdf->save($path . '/' . $fileName);
-        // return $pdf->stream('repot.pdf');
+        return response()->json(['html'=>$view]);
+    }
+
+    public function bulkPrintLabel(Request $request){
+        $shipment = shipment::whereIn('id', $request->id)->get();
+        $shipment_package = shipment_package::whereIn('shipment_id',$request->id)->get();
+
+        $shipment_count = shipment_package::whereIn('shipment_id',$request->id)->count();
+
+        $all_shipments = DB::table("shipment_packages as sp")
+        ->whereIn("sp.shipment_id",$request->id)
+        ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
+        ->join('stations as st', 'st.id', '=', 's.to_station_id')
+        ->join('manage_addresses as fa', 'fa.id', '=', 's.from_address')
+        ->join('manage_addresses as ta', 'ta.id', '=', 's.to_address')
+        ->select('s.*','sp.shipment_id','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station','fa.city_id as from_city','fa.area_id as from_area','ta.city_id','ta.area_id','ta.address1','ta.address2','ta.address3','ta.contact_name','ta.contact_mobile','ta.contact_landline')
+        //->groupBy("users.id")
+        ->get();
+
+        $country = country::all();
+        $package_category = package_category::all();
+        $user = User::find(Auth::user()->id);
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+        $view = view('print.bulkprintlabel',compact('shipment','shipment_package','country','city','area','shipment_count','all_shipments','package_category','user'))->render();
 
         return response()->json(['html'=>$view]);
     }

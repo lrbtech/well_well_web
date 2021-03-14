@@ -32,7 +32,7 @@
                 <div class="card">
                   <div class="card-header">
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
-                    @if(Auth::guard('admin')->user()->area_create == 'on')
+                    @if($role_get->country_create == 'on')
                     <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
                     <span>New Area</span>
@@ -73,15 +73,15 @@
                             <td>
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                @if(Auth::guard('admin')->user()->area_edit == 'on')
+                                    @if($role_get->country_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#">Edit</a>
                                     @endif
-                                    @if(Auth::guard('admin')->user()->area_delete == '0')
-                                    @if($row->status == 0)
-                                      <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
-                                    @else 
-                                      <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">Active</a>
-                                    @endif
+                                    @if($role_get->country_delete == 'on')
+                                      @if($row->status == 0)
+                                        <a onclick="Delete({{$row->id}},1)" class="dropdown-item" href="#">DeActive</a>
+                                      @else 
+                                        <a onclick="Delete({{$row->id}},0)" class="dropdown-item" href="#">Active</a>
+                                      @endif
                                     @endif
                                 </div>
                             </td>

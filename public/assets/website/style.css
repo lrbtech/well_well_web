@@ -332,12 +332,12 @@ a:hover {
     padding: 1rem
 }
 
-@media(max-width:991.98px) {
+/* @media(max-width:991.98px) {
     .site-navbar {
         padding-top: 3rem;
         padding-bottom: 3rem
     }
-}
+} */
 
 .site-navbar .toggle-button {
     position: absolute;
@@ -4458,7 +4458,8 @@ hero-btn {
 .categories-area .single-cat {
     border: 1px solid #e1ebf7;
     border-radius: 6px;
-    padding: 85px 22px;
+    padding: 45px 22px;
+    height: 395px;
     -webkit-transition: all .4s ease-out 0s;
     -moz-transition: all .4s ease-out 0s;
     -ms-transition: all .4s ease-out 0s;
@@ -8244,12 +8245,38 @@ body {
     display: none !important;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1199px) {
     .sidebar_toggle {
         display: flex !important;
     }
+    .sticky-wrapper, .sticky-wrapper.is-sticky .site-navbar {
+        height: 95px !important;
+    }
+    .site-navbar .site-logo {
+        position: unset;
+    }
+    .sticky-wrapper.is-sticky .site-navbar .site-logo h4 {
+        position: absolute;
+        top: 30px;
+    }
+    .body_rtl .site-menu.main-menu{
+        display: none !important;
+    }
 }
-
+@media (max-width: 991px) {
+.sticky-wrapper.is-sticky .site-navbar .site-logo h4 {
+      top: 5px;
+}
+#service-advance .col-lg-4.col-md-6.col-sm-6 {
+    margin: 0 auto;
+}
+.about-low-area .about-img {
+    margin-bottom: 35px;
+}
+.blog-caption {
+    height: 140px;
+}
+}
 @media (max-width: 767px) {
     .slick-track {
         width: 100% !important;
@@ -8266,6 +8293,11 @@ body {
     .w-md-50 {
         width: 50% !important;
     }
+}
+@media (max-width: 500px) {
+#contact .boxed-btn {
+    width: 100%;
+}
 }
 /* Track code */
 
@@ -8567,13 +8599,22 @@ body {
     z-index: 9;
 }
 
-.video_overlay {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 2;
-    background: #000;
-    opacity: 0.5;
+    .video_overlay {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 2;
+        background: #000;
+        opacity: 0.5;
+    } 
+    @media (max-width: 1199px){
+.body_rtl .site-menu.main-menu {
+    display: none !important;
 }
+
+    }
+    .rtl-sidebar.toggle{
+        left:auto;
+        right:0;

@@ -108,7 +108,6 @@ class PendingController extends Controller
     public function scheduleShipment(Request $request)
     {
         
-        
         $data = temp_shipment::whereIn('id', $request->id)->get();
         
         foreach ($data as $row) {

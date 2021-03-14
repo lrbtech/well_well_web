@@ -66,45 +66,23 @@ class ProfileController extends Controller
         // $user->twitter_url = $request->twitter_url;
         // $user->instagram_url = $request->instagram_url;
 
-        if($request->file('emirates_id_file')!=""){
-            $old_image = "upload_files/".$user->emirates_id_file;
+        if($request->file('profile_image')!=""){
+            $old_image = "upload_files/".$user->profile_image;
             if (file_exists($old_image)) {
                 @unlink($old_image);
             }
             $fileName = null;
-            $image = $request->file('emirates_id_file');
+            $image = $request->file('profile_image');
             $fileName = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('upload_files/'), $fileName);
-        $user->emirates_id_file = $fileName;
-        }
-        if($request->file('trade_license_file')!=""){
-            $old_image = "upload_files/".$user->trade_license_file;
-            if (file_exists($old_image)) {
-                @unlink($old_image);
-            }
-            $fileName = null;
-            $image = $request->file('trade_license_file');
-            $fileName = rand() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('upload_files/'), $fileName);
-        $user->trade_license_file = $fileName;
-        }
-        if($request->file('vat_certificate_file')!=""){
-            $old_image = "upload_files/".$user->vat_certificate_file;
-            if (file_exists($old_image)) {
-                @unlink($old_image);
-            }
-            $fileName = null;
-            $image = $request->file('vat_certificate_file');
-            $fileName = rand() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('upload_files/'), $fileName);
-        $user->vat_certificate_file = $fileName;
+        $user->profile_image = $fileName;
         }
         
         $user->description = $request->description;
         $user->save();
 
 
-        
+        //return response()->json($request);
         return response()->json('successfully save'); 
     }
 

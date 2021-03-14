@@ -261,7 +261,7 @@ visibility: visible;
                               </div>
                               <div class="form-group col-md-4">
                                 <label class="col-form-label">Reference No</label>
-                                <input class="form-control" id="reference_no" name="reference_no" type="text" >
+                                <input class="form-control" id="reference_no" name="reference_no" type="number" >
                               </div>
                             </div>
 
@@ -711,10 +711,18 @@ visibility: visible;
                 <label>Enter a location</label>
                 <input id="searchInput" class="input-controls form-control" type="text" placeholder="Enter a location">
                 <div class="map" id="map" style="width: 100%; height: 300px;"></div>
-                <input readonly type="hidden" id="latitude" name="latitude" class="form-control">
-                <input readonly type="hidden" id="longitude" name="longitude" class="form-control">
             </div>
         </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="col-form-label">Latitude</label>
+                <input readonly type="text" id="latitude" name="latitude" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+                <label class="col-form-label">Longitude</label>
+                <input readonly type="text" id="longitude" name="longitude" class="form-control">
+            </div>
+        </div>  
 
         </form>
         </div>

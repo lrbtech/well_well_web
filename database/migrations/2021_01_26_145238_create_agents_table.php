@@ -37,9 +37,10 @@ class CreateAgentsTable extends Migration
             $table->string('cash_report')->default('0');
             $table->string('hub')->default('0');
             $table->string('van_scan')->default('0');
-            $table->string('total_payment')->default('0');  
-            $table->string('settle_payment')->default('0');  
-            $table->string('balance_payment')->default('0');  
+            $table->string('total_guest')->default('0');
+            $table->string('paid_guest')->default('0');
+            $table->string('total_cod')->default('0');
+            $table->string('paid_cod')->default('0'); 
             $table->string('status')->default('0');  
             $table->timestamps();
         });

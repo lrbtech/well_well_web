@@ -32,11 +32,12 @@ class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeading
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($status,$fdate,$tdate)
+    public function __construct($status,$fdate,$tdate,$user_id)
     {
         $this->fdate = $fdate;
         $this->tdate = $tdate;
         $this->status = $status;
+        $this->user_id = $user_id;
     }
 
     public function collection()
@@ -60,7 +61,7 @@ class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeading
         {
             $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
         }
-        $i->where('shipments.sender_id',Auth::user()->id);
+        $i->where('shipments.sender_id',$this->user_id);
         $i->orderBy('shipments.id','DESC');
         return $shipment = $i->get();
         //return booking::query()->whereYear('created_at', $this->fdate);
@@ -102,22 +103,10 @@ class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeading
             $status='Ready for Pickup';
         }
         elseif($shipment->status == 1){
-            $agent = agent::find($shipment->pickup_agent_id);
-            if(!empty($agent)){
-                $status='Schedule for Pickup '.$agent->agent_id;
-            }
-            else{
-                $status='Schedule for Pickup';
-            }
+            $status='Schedule for Pickup';
         }
         elseif($shipment->status == 2){
-            $agent = agent::find($shipment->pickup_agent_id);
-            if(!empty($agent)){
-                $status='Package Collected '.$agent->agent_id;
-            }
-            else{
-                $status='Package Collected';
-            }
+            $status='Package Collected';
         }
         elseif($shipment->status == 3){
             $status='
@@ -128,61 +117,25 @@ class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeading
         }
         elseif($shipment->status == 4){
             $from_station = station::find($shipment->from_station_id);
-            $agent = agent::find($shipment->transit_in_id);
-            if(!empty($agent)){
-                $status='
-                Transit In '.$from_station->station.'
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                Transit In '.$from_station->station.''
-               ;
-            }
+            $status='Transit In '.$from_station->station.'';
         }
-        elseif($shipment->status == 5){
-            $status='Assign Agent to Transit Out (Hub)';
+        elseif($shipment->status == 11){
+            $to_station = station::find($shipment->to_station_id);
+            $status='Transit In '.$to_station->station.'';
         }
         elseif($shipment->status == 6){
+            $from_station = station::find($shipment->from_station_id);
+            $status='Transit Out '.$from_station->station.'';
+        }
+        elseif($shipment->status == 12){
             $to_station = station::find($shipment->to_station_id);
-            $agent = agent::find($shipment->transit_out_id);
-            if(!empty($agent)){
-                $status='
-                Transit Out '.$to_station->station.'
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                Transit Out '.$to_station->station.''
-               ;
-            }
+            $status='Transit Out '.$to_station->station.'';
         }
         elseif($shipment->status == 7){
-            $agent = agent::find($shipment->delivery_agent_id);
-            if(!empty($agent)){
-                $status='
-                In the Van for Delivery
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                In the Van for Delivery'
-               ;
-            }
+            $status='In the Van for Delivery';
         }
         elseif($shipment->status == 8){
-            $agent = agent::find($shipment->delivery_agent_id);
-            if(!empty($agent)){
-                $status='Shipment delivered
-                Agent ID '.$agent->agent_id;
-            }
-            else{
-                $status='Shipment delivered';
-               ;
-            }
+            $status='Shipment delivered';
         }
         elseif($shipment->status == 9){
             $status='
@@ -194,13 +147,7 @@ class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeading
         elseif($shipment->status == 10){
             $status='
             Canceled
-            ' . $shipment->cancel_remark . '
-            ';
-        }
-        elseif($shipment->status == 11){
-            $status='
-            Shipemnt Hold
-            ';
+            ' . $shipment->cancel_remark . '';
         }
 
         $special_service='';

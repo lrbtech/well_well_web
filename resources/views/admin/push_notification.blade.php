@@ -34,10 +34,12 @@
                 <div class="card">
                   <div class="card-header">
                     <!-- <h5>Zero Configuration</h5><span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span><span>Searching, ordering and paging goodness will be immediately added to the table, as shown in this example.</span> -->
+                    @if($role_get->push_notification_create == 'on')
                     <button id="add_new" style="width: 200px;" type="button" class="btn btn-primary add-task-btn btn-block my-1">
                     <i class="bx bx-plus"></i>
                     <span>New Push Notification</span>
                     </button>
+                    @endif
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -63,7 +65,11 @@
                                 @if($row->send_to == 1)
                                 All Agent
                                 @elseif($row->send_to == 2)
+                                All Customer
+                                @elseif($row->send_to == 3)
                                 Selected Agent
+                                @elseif($row->send_to == 4)
+                                Selected Customer
                                 @endif
                             </td>
                             <td>{{$row->created_at}}</td>
@@ -73,20 +79,26 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     @if($row->expiry_date != '')
                                     @if($row->expiry_date >= date('Y-m-d'))
+                                    @if($role_get->push_notification_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-edit-alt mr-1"></i> edit</a>
-                                    @if(Auth::guard('admin')->user()->role_id == '0')
+                                    <a onclick="SendNotification({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-chat mr-1"></i> Send</a>
+                                    @endif
+                                    @if($role_get->push_notification_delete == 'on')
                                     <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-trash mr-1"></i> delete</a>
                                     @endif
-                                    <a onclick="SendNotification({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-chat mr-1"></i> Send</a>
+                                    
                                     @else
                                     <a class="dropdown-item" href="#">Expired</a>
                                     @endif
                                     @else
+                                    @if($role_get->push_notification_edit == 'on')
                                     <a onclick="Edit({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-edit-alt mr-1"></i> edit</a>
-                                    @if(Auth::guard('admin')->user()->role_id == '0')
+                                    <a onclick="SendNotification({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-chat mr-1"></i> Send</a>
+                                    @endif
+                                    @if($role_get->push_notification == 'on')
                                     <a onclick="Delete({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-trash mr-1"></i> delete</a>
                                     @endif
-                                    <a onclick="SendNotification({{$row->id}})" class="dropdown-item" href="#"><i class="bx bx-chat mr-1"></i> Send</a>
+                                    
                                     @endif
                                 </div>
                             </td>
@@ -139,7 +151,9 @@
             <select onchange="usertype()" id="send_to" name="send_to" class="form-control">
                 <option value="">SELECT</option>
                 <option value="1">All Agent</option>
-                <option value="2">Selected Agent</option>
+                <option value="2">All Customer</option>
+                <option value="3">Selected Agent</option>
+                <option value="4">Selected Customer</option>
             </select>
         </div>
 
@@ -148,6 +162,17 @@
             <select style="width:100% !imporatnt;" id="agent_id" name="agent_id[]" class="js-example-basic-multiple col-sm-12" multiple="multiple">
                 @foreach ($agent as $agent1)
                 <option value="{{$agent1->id}}">{{$agent1->name}}</option>
+                @endforeach
+            </select>
+        </div>
+
+
+
+        <div class="form-group" id="usershow">
+            <label>Select the Customer</label>
+            <select style="width:100% !imporatnt;" id="customer_id" name="customer_id[]" class="js-example-basic-multiple col-sm-12" multiple="multiple">
+                @foreach ($user as $user1)
+                <option value="{{$user1->id}}">{{$user1->first_name}} {{$user1->last_name}}</option>
                 @endforeach
             </select>
         </div>
@@ -181,7 +206,9 @@
   <script type="text/javascript">
 $('.push-notification').addClass('active');
 $("#agentshow").hide();
+$("#usershow").hide();
 $('#agent_id').select2();
+$('#customer_id').select2();
 
 // $(".select2").select2({
 //     dropdownAutoWidth: true,
@@ -197,9 +224,19 @@ function usertype(){
   var send_to = $("#send_to").val();
   if(send_to == '1'){
     $("#agentshow").hide();
+    $("#usershow").hide();
   }
   else if(send_to == '2'){
+    $("#agentshow").hide();
+    $("#usershow").hide();
+  }
+  else if(send_to == '3'){
     $("#agentshow").show();
+    $("#usershow").hide();
+  }
+  else if(send_to == '4'){
+    $("#usershow").show();
+    $("#agentshow").hide();
   }
 }
 
@@ -326,13 +363,24 @@ function Edit(id){
       $('input[name=id]').val(id);
       $('#agent_id').select2();
 
-    if(data.send_to == '1'){
+      if(data.send_to == '1'){
         $("#agentshow").hide();
-    }
-    else if(data.send_to == '2'){
+        $("#usershow").hide();
+      }
+      else if(data.send_to == '2'){
+        $("#agentshow").hide();
+        $("#usershow").hide();
+      }
+      else if(data.send_to == '3'){
         $("#agentshow").show();
+        $("#usershow").hide();
         get_notification_agent(data.id);
-    }
+      }
+      else if(data.send_to == '4'){
+        $("#usershow").show();
+        $("#agentshow").hide();
+        get_notification_user(data.id);
+      }
 
       $('#popup_modal').modal('show');
       action_type = 2;
@@ -348,6 +396,18 @@ function get_notification_agent(id)
         success: function(data)
         {
            $('#agent_id').html(data);
+        }
+   });
+}
+
+function get_notification_user(id)
+{
+    $.ajax({        
+        url : '/admin/get-notification-user/'+id,
+        type: "GET",
+        success: function(data)
+        {
+           $('#customer_id').html(data);
         }
    });
 }

@@ -33,10 +33,11 @@ class UserRevenueExport implements FromCollection, ShouldAutoSize , WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($fdate,$tdate)
+    public function __construct($fdate,$tdate,$user_id)
     {
         $this->fdate = $fdate;
         $this->tdate = $tdate;
+        $this->user_id = $user_id;
     }
 
     public function collection()
@@ -51,7 +52,7 @@ class UserRevenueExport implements FromCollection, ShouldAutoSize , WithHeadings
         {
             $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
         }
-        $i->where('shipments.sender_id',Auth::user()->id);
+        $i->where('shipments.sender_id',$this->user_id);
         $i->where('shipments.status',8);
         $i->orderBy('shipments.id','DESC');
         $shipment = $i->get();

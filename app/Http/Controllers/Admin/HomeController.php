@@ -19,6 +19,7 @@ use App\Models\add_rate_item;
 use App\Models\role;
 use App\Models\language;
 use Auth;
+use DB;
 use App\Http\Controllers\Admin\logController;
 
 
@@ -39,8 +40,10 @@ class HomeController extends Controller
         $cldate = date('Y-m-d',strtotime('last day of this month'));
 
         $shipment = shipment::orderBy('id', 'desc')->take('5')->get();
+        $shipment_package = shipment_package::orderBy('id', 'desc')->get();
+
         $current_month_value = shipment::whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
         $language = language::all();
-        return view('admin.dashboard',compact('total_shipment','shipment','current_month_value','total_individual','total_business','role_get','language'));
+        return view('admin.dashboard',compact('total_shipment','shipment','current_month_value','total_individual','total_business','role_get','language','shipment_package'));
     }
 }

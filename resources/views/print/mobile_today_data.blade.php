@@ -26,8 +26,8 @@
                     <tr>
                       <td valign="top" width="50%" style="color:#000; padding: 20px 10px 20px 40px; background: #EDEDED; border-right: 2px solid white;">
                         <h3 style="font-size: 13px;">
-                            <label id="tmp_billing_address_label">Today Shipment Values</label><br>
-                            <label id="tmp_billing_address_label">{{$shipment_data['total_shipment_value']}}</label>
+                            <label id="tmp_billing_address_label">Today Total Shipment </label><br>
+                            <label id="tmp_billing_address_label">{{$shipment_data['total_shipment']}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
                             <label id="tmp_billing_address_label">On Pickup</label><br>

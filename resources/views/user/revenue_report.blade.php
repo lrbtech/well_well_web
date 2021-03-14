@@ -58,7 +58,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Order ID</th>
+                            <th>Tracking ID</th>
                             <th>{{$language[119][Auth::user()->lang]}}</th>
                             <th>{{$language[64][Auth::user()->lang]}}</th>
                             <th>{{$language[66][Auth::user()->lang]}}</th>

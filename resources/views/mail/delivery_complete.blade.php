@@ -172,7 +172,7 @@
                 </table>
             </td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td bgcolor="#f4f4f4" align="center" style="padding: 30px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
@@ -194,7 +194,7 @@
                     </tr>
                 </table>
             </td>
-        </tr>
+        </tr> -->
     </table>
 </body>
 

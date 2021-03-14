@@ -31,12 +31,16 @@ class AutoCompleteController extends Controller
 
         $availableResults = DB::table('users')
             //->select('id,name,register_number,mobile')
-            ->where('first_name', 'like', '%' . $search_term . '%')
-            ->orWhere('last_name', 'like', '%' . $search_term . '%')
-            ->orWhere('email', 'like', '%' . $search_term . '%')
-            ->orWhere('mobile', 'like', '%' . $search_term . '%')
-            ->orWhere('customer_id', 'like', '%' . $search_term . '%')
-            ->where('status', 4)
+            ->where([['first_name','LIKE','%'.$search_term.'%'],
+                    ['status',4]])
+            ->orWhere([['last_name','LIKE','%'.$search_term.'%'],
+                    ['status',4]])
+            ->orWhere([['email','LIKE','%'.$search_term.'%'],
+                    ['status',4]])
+            ->orWhere([['mobile','LIKE','%'.$search_term.'%'],
+                    ['status',4]])
+            ->orWhere([['customer_id','LIKE','%'.$search_term.'%'],
+                    ['status',4]])
             ->get();
     
         if(!empty($availableResults)){     
@@ -63,9 +67,10 @@ class AutoCompleteController extends Controller
 
     public function getUserId($id)
     {
+    $user = User::find($id);
     $data = add_rate::where('user_id',$id)->first();
     $settings = settings::find(1);
-    return response()->json(['data'=>$data , 'settings'=>$settings]);
+    return response()->json(['data'=>$data , 'user'=>$user , 'settings'=>$settings]);
     //return response()->json($data); 
     }
 

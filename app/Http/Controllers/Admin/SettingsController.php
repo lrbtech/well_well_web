@@ -20,6 +20,7 @@ use App\Models\system_logs;
 use App\Models\shipment_package;
 use App\Models\shipment;
 use App\Models\weeks;
+use App\Models\role;
 use Hash;
 use Auth;
 use DB;
@@ -67,7 +68,7 @@ class SettingsController extends Controller
             'insurance_percentage'=>'required',
             'vat_percentage'=> 'required',
             'postal_charge_percentage'=> 'required',
-            'cod_amount'=> 'required',
+            //'cod_amount'=> 'required',
           ],[
             'vat_percentage.required' => 'Vat Percentage Field is Required',
         ]);
@@ -75,11 +76,32 @@ class SettingsController extends Controller
         $settings->insurance_percentage = $request->insurance_percentage;
         $settings->vat_percentage = $request->vat_percentage;
         $settings->postal_charge_percentage = $request->postal_charge_percentage;
-        $settings->cod_amount = $request->cod_amount;
+        //$settings->cod_amount = $request->cod_amount;
         $settings->save();
 
         $logController = new logController();
         $logController->createLog(Auth::guard('admin')->user()->email," Edit Financial Settings");
+
+        return response()->json('successfully update'); 
+    }
+
+    public function SocialMediaLink(){
+        $settings = settings::find(1);
+        $language = language::all();
+        return view('admin.social_media_link',compact('settings','language'));
+    }
+
+    public function updateSocialMediaLink(Request $request){
+        $settings = settings::find($request->id);
+        $settings->facebook_url = $request->facebook_url;
+        $settings->twitter_url = $request->twitter_url;
+        $settings->linkedin_url = $request->linkedin_url;
+        $settings->instagram_url = $request->instagram_url;
+        $settings->youtube_url = $request->youtube_url;
+        $settings->save();
+
+        $logController = new logController();
+        $logController->createLog(Auth::guard('admin')->user()->email," Edit Social Media Settings");
 
         return response()->json('successfully update'); 
     }
@@ -92,6 +114,7 @@ class SettingsController extends Controller
 
     public function updateTermsAndConditions(Request $request){
         $settings = settings::find($request->id);
+        $settings->mobile_terms_english = $request->mobile_terms_english;
         $settings->terms_and_conditions = $request->editor1;
         $settings->save();
         $logController = new logController();
@@ -235,7 +258,8 @@ class SettingsController extends Controller
     public function packageCategory(){
         $package_category = package_category::all();
         $language = language::all();
-        return view('admin.package_category',compact('package_category','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.package_category',compact('package_category','language','role_get'));
     }
 
     public function editpackageCategory($id){
@@ -258,12 +282,14 @@ class SettingsController extends Controller
     public function saveExceptionCategory(Request $request){
         $this->validate($request, [
             'category'=>'required',
+            'exception_status'=>'required',
           ],[
             'category.required' => 'Exception Category Field is Required',
         ]);
 
         $exception_category = new exception_category;
         $exception_category->category = $request->category;
+        $exception_category->exception_status = $request->exception_status;
         $exception_category->save();
 
         $logController = new logController();
@@ -274,12 +300,14 @@ class SettingsController extends Controller
     public function updateExceptionCategory(Request $request){
         $this->validate($request, [
             'category'=>'required',
+            'exception_status'=>'required',
           ],[
             'category.required' => 'Exception Category Field is Required',
         ]);
 
         $exception_category = exception_category::find($request->id);
         $exception_category->category = $request->category;
+        $exception_category->exception_status = $request->exception_status;
         $exception_category->save();
 
         $logController = new logController();
@@ -291,7 +319,8 @@ class SettingsController extends Controller
     public function ExceptionCategory(){
         $exception_category = exception_category::all();
         $language = language::all();
-        return view('admin.exception_category',compact('exception_category','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.exception_category',compact('exception_category','language','role_get'));
     }
 
     public function editExceptionCategory($id){
@@ -347,7 +376,8 @@ class SettingsController extends Controller
     public function Station(){
         $station = station::all();
         $language = language::all();
-        return view('admin.station',compact('station','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.station',compact('station','language','role_get'));
     }
 
     public function editStation($id){
@@ -372,6 +402,30 @@ class SettingsController extends Controller
         $language = language::all();
         $user = admin::find(Auth::guard('admin')->user()->id);
         return view('admin.change_password',compact('user','language'));
+    }
+
+    public function ChangeProfileImage()
+    {
+        $language = language::all();
+        $user = admin::find(Auth::guard('admin')->user()->id);
+        return view('admin.change_profile_image',compact('user','language'));
+    }
+
+    public function updateChangeProfileImage(Request $request){        
+        $user = admin::find(Auth::guard('admin')->user()->id);
+        if($request->file('profile_image')!=""){
+            $old_image = "upload_files/".$user->profile_image;
+            if (file_exists($old_image)) {
+                @unlink($old_image);
+            }
+            $fileName = null;
+            $image = $request->file('profile_image');
+            $fileName = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('upload_files/'), $fileName);
+        $user->profile_image = $fileName;
+        }
+        $user->save();
+        return response()->json('successfully save'); 
     }
 
     public function changelanguage($language)

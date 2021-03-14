@@ -162,6 +162,11 @@ th {
             </div>
             <div style="width: 50% !important;" class="px-2">
                 <p class="m-0"><strong>SHIP DATE:</strong> {{date('d-m-Y',strtotime($row->shipment_date))}}</p>
+                @if($row->shipment_mode == 1)
+                <p class="m-0"><strong>Commitment DATE:</strong> {{date('d-m-Y', strtotime($row->shipment_date.'+3 days'))}}</p>
+                @else 
+                <p class="m-0"><strong>Commitment DATE:</strong> {{date('d-m-Y', strtotime($row->shipment_date.'+1 day'))}}</p>
+                @endif
                 <p class="m-0"><strong>Weight:</strong> {{$row->total_weight}} KG</p>
                 <!-- <p class="m-0"><strong>CAD:</strong> 1234567ASD12</p> -->
                 <p class="m-0"><strong>DIMS:</strong> {{$row->length}}x{{$row->width}}x{{$row->height}} CM</p>

@@ -9,23 +9,25 @@ use App\Models\fleet_management;
 use App\Models\vehicle_group;
 use App\Models\agent;
 use App\Models\vehicle_type;
+use App\Models\role;
 use App\Http\Controllers\Admin\logController;
 use Auth;
 
 class FleetManagement extends Controller
 {
     public function getVehicleType(){
-        $vehicle_type = vehicle_type::where('status',0)->get();
+        $vehicle_type = vehicle_type::all();
         $language = language::all();
-        return view('admin.vehicle_type',compact('vehicle_type','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.vehicle_type',compact('vehicle_type','language','role_get'));
     }
     public function editVehicleType($id){
         $vehicle_type = vehicle_type::find($id);
         return response()->json($vehicle_type); 
     }
-    public function deleteVehicleType($id){
+    public function deleteVehicleType($id,$status){
         $vehicle_type = vehicle_type::find($id);
-        $vehicle_type->status = 1;
+        $vehicle_type->status = $status;
         $vehicle_type->save();
 
         $logController = new logController();
@@ -59,17 +61,18 @@ class FleetManagement extends Controller
 
 //vehicle group
     public function getVehicleGroup(){
-        $vehicle_group = vehicle_group::where('status',0)->get();
+        $vehicle_group = vehicle_group::all();
         $language = language::all();
-        return view('admin.vehicle_group',compact('vehicle_group','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.vehicle_group',compact('vehicle_group','language','role_get'));
     }
     public function editVehicleGroup($id){
         $vehicle_group = vehicle_group::find($id);
         return response()->json($vehicle_group); 
     }
-    public function deleteVehicleGroup($id){
+    public function deleteVehicleGroup($id,$status){
         $vehicle_group = vehicle_group::find($id);
-        $vehicle_group->status = 1;
+        $vehicle_group->status = $status;
         $vehicle_group->save();
 
         $logController = new logController();
@@ -105,18 +108,19 @@ class FleetManagement extends Controller
     public function getFleet(){
         $vehicle_type = vehicle_type::where('status',0)->get();
         $vehicle_group = vehicle_group::where('status',0)->get();
-        $fleet_management = fleet_management::where('status',0)->get();
+        $fleet_management = fleet_management::all();
         $agent = agent::where('status',0)->get();
         $language = language::all();
-        return view('admin.fleet_management',compact('fleet_management','language','vehicle_type','vehicle_group','agent'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.fleet_management',compact('fleet_management','language','vehicle_type','vehicle_group','agent','role_get'));
     }
     public function editFleet($id){
         $fleet_management = fleet_management::find($id);
         return response()->json($fleet_management); 
     }
-    public function deleteFleet($id){
+    public function deleteFleet($id,$status){
         $fleet_management = fleet_management::find($id);
-        $fleet_management->status = 1;
+        $fleet_management->status = $status;
         $fleet_management->save();
 
         $logController = new logController();
