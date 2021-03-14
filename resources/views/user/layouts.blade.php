@@ -206,8 +206,8 @@
                  {{-- <i data-feather="settings"> </i></li> --}}
                   <img style="width:50px !important;" class="img-fluid" src="/upload_files/{{Auth::user()->profile_image}}" alt="">
                 @else 
-                 <i data-feather="settings"> </i></li>
-                  <img style="width:50px !important;" class="img-fluid" src="/assets/app-assets/images/dashboard/user.png" alt="">
+                 {{-- <i data-feather="settings"> </i></li> --}}
+                  <img class="img-fluid" src="/assets/app-assets/images/dashboard/user.png" alt="">
                 @endif
                 </span>
                 <ul class="onhover-show-div profile-dropdown">
