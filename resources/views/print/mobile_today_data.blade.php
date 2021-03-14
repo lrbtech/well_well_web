@@ -48,6 +48,10 @@
                             <label id="tmp_billing_address_label">{{$shipment_data['collected_value']}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
+                            <label id="tmp_billing_address_label">Collected Guest Value</label><br>
+                            <label id="tmp_billing_address_label">{{$shipment_data['collected_guest']}}</label>
+                        </h3>
+                        <h3 style="font-size: 13px;">
                             <label id="tmp_billing_address_label">On Delievry</label><br>
                             <label id="tmp_billing_address_label">{{$shipment_data['delivery']}}</label>
                         </h3>

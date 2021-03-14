@@ -1537,6 +1537,8 @@ class ApiController extends Controller
 
         $collected_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('status',8)->get()->sum("collect_cod_amount");
 
+        $collected_guest = shipment::where('package_collect_date', $today)->where('package_collect_agent_id',$id)->where('collect_cod_amount','!=','')->get()->sum("collect_cod_amount");
+
         $i =DB::table('shipments');
         $i->where('shipments.pickup_agent_id', $id);
         $i->orWhere('shipments.package_collect_agent_id', $id);
@@ -1650,6 +1652,7 @@ class ApiController extends Controller
             'hub' => $hub,
             'delivery' => $delivery,
             'completed' => $completed,
+            'collected_guest' => $collected_guest,
         );
    
         $pdf = PDF::loadView('print.mobile_today_data',compact('shipment_data','datas'));
