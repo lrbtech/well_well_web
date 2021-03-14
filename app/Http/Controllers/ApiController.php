@@ -1077,7 +1077,9 @@ class ApiController extends Controller
             $shipment->save();
 
             $all = shipment::find($request->shipment_id);
+            if($shipment->sender_id != 0){
             $user = User::find($all->sender_id);
+            }
             $package_category = package_category::all();
             $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->get();
 
