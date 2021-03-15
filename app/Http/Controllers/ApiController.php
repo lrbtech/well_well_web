@@ -769,9 +769,10 @@ class ApiController extends Controller
                 $shipment->package_collect_time = date('H:i:s');
 
                 if($shipment->sender_id == 0){
-                    $shipment->collect_cod_amount = $shipment->total;
-                    $agent->total_guest = (float)$agent->total_guest + $shipment->total;
-                    $agent->save();
+                    $agent1 = agent::find($request->agent_id);
+                    $shipment->collect_cod_amount = (float)$shipment->total;
+                    $agent1->total_guest = (float)$agent1->total_guest + (float)$shipment->total;
+                    $agent1->save();
                 }
 
                 $shipment->save();
