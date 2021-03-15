@@ -111,6 +111,10 @@ th {
     text-align: inherit;
 }
 
+.page {
+  page-break-after: always;
+}
+
 
 /* .table-striped tbody tr:nth-of-type(2n+1) {
     background-color: rgba(0, 0, 0, .05);
@@ -120,7 +124,7 @@ th {
 
 <body>
 @foreach($all_shipments as $key => $row)
-    <div class="sticker_label">
+    <div class="sticker_label page">
         <div class="d-flex" style="border-bottom: 1px solid #cdcdcd;">
             <div style="width: 50% !important;" class="px-2" style="border-right: 1px solid #cdcdcd;">
                 <div class="d-flex">
@@ -249,9 +253,6 @@ th {
         @endif
 
     </div>
-    <br>
-    <hr>
-    <br>
 @endforeach
 </body>
 <style>

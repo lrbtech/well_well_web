@@ -19,6 +19,14 @@
     margin: 20px 40px;
 }
 
+.page {
+  page-break-after: always;
+}
+
+/* @page {
+  margin: 20mm
+} */
+
 body {
     font-family: 'open-sans', sans-serif;
     font-size: 16px;
@@ -130,9 +138,10 @@ th {
 </head>
 
 <body>
-<?php $x=0; ?>
+<?php $x=1; ?>
+<?php $y=0; ?>
 @foreach($all_shipments as $key => $row)
-    <div class="sticker_label">
+    <div class="sticker_label page">
         <div class="d-flex" style="border-bottom: 1px solid #cdcdcd;">
             <div style="width: 50% !important;" class="px-2" style="border-right: 1px solid #cdcdcd;">
                 <div class="d-flex">
@@ -223,30 +232,34 @@ th {
             </div>
         </div>
         <div class="d-flex justify-between pt-2 ">
-            <!-- @if($row->id == $row->shipment_id)
-            <div style="font-size: 16px;">{{$x + 1}} of {{$row->no_of_packages}}</div>
+            @if($x <= $row->no_of_packages)
+            <!-- <div style="font-size: 16px;">{{$x}} of {{$row->no_of_packages}}</div> -->
             @else
-            <?php //$x=0; ?>
+            <?php $x=1; ?>
+            <?php 
+            $y = $row->no_of_packages + $y; ?>
             @endif
-            <?php //$x++; ?> -->
-            <div style="font-size: 16px;">{{$key + 1}} of {{$shipment_count}}</div>
+            <div style="font-size: 16px;">{{$x}} of {{$row->no_of_packages}}</div>
+            <!-- <div style="font-size: 16px;">{{$key + 1}} of {{$shipment_count}}</div> -->
             <!-- <div style="font-size: 16px;"><strong>H2</strong></div> -->
+            
 
 
         </div>
         <div class="d-flex justify-between pt-2 ">
             <div>
-                <!-- @if(($key + 1) != '1')
+                <!-- @if(($x) != '1')
                 <div class="d-flex">
                     <div class="mr-2">
                         <div><strong style="font-size: 14px;">Master TRK#</strong></div>
                     </div>
-                    <div style="font-size: 20px;"><strong>{{$shipment_package[0]->sku_value}}</strong></div>
+                    <div style="font-size: 20px;"><strong>{{$shipment_package[$y]->sku_value}}</strong></div>
                 </div>
                 @endif -->
                 <div style="font-size: 18px;"><strong>Your Tracking ID</strong></div>
                 <div style="font-size: 25px;"><strong>{{$row->sku_value}}</strong></div>
             </div>
+            <?php $x++; ?>
             <div>
 
                 <div style="font-size: 24px;"><strong>{{$row->station}}</strong></div>
@@ -257,10 +270,7 @@ th {
         <div class="pt-2 text-center"> 
         <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($row->sku_value, 'C39',1,50)}}" alt="barcode"   />
         </div>
-    </div>
-    <br>
-    <hr>
-    <br>
+    </div>   
 @endforeach
 </body>
 <style>
