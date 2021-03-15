@@ -1645,6 +1645,12 @@ class ApiController extends Controller
             $datas[] = $data;
         }   
 
+        $collected_cash_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('cod_type','Cash')->where('status',8)->get()->sum("collect_cod_amount");
+        $collected_credit_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('cod_type','Credit Card')->where('status',8)->get()->sum("collect_cod_amount");
+        $collected_bank_value = shipment::where('delivery_date', $today)->where('delivery_agent_id',$id)->where('cod_type','Bank Transfer')->where('status',8)->get()->sum("collect_cod_amount");
+
+        $agent = agent::find($id);
+
         $shipment_data = array(
             'total_shipment' => $total_shipment,
             'total_shipment_value' => $total_shipment_value,
@@ -1656,9 +1662,12 @@ class ApiController extends Controller
             'delivery' => $delivery,
             'completed' => $completed,
             'collected_guest' => $collected_guest,
+            'collected_bank_value' => $collected_bank_value,
+            'collected_credit_value' => $collected_credit_value,
+            'collected_cash_value' => $collected_cash_value,
         );
    
-        $pdf = PDF::loadView('print.mobile_today_data',compact('shipment_data','datas'));
+        $pdf = PDF::loadView('print.mobile_today_data',compact('shipment_data','datas','agent'));
         $pdf->setPaper('A4');
         return $pdf->stream('report.pdf');
 

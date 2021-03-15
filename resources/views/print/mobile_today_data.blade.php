@@ -27,15 +27,22 @@
                       <td valign="top" width="50%" style="color:#000; padding: 20px 10px 20px 40px; background: #EDEDED; border-right: 2px solid white;">
                         <h3 style="font-size: 13px;">
                             <label id="tmp_billing_address_label">Agent Details </label><br>
-                            <label id="tmp_billing_address_label">{{$shipment_data['total_shipment']}}</label>
+                            <label id="tmp_billing_address_label">
+                            Agent ID : {{$agent->agent_id}} <br>
+                            Name : {{$agent->name}}
+                            </label>
                         </h3>
                         <h3 style="font-size: 13px;">
                             <label id="tmp_billing_address_label">Today Total Shipment </label><br>
                             <label id="tmp_billing_address_label">{{$shipment_data['total_shipment']}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
-                            <label id="tmp_billing_address_label">Today Total Shipment </label><br>
-                            <label id="tmp_billing_address_label">{{$shipment_data['total_shipment']}}</label>
+                            <label id="tmp_billing_address_label">Collected C.O.D Value </label><br>
+                            <label id="tmp_billing_address_label">{{$shipment_data['collected_value']}}</label>
+                        </h3>
+                        <h3 style="font-size: 13px;">
+                            <label id="tmp_billing_address_label">Collected C.O.D Bank Transfer Value </label><br>
+                            <label id="tmp_billing_address_label">{{$shipment_data['collected_bank_value']}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
                             <label id="tmp_billing_address_label">On Pickup</label><br>
@@ -56,12 +63,16 @@
                             <label id="tmp_billing_address_label">{{date('d-m-Y')}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
-                            <label id="tmp_billing_address_label">Today Total Shipment</label><br>
-                            <label id="tmp_billing_address_label">{{$shipment_data['collected_value']}}</label>
+                            <label id="tmp_billing_address_label">Collected Guest Value</label><br>
+                            <label id="tmp_billing_address_label">{{$shipment_data['collected_guest']}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
-                            <label id="tmp_billing_address_label">Collected C.O.D Value</label><br>
-                            <label id="tmp_billing_address_label">{{$shipment_data['collected_guest']}}</label>
+                            <label id="tmp_billing_address_label">Collected C.O.D Cash Value</label><br>
+                            <label id="tmp_billing_address_label">{{$shipment_data['collected_cash_value']}}</label>
+                        </h3>
+                        <h3 style="font-size: 13px;">
+                            <label id="tmp_billing_address_label">Collected C.O.D Credit Card Value</label><br>
+                            <label id="tmp_billing_address_label">{{$shipment_data['collected_credit_value']}}</label>
                         </h3>
                         <h3 style="font-size: 13px;">
                             <label id="tmp_billing_address_label">On Delievry</label><br>
