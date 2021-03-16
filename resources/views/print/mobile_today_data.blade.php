@@ -26,9 +26,8 @@
                     <tr>
                       <td valign="top" width="50%" style="color:#000; padding: 20px 10px 20px 40px; background: #EDEDED; border-right: 2px solid white;">
                         <h3 style="font-size: 13px;">
-                            <label id="tmp_billing_address_label">Agent Details </label><br>
+                            <label id="tmp_billing_address_label">Agent ID : {{$agent->agent_id}} </label><br>
                             <label id="tmp_billing_address_label">
-                            Agent ID : {{$agent->agent_id}} <br>
                             Name : {{$agent->name}}
                             </label>
                         </h3>

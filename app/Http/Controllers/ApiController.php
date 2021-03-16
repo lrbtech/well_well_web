@@ -781,7 +781,7 @@ class ApiController extends Controller
                 $system_logs->_id = $request->shipment_id;
                 $system_logs->category = 'shipment';
                 $system_logs->to_id = $agent->email;
-                $system_logs->remark = 'Pacakge Collected by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+                $system_logs->remark = 'Package Collected by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
                 $system_logs->save();
                 
             }

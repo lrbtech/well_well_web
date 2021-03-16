@@ -101,8 +101,8 @@ class ShipmentController extends Controller
 
     public function saveNewShipment(Request $request){
         $this->validate($request, [
-            //'from_address'=>'required',
-            //'to_address'=>'required',
+            'from_address'=>'required',
+            'to_address'=>'required',
             //'shipment_date'=>'required',
             //'shipment_from_time'=>'required',
             //'shipment_type'=>'required',
@@ -117,11 +117,14 @@ class ShipmentController extends Controller
             'width.*'=> 'required',
             'height.*'=> 'required',
             'chargeable_weight.*'=> 'required',
+            'total'=> 'required',
+            'user_id'=> 'required',
           ],[
-            //'from_address.required' => 'Choose From Address Field is Required',
-            //'to_address.required' => 'Choose To Address Field is Required',
+            'from_address.required' => 'Choose From Address Field is Required',
+            'to_address.required' => 'Choose To Address Field is Required',
             //'shipment_type.required' => 'Pickup/Drop-Off Field is Required',
             //'price.*.required' => 'Price Field is Required',
+            'user_id.required' => 'Please Choose Customer Field is Required',
         ]);
 
         $from_address = manage_address::find($request->from_address);
@@ -216,8 +219,8 @@ class ShipmentController extends Controller
             $shipment1->shipment_type = $request->shipment_type;
             $shipment1->from_address = $request->to_address;
             $shipment1->to_address = $request->from_address;
-            $shipment1->from_station_id = $from_station->station_id;
-            $shipment1->to_station_id = $to_station->station_id;
+            $shipment1->from_station_id = $to_station->station_id;
+            $shipment1->to_station_id = $from_station->station_id;
             $shipment1->shipment_mode = $request->shipment_mode;
             //$shipment1->special_service = $request->special_service;
             //$shipment1->special_service_description = $request->special_service_description;

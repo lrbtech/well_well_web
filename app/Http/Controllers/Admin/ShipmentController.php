@@ -331,8 +331,8 @@ class ShipmentController extends Controller
             $shipment1->shipment_to_time = $request->shipment_to_time;
             $shipment1->from_address = $request->to_address;
             $shipment1->to_address = $request->from_address;
-            $shipment1->from_station_id = $from_station->station_id;
-            $shipment1->to_station_id = $to_station->station_id;
+            $shipment1->from_station_id = $to_station->station_id;
+            $shipment1->to_station_id = $from_station->station_id;
             $shipment1->shipment_mode = $request->shipment_mode;
             $shipment1->special_service = $request->special_service;
             $shipment1->special_service_description = $request->special_service_description;
