@@ -118,13 +118,11 @@ class ShipmentController extends Controller
             'height.*'=> 'required',
             'chargeable_weight.*'=> 'required',
             'total'=> 'required',
-            'user_id'=> 'required',
           ],[
             'from_address.required' => 'Choose From Address Field is Required',
             'to_address.required' => 'Choose To Address Field is Required',
             //'shipment_type.required' => 'Pickup/Drop-Off Field is Required',
             //'price.*.required' => 'Price Field is Required',
-            'user_id.required' => 'Please Choose Customer Field is Required',
         ]);
 
         $from_address = manage_address::find($request->from_address);

@@ -176,8 +176,8 @@ class ShipmentController extends Controller
 
     public function saveNewShipment(Request $request){
         $this->validate($request, [
-            //'from_address'=>'required',
-            //'to_address'=>'required',
+            'from_address'=>'required',
+            'to_address'=>'required',
             'shipment_date'=>'required',
             'shipment_from_time'=>'required',
             'shipment_type'=>'required',
@@ -192,11 +192,14 @@ class ShipmentController extends Controller
             'width.*'=> 'required',
             'height.*'=> 'required',
             'chargeable_weight.*'=> 'required',
+            'user_id'=> 'required',
+            'total'=> 'required',
           ],[
-            //'from_address.required' => 'Choose From Address Field is Required',
-            //'to_address.required' => 'Choose To Address Field is Required',
+            'from_address.required' => 'Choose From Address Field is Required',
+            'to_address.required' => 'Choose To Address Field is Required',
             'shipment_type.required' => 'Pickup/Drop-Off Field is Required',
             //'price.*.required' => 'Price Field is Required',
+            'user_id.required' => 'Please Choose Customer Field is Required',
         ]);
 
         $config = [
