@@ -69,82 +69,92 @@ Route::post('/ext/order/get-area', [App\Http\Controllers\OrderApiController::cla
 Route::post('/ext/order/create-order', [App\Http\Controllers\OrderApiController::class, 'createOrder']);
 
 
-//user
-Route::post('/user-login', [App\Http\Controllers\UserApiController::class, 'userLogin']);
+// Route::group(['prefix' => 'user'],function(){
+// $token = $request->header('APP_KEY');
+// if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+//     return response()->json(['message' => 'App Key Not Found'], 401);
+// }
+// else{
+    //user
+    Route::post('/user-login', [App\Http\Controllers\UserApiController::class, 'userLogin']);
 
-Route::post('/tracking', [App\Http\Controllers\UserApiController::class, 'Tracking']);
-Route::get('/track-history/{id}', [App\Http\Controllers\UserApiController::class, 'trackHistory']);
+    Route::post('/tracking', [App\Http\Controllers\UserApiController::class, 'Tracking']);
+    Route::get('/track-history/{id}', [App\Http\Controllers\UserApiController::class, 'trackHistory']);
 
-Route::get('/get-city', [App\Http\Controllers\UserApiController::class, 'getCity']);
-Route::get('/get-area/{id}', [App\Http\Controllers\UserApiController::class, 'getArea']);
+    Route::get('/get-city', [App\Http\Controllers\UserApiController::class, 'getCity']);
+    Route::get('/get-area/{id}', [App\Http\Controllers\UserApiController::class, 'getArea']);
 
-Route::get('/get-package-category', [App\Http\Controllers\UserApiController::class, 'getPackageCategory']);
-//ship-now save
-Route::post('/save-shipnow', [App\Http\Controllers\UserApiController::class, 'saveShipNow']);
-Route::post('/save-shipnow-package', [App\Http\Controllers\UserApiController::class, 'saveShipNowPackage']);
+    Route::get('/get-package-category', [App\Http\Controllers\UserApiController::class, 'getPackageCategory']);
+    //ship-now save
+    Route::post('/save-shipnow', [App\Http\Controllers\UserApiController::class, 'saveShipNow']);
+    Route::post('/save-shipnow-package', [App\Http\Controllers\UserApiController::class, 'saveShipNowPackage']);
 
-Route::post('/save-mobile-verify', [App\Http\Controllers\UserApiController::class, 'saveMobileVerify']);
-Route::get('/verify-otp/{mobile}/{otp}', [App\Http\Controllers\UserApiController::class, 'verifyOtp']);
+    Route::post('/save-mobile-verify', [App\Http\Controllers\UserApiController::class, 'saveMobileVerify']);
+    Route::get('/verify-otp/{mobile}/{otp}', [App\Http\Controllers\UserApiController::class, 'verifyOtp']);
 
-//ship-now-guest
-Route::get('/get-shipping-price/{weight}/{declared_value}', [App\Http\Controllers\UserApiController::class, 'getShippingPrice']);
+    //ship-now-guest
+    Route::get('/get-shipping-price/{weight}/{declared_value}', [App\Http\Controllers\UserApiController::class, 'getShippingPrice']);
 
-//get dimensiget-dimensionon
-Route::get('/get-dimension/{weight}/{length}/{width}/{height}', [App\Http\Controllers\UserApiController::class, 'getDimension']);
+    //get dimensiget-dimensionon
+    Route::get('/get-dimension/{weight}/{length}/{width}/{height}', [App\Http\Controllers\UserApiController::class, 'getDimension']);
 
-Route::get('/get-shipment-price/{user_id}/{weight}/{to_address}/{shipment_mode}/{declared_value}/{cod_enable}', [App\Http\Controllers\UserApiController::class, 'getShipmentPrice']);
-
-
-
-Route::post('/save-shipment', [App\Http\Controllers\UserApiController::class, 'saveShipment']);
-Route::post('/save-shipment-package', [App\Http\Controllers\UserApiController::class, 'saveShipmentPackage']);
-
-Route::post('/schedule-shipment', [App\Http\Controllers\UserApiController::class, 'scheduleShipment']);
-
-Route::post('/save-register', [App\Http\Controllers\UserApiController::class, 'saveRegister']);
-
-//email exist
-Route::get('/get-email/{email}', [App\Http\Controllers\UserApiController::class, 'getEmail']);
-
-//mobile exist
-Route::get('/get-mobile/{mobile}', [App\Http\Controllers\UserApiController::class, 'getMobile']);
-
-Route::get('/get-available-time/{date}', [App\Http\Controllers\UserApiController::class, 'getAvailableTime']);
-
-Route::get('/get-terms', [App\Http\Controllers\UserApiController::class, 'getTerms']);
-
-Route::get('/get-dashboard/{user_id}', [App\Http\Controllers\UserApiController::class, 'getDashboard']);
-Route::get('/get-dummy-record/{count}', [App\Http\Controllers\ApiController::class, 'dummyRecordCreate']);
-
-Route::get('/get-from-address/{user_id}', [App\Http\Controllers\UserApiController::class, 'getFromAddress']);
-Route::get('/get-to-address/{user_id}', [App\Http\Controllers\UserApiController::class, 'getToAddress']);
-
-Route::post('/save-address', [App\Http\Controllers\UserApiController::class, 'saveAddress']);
+    Route::get('/get-shipment-price/{user_id}/{weight}/{to_address}/{shipment_mode}/{declared_value}/{cod_enable}', [App\Http\Controllers\UserApiController::class, 'getShipmentPrice']);
 
 
 
-Route::get('/get-pending-shipment/{user_id}', [App\Http\Controllers\UserApiController::class, 'pendingShipment']);
+    Route::post('/save-shipment', [App\Http\Controllers\UserApiController::class, 'saveShipment']);
+    Route::post('/save-shipment-package', [App\Http\Controllers\UserApiController::class, 'saveShipmentPackage']);
 
-Route::get('/delete-pending-shipment/{id}', [App\Http\Controllers\UserApiController::class, 'deletePendingShipment']);
+    Route::post('/schedule-shipment', [App\Http\Controllers\UserApiController::class, 'scheduleShipment']);
 
-Route::get('/get-all-shipment/{user_id}', [App\Http\Controllers\UserApiController::class, 'getAllShipment']);
+    Route::post('/save-register', [App\Http\Controllers\UserApiController::class, 'saveRegister']);
 
-//shipment delivery report
-Route::get('/get-delivered-shipment/{user_id}', [App\Http\Controllers\UserApiController::class, 'getDeliveredShipment']);
+    //email exist
+    Route::get('/get-email/{email}', [App\Http\Controllers\UserApiController::class, 'getEmail']);
 
-Route::POST('/get-payments-in-report/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getPaymentsInReport']);
+    //mobile exist
+    Route::get('/get-mobile/{mobile}', [App\Http\Controllers\UserApiController::class, 'getMobile']);
 
-Route::get('/settlement-details/{user_id}', [App\Http\Controllers\UserApiController::class, 'settlementDetails']);
+    Route::get('/get-available-time/{date}', [App\Http\Controllers\UserApiController::class, 'getAvailableTime']);
 
-Route::POST('/get-revenue-report/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getRevenueReport']);
+    Route::get('/get-terms', [App\Http\Controllers\UserApiController::class, 'getTerms']);
 
-Route::POST('/get-shipment-report/{status}/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getShipmentReport']);
+    Route::get('/get-dashboard/{user_id}', [App\Http\Controllers\UserApiController::class, 'getDashboard']);
+    Route::get('/get-dummy-record/{count}', [App\Http\Controllers\ApiController::class, 'dummyRecordCreate']);
 
-Route::POST('/get-invoice/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getInvoice']);
+    Route::get('/get-from-address/{user_id}', [App\Http\Controllers\UserApiController::class, 'getFromAddress']);
+    Route::get('/get-to-address/{user_id}', [App\Http\Controllers\UserApiController::class, 'getToAddress']);
 
-Route::get('/hold-shipment/{id}/{status}', [App\Http\Controllers\UserApiController::class, 'HoldShipment']);
+    Route::post('/save-address', [App\Http\Controllers\UserApiController::class, 'saveAddress']);
 
-Route::post('/cancel-shipment', [App\Http\Controllers\UserApiController::class, 'CancelShipment']);
 
-Route::get('/excel-shipment-report/{status}/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'excelShipmentReport']);
-Route::get('/excel-revenue-report/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'excelRevenueReport']);
+
+    Route::get('/get-pending-shipment/{user_id}', [App\Http\Controllers\UserApiController::class, 'pendingShipment']);
+
+    Route::get('/delete-pending-shipment/{id}', [App\Http\Controllers\UserApiController::class, 'deletePendingShipment']);
+
+    Route::get('/get-all-shipment/{user_id}', [App\Http\Controllers\UserApiController::class, 'getAllShipment']);
+
+    //shipment delivery report
+    Route::get('/get-delivered-shipment/{user_id}', [App\Http\Controllers\UserApiController::class, 'getDeliveredShipment']);
+
+    Route::POST('/get-payments-in-report/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getPaymentsInReport']);
+
+    Route::get('/settlement-details/{user_id}', [App\Http\Controllers\UserApiController::class, 'settlementDetails']);
+
+    Route::POST('/get-revenue-report/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getRevenueReport']);
+
+    Route::POST('/get-shipment-report/{status}/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getShipmentReport']);
+
+    Route::POST('/get-invoice/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'getInvoice']);
+
+    Route::get('/hold-shipment/{id}/{status}', [App\Http\Controllers\UserApiController::class, 'HoldShipment']);
+
+    Route::post('/cancel-shipment', [App\Http\Controllers\UserApiController::class, 'CancelShipment']);
+
+    Route::get('/excel-shipment-report/{status}/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'excelShipmentReport']);
+    Route::get('/excel-revenue-report/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'excelRevenueReport']);
+    
+// }
+
+// });

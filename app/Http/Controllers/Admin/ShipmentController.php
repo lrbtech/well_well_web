@@ -63,6 +63,17 @@ class ShipmentController extends Controller
         return view('admin.manual_shipment',compact('drop_point','country','city','area','package_category','agent', 'language'));
     }
 
+    public function GuestShipment(){
+        $drop_point = drop_point::all();
+        $country = country::where('status',0)->get();
+        $agent = agent::all();
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
+        $language = language::all();
+        return view('admin.create_guest_shipment',compact('drop_point','country','city','area','package_category','agent', 'language'));
+    }
+
     public function complaintShipment($id){
         $shipment1 = shipment_package::where('sku_value',$id)->first();
         $country = country::all();
@@ -598,7 +609,7 @@ class ShipmentController extends Controller
         if(!empty($user)){
             Mail::send('mail.delivery_complete',compact('all','shipment_package','package_category'),function($message) use($user){
                 $message->to($user->email)->subject('Well Well Express - Delivery Completed');
-                $message->from('info@lrbinfotech.com','Well Well Express');
+                $message->from('mail@wellwell.ae','Well Well Express');
             });
         }
 
@@ -764,14 +775,20 @@ class ShipmentController extends Controller
                 elseif($shipment->status == 6){
                     return '<p>Transit Out '.$from_station->station.'</p>';
                 }
+                elseif($shipment->status == 13){
+                    return '<p>Package At Station '.$from_station->station.'</p>';
+                }
                 elseif($shipment->status == 11){
                     return '<p>Transit In '.$to_station->station.'</p>';
                 }
                 elseif($shipment->status == 12){
                     return '<p>Transit Out '.$to_station->station.'</p>';
                 }
+                elseif($shipment->status == 14){
+                    return '<p>Package At Station '.$to_station->station.'</p>';
+                }
                 elseif($shipment->status == 7){
-                    $agent = agent::find($shipment->delivery_agent_id);
+                    $agent = agent::find($shipment->van_scan_id);
                     if(!empty($agent)){
                         return '
                         <p>In the Van for Delivery</p>

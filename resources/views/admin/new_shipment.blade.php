@@ -591,7 +591,7 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-footer text-right">
-                    <button onclick="SaveShipment()" class="btn btn-primary m-r-15" type="button">{{$language[71][Auth::guard('admin')->user()->lang]}}</button>
+                    <button id="saveshipment" onclick="SaveShipment()" class="btn btn-primary m-r-15" type="button">{{$language[71][Auth::guard('admin')->user()->lang]}}</button>
                     <button class="btn btn-light" type="button">{{$language[72][Auth::guard('admin')->user()->lang]}}</button>
                   </div>
                 </div>
@@ -1124,6 +1124,7 @@ function getToAddress(contact_id){
 }
 
 function SaveShipment(){
+  $("#saveshipment").attr("disabled", true);
   var formData = new FormData($('#shipping_form')[0]);
   $.ajax({
       url : '/admin/save-new-shipment',
@@ -1138,6 +1139,7 @@ function SaveShipment(){
           $('#address_modal').modal('hide');
           
           toastr.success(data, 'Successfully Save');
+          $("#saveshipment").attr("disabled", false);
 
           var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
           var is_chrome = Boolean(mywindow.chrome);
@@ -1160,8 +1162,9 @@ function SaveShipment(){
       },error: function (data) {
           var errorData = data.responseJSON.errors;
           $.each(errorData, function(i, obj) {
-          toastr.error(obj[0]);
-        });
+            toastr.error(obj[0]);
+          });
+          $("#saveshipment").attr("disabled", false);
       }
   });
 }

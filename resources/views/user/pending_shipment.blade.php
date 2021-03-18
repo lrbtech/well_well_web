@@ -60,12 +60,15 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
+                            <th>#</th>
                             <th><input type="checkbox" name="order_master_checkbox" class="order_master_checkbox" value=""/></th>
-                            <th>{{$language[145][Auth::user()->lang]}}</th>
+                            <th>Reference No</th>
+                            <th>C.O.D Value</th>
                             <th>{{$language[32][Auth::user()->lang]}}</th>
                             <th>{{$language[24][Auth::user()->lang]}}</th>
                             <th>{{$language[28][Auth::user()->lang]}}</th>
                             <th>{{$language[70][Auth::user()->lang]}}</th>
+                            <th>{{$language[16][Auth::user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -127,14 +130,33 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'checkbox', name: 'checkbox' , orderable:false, searchable:false },
-        { data: 'shipment_type', name: 'shipment_type' },
+        { data: 'reference_no', name: 'reference_no' },
+        { data: 'cod_value', name: 'cod_value' },
         { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },
         { data: 'to_address', name: 'to_address' },
         { data: 'total', name: 'total' },
+        { data: 'action', name: 'action' },
     ]
 });
+
+function Delete(id){
+  var r = confirm("Are you sure");
+  if (r == true) {
+    $.ajax({
+      url : '/user/delete-pending-shipment/'+id,
+      type: "GET",
+      dataType: "JSON",
+      success: function(data)
+      {
+        toastr.success(data, 'Successfully Delete');
+        window.location.href="/user/pending-shipment";
+      }
+    });
+  }
+}
 
 $(document).on('click','.order_master_checkbox', function(){
   if($(".order_master_checkbox").prop('checked') == true){

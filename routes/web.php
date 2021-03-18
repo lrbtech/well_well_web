@@ -43,6 +43,8 @@ Route::get('/view-clear', function() {
 
 Auth::routes(['register' => false]);
 
+Route::get('/send-sms/{mobile}/{msg}', [App\Http\Controllers\PageController::class, 'send_sms']);
+
 // Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/home', [App\Http\Controllers\PageController::class, 'Home']);
 Route::get('/', [App\Http\Controllers\PageController::class, 'Home']);
@@ -73,7 +75,7 @@ Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::clas
 Route::get('/get-available-time/{date}', [App\Http\Controllers\PageController::class, 'getAvailableTime']);
 
 
-//Route::get('/delete-dublicate-data', [App\Http\Controllers\PageController::class, 'deleteDublicateData']);
+Route::get('/delete-dublicate-data', [App\Http\Controllers\PageController::class, 'deleteDublicateData']);
 
 
 Route::group(['prefix' => 'admin'],function(){
@@ -239,6 +241,10 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/save-new-address', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewAddress']);
     Route::POST('/save-new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewShipment']);
     Route::POST('/save-shipment-notes', [App\Http\Controllers\Admin\ShipmentController::class, 'saveShipmentNotes']);
+
+    Route::get('/guest-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'GuestShipment']);
+    Route::get('/get-common-price/{weight}', [App\Http\Controllers\Admin\ShipmentController::class, 'getCommonPrice']);
+    Route::POST('/save-guest-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'saveGuestShipment']);
 
     Route::get('/print-label/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'printLabel']);
     Route::get('/print-invoice/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'printInvoice']);
@@ -474,6 +480,8 @@ Route::group(['prefix' => 'user'],function(){
     Route::get('/pending-shipment', [App\Http\Controllers\User\PendingController::class, 'PendingShipment']);
     Route::POST('/get-pending-shipment', [App\Http\Controllers\User\PendingController::class, 'getPendingShipment']);
     Route::get('/schedule-shipment', [App\Http\Controllers\User\PendingController::class, 'scheduleShipment']);
+
+    Route::get('/delete-pending-shipment/{id}', [App\Http\Controllers\User\PendingController::class, 'deletePendingShipment']);
 
     Route::get('/print-label/{id}', [App\Http\Controllers\User\ShipmentController::class, 'printLabel']);
     Route::get('/print-invoice/{id}', [App\Http\Controllers\User\ShipmentController::class, 'printInvoice']);

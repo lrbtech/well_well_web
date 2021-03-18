@@ -20,6 +20,8 @@ use App\Models\common_price;
 use App\Models\revenue_exception_log;
 use App\Models\system_logs;
 use App\Models\guest_user;
+use App\Models\temp_shipment;
+use App\Models\temp_shipment_package;
 use App\Models\ship_now_mobile_verify;
 use Hash;
 use Mail;
@@ -33,27 +35,46 @@ class OrderApiController extends Controller
     // }
 
     public function getArea(Request $request){ 
-        $city = city::where('parent_id',0)->where('city',$request->city)->first();
-        $data = city::where('parent_id',$city->id)->where('status',0)->orderBy('city','ASC')->get();
-        $datas =array();
-        foreach($data as $row){
-            $datas[]=$row->city;
+        $token = $request->header('APP_KEY');
+        $account_id = $request->header('Account_ID');
+        $user = User::where('customer_id',$account_id)->where('status',4)->first();
+        //WellWell@2021
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
         }
-        return response()->json($data); 
+        elseif(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
+            $city = city::where('parent_id',0)->where('city',$request->city)->first();
+            $data = city::where('parent_id',$city->id)->where('status',0)->orderBy('city','ASC')->get();
+            $datas =array();
+            foreach($data as $row){
+                $data = array(
+                    'area' => $row->city,
+                );
+                $datas[] = $data;
+            }
+            return response()->json($datas); 
+        }
     }
 
     public function createOrder(Request $request){ 
-        // $config = [
-        //     'table' => 'shipments',
-        //     'field' => 'order_id',
-        //     'length' => 6,
-        //     'prefix' => '0'
-        // ];
+        $token = $request->header('APP_KEY');
+        $account_id = $request->header('Account_ID');
+        $user = User::where('customer_id',$account_id)->where('status',4)->first();
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
+        }
+        elseif(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
 
-        // $order_id = IdGenerator::generate($config);
+        //return response()->json($request->order['pick_up']['city']);
 
         $from_address = new manage_address;
-        $from_address->user_id = 0;
+        $from_address->user_id = $user->id;
         $from_address->from_to = 1;
         $from_city = city::where('parent_id',0)->where('city',$request->order['pick_up']['city'])->first();
         $from_address->city_id = $from_city->id;
@@ -80,7 +101,7 @@ class OrderApiController extends Controller
         $from_address->save();
 
         $to_address = new manage_address;
-        $to_address->user_id = 0;
+        $to_address->user_id = $user->id;
         $to_address->from_to = 2;
         $to_city = city::where('parent_id',0)->where('city',$request->order['delivery']['city'])->first();
         $to_address->city_id = $to_city->id;
@@ -109,10 +130,10 @@ class OrderApiController extends Controller
         $from_station = city::find($from_city->id);
         $to_station = city::find($to_city->id);
 
-        $shipment = new shipment;
+        $shipment = new temp_shipment;
         //$shipment->order_id = $order_id;
         $shipment->date = date('Y-m-d');
-        //$shipment->sender_id = $request->user_id;
+        $shipment->sender_id = $user->id;
         $shipment->shipment_type = 1;
         //$shipment->shipment_date = date('Y-m-d',strtotime($request->shipment_date));
         //$shipment->shipment_from_time = $request->shipment_from_time;
@@ -129,83 +150,224 @@ class OrderApiController extends Controller
         $shipment->declared_value = $request->order['declared_value'];
         $shipment->reference_no = $request->order['reference'];
         $shipment->identical = $request->order['identical'];
+
+        $total_weight=0;
+        if($request->order['identical'] == '0'){
+            foreach ($request->order['package'] as $row) 
+            {
+                $dimension = ($row['length'] * $row['width'] * $row['height']) / 5000;
+                $chargeable_weight=0;
+                if($dimension > $row['weight']){
+                    $chargeable_weight = $dimension;
+                }
+                else{
+                    $chargeable_weight = $row['weight'];
+                }  
+                $total_weight = $total_weight + $chargeable_weight;
+            }
+        }
+        else{
+            for ($y=1; $y<=$request->order['no_of_packages']; $y++){
+                foreach ($request->order['package'] as $row) 
+                {
+                    $dimension = ($row['length'] * $row['width'] * $row['height']) / 5000;
+                    $chargeable_weight=0;
+                    if($dimension > $row['weight']){
+                        $chargeable_weight = $dimension;
+                    }
+                    else{
+                        $chargeable_weight = $row['weight'];
+                    }  
+                    $total_weight = $total_weight + $chargeable_weight;
+                }
+            }
+        }
         
-        $shipment->total_weight = $request->total_weight;
-        $shipment->shipment_price = $request->shipment_price;
-        $shipment->postal_charge_percentage = $request->postal_charge_percentage;
-        $shipment->postal_charge = $request->postal_charge;
-        $shipment->sub_total = $request->sub_total;
-        $shipment->vat_percentage = $request->vat_percentage;
-        $shipment->vat_amount = $request->vat_amount;
-        $shipment->insurance_percentage = $request->insurance_percentage;
-        $shipment->insurance_amount = $request->insurance_amount;
-        $shipment->cod_amount = $request->cod_amount;
-        $shipment->total = $request->total;
+        $shipment->total_weight = $total_weight;
+        $cod_enable;
+        if($request->order['cod_enable'] == '1'){
+            $cod_enable = 1;
+        }
+        else{
+            $cod_enable=0;
+        }
+        
+        $price = $this->getShipmentPrice($user->id,$total_weight,$to_address->id,$request->order['shipment_mode'],$request->order['declared_value'],$cod_enable);
+
+
+        $shipment->shipment_price = $price->original['shipment_price'];
+        $shipment->postal_charge_percentage = $price->original['postal_charge_percentage'];
+        $shipment->postal_charge = $price->original['postal_charge'];
+        $shipment->sub_total = $price->original['sub_total'];
+        $shipment->vat_percentage = $price->original['vat_percentage'];
+        $shipment->vat_amount = $price->original['vat_amount'];
+        $shipment->insurance_percentage = $price->original['insurance_percentage'];
+        $shipment->insurance_amount = $price->original['insurance_amount'];
+        $shipment->cod_amount = $price->original['cod_amount'];
+        $shipment->total = $price->original['total'];
         
         $shipment->save();
 
-        $system_logs = new system_logs;
-        $system_logs->_id = $shipment->id;
-        $system_logs->category = 'shipment';
-        $system_logs->to_id = Auth::guard('admin')->user()->email;
-        $system_logs->remark = 'New Shipment Created to '.Auth::guard('admin')->user()->name;
-        $system_logs->save();
 
-        $arrayshipment = array();
-        $arrayshipment[] = $shipment->id;
-
-        if($request->same_data == '0'){
-            for ($x=0; $x<count($_POST['weight']); $x++) 
+        if($request->order['identical'] == '0'){
+            foreach ($request->order['package'] as $row) 
             {
-                do {
-                    $sku_value = mt_rand( 1000000000, 9999999999 );
-                } 
-                while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
-
-                $shipment_package = new shipment_package;
-                $shipment_package->sku_value = $sku_value;
-                $shipment_package->shipment_id = $shipment->id;
-                $shipment_package->category = $_POST['category'][$x];
-               // $shipment_package->reference_no = $_POST['reference_no'][$x];
-                $shipment_package->description = $_POST['description'][$x];
-                $shipment_package->weight = $_POST['weight'][$x];
-                $shipment_package->length = $_POST['length'][$x];
-                $shipment_package->width = $_POST['width'][$x];
-                $shipment_package->height = $_POST['height'][$x];
-                $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
-
-                if($_POST['weight'][$x]!=""){
+                $shipment_package = new temp_shipment_package;
+                $shipment_package->temp_id = $shipment->id;
+                $shipment_package->category = $row['category'];
+                $shipment_package->description = $row['description'];
+                $shipment_package->weight = $row['weight'];
+                $shipment_package->length = $row['length'];
+                $shipment_package->width = $row['width'];
+                $shipment_package->height = $row['height'];
+                $dimension = ($row['length'] * $row['width'] * $row['height']) / 5000;
+                $chargeable_weight=0;
+                if($dimension > $row['weight']){
+                    $chargeable_weight = $dimension;
+                }
+                else{
+                    $chargeable_weight = $row['weight'];
+                }  
+                $shipment_package->chargeable_weight = $chargeable_weight;
+                $shipment_package->save();
+            }
+        }
+        else{
+            for ($y=1; $y<=$request->order['no_of_packages']; $y++){
+                foreach ($request->order['package'] as $row) 
+                {
+                    $shipment_package = new temp_shipment_package;
+                    $shipment_package->temp_id = $shipment->id;
+                    $shipment_package->category = $row['category'];
+                    $shipment_package->description = $row['description'];
+                    $shipment_package->weight = $row['weight'];
+                    $shipment_package->length = $row['length'];
+                    $shipment_package->width = $row['width'];
+                    $shipment_package->height = $row['height'];
+                    $dimension = ($row['length'] * $row['width'] * $row['height']) / 5000;
+                    $chargeable_weight=0;
+                    if($dimension > $row['weight']){
+                        $chargeable_weight = $dimension;
+                    }
+                    else{
+                        $chargeable_weight = $row['weight'];
+                    }  
+                    $shipment_package->chargeable_weight = $chargeable_weight;
                     $shipment_package->save();
                 }
             }
         }
-        else{
-            for ($y=1; $y<=$request->no_of_packages; $y++){
-                for ($x=0; $x<count($_POST['weight']); $x++) 
-                {
-                    do {
-                        $sku_value = mt_rand( 1000000000, 9999999999 );
-                    } 
-                    while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
-                    $shipment_package = new shipment_package;
-                    $shipment_package->sku_value = $sku_value;
-                    $shipment_package->shipment_id = $shipment->id;
-                    $shipment_package->category = $_POST['category'][$x];
-                    //$shipment_package->reference_no = $_POST['reference_no'][$x];
-                    $shipment_package->description = $_POST['description'][$x];
-                    $shipment_package->weight = $_POST['weight'][$x];
-                    $shipment_package->length = $_POST['length'][$x];
-                    $shipment_package->width = $_POST['width'][$x];
-                    $shipment_package->height = $_POST['height'][$x];
-                    $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
 
-                    if($_POST['weight'][$x]!=""){
-                        $shipment_package->save();
-                    }
+        return response()->json(['message' => 'Save Successfully','status'=>200], 200);
+        }
+    }
+
+
+    public function getShipmentPrice($user_id,$weight,$to_address,$shipment_mode,$declared_value,$cod_enable){
+        $rate = add_rate::where('user_id',$user_id)->first();
+        $address = manage_address::find($to_address);
+        $area = city::find($address->area_id);
+        $data =array();
+
+        $price=0;
+        if($area->remote_area == '0'){
+            if('0' <= $weight && '5' >= $weight && $shipment_mode == '1'){
+                $price = $rate->service_area_0_to_5_kg_price;
+            }
+            elseif('5.1' <= $weight && '10' >= $weight && $shipment_mode == '1'){
+                $price = $rate->service_area_5_to_10_kg_price;
+            }
+            elseif('10.1' <= $weight && '15' >= $weight && $shipment_mode == '1'){
+                $price = $rate->service_area_10_to_15_kg_price;
+            }
+            elseif('15.1' <= $weight && '20' >= $weight && $shipment_mode == '1'){
+                $price = $rate->service_area_15_to_20_kg_price;
+            }
+            elseif('20.1' <= $weight && '99999' >= $weight && $shipment_mode == '1'){
+                $price = (($weight - 20) * $rate->service_area_20_to_1000_kg_price) + $rate->service_area_15_to_20_kg_price; 
+            }
+            elseif('0' <= $weight && '5' >= $weight && $shipment_mode == '2'){
+                $price = $rate->same_day_delivery_0_to_5_kg_price;
+            }
+            elseif('5.1' <= $weight && '10' >= $weight && $shipment_mode == '2'){
+                $price = $rate->same_day_delivery_5_to_10_kg_price;
+            }
+            elseif('10.1' <= $weight && '15' >= $weight && $shipment_mode == '2'){
+                $price = $rate->same_day_delivery_10_to_15_kg_price;
+            }
+            elseif('15.1' <= $weight && '10' >= $weight && $shipment_mode == '2'){
+                $price = $rate->same_day_delivery_15_to_20_kg_price;
+            }
+            elseif('20.1' <= $weight && '999999' >= $weight && $shipment_mode == '2'){
+                $price = (($weight - 20) * $rate->same_day_delivery_20_to_1000_kg_price) + $rate->same_day_delivery_15_to_20_kg_price;
+            }
+        }
+        else{
+            $price1=0;
+            if($shipment_mode == '1'){
+                $price1 = $rate->service_area_0_to_5_kg_price;
+            }
+            elseif($shipment_mode == '2'){
+                $price1 = $rate->same_day_delivery_0_to_5_kg_price;
+            }
+            if('0' <= $weight && '5' >= $weight){
+                $price = $rate->before_5_kg_price + $price1;
+            }
+            else{
+                $price = (($weight - 5) * $rate->above_5_kg_price) + $rate->before_5_kg_price + $price1;
+            }
+        }
+
+        $insurance_amount = 0;
+        $cod_amount = 0;
+        $vat_amount = 0;
+        $postal_charge = 0;
+
+        $settings = settings::find('1');
+        if($rate->insurance_enable == 1){
+            $insurance_amount = ($settings->insurance_percentage/100) * $declared_value;
+        }
+        
+        if($cod_enable == 1){
+            $cod_amount = $settings->cod_amount;
+        }
+
+        $sub_total = $price + $insurance_amount + $cod_amount;
+
+        if($rate->vat_enable == 1){
+        $vat_amount = ($settings->vat_percentage/100) * $sub_total;
+        }
+    
+        if($rate->postal_charge_enable == 1){
+            if($weight >= 30){
+                $postal_charge = 0;
+            }
+            else{
+                $postal_charge = ($settings->postal_charge_percentage/100) * $price;
+                if($postal_charge < 2){
+                    $postal_charge = 2;
                 }
             }
         }
 
-        //return response()->json(['message' => 'Unauthorized Access','status'=>419], 419);
+        $total = $sub_total + $vat_amount + $postal_charge;
+
+        $data = array(
+            'shipment_price' => round($price,2),
+            'postal_charge_percentage' => round($settings->postal_charge_percentage,2),
+            'postal_charge' => round($postal_charge,2),
+            'cod_amount' => round($cod_amount,2),
+            'sub_total' => round($sub_total,2),
+            'vat_percentage' => round($settings->vat_percentage,2),
+            'vat_amount' => round($vat_amount,2),
+            'insurance_percentage' => round($settings->insurance_percentage,2),
+            'insurance_amount' => round($insurance_amount,2),
+            'total' => round($total,2),
+        );
+
+        return response()->json($data);
     }
+
+
+
 }

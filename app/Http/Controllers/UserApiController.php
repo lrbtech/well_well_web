@@ -40,32 +40,28 @@ class UserApiController extends Controller
 {
     private function send_sms($phone,$msg)
     {
-      $requestParams = array(
-        //'Unicode' => '0',
-        //'route_id' => '2',
-        'datetime' => '2020-09-27',
-        'username' => 'isalonuae',
-        'password' => 'Ms5sbqBxif',
-        'senderid' => 'ISalon UAE',
-        'type' => 'text',
-        'to' => '+971'.$phone,
-        'text' => $msg
-      );
+        $requestParams = array(
+          'api_key' => 'C2003249604f3c09173d94.20000197',
+          'type' => 'text',
+          'contacts' => '+971'.$phone,
+          'senderid' => 'WellWellExp',
+          'msg' => $msg
+        );
+        
+        //merge API url and parameters
+        $apiUrl = 'https://www.elitbuzz-me.com/sms/smsapi?';
+        foreach($requestParams as $key => $val){
+            $apiUrl .= $key.'='.urlencode($val).'&';
+        }
+        $apiUrl = rtrim($apiUrl, "&");
       
-      //merge API url and parameters
-      $apiUrl = 'https://smartsmsgateway.com/api/api_http.php?';
-      foreach($requestParams as $key => $val){
-          $apiUrl .= $key.'='.urlencode($val).'&';
-      }
-      $apiUrl = rtrim($apiUrl, "&");
-    
-      //API call
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $apiUrl);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    
-      curl_exec($ch);
-      curl_close($ch);
+        //API call
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      
+        curl_exec($ch);
+        curl_close($ch);
     }
 
     public function userLogin(Request $request){
@@ -904,7 +900,7 @@ class UserApiController extends Controller
 
             Mail::send('mail.verify_mail',compact('all'),function($message) use($all){
                 $message->to($all->email)->subject('Well Well Express - Confirm your email');
-                $message->from('info@lrbtech.com','Well Well Express');
+                $message->from('mail@wellwell.ae','Well Well Express');
             });
         
             return response()->json(

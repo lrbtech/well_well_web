@@ -35,7 +35,10 @@ class HomeController extends Controller
         $shipment_package = shipment_package::orderBy('id', 'desc')->get();
 
         $current_month_value = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
-        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package'));
+
+        $current_month_cod = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->get()->sum("special_cod");
+
+        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod'));
     }
     
 }

@@ -219,7 +219,7 @@ class CustomerController extends Controller
         $all = User::find($id);
         Mail::send('mail.verify_complete',compact('all'),function($message) use($all){
             $message->to($all->email)->subject('Well Well Express - verification completed');
-            $message->from('info@lrbinfotech.com','Well Well Express');
+            $message->from('mail@wellwell.ae','Well Well Express');
         });
 
         $logController = new logController();

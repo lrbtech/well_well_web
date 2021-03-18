@@ -42,8 +42,25 @@ class PendingController extends Controller
         $language = language::all();
         return view('user.pending_shipment',compact('language'));
     }
+
+    public function deletePendingShipment($id)
+    {
+        try{
+            $temp_shipment_delete = temp_shipment::find($id);
+            $temp_shipment_delete->delete();
+
+            temp_shipment_package::where('temp_id', $id)->delete();
+
+            return response()->json(
+            ['message' => 'Delete Successfully'],
+             200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        }
+    }
+
     public function getPendingShipment(){
-        $shipment = temp_shipment::where('sender_id',Auth::user()->id)->get();
+        $shipment = temp_shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return Datatables::of($shipment)
             ->addColumn('checkbox', function ($shipment) {
@@ -97,8 +114,27 @@ class PendingController extends Controller
                     return '<td></td>';
                 }
             })
+            ->addColumn('reference_no', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->reference_no . '</p>
+                </td>';
+            })
+            ->addColumn('cod_value', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->special_cod . '</p>
+                </td>';
+            })
+            ->addColumn('action', function ($shipment) {
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="Delete('.$shipment->id.')" class="dropdown-item" href="#">Delete</a>
+                    </div>
+                </td>';
+            })
             
-        ->rawColumns([ 'checkbox','from_address', 'to_address','shipment_type', 'shipment_mode','total'])
+        ->rawColumns([ 'checkbox','from_address', 'to_address','shipment_type', 'shipment_mode','total','action','reference_no','cod_value'])
+        ->addIndexColumn()
         ->make(true);
 
         //return Datatables::of($orders) ->addIndexColumn()->make(true);

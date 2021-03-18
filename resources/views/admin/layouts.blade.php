@@ -338,6 +338,8 @@
                   <li class="special-shipment"><a class="special-shipment" href="/admin/special-shipment">{{$language[305][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
 
+                  <!-- <li class="guest-shipment"><a class="guest-shipment" href="/admin/guest-shipment">Create Guest Shipment</a></li> -->
+
                   @if($role_get->all_shipment == 'on')
                   <li class="shipment"><a class="shipment" href="/admin/shipment">{{$language[174][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif

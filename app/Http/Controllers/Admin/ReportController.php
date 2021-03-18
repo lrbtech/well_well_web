@@ -108,6 +108,19 @@ class ReportController extends Controller
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
             })
+            ->addColumn('account_id', function ($shipment) {
+                if($shipment->sender_id == '0'){
+                    return '<td>Guest</td>';
+                }
+                else{
+                    $user = User::find($shipment->sender_id);
+                    return '<td>
+                    <p>' . $user->customer_id . '</p>
+                    <p>' . $user->first_name . ' ' . $user->last_name . '</p>
+                    <p>' . $user->mobile . '</p>
+                    </td>';
+                }
+            })
             ->addColumn('shipment_mode', function ($shipment) {
                 if ($shipment->shipment_mode == 2) {
                     return '<td>Express</td>';
@@ -249,7 +262,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
@@ -306,6 +319,19 @@ class ReportController extends Controller
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->first();
                 return '<td>#'.$shipment_package->sku_value.'</td>';
             })
+            ->addColumn('account_id', function ($shipment) {
+                if($shipment->sender_id == '0'){
+                    return '<td>Guest</td>';
+                }
+                else{
+                    $user = User::find($shipment->sender_id);
+                    return '<td>
+                    <p>' . $user->customer_id . '</p>
+                    <p>' . $user->first_name . ' ' . $user->last_name . '</p>
+                    <p>' . $user->mobile . '</p>
+                    </td>';
+                }
+            })
             
             ->addColumn('total_weight', function ($shipment) {
                 return '<td>
@@ -348,7 +374,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','postal_charge', 'shipment_price', 'total_weight','total','vat','insurance','cod_amount'])
+        ->rawColumns(['order_id','postal_charge', 'shipment_price', 'total_weight','total','vat','insurance','cod_amount','account_id'])
         ->addIndexColumn()
         ->make(true);
 
@@ -388,6 +414,19 @@ class ReportController extends Controller
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('account_id', function ($shipment) {
+                if($shipment->sender_id == '0'){
+                    return '<td>Guest</td>';
+                }
+                else{
+                    $user = User::find($shipment->sender_id);
+                    return '<td>
+                    <p>' . $user->customer_id . '</p>
+                    <p>' . $user->first_name . ' ' . $user->last_name . '</p>
+                    <p>' . $user->mobile . '</p>
+                    </td>';
+                }
             })
             ->addColumn('shipment_mode', function ($shipment) {
                 if ($shipment->shipment_mode == 2) {
@@ -530,7 +569,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);

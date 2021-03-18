@@ -33,6 +33,32 @@ class ApiController extends Controller
         date_default_timezone_get();
     }
 
+    private function send_sms($phone,$msg)
+    {
+        $requestParams = array(
+          'api_key' => 'C2003249604f3c09173d94.20000197',
+          'type' => 'text',
+          'contacts' => '+971'.$phone,
+          'senderid' => 'WellWellExp',
+          'msg' => $msg
+        );
+        
+        //merge API url and parameters
+        $apiUrl = 'https://www.elitbuzz-me.com/sms/smsapi?';
+        foreach($requestParams as $key => $val){
+            $apiUrl .= $key.'='.urlencode($val).'&';
+        }
+        $apiUrl = rtrim($apiUrl, "&");
+      
+        //API call
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      
+        curl_exec($ch);
+        curl_close($ch);
+    }
+
     public function sendNotificationAgent($msg,$agent_id){
         $agent = agent::find($agent_id);
         $curl = curl_init();
@@ -783,6 +809,20 @@ class ApiController extends Controller
                 $system_logs->to_id = $agent->email;
                 $system_logs->remark = 'Package Collected by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
                 $system_logs->save();
+
+                $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            
+                $msg= "Track ID : ".$shipment_package->sku_value." Package Collected";
+                $this->sendNotificationAgent($msg,$agent->id);
+                if($shipment->sender_id != 0){
+                $user_notification = User::find($shipment->sender_id);
+                $this->sendNotificationUser($msg,$user_notification->id);
+                }
+
+                // $from_address = manage_address::find($shipment->from_address);
+                // $sms_msg= "Hi ('.$from_address->contact_name.') your package has been collected from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). ";
+
+                // $this->send_sms($from_address->contact_mobile,$sms_msg);
                 
             }
             else{
@@ -802,14 +842,7 @@ class ApiController extends Controller
                 $system_logs->save();
             }
 
-            $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->first();
             
-            $msg= "Track ID : ".$shipment_package->sku_value." Package Collected";
-            $this->sendNotificationAgent($msg,$agent->id);
-            if($shipment->sender_id != 0){
-            $user_notification = User::find($shipment->sender_id);
-            $this->sendNotificationUser($msg,$user_notification->id);
-            }
             return response()->json(
                 ['message' => 'Update Successfully',
                 'shipment_id'=>$shipment->id,
@@ -977,7 +1010,6 @@ class ApiController extends Controller
             $this->sendNotificationUser($msg,$user_notification->id);
             }
 
-           // return response()->json($shipment);
             return response()->json(
                 ['message' => 'Update Successfully',
                 'shipment_id'=>$shipment->id,
@@ -1014,7 +1046,11 @@ class ApiController extends Controller
             $this->sendNotificationUser($msg,$user_notification->id);
             }
 
-           // return response()->json($shipment);
+            // $to_address = manage_address::find($shipment->to_address);
+            // $sms_msg= "Hi ('.$to_address->contact_name.') your package has been delivered from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). ";
+
+            // $this->send_sms($to_address->contact_mobile,$sms_msg);
+
             return response()->json(
                 ['message' => 'Update Successfully',
                 'shipment_id'=>$shipment->id,
@@ -1077,14 +1113,6 @@ class ApiController extends Controller
 
             $shipment->save();
 
-            // $all = shipment::find($request->shipment_id);
-            // if($all->sender_id != 0){
-            // $user = User::find($all->sender_id);
-            // }
-            // $package_category = package_category::all();
-            // $shipment_package = shipment_package::where('shipment_id',$request->shipment_id)->get();
-
-
             $shipment_package1 = shipment_package::where('shipment_id',$request->shipment_id)->first();
             $msg= "Track ID : ".$shipment_package1->sku_value." Delivered Successfully";
             $this->sendNotificationAgent($msg,$agent->id);
@@ -1092,9 +1120,13 @@ class ApiController extends Controller
             $user_notification = User::find($shipment->sender_id);
             $this->sendNotificationUser($msg,$user_notification->id);
             }
+
+            // $to_address = manage_address::find($shipment->to_address);
+            // $sms_msg= "Hi ('.$to_address->contact_name.') your package has been delivered from wellwell your tracking ID for this shipment is ('.$shipment_package1->sku_value.'). ";
+
+            // $this->send_sms($to_address->contact_mobile,$sms_msg);
             
 
-           // return response()->json($shipment);
             return response()->json(
                 ['message' => 'Update Successfully',
                 'shipment_id'=>$shipment->id,

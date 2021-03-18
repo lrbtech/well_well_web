@@ -42,22 +42,18 @@ class PageController extends Controller
         date_default_timezone_get();
     }
 
-    private function send_sms($phone,$msg)
+    public function send_sms($phone,$msg)
     {
       $requestParams = array(
-        //'Unicode' => '0',
-        //'route_id' => '2',
-        'datetime' => '2020-09-27',
-        'username' => 'isalonuae',
-        'password' => 'Ms5sbqBxif',
-        'senderid' => 'ISalon UAE',
+        'api_key' => 'C2003249604f3c09173d94.20000197',
         'type' => 'text',
-        'to' => '+971'.$phone,
-        'text' => $msg
+        'contacts' => '+971'.$phone,
+        'senderid' => 'WellWellExp',
+        'msg' => $msg
       );
       
       //merge API url and parameters
-      $apiUrl = 'https://smartsmsgateway.com/api/api_http.php?';
+      $apiUrl = 'https://www.elitbuzz-me.com/sms/smsapi?';
       foreach($requestParams as $key => $val){
           $apiUrl .= $key.'='.urlencode($val).'&';
       }
@@ -300,7 +296,7 @@ class PageController extends Controller
 
         Mail::send('mail.verify_mail',compact('all'),function($message) use($all){
             $message->to($all->email)->subject('Well Well Express - Confirm your email');
-            $message->from('info@lrbinfotech.com','Well Well Express');
+            $message->from('mail@wellwell.ae','Well Well Express');
         });
         
         return response()->json('Save Successfully'); 
@@ -320,7 +316,7 @@ class PageController extends Controller
         $all = User::find($id);
         Mail::send('mail.verify_mail',compact('all'),function($message) use($all){
             $message->to($all->email)->subject('Well Well Express - Confirm your email');
-            $message->from('info@lrbinfotech.com','Well Well Express');
+            $message->from('mail@wellwell.ae','Well Well Express');
         });
     }
 
@@ -568,8 +564,8 @@ class PageController extends Controller
         $to_msg= "Hi ('.$request->to_name.') your package has been scheduled for delivery from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). 
         Please visit our site www.wellwell.ae/track";
 
-        //$this->send_sms($request->from_mobile,$from_msg);
-        //$this->send_sms($request->to_mobile,$to_msg);
+        $this->send_sms($request->from_mobile,$from_msg);
+        $this->send_sms($request->to_mobile,$to_msg);
         
         ship_now_mobile_verify::where('mobile',$request->from_mobile)->delete();
         //return response()->json('successfully save'); 

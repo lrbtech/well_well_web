@@ -125,14 +125,14 @@
        
       
     </h3>
-    <h5>This information will let us know more about you.</h5>
+    <h5>ستتيح لنا هذه المعلومات معرفة المزيد عنك.</h5>
 </div>
 <div class="wizard-navigation" dir="rtl">
     <ul>
         <li><a href="#shipfrom" data-toggle="tab">الشحن من</a></li>
-        <li><a href="#shipto" data-toggle="tab">سافر على متن سفينة ل</a></li>
+        <li><a href="#shipto" data-toggle="tab">الشحن إلى </a></li>
         <li><a href="#shipdetail" data-toggle="tab">تفاصيل الشحنة</a></li>
-        <li><a href="#billing" data-toggle="tab">بيلينغز</a></li>
+        <li><a href="#billing" data-toggle="tab">الفاتورة</a></li>
 
     </ul>
 </div>
@@ -188,7 +188,7 @@
             <div class="col-sm-3">
                 <!-- <label class="control-label">Address Type</label> -->
                 <select name="from_address_type" id="from_address_type" class="form-control">
-                    <option disabled="" selected="">Choose Address Type</option>
+                    <option disabled="" selected="">إختار نوع العنوان </option>
                     <option value="1">Home</option>
                     <option value="2">Office</option>
                     <option value="3">Other</option>
@@ -352,7 +352,7 @@
                         <i class="fa fa-mobile fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">الاتصال بالهاتف المحمول (مطلوب)
+                        <label class="control-label">رقم الهاتف المحمول(مطلوب)
 </label>
                         <input autocomplete="off" name="to_mobile" id="to_mobile" type="text" class="form-control">
                     </div>
@@ -365,7 +365,7 @@
                         <i class="fa fa-phone fa-2x" aria-hidden="true"></i>
                     </span>
                     <div class="form-group label-floating">
-                        <label class="control-label">الاتصال بالهاتف الأرضي (اختياري)
+                        <label class="control-label">رقم االهاتف الأرضي (اختياري)
 </label>
                         <input name="to_landline" id="to_landline" type="text" class="form-control">
                     </div>
@@ -385,7 +385,7 @@
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>تبوك
+                    <label>العنوان
 </label>
                     <input autocomplete="off" id="to_address" name="to_address" class="form-control"></input>
                 </div>
@@ -437,10 +437,10 @@
             </div>
         </div> -->
         <div class="parent">
-            <h4><strong>تفاصيل الحزمة والشحن</strong></h4>
+            <h4><strong>تفاصيل الشحن</strong></h4>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label class="col-form-label">عدد الحزم</label>
+                    <label class="col-form-label">عدد الشحنات</label>
                     <input class="form-control" id="no_of_packages" name="no_of_packages" type="number" min="1">
                 </div>
 
@@ -477,7 +477,7 @@
 
                 <div class="form-group col-md-10">
                     <div class="col-md-12">
-                        <label class="col-form-label">الأبعاد & nbsp؛ & nbsp؛ [الطول & nbsp؛ x & nbsp؛ العرض & nbsp؛ x & nbsp؛ الارتفاع] (سم) = وزن البعد</label>
+                        <label class="col-form-label">الأبعاد & nbsp؛ & nbsp؛ [الطول & nbsp؛ x & nbsp؛ العرض & nbsp؛ x & nbsp؛ الارتفاع] (سم) = الوزن الإفتراضي</label>
                         <div class="input-group">
                             <span class="input-group-text">
                                 <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="length[]" id="length1" style="max-width: 100px;">
@@ -491,7 +491,7 @@
                                 <input type="number" min="1" class="form-control form-control-sm bootstrap-touchspin-vertical-btn" name="height[]" id="height1" style="max-width: 100px;">
                             </span>
                             <span class="input-group-text">
-                                <input style="max-width: 100px;" onclick="getPrice(1)" type="button" class="btn btn-fill btn-success btn-wd" value="احصل على وزن خافت" />
+                                <input style="max-width: 100px;" onclick="getPrice(1)" type="button" class="btn btn-fill btn-success btn-wd" value="احصل على الوزن الإفتراضي" />
                             </span>
                             <span class="input-group-text">=</span>
                             <span class="input-group-text">
@@ -502,7 +502,7 @@
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label class="col-form-label">الوزن المحمّل</label>
+                    <label class="col-form-label">الوزن الفعلي</label>
                     <input readonly="" class="form-control" id="chargeable_weight1" name="chargeable_weight[]" type="text">
                 </div>
             </div>
@@ -649,7 +649,7 @@
 
 <div class="wizard-footer">
     <div class="pull-right">
-        <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next' />
+        <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='Next' value='التالي' />
         <input id="save" onclick="Send()" type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='ينهي' />
     </div>
 

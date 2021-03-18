@@ -46,7 +46,8 @@
                             <th></th>
                             <th>Tracking ID</th>
                             <th>{{$language[59][Auth::user()->lang]}}</th>
-                            <th>{{$language[145][Auth::user()->lang]}}</th>
+                            <th>Reference No</th>
+                            <th>C.O.D Value</th>
                             <th>{{$language[32][Auth::user()->lang]}}</th>
                             <th>{{$language[24][Auth::user()->lang]}}</th>
                             <th>{{$language[28][Auth::user()->lang]}}</th>
@@ -127,7 +128,8 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'checkbox', name: 'checkbox' },
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
-        { data: 'shipment_type', name: 'shipment_type' },
+        { data: 'reference_no', name: 'reference_no' },
+        { data: 'cod_value', name: 'cod_value' },
         { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },
         { data: 'to_address', name: 'to_address' },

@@ -374,6 +374,16 @@ class ShipmentController extends Controller
                     return '<td></td>';
                 }
             })
+            ->addColumn('reference_no', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->reference_no . '</p>
+                </td>';
+            })
+            ->addColumn('cod_value', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->special_cod . '</p>
+                </td>';
+            })
             ->addColumn('status', function ($shipment) {
                 $to_station = station::find($shipment->to_station_id);
                 $from_station = station::find($shipment->from_station_id);
@@ -432,6 +442,7 @@ class ShipmentController extends Controller
                 return $output;
 
             })
+            
             ->addColumn('action', function ($shipment) {
                 $output='';
                 if($shipment->status == 8){
@@ -458,7 +469,7 @@ class ShipmentController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_type', 'shipment_mode','action','status','checkbox'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_type', 'shipment_mode','action','status','checkbox','reference_no','cod_value'])
         ->addIndexColumn()
         ->make(true);
 
