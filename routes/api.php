@@ -154,6 +154,8 @@ Route::post('/ext/order/create-order', [App\Http\Controllers\OrderApiController:
 
     Route::get('/excel-shipment-report/{status}/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'excelShipmentReport']);
     Route::get('/excel-revenue-report/{date1}/{date2}/{user_id}', [App\Http\Controllers\UserApiController::class, 'excelRevenueReport']);
+
+    Route::get('/shipment-send-sms/{id}', [App\Http\Controllers\UserApiController::class, 'ShipmentSendSMS']);
     
 // }
 

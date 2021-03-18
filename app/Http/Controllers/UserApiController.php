@@ -1805,4 +1805,24 @@ class UserApiController extends Controller
         return Excel::download(new UserRevenueExport($fdate,$tdate,$user_id), 'revenuereport.xlsx');
     }
 
+    public function ShipmentSendSMS($id){
+        $shipment = shipment::find($id);
+        $shipment_package = shipment_package::where('shipment_id',$id)->first();
+        $from_address = manage_address::find($shipment->from_address);
+        $to_address = manage_address::find($shipment->to_address);
+
+        $from_msg= "Hi ('.$from_address->contact_name.') your package has been scheduled for delivery from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). 
+        Please visit our site www.wellwell.ae/track";
+
+        $to_msg= "Hi ('.$to_address->contact_name.') your package has been scheduled for delivery from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). 
+        Please visit our site www.wellwell.ae/track";
+
+        $this->send_sms($from_address->contact_mobile,$from_msg);
+        $this->send_sms($to_address->contact_mobile,$to_msg);
+
+        return response()->json(
+            ['message' => 'SMS Send Successfully'],
+             200);
+    }
+
 }
