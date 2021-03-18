@@ -747,9 +747,11 @@ class ShipmentController extends Controller
                 elseif($shipment->status == 1){
                     $agent = agent::find($shipment->pickup_agent_id);
                     if(!empty($agent)){
-                        return '<p>Schedule for Pickup</p>
+                        return '<td>
+                        <p>Schedule for Pickup</p>
                         <p>Agent ID :'.$agent->agent_id.'</p>
-                        <p>Name :' . $agent->name . '</p>';
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                     else{
                         return 'Schedule for Pickup';
@@ -758,9 +760,11 @@ class ShipmentController extends Controller
                 elseif($shipment->status == 2){
                     $agent = agent::find($shipment->package_collect_agent_id);
                     if(!empty($agent)){
-                        return '<p>Package Collected</p>
+                        return '<td>
+                        <p>Package Collected</p>
                         <p>Agent ID :'.$agent->agent_id.'</p>
-                        <p>Name :' . $agent->name . '</p>';
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                     else{
                         return 'Package Collected';
@@ -769,12 +773,13 @@ class ShipmentController extends Controller
                 elseif($shipment->status == 3){
                     $agent = agent::find($shipment->pickup_exception_id);
                     if(!empty($agent)){
-                        return '
+                        return '<td>
                         <p>Pickup Exception</p>
                         <p>' . $shipment->exception_category . '</p>
                         <p>' . $shipment->exception_remark . '</p>
                         <p>Agent ID :'.$agent->agent_id.'</p>
-                        <p>Name :' . $agent->name . '</p>';
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                     else{
                         return '<td>
@@ -787,25 +792,31 @@ class ShipmentController extends Controller
                 elseif($shipment->status == 4){
                     $agent = agent::find($shipment->transit_in_id);
                     if(!empty($agent)){
-                        return '<p>Transit In '.$from_station->station.'</p>
+                        return '<td>
+                        <p>Transit In '.$from_station->station.'</p>
                         <p>Agent ID :'.$agent->agent_id.'</p>
-                        <p>Name :' . $agent->name . '</p>';
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                 }
                 elseif($shipment->status == 6){
                     $agent = agent::find($shipment->transit_out_id);
                     if(!empty($agent)){
-                        return '<p>Transit Out '.$from_station->station.'</p>
+                        return '<td>
+                        <p>Transit Out '.$from_station->station.'</p>
                         <p>Agent ID :'.$agent->agent_id.'</p>
-                        <p>Name :' . $agent->name . '</p>';
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                 }
                 elseif($shipment->status == 13){
                     $agent = agent::find($shipment->package_at_station_id);
                     if(!empty($agent)){
-                        return '<p>Package At Station '.$from_station->station.'</p>
+                        return '<td>
+                        <p>Package At Station '.$from_station->station.'</p>
                         <p>Agent ID :'.$agent->agent_id.'</p>
-                        <p>Name :' . $agent->name . '</p>';
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                 }
                 elseif($shipment->status == 11){

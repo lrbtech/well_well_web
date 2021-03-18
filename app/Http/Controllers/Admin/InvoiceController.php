@@ -151,11 +151,11 @@ class InvoiceController extends Controller
                     $i->join('users', 'users.id', '=', 's.sender_id');
                     $i->where('users.user_type', $user_type);
                 }
-                $i->where('s.sender_id','!=',0);
+                $i->where('s.sender_id',$shipment->sender_id);
                 $i->where('s.status', 8);
                 $i->where('s.invoice_status', 0);
                 $all_shipment = $i->get();
-
+                
                 $order_id = '';
                 foreach ($all_shipment as $key => $value) {
                     $datas[] = $value->id;

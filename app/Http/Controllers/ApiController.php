@@ -823,7 +823,6 @@ class ApiController extends Controller
                 // $sms_msg= "Hi ('.$from_address->contact_name.') your package has been collected from wellwell your tracking ID for this shipment is ('.$shipment_package->sku_value.'). ";
 
                 // $this->send_sms($from_address->contact_mobile,$sms_msg);
-                
             }
             else{
                 $shipment->status = 3;
