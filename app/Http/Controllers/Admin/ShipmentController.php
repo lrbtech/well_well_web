@@ -676,6 +676,19 @@ class ShipmentController extends Controller
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
             })
+            ->addColumn('account_id', function ($shipment) {
+                if($shipment->sender_id == '0'){
+                    return '<td>Guest</td>';
+                }
+                else{
+                    $user = User::find($shipment->sender_id);
+                    return '<td>
+                    <p>' . $user->customer_id . '</p>
+                    <p>' . $user->first_name . ' ' . $user->last_name . '</p>
+                    <p>' . $user->mobile . '</p>
+                    </td>';
+                }
+            })
             ->addColumn('shipment_time', function ($shipment) {
                 return '<td>'.date('h:i a',strtotime($shipment->shipment_from_time)).' to '.$shipment->shipment_to_time.'</td>';
             })
@@ -944,7 +957,7 @@ class ShipmentController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','user_id'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','user_id','account_id'])
         ->addIndexColumn()
         ->make(true);
 

@@ -78,6 +78,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>Account ID</th>
                             <th>{{$language[326][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[78][Auth::guard('admin')->user()->lang]}}</th>
@@ -230,6 +231,7 @@ var orderPageTable = $('#datatable').DataTable({
     },
     "columns": [
         { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'account_id', name: 'account_id' },
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_time', name: 'shipment_time' },
