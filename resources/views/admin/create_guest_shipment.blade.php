@@ -9,41 +9,58 @@
 
 <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMTNFnPj4AizpevEiZcG77II6MptFemd4&sensor=false&libraries=places"></script> -->
 <style type="text/css">
-.input-controls {
-  margin-top: 10px;
-  border: 1px solid transparent;
-  border-radius: 2px 0 0 2px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  height: 32px;
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-#searchInput {
-  background-color: #fff;
-  font-family: Roboto;
-  font-size: 15px;
-  font-weight: 300;
-  margin-left: 12px;
-  padding: 0 11px 0 13px;
-  text-overflow: ellipsis;
-  width: 50%;
-}
-#searchInput:focus {
-  border-color: #4d90fe;
-}
-.hide{
-    visibility: hidden;
-}
-.hide{
-visibility: visible;
-}
+        .input-controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        #searchInput {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 50%;
+        }
+        
+        #searchInput:focus {
+            border-color: #4d90fe;
+        }
 
-</style> 
-<style>
-    .pac-container {
-        z-index: 10000 !important;
-    }
+        #searchInput1 {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 50%;
+        }
+        
+        #searchInput1:focus {
+            border-color: #4d90fe;
+        }
+        
+        .hide {
+            visibility: hidden;
+        }
+        
+        .hide {
+            visibility: visible;
+        }
+        .pac-container {
+            z-index: 1200 !important;
+        }
+
 </style>
 @endsection
 @section('section')
@@ -75,148 +92,162 @@ visibility: visible;
           <div class="container-fluid">
             <div class="row">
 
-            <div class="col-sm-12">
+              <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5>{{$language[19][Auth::guard('admin')->user()->lang]}} </h5>
-                  </div>
-                  <div class="card-body megaoptions-border-space-sm">
-                      <div class="row">
-
-                        <div class="col-md-12">
-                          <label>{{$language[20][Auth::guard('admin')->user()->lang]}}</label>
-                          <input class="form-control" id="user_search" name="user_search" type="text">
-                        </div>
-
-                        <div class="col-sm-12 show_from_address">
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <label class="col-form-label">{{$language[21][Auth::guard('admin')->user()->lang]}}</label>
-                                <input readonly class="form-control" id="first_name" name="first_name" type="text">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="col-form-label">{{$language[22][Auth::guard('admin')->user()->lang]}}</label>
-                                <input readonly class="form-control" id="last_name" name="last_name" type="text">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="col-form-label">{{$language[14][Auth::guard('admin')->user()->lang]}}</label>
-                                <input readonly class="form-control" id="mobile" name="mobile" type="text">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="col-form-label">{{$language[13][Auth::guard('admin')->user()->lang]}}</label>
-                                <input readonly class="form-control" id="email" name="email" type="text">
-                            </div>
-                        </div>
-                        </div>
-
-                      </div>
-                  </div>
-            
-                </div>
-              </div>
-
-              <div class="col-sm-6">
-                <div class="card">
-                  <div class="card-header">
-                    <h5>Pickup Address <button id="add_from_address" class="btn btn-primary m-r-15" type="button">Create Pickup Address</button></h5>
+                    <h5>Pickup Address</h5>
                     <span>{{$language[26][Auth::user()->lang]}}</span>
                   </div>
                   <div class="card-body megaoptions-border-space-sm">
                       <div class="row">
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Country</label>
+                              <select name="from_country_id" id="from_country_id" class="form-control">
+                                <option disabled="" selected="">Choose Country</option>
+                                @foreach($country as $row)
+                                <option value="{{$row->id}}"> {{$row->country_name_english}} </option>
+                                @endforeach
+                            </select>
+                          </div>
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">City</label>
+                              <select name="from_city_id" id="from_city_id" class="form-control" aria-required="true" onChange="applyMyLocation(this);">
+                                <option disabled="" selected="">Choose City</option>
+                                @foreach($city as $row)
+                                <option value="{{$row->id}}"> {{$row->city}} </option>
+                                @endforeach
+                            </select>
+                          </div>
 
-                        <div class="col-md-12">
-                          <label>Search Pickup Address</label>
-                          <!-- <input class="form-control" id="search_from_address" name="search_from_address" type="text"> -->
-                          <select id="search_from_address" name="search_from_address" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                            <option value="">SELECT</option>
-                          </select>
-                        </div>
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Area</label>
+                              <select name="from_area_id" id="from_area_id" class="form-control" aria-required="true" onChange="applyMyLocationCity(this);">
+                                  <option disabled="" selected="">Choose City</option>
+                                  @foreach($area as $row)
+                                  <option value="{{$row->id}}"> {{$row->city}} </option>
+                                  @endforeach
+                              </select>
+                          </div>
 
-                        <div class="col-sm-12 show_from_address">
-                            <input id="from_address" type="hidden" name="from_address">
-                        </div>
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Name</label>
+                              <input autocomplete="off" name="from_name" id="from_name" type="text" class="form-control">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Mobile</label>
+                              <input autocomplete="off" name="from_mobile" id="from_mobile" class="form-control" type="text">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Landline</label>
+                              <input name="from_landline" id="from_landline" type="text" class="form-control">
+                          </div>
+
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label>Enter a location</label>
+                                  <input id="searchInput" name="searchInput" class="input-controls form-control" type="text" placeholder="Enter a location">
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="map" id="map" style="width: 100%; height: 300px;"></div>
+                          </div>
+
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label>Address</label>
+                                  <input autocomplete="false" id="from_address" name="from_address" class="form-control"></input>
+                                  <input readonly type="hidden" id="from_latitude" name="from_latitude" class="form-control">
+                                  <input readonly type="hidden" id="from_longitude" name="from_longitude" class="form-control">
+                              </div>
+                          </div>
 
                       </div>
                   </div>
             
-                </div>
-              </div>
-
-              <div class="col-sm-6">
-                <div class="card">
-                  <div class="card-header">
-                    <h5>{{$language[28][Auth::guard('admin')->user()->lang]}} <button id="add_to_address" class="btn btn-primary m-r-15" type="button">{{$language[29][Auth::guard('admin')->user()->lang]}}</button></h5
-                    ><span>{{$language[30][Auth::guard('admin')->user()->lang]}}</span>
-                  </div>
-                  <div class="card-body megaoptions-border-space-sm">
-                    <div class="row">
-                        <div class="col-md-12">
-                          <label>{{$language[31][Auth::guard('admin')->user()->lang]}}</label>
-                          <!-- <input autocomplete="off" class="form-control" id="search_to_address" name="search_to_address" type="text"> -->
-                          <select id="search_to_address" name="search_to_address" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                            <option value="">SELECT</option>
-                          </select>
-                        </div>
-                        <br>
-                        <div class="col-sm-12 show_to_address">
-                        <input id="to_address" type="hidden" name="to_address">
-                          
-                        </div>
-
-                      </div>
-                  </div>
-              
                 </div>
               </div>
 
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5>{{$language[32][Auth::guard('admin')->user()->lang]}}</h5>
-                    <!-- <span>Shipment Type </span> -->
+                    <h5>{{$language[28][Auth::guard('admin')->user()->lang]}}</h5
+                    ><span>{{$language[30][Auth::guard('admin')->user()->lang]}}</span>
                   </div>
-                    <div class="card-body megaoptions-border-space-sm">
+                  <div class="card-body megaoptions-border-space-sm">
+                    
                       <div class="row">
-                        
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="media p-20">
-                              <div class="radio radio-secondary mr-3">
-                                <input checked id="shipment_mode2" type="radio" name="shipment_mode" value="1">
-                                <label for="shipment_mode2"></label>
-                              </div>
-                              <div class="media-body">
-                                <h6 class="mt-0 mega-title-badge">{{$language[34][Auth::guard('admin')->user()->lang]}}
-                                  <!-- <span class="badge badge-secondary pull-right digits">0 AED</span> -->
-                                </h6>
-                                <p>{{$language[33][Auth::guard('admin')->user()->lang]}}</p>
-                              </div>
-                            </div>
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Country</label>
+                              <select name="to_country_id" id="to_country_id" class="form-control">
+                                <option disabled="" selected="">Choose Country</option>
+                                @foreach($country as $row)
+                                <option value="{{$row->id}}"> {{$row->country_name_english}} </option>
+                                @endforeach
+                            </select>
                           </div>
-                        </div>
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">City</label>
+                              <select name="to_city_id" id="to_city_id" class="form-control" aria-required="true" onChange="applyMyLocation1(this);">
+                                <option disabled="" selected="">Choose City</option>
+                                @foreach($city as $row)
+                                <option value="{{$row->id}}"> {{$row->city}} </option>
+                                @endforeach
+                            </select>
+                          </div>
 
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="media p-20">
-                              <div class="radio radio-secondary mr-3">
-                                <input id="shipment_mode1" type="radio" name="shipment_mode" value="2">
-                                <label for="shipment_mode1"></label>
-                              </div>
-                              <div class="media-body">
-                                <h6 class="mt-0 mega-title-badge">{{$language[35][Auth::guard('admin')->user()->lang]}}
-                                  <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
-                                </h6>
-                                <p>{{$language[36][Auth::guard('admin')->user()->lang]}}</p>
-                              </div>
-                            </div>
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Area</label>
+                              <select name="to_area_id" id="to_area_id" class="form-control" aria-required="true" onChange="applyMyLocationCity1(this);">
+                                  <option disabled="" selected="">Choose City</option>
+                                  @foreach($area as $row)
+                                  <option value="{{$row->id}}"> {{$row->city}} </option>
+                                  @endforeach
+                              </select>
                           </div>
-                        </div>
+
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Name</label>
+                              <input autocomplete="off" name="to_name" id="to_name" type="text" class="form-control">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Mobile</label>
+                              <input autocomplete="off" name="to_mobile" id="to_mobile" class="form-control" type="text">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                              <label class="col-form-label">Landline</label>
+                              <input name="to_landline" id="to_landline" type="text" class="form-control">
+                          </div>
+
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label>Enter a location</label>
+                                  <input id="searchInput1" name="searchInput1" class="input-controls form-control" type="text" placeholder="Enter a location">
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="map" id="map1" style="width: 100%; height: 300px;"></div>
+                          </div>
+
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label>Address</label>
+                                  <input autocomplete="false" id="to_address" name="to_address" class="form-control"></input>
+                                  <input readonly type="hidden" id="to_latitude" name="to_latitude" class="form-control">
+                                  <input readonly type="hidden" id="to_longitude" name="to_longitude" class="form-control">
+                              </div>
+                          </div>
 
                       </div>
-                      
-                    </div>
+
+                  </div>
+              
                 </div>
               </div>
+
 
               {{-- Shipment details start --}}
                 <div class="row">
@@ -366,11 +397,11 @@ visibility: visible;
                         </div>
                 </div>
 
-<div class="col-sm-12 col-xl-12 xl-100">
+<!-- <div class="col-sm-12 col-xl-12 xl-100">
     <div class="card">
-      <!-- <div class="card-header">
+       <div class="card-header">
         <h5>{{$language[49][Auth::guard('admin')->user()->lang]}}</h5>
-      </div> -->
+      </div>
       <div class="card-body">
 
           <div class="form-group row">
@@ -392,7 +423,7 @@ visibility: visible;
       </div>
 
     </div>
-</div>
+</div> -->
               
 
               <div class="col-sm-12">
@@ -503,7 +534,8 @@ visibility: visible;
                               <input class="form-control" name="insurance_amount" id="insurance_amount" type="text">
                             </div>
                           </div>
-                          <div class="form-group row">
+                          
+                          <!-- <div class="form-group row">
                             <label class="col-sm-6 col-form-label">{{$language[53][Auth::guard('admin')->user()->lang]}} </label>
                             <div class="col-sm-6">
                               <input name="cod_enable" id="cod_enable" type="hidden">
@@ -511,7 +543,7 @@ visibility: visible;
                               <input name="before_total" id="before_total" type="hidden">
                               <input class="form-control" name="cod_amount" id="cod_amount" type="text">
                             </div>
-                          </div>
+                          </div> -->
 
                           <div class="form-group row">
                             <label class="col-sm-6 col-form-label">{{$language[67][Auth::guard('admin')->user()->lang]}} </label>
@@ -556,7 +588,7 @@ visibility: visible;
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-footer text-right">
-                    <button onclick="SaveShipment()" class="btn btn-primary m-r-15" type="button">{{$language[71][Auth::guard('admin')->user()->lang]}}</button>
+                    <button id="saveshipment" onclick="SaveShipment()" class="btn btn-primary m-r-15" type="button">{{$language[71][Auth::guard('admin')->user()->lang]}}</button>
                     <button class="btn btn-light" type="button">{{$language[72][Auth::guard('admin')->user()->lang]}}</button>
                   </div>
                 </div>
@@ -588,83 +620,260 @@ visibility: visible;
 <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
 
 <script>
+
+    var from_lat='24.453884';
+    var from_lng='54.3773438';
+    var to_lat='24.453884';
+    var to_lng='54.3773438';
+
+var select_location='';
+$("#from_city_id").change(function(){
+  var id = $('#from_city_id').val();
+//   console.log(id);
+  $.ajax({
+    url : '/get-area/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#from_area_id').html(data);
+        get_from_latlng(id);
+    }
+  });
+});
+
 function applyMyLocation(sel){
     select_location='';
-    var id = $('#city_id').val();
-    $('#searchInput').val($( "#city_id option:selected" ).text()); 
-    $('#searchInput').focus(); 
-    select_location = $( "#city_id option:selected" ).text();
+    var id = $('#from_city_id').val();
+    // console.log($( "#from_city_id option:selected" ).text());
+  $('#searchInput').val($( "#from_city_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
+$('#searchInput').focus(); 
+select_location = $( "#from_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
+    
+// }
 }
 function applyMyLocationCity(sel){
+//     var id = $('#from_city_id').val();
+//     // console.log($( "#from_city_id option:selected" ).text());
+//   $('#searchInput').val($( "#from_area_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
 if(select_location !=''){
-    $('#searchInput').val( select_location+' '+$( "#area_id option:selected" ).text()); 
+      $('#searchInput').val( select_location+' '+$( "#from_area_id option:selected" ).text()); 
+// select_location = select_location+' '+$( "#from_area_id option:selected" ).text();
     $('#searchInput').focus(); 
 }
-select_location = $( "#city_id option:selected" ).text();
-}
-/* script */
-function initialize() {
-   var latlng = new google.maps.LatLng(24.453884,54.3773438);
-    var map = new google.maps.Map(document.getElementById('map'), {
-      center: latlng,
-      zoom: 13
-    });
-    var marker = new google.maps.Marker({
-      map: map,
-      position: latlng,
-      draggable: true,
-      anchorPoint: new google.maps.Point(0, -29)
-   });
-    var input = document.getElementById('searchInput');
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    var geocoder = new google.maps.Geocoder();
-    var autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.bindTo('bounds', map);
-    var infowindow = new google.maps.InfoWindow();   
-    autocomplete.addListener('place_changed', function() {
-        infowindow.close();
-        marker.setVisible(false);
-        var place = autocomplete.getPlace();
-        if (!place.geometry) {
-            window.alert("Autocomplete's returned place contains no geometry");
-            return;
-        }
-  
-        // If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-        } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(17);
-        }
-       
-        marker.setPosition(place.geometry.location);
-        marker.setVisible(true);          
+select_location = $( "#from_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
     
-        bindDataToForm(place.formatted_address,place.geometry.location.lat(),place.geometry.location.lng());
-        infowindow.setContent(place.formatted_address);
-        infowindow.open(map, marker);
-       
-    });
-    // this function will work on marker move event into map 
-    google.maps.event.addListener(marker, 'dragend', function() {
-        geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          if (results[0]) {        
-              bindDataToForm(results[0].formatted_address,marker.getPosition().lat(),marker.getPosition().lng());
-              infowindow.setContent(results[0].formatted_address);
-              infowindow.open(map, marker);
-          }
+// }
+}
+
+
+function applyMyLocation1(sel){
+    select_location='';
+    var id = $('#to_city_id').val();
+    // console.log($( "#from_city_id option:selected" ).text());
+  $('#searchInput1').val($( "#to_city_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
+$('#searchInput1').focus(); 
+select_location = $( "#to_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
+    
+// }
+}
+function applyMyLocationCity1(sel){
+//     var id = $('#from_city_id').val();
+//     // console.log($( "#from_city_id option:selected" ).text());
+//   $('#searchInput').val($( "#from_area_id option:selected" ).text()); 
+//   console.log($('#searchInput option:selected').text())
+if(select_location !=''){
+      $('#searchInput1').val( select_location+' '+$( "#to_area_id option:selected" ).text()); 
+// select_location = select_location+' '+$( "#from_area_id option:selected" ).text();
+    $('#searchInput1').focus(); 
+}
+select_location = $( "#to_city_id option:selected" ).text();
+// if(sel ="Abu Dhabi"){
+    
+// }
+}
+
+function get_from_latlng(id){
+    window.from_lat;
+    window.from_lng;
+    $.ajax({
+        url : '/get-city-data/'+id,
+        type: "GET",
+        success: function(data)
+        {
+            from_lat = data.lat;
+            from_lng = data.lng;
+            //google.maps.event.addDomListener(initialize);
+            //initialize();
         }
-        });
     });
 }
-function bindDataToForm(address,lat,lng){
-   document.getElementById('address1').value = address;
-   document.getElementById('latitude').value = lat;
-   document.getElementById('longitude').value = lng;
+
+$('#to_city_id').change(function(){
+  var id = $('#to_city_id').val();
+  $.ajax({
+    url : '/get-area/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#to_area_id').html(data);
+        get_to_latlng(id);
+    }
+  });
+});
+
+function get_to_latlng(id){
+    $.ajax({
+        url : '/get-city-data/'+id,
+        type: "GET",
+        success: function(data)
+        {
+           to_lat = data.lat;
+           to_lng = data.lng;
+        }
+    });
 }
-google.maps.event.addDomListener(window, 'load', initialize);
+
+    function initialize() {
+        var latlng = new google.maps.LatLng(from_lat, from_lng);
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: latlng,
+            zoom: 13
+        });
+        var marker = new google.maps.Marker({
+            map: map,
+            position: latlng,
+            draggable: true,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+        var input = document.getElementById('searchInput');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var geocoder = new google.maps.Geocoder();
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+
+            bindDataToForm(place.formatted_address, place.geometry.location.lat(), place.geometry.location.lng());
+            infowindow.setContent(place.formatted_address);
+            infowindow.open(map, marker);
+
+        });
+        // this function will work on marker move event into map 
+        google.maps.event.addListener(marker, 'dragend', function() {
+            geocoder.geocode({
+                'latLng': marker.getPosition()
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        bindDataToForm(results[0].formatted_address, marker.getPosition().lat(), marker.getPosition().lng());
+                        infowindow.setContent(results[0].formatted_address);
+                        infowindow.open(map, marker);
+                    }
+                }
+            });
+        });
+    }
+
+    function initialize1() {
+        var latlng = new google.maps.LatLng(to_lat, to_lng);
+
+        var map = new google.maps.Map(document.getElementById('map1'), {
+            center: latlng,
+            zoom: 13
+        });
+        var marker = new google.maps.Marker({
+            map: map,
+            position: latlng,
+            draggable: true,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+        var input = document.getElementById('searchInput1');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var geocoder = new google.maps.Geocoder();
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+
+            bindDataToForm1(place.formatted_address, place.geometry.location.lat(), place.geometry.location.lng());
+            infowindow.setContent(place.formatted_address);
+            infowindow.open(map, marker);
+
+        });
+        // this function will work on marker move event into map 
+        google.maps.event.addListener(marker, 'dragend', function() {
+            geocoder.geocode({
+                'latLng': marker.getPosition()
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        bindDataToForm1(results[0].formatted_address, marker.getPosition().lat(), marker.getPosition().lng());
+                        infowindow.setContent(results[0].formatted_address);
+                        infowindow.open(map, marker);
+                    }
+                }
+            });
+        });
+    }
+
+    function bindDataToForm(address, lat, lng) {
+        console.log('address');
+        console.log(address);
+        document.getElementById('from_address').value = address;
+        document.getElementById('from_latitude').value = lat;
+        document.getElementById('from_longitude').value = lng;
+    }
+    function bindDataToForm1(address, lat, lng) {
+        document.getElementById('to_address').value = address;
+        document.getElementById('to_latitude').value = lat;
+        document.getElementById('to_longitude').value = lng;
+    }
+    
+    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', initialize1);
+
 </script>
 
 <script type="text/javascript">
@@ -697,20 +906,22 @@ $(document).ready(function() {
 
 
 function SaveShipment(){
+  $("#saveshipment").attr("disabled", true);
   var formData = new FormData($('#shipping_form')[0]);
   $.ajax({
-      url : '/admin/save-new-shipment',
+      url : '/save-new-shipment',
       type: "POST",
       data: formData,
       contentType: false,
       processData: false,
       dataType: "JSON",
       success: function(data)
-      {                
+      {      
           $("#shipping_form")[0].reset();
           $('#address_modal').modal('hide');
           
           toastr.success(data, 'Successfully Save');
+          $("#saveshipment").attr("disabled", false);
 
           var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
           var is_chrome = Boolean(mywindow.chrome);
@@ -733,23 +944,20 @@ function SaveShipment(){
       },error: function (data) {
           var errorData = data.responseJSON.errors;
           $.each(errorData, function(i, obj) {
-          toastr.error(obj[0]);
-        });
+            toastr.error(obj[0]);
+          });
+          $("#saveshipment").attr("disabled", false);
       }
   });
 }
 
 
 function getPrice(count){
-  var to_address = $("#to_address").val();
   var weight = $("#weight"+count).val();
   var length = $("#length"+count).val();
   var width = $("#width"+count).val();
   var height = $("#height"+count).val();
-  var shipment_mode = $("input[name='shipment_mode']:checked").val();
-  
-  //alert(to_address);
-  if(to_address != ''){
+    
     if(weight != ''){
       if(length > 0 && width > 0 && height > 0){
         
@@ -773,17 +981,11 @@ function getPrice(count){
       alert('Please Fill Weight');
       $("#weight"+count).focus();
     }
-  }else{
-    alert('Please Choose a To Address');
-    $("#search_to_address").focus();
-  }
+  
 }
 
 function getvalue() {
   var no_of_packages = Number($('#no_of_packages').val());
-  var to_address = $('#to_address').val();
-  var shipment_mode = $("input[name='shipment_mode']:checked").val();
-  var user_id = $('#user_id').val();
   var total_weight=0;
   
   var same_data = $('#same_data').val();
@@ -801,10 +1003,8 @@ else{
 $("#total_weight_label").html(total_weight);
 $("#total_weight").val(total_weight);
 
-var special_service = $("input[name='special_service']:checked").val();
-
   $.ajax({
-    url:"/admin/get-area-price/"+total_weight+"/"+to_address+"/"+shipment_mode+"/"+user_id+"/"+special_service,
+    url:"/get-area-price/"+total_weight,
     type: "GET",
     dataType: "JSON",
     success: function( data ) 
@@ -825,51 +1025,38 @@ function subAmount(total_price1,total_weight1) {
   var cod_amount = 0;
   var total = 0;
     
-  var shipment_price =  Number(total_price.toFixed(2));
-  $("#shipment_price").val(shipment_price);
+  $("#shipment_price").val(total_price);
   
-  var postal_charge_enable = Number($('#postal_charge_enable').val());
-  var postal_charge_percentage =Number($('#postal_charge_percentage').val());
-  var insurance_enable = Number($('#insurance_enable').val());
-  var insurance_percentage = Number($('#insurance_percentage').val());
-  var cod_enable = Number($('#cod_enable').val());
-  var cod_price = Number($('#cod_price').val());
-  var vat_enable = Number($('#vat_enable').val());
-  var vat_percentage = Number($('#vat_percentage').val());
-  var declared_value = Number($('#declared_value').val());
+    var postal_charge_percentage =Number($('#postal_charge_percentage').val());
+    var insurance_percentage = Number($('#insurance_percentage').val());
+    var vat_percentage = Number($('#vat_percentage').val());
+    var declared_value = Number($('#declared_value').val());
+    var cod_price = Number($('#cod_price').val());
 
+  if($("#special_cod_enable1").is(':checked')){
+      cod_amount = cod_price;
+      $("#cod_amount").val(cod_amount);
+  }
+  else{
+    $("#cod_amount").val('0');
+  }
 
-  if(insurance_enable == 1){
     insurance_amount = Number((insurance_percentage/100) * declared_value);
     insurance_amount =  Number(insurance_amount.toFixed(2));
     $("#insurance_amount").val(insurance_amount);
-  }
-
-//before_total = Number( + postal_charge);
-if($("#special_cod_enable1").is(':checked')){
-  if(cod_enable == 1){
-    cod_amount = cod_price;
-    $("#cod_amount").val(cod_amount);
-  }
-}
-else{
-  $("#cod_amount").val('0');
-}
 
 
-  sub_total = Number(total_price + insurance_amount + cod_amount);
-  sub_total =  Number(sub_total.toFixed(2));
+    sub_total = Number(insurance_amount + cod_amount + total_price);
+    sub_total =  Number(sub_total.toFixed(2));
 
-  $("#sub_total").val(sub_total);
+    $("#sub_total").val(sub_total);
 
-  if(vat_enable == 1){
     vat_amount = Number((vat_percentage/100) * sub_total);
     vat_amount =  Number(vat_amount.toFixed(2));
     $("#vat_amount").val(vat_amount);
-  }
 
+    
 
-  if(postal_charge_enable == 1){
     if(total_weight >= 30){
       postal_charge = 0;
       $("#postal_charge").val('0');
@@ -882,13 +1069,13 @@ else{
       }
       $("#postal_charge").val(postal_charge);
     }
-  }
 
-  total = Number(sub_total + vat_amount + postal_charge);
-  total =  Number(total.toFixed(2));
+    before_total = Number(sub_total + vat_amount + postal_charge);
 
-  $("#total").val(total);
+    total = Number(before_total);
+    total =  Number(total.toFixed(2));
 
+    $("#total").val(total);
 }
 
 

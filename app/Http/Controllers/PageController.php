@@ -414,6 +414,43 @@ class PageController extends Controller
 
     public function saveNewShipment(Request $request){
 
+        $this->validate($request, [
+            'from_name'=>'required',
+            'from_mobile'=>'required',
+            'from_city_id'=>'required',
+            'from_area_id'=>'required',
+            'from_address'=>'required',
+            'to_name'=>'required',
+            'to_mobile'=>'required',
+            'to_city_id'=>'required',
+            'to_area_id'=>'required',
+            'to_address'=>'required',
+            'shipment_date'=>'required',
+            'shipment_from_time'=>'required',
+            'no_of_packages'=> 'required',
+            'declared_value'=> 'required',
+            'category.*'=> 'required',
+            'description.*'=> 'required',
+            'reference_no.*'=> 'required',
+            'weight.*'=> 'required',
+            'length.*'=> 'required',
+            'width.*'=> 'required',
+            'height.*'=> 'required',
+            'chargeable_weight.*'=> 'required',
+            'total'=> 'required',
+          ],[
+            'from_address.required' => 'Choose From Address Field is Required',
+            'to_address.required' => 'Choose To Address Field is Required',
+            'from_name.required' => 'Pickup Name Field is Required',
+            'from_mobile.required' => 'Pickup Mobile Field is Required',
+            'from_city_id.required' => 'Pickup City Field is Required',
+            'from_area_id.required' => 'Pickup Area Field is Required',
+            'to_name.required' => 'Delivery Name Field is Required',
+            'to_mobile.required' => 'Delivery Mobile Field is Required',
+            'to_city_id.required' => 'Delivery City Field is Required',
+            'to_area_id.required' => 'Delivery Area Field is Required',
+        ]);
+
         $config = [
             'table' => 'shipments',
             'field' => 'order_id',

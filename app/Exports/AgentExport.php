@@ -235,75 +235,123 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
         'Total Weight ' .$shipment->total_weight . ' Kg';
 
         $pickup_assigned='';
+        $pickup_assigned_date=date('d-m-Y',strtotime($shipment->pickup_assign_date)) .' '. date('h:i a',strtotime($shipment->pickup_assign_time));
+
         if($shipment->pickup_agent_id != ''){
             $agent = agent::find($shipment->pickup_agent_id);
+            if(!empty($agent)){
             $pickup_assigned=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $pickup_exception='';
+        $pickup_exception_date=date('d-m-Y',strtotime($shipment->exception_assign_date)) .' '. date('h:i a',strtotime($shipment->exception_assign_time));
+
         if($shipment->pickup_exception_id != ''){
             $agent = agent::find($shipment->pickup_exception_id);
+            if(!empty($agent)){
             $pickup_exception=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $package_collect='';
+        $package_collect_date=date('d-m-Y',strtotime($shipment->package_collect_date)) .' '. date('h:i a',strtotime($shipment->package_collect_time));
+
         if($shipment->package_collect_agent_id != ''){
             $agent = agent::find($shipment->package_collect_agent_id);
+            if(!empty($agent)){
             $package_collect=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $from_transit_in='';
+        $from_transit_in_date=date('d-m-Y',strtotime($shipment->transit_in_date)) .' '. date('h:i a',strtotime($shipment->transit_in_time));
+
         if($shipment->transit_in_id != ''){
             $agent = agent::find($shipment->transit_in_id);
+            if(!empty($agent)){
             $from_transit_in=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $to_transit_in='';
+        $to_transit_in_date=date('d-m-Y',strtotime($shipment->transit_in_date)) .' '. date('h:i a',strtotime($shipment->transit_in_time));
+
         if($shipment->transit_in_id1 != ''){
             $agent = agent::find($shipment->transit_in_id1);
+            if(!empty($agent)){
             $to_transit_in=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $from_transit_out='';
+        $from_transit_out_date=date('d-m-Y',strtotime($shipment->transit_out_date)) .' '. date('h:i a',strtotime($shipment->transit_out_time));
+
         if($shipment->transit_out_id != ''){
             $agent = agent::find($shipment->transit_out_id);
+            if(!empty($agent)){
             $from_transit_out=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $to_transit_out='';
+        $to_transit_out_date=date('d-m-Y',strtotime($shipment->transit_out_date)) .' '. date('h:i a',strtotime($shipment->transit_out_time));
+
         if($shipment->transit_out_id1 != ''){
             $agent = agent::find($shipment->transit_out_id1);
+            if(!empty($agent)){
             $to_transit_out=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $from_package_at_station='';
+        $from_package_at_station_date=date('d-m-Y',strtotime($shipment->package_at_station_date)) .' '. date('h:i a',strtotime($shipment->package_at_station_time));
+
         if($shipment->package_at_station_id != ''){
             $agent = agent::find($shipment->package_at_station_id);
+            if(!empty($agent)){
             $from_package_at_station=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $to_package_at_station='';
+        $to_package_at_station_date=date('d-m-Y',strtotime($shipment->package_at_station_date)) .' '. date('h:i a',strtotime($shipment->package_at_station_time));
+
         if($shipment->package_at_station_id1 != ''){
             $agent = agent::find($shipment->package_at_station_id1);
+            if(!empty($agent)){
             $to_package_at_station=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $van_scan='';
+        $van_scan_date=date('d-m-Y',strtotime($shipment->van_scan_date)) .' '. date('h:i a',strtotime($shipment->van_scan_time));
+
         if($shipment->van_scan_id != ''){
             $agent = agent::find($shipment->van_scan_id);
+            if(!empty($agent)){
             $van_scan=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $delivery_exception='';
+        $delivery_exception_date=date('d-m-Y',strtotime($shipment->delivery_exception_assign_date)) .' '. date('h:i a',strtotime($shipment->delivery_exception_assign_time));
+
         if($shipment->delivery_exception_id != ''){
             $agent = agent::find($shipment->delivery_exception_id);
+            if(!empty($agent)){
             $delivery_exception=$agent->agent_id .' '. $agent->name;
+            }
         }
 
         $delivery='';
+        $delivery_date=date('d-m-Y',strtotime($shipment->delivery_date)) .' '. date('h:i a',strtotime($shipment->delivery_time));
+
         if($shipment->delivery_agent_id != ''){
             $agent = agent::find($shipment->delivery_agent_id);
+            if(!empty($agent)){
             $delivery=$agent->agent_id .' '. $agent->name;
+            }
         }
 
 
