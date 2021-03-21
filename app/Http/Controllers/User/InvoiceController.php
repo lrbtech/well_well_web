@@ -139,6 +139,7 @@ class InvoiceController extends Controller
                 'tracking_id'=>$shipment_package->sku_value,
                 'no_of_packages'=>$shipment->no_of_packages,
                 'total'=>$shipment->total,
+                'cancel_pay'=>$shipment->cancel_pay,
             );
             $invoice_item[]=$data1;
         }

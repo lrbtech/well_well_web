@@ -149,8 +149,8 @@ th {
                     <strong>Order ID :</strong> </p><span>{{$row->order_id}}</span> -->
                 </div>
                 <p class="m-0">
-                {{$user->first_name}} {{$user->last_name}}<br>
-                {{$user->mobile}}<br>
+                {{$row->from_name}}<br>
+                {{$row->from_mobile}}<br>
                 @foreach($area as $area1)
                 @if($area1->id == $row->from_area)
                 {{$area1->city}}

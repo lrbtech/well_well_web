@@ -143,13 +143,8 @@ th {
                 </div>
                 <p class="m-0">
                 <!-- {{$from_address->address1}} {{$from_address->address2}} {{$from_address->address3}} -->
-                @if($row->sender_id == 0)
                 {{$from_address->contact_name}}<br>
                 {{$from_address->contact_mobile}}<br>
-                @else 
-                {{$user->first_name}} {{$user->last_name}}<br>
-                {{$user->mobile}}<br>
-                @endif
                 @foreach($area as $area1)
                 @if($area1->id == $from_address->area_id)
                 {{$area1->city}}

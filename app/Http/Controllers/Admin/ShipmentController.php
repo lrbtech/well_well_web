@@ -576,6 +576,27 @@ class ShipmentController extends Controller
         return view('admin.shipment_delivery',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language'));
     }
 
+    public function SaveCancelRequest(Request $request){
+        $shipment = shipment::find($request->cancel_shipment_id);
+        $shipment->cancel_remark = $request->cancel_remark;
+        $shipment->cancel_request_date = date('Y-m-d');
+        $shipment->cancel_request_time = date('H:i:s');
+        if($shipment->status >= 2){
+            $shipment->cancel_pay = 1;
+        }
+        $shipment->status = 10;
+        $shipment->save();
+
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::guard('admin')->user()->email;
+        $system_logs->remark = 'Cancel Shipment Created to '.Auth::guard('admin')->user()->email;
+        $system_logs->save();
+
+        return response()->json('successfully update'); 
+    }
+
     public function updateShipmentDelivery(Request $request){
         $this->validate($request, [
             'receiver_id_copy' => 'mimes:jpeg,jpg,png|max:1000', // max 1000kb
@@ -951,6 +972,7 @@ class ShipmentController extends Controller
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        <a onclick="CancelRequest('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>
                         '.$output1.'
                         '.$output.'
                     </div>
@@ -1129,7 +1151,7 @@ class ShipmentController extends Controller
         ->join('stations as st', 'st.id', '=', 's.to_station_id')
         ->join('manage_addresses as fa', 'fa.id', '=', 's.from_address')
         ->join('manage_addresses as ta', 'ta.id', '=', 's.to_address')
-        ->select('s.*','sp.shipment_id','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station','fa.city_id as from_city','fa.area_id as from_area','ta.city_id','ta.area_id','ta.address1','ta.address2','ta.address3','ta.contact_name','ta.contact_mobile','ta.contact_landline')
+        ->select('s.*','sp.shipment_id','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station','fa.contact_name as from_name','fa.contact_mobile as from_mobile','fa.city_id as from_city','fa.area_id as from_area','ta.city_id','ta.area_id','ta.address1','ta.address2','ta.address3','ta.contact_name','ta.contact_mobile','ta.contact_landline')
         //->groupBy("users.id")
         ->get();
 

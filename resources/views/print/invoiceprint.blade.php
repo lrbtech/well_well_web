@@ -82,7 +82,11 @@
                         {{$key+1}}
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">
-                        Tracking ID : {{$row['tracking_id']}} Delivery Charge
+                        @if($row['cancel_pay'] == 0)
+                        <p>Tracking ID : {{$row['tracking_id']}} Delivery Charge</p>
+                        @else 
+                        <p style="color:red;">Tracking ID : {{$row['tracking_id']}} Delivery Charge</p>
+                        @endif
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">

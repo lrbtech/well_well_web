@@ -63,8 +63,8 @@
                       <td width="30%" valign="top" style="color:#000; padding: 20px 10px; background: #dde9ef; border-right: 2px solid white;">
                         <p style="font-size: 14px">Ship Date:</p>
                         <h3 style="font-size: 14px">{{$shipment->shipment_date}}</h3>
-                        <p style="font-size: 14px">Invoice Number:</p>
-                        <h3 style="font-size: 13px;word-wrap:break-word;max-width: 170px"><span id="tmp_entity_number"><b> #{{$shipment->order_id}}</b></span></h3>
+                        <p style="font-size: 14px">Tracking Number:</p>
+                        <h3 style="font-size: 13px;word-wrap:break-word;max-width: 170px"><span id="tmp_entity_number"><b> #{{$shipment_package[0]->sku_value}}</b></span></h3>
                       </td>
                       
                     </tr>

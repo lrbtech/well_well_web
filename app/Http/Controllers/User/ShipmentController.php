@@ -650,7 +650,7 @@ class ShipmentController extends Controller
         ->join('stations as st', 'st.id', '=', 's.to_station_id')
         ->join('manage_addresses as fa', 'fa.id', '=', 's.from_address')
         ->join('manage_addresses as ta', 'ta.id', '=', 's.to_address')
-        ->select('s.*','sp.shipment_id','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station','fa.city_id as from_city','fa.area_id as from_area','ta.city_id','ta.area_id','ta.address1','ta.address2','ta.address3','ta.contact_name','ta.contact_mobile','ta.contact_landline')
+        ->select('s.*','sp.shipment_id','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station','fa.contact_name as from_name','fa.contact_mobile as from_mobile','fa.city_id as from_city','fa.area_id as from_area','ta.city_id','ta.area_id','ta.address1','ta.address2','ta.address3','ta.contact_name','ta.contact_mobile','ta.contact_landline')
         //->groupBy("users.id")
         ->get();
 

@@ -249,6 +249,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/print-label/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'printLabel']);
     Route::get('/print-invoice/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'printInvoice']);
 
+    Route::POST('/save-cancel-request', [App\Http\Controllers\Admin\ShipmentController::class, 'SaveCancelRequest']);
+
 
     Route::get('/get-area-price/{weight}/{to_address}/{shipment_mode}/{user_id}/{special_service}', [App\Http\Controllers\Admin\ShipmentController::class, 'getAreaPrice']);
 

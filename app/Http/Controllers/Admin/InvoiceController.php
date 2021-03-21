@@ -79,6 +79,7 @@ class InvoiceController extends Controller
         }
         $i->where('s.sender_id','!=',0);
         $i->where('s.status', 8);
+        $i->orWhere('s.cancel_pay', 1);
         $i->where('s.invoice_status', 0);
         $i->groupBy('s.sender_id');
         $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.total) as total") , DB::raw("s.sender_id") ]);
@@ -153,6 +154,7 @@ class InvoiceController extends Controller
                 }
                 $i->where('s.sender_id',$shipment->sender_id);
                 $i->where('s.status', 8);
+                $i->orWhere('s.cancel_pay', 1);
                 $i->where('s.invoice_status', 0);
                 $all_shipment = $i->get();
                 
@@ -438,6 +440,7 @@ class InvoiceController extends Controller
                 'tracking_id'=>$shipment_package->sku_value,
                 'no_of_packages'=>$shipment->no_of_packages,
                 'total'=>$shipment->total,
+                'cancel_pay'=>$shipment->cancel_pay,
             );
             $invoice_item[]=$data1;
         }
