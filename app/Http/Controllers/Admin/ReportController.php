@@ -142,8 +142,10 @@ class ReportController extends Controller
                 $user = User::find($shipment->sender_id);
                 if(!empty($from_area)){
                 return '<td>
+                <p><b>Mobile :' . $from_address->contact_mobile . '</b></p>
                 <p>' . $from_area->city . '</p>
                 <p>' . $from_city->city . '</p>
+                <p><b>Station :' . $from_station->station . '</b></p>
                 </td>';
                 }
                 else{
@@ -157,6 +159,7 @@ class ReportController extends Controller
                 $to_station = station::find($shipment->to_station_id);
                 if(!empty($to_area)){
                 return '<td>
+                <p><b>Mobile :' . $to_address->contact_mobile . '</b></p>
                 <p>' . $to_area->city . '</p>
                 <p>' . $to_city->city . '</p>
                 <p><b>Station :' . $to_station->station . '</b></p>
