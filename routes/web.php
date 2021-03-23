@@ -71,6 +71,7 @@ Route::get('/get-area/{id}', [App\Http\Controllers\PageController::class, 'getAr
 Route::get('/get-city-data/{id}', [App\Http\Controllers\PageController::class, 'getCityData']);
 
 Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
+Route::get('/pdfprint/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
 
 Route::get('/get-available-time/{date}', [App\Http\Controllers\PageController::class, 'getAvailableTime']);
 

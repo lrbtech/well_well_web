@@ -45,6 +45,8 @@ Route::post('/barcode-package', [App\Http\Controllers\ApiController::class, 'bar
 
 Route::post('/barcode-scan', [App\Http\Controllers\ApiController::class, 'barcodeScan']);
 Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
+Route::get('/pdfprint/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
+
 Route::get('/exception-category/{status}', [App\Http\Controllers\ApiController::class, 'exceptionCategory']);
 Route::get('/get-today-station', [App\Http\Controllers\ApiController::class, 'getTodayStation']);
 Route::get('/get-today-data/{id}', [App\Http\Controllers\ApiController::class, 'getTodayData']);
