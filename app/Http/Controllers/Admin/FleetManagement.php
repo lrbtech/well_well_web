@@ -190,6 +190,8 @@ class FleetManagement extends Controller
     //Remainder Management
     public function getRemainder(){
         $fleet_management = fleet_management::where('status',0)->get();
+        //$fleet_management = fleet_management::whereRaw('DAYOFYEAR(curdate()) <= DAYOFYEAR(dob) AND DAYOFYEAR(curdate()) + 7 >=  dayofyear(dob)')->orderByRaw('DAYOFYEAR(dob)')->get();
+
         $language = language::all();
         return view('admin.fleet_remainder',compact('fleet_management','language'));
     }

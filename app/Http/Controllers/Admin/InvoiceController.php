@@ -410,7 +410,7 @@ class InvoiceController extends Controller
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="#" onclick="newPayment('.$invoice->id.')">Add Payment</a> 
                         <a class="dropdown-item" href="#" onclick="viewPayment('.$invoice->id.')">View Payment</a>    
-                        <a target="_blank" class="dropdown-item" href="/admin/invoice-print/'.$invoice->id.'" >Print</a>
+                        <a onclick="PrintInvoice('.$invoice->id.')" class="dropdown-item" href="#" >Print</a>
                     </div>
                 </td>';
             })
@@ -447,9 +447,12 @@ class InvoiceController extends Controller
 
         //return view('print.invoiceprint',compact('invoice','invoice_item'));
         //return response()->json(count($invoice_item));
-        $pdf = PDF::loadView('print.invoiceprint',compact('invoice','invoice_item'));
-        $pdf->setPaper('A4');
-        return $pdf->stream('invoice.pdf');
+        // $pdf = PDF::loadView('print.invoiceprint',compact('invoice','invoice_item'));
+        // $pdf->setPaper('A4');
+        // return $pdf->stream('invoice.pdf');
+
+        $view = view('print.invoiceprint',compact('invoice','invoice_item'))->render();
+        return response()->json(['html'=>$view]);
     }
 
 
