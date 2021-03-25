@@ -31,6 +31,9 @@ use DB;
 use Mail;
 use PDF;
 use App\Http\Controllers\Admin\logController;
+use App\Imports\ShipmentImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class ShipmentController extends Controller
 {
@@ -39,6 +42,21 @@ class ShipmentController extends Controller
         $this->middleware('auth:admin');
         date_default_timezone_set("Asia/Dubai");
         date_default_timezone_get();
+    }
+
+    public function ShipmentExcel(){
+        $language = language::all();
+        return view('admin.shipment_excel',compact('language'));
+    }
+
+    function UploadShipmentExcel(Request $request)
+    {
+     $this->validate($request, [
+      'excel_file'  => 'required|mimes:xls,xlsx'
+     ]);
+
+     Excel::import(new ShipmentImport,request()->file('excel_file'));
+     return back()->with('success', 'Excel Data Imported successfully.');
     }
 
     public function newShipment(){

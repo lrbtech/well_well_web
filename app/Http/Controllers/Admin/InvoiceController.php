@@ -445,7 +445,8 @@ class InvoiceController extends Controller
             $invoice_item[]=$data1;
         }
 
-       // return response()->json($invoice_item);
+        //return view('print.invoiceprint',compact('invoice','invoice_item'));
+        //return response()->json(count($invoice_item));
         $pdf = PDF::loadView('print.invoiceprint',compact('invoice','invoice_item'));
         $pdf->setPaper('A4');
         return $pdf->stream('invoice.pdf');

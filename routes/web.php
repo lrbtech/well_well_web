@@ -234,6 +234,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
     Route::POST('/get-shipment/{status}/{date1}/{date2}', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
 
+    Route::get('/shipment-excel', [App\Http\Controllers\Admin\ShipmentController::class, 'ShipmentExcel']);
+    Route::POST('/upload-shipment-excel', [App\Http\Controllers\Admin\ShipmentController::class, 'UploadShipmentExcel']);
+
     Route::get('/new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'newShipment']);
     Route::get('/special-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'specialShipment']);
 

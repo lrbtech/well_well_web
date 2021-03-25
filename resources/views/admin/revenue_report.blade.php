@@ -10,7 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>{{$language[18][Auth::guard('admin')->user()->lang]}} <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
+                  <h2>Revenue <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
                   <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     

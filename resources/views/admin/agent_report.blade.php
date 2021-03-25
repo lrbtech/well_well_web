@@ -10,7 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>{{$language[18][Auth::guard('admin')->user()->lang]}} <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
+                  <h2>Agent <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
                   <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -44,7 +44,7 @@
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
                         <div class="form-group col-md-3">
-                            <label>{{$language[75][Auth::guard('admin')->user()->lang]}}</label>
+                            <label>Choose Driver</label>
                           <select id="agent_id" name="agent_id" class="form-control">
                             <option value="agent">{{$language[76][Auth::guard('admin')->user()->lang]}}</option>
                             @foreach($agent as $row)
@@ -75,6 +75,7 @@
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[115][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[116][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>Special C.O.D</th>
                             <th>{{$language[70][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
@@ -125,6 +126,7 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },
         { data: 'to_address', name: 'to_address' },
+        { data: 'special_cod', name: 'special_cod' },
         { data: 'total', name: 'total' },
         { data: 'status', name: 'status' },
         { data: 'action', name: 'action' },

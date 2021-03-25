@@ -330,6 +330,8 @@
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[18][Auth::guard('admin')->user()->lang]}}</li>
                   
+                  <li class="shipment-excel"><a class="shipment-excel" href="/admin/shipment-excel">Upload Excel</a></li>
+
                   @if($role_get->create_shipment == 'on')
                   <li class="new-shipment"><a class="new-shipment" href="/admin/new-shipment">{{$language[173][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
@@ -476,15 +478,18 @@
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[307][Auth::guard('admin')->user()->lang]}}</li>
                   @if($role_get->vehicle_create == 'on')
-                  <li class="agent"><a class="agent" href="/admin/get-fleet">{{$language[310][Auth::guard('admin')->user()->lang]}}</a></li> 
+                  <li class="get-fleet"><a class="get-fleet" href="/admin/get-fleet">{{$language[310][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
+
                   @if($role_get->vehicle_group == 'on')
-                  <li class="agent"><a class="agent" href="/admin/get-vehicle-group">{{$language[308][Auth::guard('admin')->user()->lang]}} </a></li> 
+                  <li class="get-vehicle-group"><a class="get-vehicle-group" href="/admin/get-vehicle-group">{{$language[308][Auth::guard('admin')->user()->lang]}} </a></li> 
                   @endif
+
                   @if($role_get->vehicle_type == 'on')
-                  <li class="agent"><a class="agent" href="/admin/get-vehicle-type">{{$language[309][Auth::guard('admin')->user()->lang]}} </a></li> 
+                  <li class="get-vehicle-type"><a class="get-vehicle-type" href="/admin/get-vehicle-type">{{$language[309][Auth::guard('admin')->user()->lang]}} </a></li> 
                   @endif
-                  {{-- <li class="agent"><a class="agent" href="/admin/get-remainder">Remainder </a></li>  --}}
+                  
+                  <!-- <li class="get-remainder"><a class="get-remainder" href="/admin/get-remainder">Remainder </a></li> -->
          
                 </ul>
               </li>

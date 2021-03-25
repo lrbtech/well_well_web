@@ -1778,15 +1778,17 @@ class UserApiController extends Controller
         $shipment->status = 10;
         $shipment->save();
 
+        $user = User::find($shipment->sender_id);
+
         $system_logs = new system_logs;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
-        $system_logs->to_id = Auth::user()->email;
+        $system_logs->to_id = $user->email;
         $system_logs->remark = 'Cancel Shipment Created by Customer';
         $system_logs->save();
 
         return response()->json(
-            ['message' => 'Shipment Hold Successfully'],
+            ['message' => 'Shipment Cancel Successfully'],
              200);
     }
 

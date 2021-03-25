@@ -174,6 +174,11 @@ class ReportController extends Controller
                 <p>AED ' . $shipment->total . '</p>
                 </td>';
             })
+            ->addColumn('special_cod', function ($shipment) {
+                return '<td>
+                <p>AED ' . $shipment->special_cod . '</p>
+                </td>';
+            })
             ->addColumn('status', function ($shipment) {
                 $to_station = station::find($shipment->to_station_id);
                 $from_station = station::find($shipment->from_station_id);
@@ -265,7 +270,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
@@ -481,6 +486,11 @@ class ReportController extends Controller
                 <p>AED ' . $shipment->total . '</p>
                 </td>';
             })
+            ->addColumn('special_cod', function ($shipment) {
+                return '<td>
+                <p>AED ' . $shipment->special_cod . '</p>
+                </td>';
+            })
             ->addColumn('status', function ($shipment) {
                 $to_station = station::find($shipment->to_station_id);
                 $from_station = station::find($shipment->from_station_id);
@@ -572,7 +582,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);

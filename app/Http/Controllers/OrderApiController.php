@@ -258,7 +258,7 @@ class OrderApiController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Save Successfully','status'=>200], 200);
+        return response()->json(['id' => $shipment->id , 'message' => 'Save Successfully','status'=>200], 200);
         }
     }
 
@@ -366,6 +366,164 @@ class OrderApiController extends Controller
         );
 
         return response()->json($data);
+    }
+
+
+
+    public function pendingShipment(Request $request){ 
+        $token = $request->header('APP_KEY');
+        $account_id = $request->header('Account_ID');
+        $user = User::where('customer_id',$account_id)->where('status',4)->first();
+        //WellWell@2021
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
+        }
+        elseif(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
+            $shipment = temp_shipment::where('sender_id',$user->id)->get();
+            $data =array();
+            $datas =array();
+            foreach ($shipment as $key => $value) {
+                $from_address = manage_address::find($value->from_address);
+                $from_city = city::find($from_address->city_id);
+                $from_area = city::find($from_address->area_id);
+                $to_address = manage_address::find($value->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $data = array(
+                    'id' => $value->id,
+                    'to_address' => $to_address->address1.' '.$to_address->address2 .' '.$to_address->address3,
+                    'to_city' => $to_city->city,
+                    'to_area' => $to_area->city,
+                    'to_name' => $to_address->contact_name,
+                    'to_mobile' => $to_address->contact_mobile,
+                    'reference' => $value->reference_no,
+                    'cod_value' => $value->special_cod,
+                );
+                
+                $datas[] = $data;
+            }   
+            return response()->json($datas);
+        }
+    }
+
+
+    public function deletePendingShipment(Request $request)
+    {
+        $token = $request->header('APP_KEY');
+        $account_id = $request->header('Account_ID');
+        $user = User::where('customer_id',$account_id)->where('status',4)->first();
+        //WellWell@2021
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
+        }
+        elseif(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
+            $temp_shipment_delete = temp_shipment::find($request->order_id);
+            $temp_shipment_delete->delete();
+            temp_shipment_package::where('temp_id', $request->order_id)->delete();
+            return response()->json(['message' => 'Delete Successfully'],200);
+        }
+    }
+
+    public function shipmentCancel(Request $request)
+    {
+        $token = $request->header('APP_KEY');
+        $account_id = $request->header('Account_ID');
+        $user = User::where('customer_id',$account_id)->where('status',4)->first();
+        //WellWell@2021
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
+        }
+        elseif(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
+            $shipment_package = shipment_package::where('sku_value',$request->sku_value)->first();
+
+            $shipment = shipment::find($shipment_package->shipment_id);
+            $shipment->cancel_remark = $request->cancel_remark;
+            $shipment->cancel_request_date = date('Y-m-d');
+            $shipment->cancel_request_time = date('H:i:s');
+            if($shipment->status >= 2){
+                $shipment->cancel_pay = 1;
+            }
+            $shipment->status = 10;
+            $shipment->save();
+
+            $system_logs = new system_logs;
+            $system_logs->_id = $shipment->id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $user->email;
+            $system_logs->remark = 'Cancel Shipment Created by Customer';
+            $system_logs->save();
+
+            return response()->json(['message' => 'Shipment Cancel Successfully'],200);
+        }
+    }
+
+    public function shipmentHold(Request $request)
+    {
+        $token = $request->header('APP_KEY');
+        $account_id = $request->header('Account_ID');
+        $user = User::where('customer_id',$account_id)->where('status',4)->first();
+        //WellWell@2021
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
+        }
+        elseif(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
+            $shipment_package = shipment_package::where('sku_value',$request->sku_value)->first();
+
+            $shipment = shipment::find($shipment_package->shipment_id);
+            $shipment->hold_status = 1;
+            $shipment->save();
+            
+            $system_logs = new system_logs;
+            $system_logs->_id = $shipment->id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $user->email;
+            $system_logs->remark = 'Active Hold Shipment by Customer';
+            $system_logs->save();
+
+            return response()->json(['message' => 'Shipment Hold Successfully'],200);
+        }
+    }
+
+    public function shipmentUnhold(Request $request)
+    {
+        $token = $request->header('APP_KEY');
+        $account_id = $request->header('Account_ID');
+        $user = User::where('customer_id',$account_id)->where('status',4)->first();
+        //WellWell@2021
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
+        }
+        elseif(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
+            $shipment_package = shipment_package::where('sku_value',$request->sku_value)->first();
+
+            $shipment = shipment::find($shipment_package->shipment_id);
+            $shipment->hold_status = 0;
+            $shipment->save();
+            
+            $system_logs = new system_logs;
+            $system_logs->_id = $shipment->id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $user->email;
+            $system_logs->remark = 'Cancel Hold Shipment by Customer';
+            $system_logs->save();
+
+            return response()->json(['message' => 'Shipment UnHold Successfully'],200);
+        }
     }
 
 

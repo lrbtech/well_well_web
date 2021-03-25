@@ -70,6 +70,13 @@ Route::post('/delivery-exception', [App\Http\Controllers\ApiController::class, '
 Route::post('/ext/order/get-area', [App\Http\Controllers\OrderApiController::class, 'getArea']);
 Route::post('/ext/order/create-order', [App\Http\Controllers\OrderApiController::class, 'createOrder']);
 
+Route::post('/ext/order/pending-shipment', [App\Http\Controllers\OrderApiController::class, 'pendingShipment']);
+Route::post('/ext/order/delete-pending-shipment', [App\Http\Controllers\OrderApiController::class, 'deletePendingShipment']);
+
+Route::post('/ext/order/shipment-cancel', [App\Http\Controllers\OrderApiController::class, 'shipmentCancel']);
+Route::post('/ext/order/shipment-hold', [App\Http\Controllers\OrderApiController::class, 'shipmentHold']);
+Route::post('/ext/order/shipment-unhold', [App\Http\Controllers\OrderApiController::class, 'shipmentUnhold']);
+
 
 // Route::group(['prefix' => 'user'],function(){
 // $token = $request->header('APP_KEY');

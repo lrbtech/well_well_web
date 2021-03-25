@@ -92,6 +92,7 @@
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[115][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[116][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>Special C.O.D</th>
                             <th>{{$language[70][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
@@ -142,6 +143,7 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },
         { data: 'to_address', name: 'to_address' },
+        { data: 'special_cod', name: 'special_cod' },
         { data: 'total', name: 'total' },
         { data: 'status', name: 'status' },
         { data: 'action', name: 'action' },
