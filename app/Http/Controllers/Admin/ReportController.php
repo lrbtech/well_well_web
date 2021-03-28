@@ -45,19 +45,30 @@ class ReportController extends Controller
     }
 
     public function ShipmentReport(){
-        $agent=agent::all();
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $agent = agent::where('status',0)->get();
+        }
+        else{
+            $q =DB::table('agents as a');
+            $q->join('cities as c','a.city_id','=','c.id');
+            $q->where('c.station_id', Auth::guard('admin')->user()->station_id);
+            $q->where('a.status',0);
+            $q->select('a.*');
+            $agent = $q->get();
+        }
         $language = language::all();
         return view('admin.shipment_report',compact('agent','language'));
     }
 
     public function AgentReport(){
         if(Auth::guard('admin')->user()->station_id == '0'){
-            $agent = agent::all();
+            $agent = agent::where('status',0)->get();
         }
         else{
             $q =DB::table('agents as a');
             $q->join('cities as c','a.city_id','=','c.id');
             $q->where('c.station_id', Auth::guard('admin')->user()->station_id);
+            $q->where('a.status',0);
             $q->select('a.*');
             $agent = $q->get();
         }
