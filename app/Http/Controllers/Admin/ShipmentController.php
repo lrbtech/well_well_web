@@ -684,6 +684,7 @@ class ShipmentController extends Controller
         }
         else{
             $i =DB::table('shipments');
+            $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
             if ( $status != 20 )
             {
                 if ( $status == 4 ){
@@ -702,8 +703,25 @@ class ShipmentController extends Controller
             {
                 $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
             }
-            $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
-            // $i->orWhere('shipments.to_station_id',Auth::guard('admin')->user()->station_id);
+            $i->orWhere('shipments.to_station_id',Auth::guard('admin')->user()->station_id);
+            if ( $status != 20 )
+            {
+                if ( $status == 4 ){
+                    $i->where('shipments.status', 4);
+                    $i->orWhere('shipments.status', 11);
+                }
+                elseif ( $status == 6 ){
+                    $i->where('shipments.status', 6);
+                    $i->orWhere('shipments.status', 12);
+                }
+                else{
+                    $i->where('shipments.status', $status);
+                }
+            }
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+            }
             $i->where('shipments.hold_status',0);
             $i->orderBy('shipments.id','DESC');
             $shipment = $i->get();
