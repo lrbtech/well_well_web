@@ -702,9 +702,14 @@ class ShipmentController extends Controller
             {
                 $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
             }
-            $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
-            $i->orWhere('shipments.to_station_id',Auth::guard('admin')->user()->station_id);
-            $i->where('shipments.hold_status',0);
+            $i->where([
+                ['shipments.from_station_id',Auth::guard('admin')->user()->station_id],
+                ['shipments.hold_status',0],
+            ]);
+            $i->orWhere([
+                ['shipments.to_station_id',Auth::guard('admin')->user()->station_id],
+                ['shipments.hold_status',0],
+            ]);
             $i->orderBy('shipments.id','DESC');
             $shipment = $i->get();
         }
