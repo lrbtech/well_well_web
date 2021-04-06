@@ -170,7 +170,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
-        Backup\BackupServiceProvider::class,
+        // Spatie\Backup\BackupServiceProvider::class,
         
         /*
          * Application Service Providers...
