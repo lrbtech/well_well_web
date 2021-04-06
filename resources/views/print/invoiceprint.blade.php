@@ -76,6 +76,7 @@
                     </tr>
                   </thead>
                   <tbody id="lineItem">
+                    <?php $total_package=0; ?>
                     @foreach($invoice_item as $key => $row)
                     <tr>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">
@@ -95,21 +96,27 @@
                         </td>
                         <td valign="top" style="border-bottom:1px solid #2d87ba; padding: 7px 40px 7px 0; font-size: 12px; text-align: right;">{{round($row['total'],2)}}</td>
                     </tr>
+                    <?php 
+                    $total_package = $total_package + $row['no_of_packages'];
+                    ?>
                     @endforeach
                   </tbody>
                   <tbody>
                     <tr>
-                      <td colspan="3" style="padding: 7px 5px 7px;margin-left:250px !important;"><b>Total</b> </td>
+                      <td colspan="2" style="padding: 7px 5px 7px 7px;text-align: right;"><b>Total : </b> </td>
+                      <td style="padding: 7px 5px 7px 7px;">{{$total_package}}</td>
                       <td style="padding: 7px 40px 7px 5px; text-align: right;" id="tmp_total"><b>AED {{round($invoice->total,2)}}</b></td>
                     </tr>
 
                     <tr>
-                      <td colspan="3" style="padding: 7px 5px 7px;margin-left:250px !important;"><b>Paid</b> </td>
+                      <td colspan="2" style="padding: 7px 5px 7px 7px;text-align: right;"><b>Paid : </b> </td>
+                      <td></td>
                       <td style="padding: 7px 40px 7px 5px; text-align: right;" id="tmp_total"><b>AED {{round($invoice->paid,2)}}</b></td>
                     </tr>
 
                     <tr>
-                      <td colspan="3" style="border-bottom:1px solid #EDEDED; border-bottom:1px solid #dde9ef;border-top:1px solid #dde9ef;padding: 10px 5px; color:#2d87ba; font-size: 13px;margin-left:250px !important;"><b>Balance</b></td>
+                      <td colspan="2" style="border-bottom:1px solid #EDEDED; border-bottom:1px solid #dde9ef;border-top:1px solid #dde9ef;padding: 7px 5px 7px 7px; color:#2d87ba; font-size: 13px;text-align: right;"><b>Balance : </b></td>
+                      <td style="border-bottom:1px solid #EDEDED; border-bottom:1px solid #dde9ef;border-top:1px solid #dde9ef;padding: 7px 5px 7px 7px; color:#2d87ba; font-size: 13px;text-align: right;"><b></b></td>
                       <td style="border-bottom:1px solid #2d87ba;border-top:1px solid #2d87ba;padding: 10px 40px 10px 0; text-align: right; color:#2d87ba; font-size: 13px"  id="tmp_balance_due"><b>AED {{round($invoice->total - $invoice->paid,2)}}</b></td>
                     </tr>
                   </tbody>

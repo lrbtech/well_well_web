@@ -290,11 +290,25 @@
             <li><a href="#" class="has-submenu" id="sm-1614352107947391-7" aria-haspopup="true" aria-controls="sm-1614352107947391-8" aria-expanded="false"> Report<span class="sub-arrow"></span></a>
               <ul id="sm-1614352107947391-8" role="group" aria-hidden="true" aria-labelledby="sm-1614352107947391-7" aria-expanded="false" class="sm-nowrap" style="width: auto; min-width: 10em; display: none; max-width: 20em; top: auto; left: 0px; margin-left: 0px; margin-top: 0px;">
                 <li><a href="/user/shipment-report">Shipment Report</a></li>
-                <li><a href="/user/revenue-report">Revenue Report</a></li>
+                <li><a href="/user/revenue-report">Payment Report</a></li>
                 <li><a href="/user/payments-in-report">Payments In Report</a></li>
                 <li><a href="/user/settlement-details">Settlement Deatils</a></li>
                 <li><a href="/user/invoice-history">Invoice History</a></li>
               </ul>
+            </li>
+
+            <li class="location-download">
+              <a class="sidebar-header location-download" href="/user/excel-location-download">
+              <i data-feather="settings"></i>
+              <span> Location Download</span>
+              </a>
+            </li>
+
+            <li class="location-download">
+              <a target="_blank" class="sidebar-header location-download" href="/pdfview/api_integration.pdf">
+              <i data-feather="settings"></i>
+              <span> Api Integration</span>
+              </a>
             </li>
 
           </ul>

@@ -29,6 +29,26 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
+                  <form action="/user/date-settlement-details" method="post" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="card-header">
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label>{{$language[117][Auth::user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>{{$language[118][Auth::user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="submit">{{$language[114][Auth::user()->lang]}}</button>
+                        </div>
+                    </div>
+                  </div>
+                  </form>
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="display" id="basic-1">
@@ -48,7 +68,9 @@
                             <td>{{$row->amount}} AED</td>
                             </td>
                             <td>
-                                <img style="width: 100px;height: 100px;" src="/upload_slip/{{$row->image}}">
+                              <img style="width: 100px;height: 100px;" src="/upload_slip/{{$row->image}}">
+                              <br>
+                              <a class="btn btn-shadow-primary" href="/upload_slip/{{$row->image}}" download>Download</a>
                             </td>
                         </tr>
                          @endforeach

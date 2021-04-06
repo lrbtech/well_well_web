@@ -33,8 +33,22 @@
                   <div class="card-header">
                     <div class="row">
                       <div class="form-group col-md-3">
-                          <button id="print" class="btn btn-primary btn-block mr-10" type="button">Print</button>
+                          <button id="print" class="btn btn-primary btn-block mr-10" type="button">Bulk Print</button>
                       </div>
+                      <div class="form-group col-md-3">
+                            <label>{{$language[117][Auth::user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label>{{$language[118][Auth::user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::user()->lang]}}
+                            </button>
+                        </div>
                     </div>
                   </div>
                   <div class="card-body">
@@ -118,7 +132,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/user/get-shipment",
+        "url": "/user/get-shipment/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -136,6 +150,28 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'status', name: 'status' },
         { data: 'action', name: 'action' },
     ]
+});
+
+
+$('#search').click(function(){
+    //alert('hi');
+    var from_date = $('#from_date').val();
+    var to_date = $('#to_date').val();
+    var fdate;
+    var tdate;
+    if(from_date!=""){
+      fdate = from_date;
+    }else{
+      fdate = '1';
+    }
+    if(to_date!=""){
+      tdate = to_date;
+    }else{
+      tdate = '1';
+    }
+    var new_url = '/user/get-shipment/'+fdate+'/'+tdate;
+    orderPageTable.ajax.url(new_url).load();
+    //orderPageTable.draw();
 });
 
 

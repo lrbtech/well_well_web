@@ -59,6 +59,8 @@ class CreateShipmentsTable extends Migration
             $table->string('status')->default('0'); 
             $table->string('invoice_status')->default('0'); 
             $table->string('hold_status')->default('0'); 
+            $table->string('paid_status')->default('0'); 
+            $table->string('paid_date')->nullable();
 
             $table->string('pickup_agent_id')->nullable();
             $table->string('pickup_assign_date')->nullable();

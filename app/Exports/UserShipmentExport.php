@@ -192,16 +192,8 @@ class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeading
             $shipment_details,
             $ship_from,
             $ship_to,
-            'AED '.$shipment->shipment_price,
-            'AED '.$shipment->insurance_amount,
-            'AED '.$shipment->cod_amount,
-            'AED '.$shipment->sub_total,
-            'AED '.$shipment->vat_amount,
-            'AED '.$shipment->postal_charge,
-            'AED '.$shipment->total,
-            'AED '.$shipment->special_cod,
-            'AED '.$shipment->collect_cod_amount,
-            $shipment->cod_type,
+            $shipment->total,
+            $shipment->special_cod,
         ];
     }
 
@@ -218,17 +210,8 @@ class UserShipmentExport implements FromCollection, ShouldAutoSize , WithHeading
             'Shipment Details',
             'Ship From',
             'Ship To',
-            'Total',
             'Shipment Price',
-            'Insurance',
-            'C.O.D',
-            'Sub Total',
-            'Vat',
-            'Postal Charge',
-            'Total',
             'Special C.O.D',
-            'Collected C.O.D',
-            'C.O.D Payment Type',
         ];
     }
 

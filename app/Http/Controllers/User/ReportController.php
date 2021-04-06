@@ -29,6 +29,7 @@ use Mail;
 use PDF;
 use App\Exports\UserShipmentExport;
 use App\Exports\UserRevenueExport;
+use App\Exports\LocationExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
@@ -136,10 +137,10 @@ class ReportController extends Controller
             })
             ->addColumn('status', function ($shipment) {
                 if($shipment->status == 0){
-                    return 'Ready for Pickup';
+                    return 'Scheduled for Pickup';
                 }
                 elseif($shipment->status == 1){
-                    return 'Schedule for Pickup';
+                    return 'Pickup Assigned';
                 }
                 elseif($shipment->status == 2){
                     return 'Package Collected';
@@ -323,55 +324,111 @@ class ReportController extends Controller
         return view('user.settlement_details',compact('language','user_settlement'));
     }
 
+    public function dateSettlementDetails(Request $request){
+        $language = language::all();
+        $fdate = date('Y-m-d', strtotime($request->from_date));
+        $tdate = date('Y-m-d', strtotime($request->to_date));
+
+        $user_settlement = user_settlement::where('user_id',Auth::user()->id)->whereBetween('date', [$fdate, $tdate])->get();
+        return view('user.settlement_details',compact('language','user_settlement'));
+    }
+
+
     public function getPaymentsInReport($fdate,$tdate){
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
-        
         $i =DB::table('shipments as s');
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
             $i->whereBetween('s.delivery_date', [$fdate1, $tdate1]);
         }
+
         $i->where('s.sender_id', Auth::user()->id);
         $i->where('s.special_cod_enable', 1);
         $i->where('s.status', 8);
-        $i->groupBy('s.sender_id');
-        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.cod_amount) as admin_fees") , DB::raw("s.sender_id") ]);
+        //$i->where('s.paid_status', 1);
         $shipment = $i->get();
 
         return Datatables::of($shipment)
-            ->addColumn('user_details', function ($shipment) {
-                $user = User::find($shipment->sender_id);
-                return '<td>
-                <p>Customer Id : '.$user->customer_id.'</p>
-                <p>Name : '.$user->first_name.' '.$user->last_name.'</p>
-                </td>';
-            })
+        ->addColumn('order_id', function ($shipment) {
+            $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+            return '<td>'.$shipment_package[0]->sku_value.'</td>';
+        })
+        ->addColumn('shipment_mode', function ($shipment) {
+            if ($shipment->shipment_mode == 2) {
+                return '<td>Express</td>';
+            } else {
+                return '<td>Standard</td>';
+            }
+        })
+        ->addColumn('paid_status', function ($shipment) {
+            if ($shipment->paid_status == 0) {
+                return '<td>Un Paid</td>';
+            } else {
+                return '<td>Paid</td>';
+            }
+        })
+        ->addColumn('shipment_date', function ($shipment) {
+            return '<td>
+            <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
+            </td>';
+        })
 
-            ->addColumn('no_of_shipments', function ($shipment) {
-                return '<td>
-                <p>'.$shipment->no_of_shipments.'</p>
-                </td>';
-            })
-
-            ->addColumn('total_value', function ($shipment) {
-                return '<td>
-                <p>AED ' . $shipment->special_cod . '</p>
-                </td>';
-            })
-
-            ->addColumn('settlement_value', function ($shipment) {
-                $user = User::find($shipment->sender_id);
-                return '<td>
-                <p>AED ' . $user->paid . '</p>
-                </td>';
-            })
-            
-            
-        ->rawColumns(['user_details','no_of_shipments', 'total_value','settlement_value'])
+        ->addColumn('from_address', function ($shipment) {
+            $from_address = manage_address::find($shipment->from_address);
+            $from_city = city::find($from_address->city_id);
+            $from_area = city::find($from_address->area_id);
+            $from_station = station::find($shipment->from_station_id);
+            $user = User::find($shipment->sender_id);
+            if(!empty($from_area)){
+            return '<td>
+            <p><b>Mobile :' . $from_address->contact_mobile . '</b></p>
+            <p>' . $from_area->city . '</p>
+            <p>' . $from_city->city . '</p>
+            <p><b>Station :' . $from_station->station . '</b></p>
+            </td>';
+            }
+            else{
+                return '<td></td>';
+            }
+        })
+        ->addColumn('to_address', function ($shipment) {
+            $to_address = manage_address::find($shipment->to_address);
+            $to_city = city::find($to_address->city_id);
+            $to_area = city::find($to_address->area_id);
+            $to_station = station::find($shipment->to_station_id);
+            if(!empty($to_area)){
+            return '<td>
+            <p><b>Mobile :' . $to_address->contact_mobile . '</b></p>
+            <p>' . $to_area->city . '</p>
+            <p>' . $to_city->city . '</p>
+            <p><b>Station :' . $to_station->station . '</b></p>
+            </td>';
+            }
+            else{
+                return '<td></td>';
+            }
+        })
+        ->addColumn('total', function ($shipment) {
+            return '<td>
+            <p>AED ' . $shipment->total . '</p>
+            </td>';
+        })
+        ->addColumn('special_cod', function ($shipment) {
+            return '<td>
+            <p>AED ' . $shipment->special_cod . '</p>
+            </td>';
+        })
+        
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','total','special_cod','paid_status'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+
+    public function excelLocationDownload(Request $request){        
+        return Excel::download(new LocationExport(), 'location.xlsx');
     }
 
 

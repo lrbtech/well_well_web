@@ -555,6 +555,8 @@
                   <li class="payments-out-report"><a class="payments-out-report" href="/admin/payments-out-report">{{$language[320][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
 
+                  <li class="view-user-settlement"><a class="view-user-settlement" href="/admin/view-user-settlement">User Settlement</a></li> 
+
                 </ul>
               </li>
               @endif
@@ -625,6 +627,8 @@
                   @if($role_get->roles == 'on')
                   <li class="role"><a class="role" href="/admin/role">{{$language[300][Auth::guard('admin')->user()->lang]}}</a></li>
                   @endif
+
+                  <li class="backup"><a class="backup" href="/admin/backup">DB Backup</a></li>
                 </ul>
               </li>
               @endif

@@ -30,6 +30,28 @@
           </div>
           <!-- Container-fluid starts-->
           <div class="container-fluid">
+
+            
+            <form action="/user/date-dashboard" method="post" enctype="multipart/form-data">
+            {{ csrf_field() }}
+              <div class="row">
+                <div class="form-group col-md-3">
+                    <label>{{$language[117][Auth::user()->lang]}}</label>
+                    <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>{{$language[118][Auth::user()->lang]}}</label>
+                    <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <button id="search" class="btn btn-primary btn-block mr-10" type="submit">{{$language[114][Auth::user()->lang]}}
+                    </button>
+                </div>
+              </div>
+            </form>
+
             <div class="row">
           <div class="col-lg-12">
                 <div class="row ecommerce-chart-card">
@@ -74,6 +96,22 @@
                       <div class="media-body"><span class="m-0">Current Month C.O.D</span>
                         {{-- <span>AED</span> --}}
                         <h5 class="mb-0">AED {{round($current_month_cod,2)}}</h5>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag icon-bg"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-sm-6 col-xl-3 col-lg-6 box-col-6">
+                <div class="card gradient-secondary o-hidden">
+                  <div class="b-r-4 card-body">
+                    <div class="media static-top-widget">
+                      <div class="align-self-center text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>
+                      <div class="media-body"><span class="m-0">Settlement Value</span>
+                        {{-- <span>AED</span> --}}
+                        <h5 class="mb-0">AED {{round($settlement_value,2)}}</h5>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag icon-bg"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                       </div>
                     </div>
@@ -138,31 +176,31 @@
                               <h6 class="mb-0">
                               <?php
                               if($row->status == 0){
-                                echo '<button class="btn btn-shadow-primary">Shipment Created</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Scheduled for Pickup</a>';
                               }
                               elseif($row->status == 1){
-                                echo '<button class="btn btn-shadow-primary">Schedule for Pickup</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Pickup Assigned</a>';
                               }
                               elseif($row->status == 2){
-                                echo '<button class="btn btn-shadow-primary">Package Collected</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Package Collected</a>';
                               }
                               elseif($row->status == 3){
-                                echo '<button class="btn btn-shadow-primary">Exception</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Exception</a>';
                               }
                               elseif($row->status == 4){
-                                echo '<button class="btn btn-shadow-primary">Transit In</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Transit In</a>';
                               }
                               elseif($row->status == 5){
-                                echo '<button class="btn btn-shadow-primary">Assign Agent to Transit Out (Hub)</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Assign Agent to Transit Out (Hub)</a>';
                               }
                               elseif($row->status == 6){
-                                echo '<button class="btn btn-shadow-primary">Transit Out</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Transit Out</a>';
                               }
                               elseif($row->status == 7){
-                                echo '<button class="btn btn-shadow-primary">In the Van for Delivery</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">In the Van for Delivery</a>';
                               }
                               elseif($row->status == 8){
-                                echo '<button class="btn btn-shadow-primary">Shipment delivered</button>';
+                                echo '<a href="/user/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Shipment delivered</a>';
                               }
                               ?>
                               </h6>

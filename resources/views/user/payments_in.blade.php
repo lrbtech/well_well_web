@@ -59,10 +59,14 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>User Details</th>
-                            <th>No of Shipment</th>
-                            <th>Total COD Value</th>
-                            <th>OverAll Paid Amount</th>
+                            <th>Tracking ID</th>
+                            <th>Date</th>
+                            <th>{{$language[32][Auth::user()->lang]}}</th>
+                            <th>{{$language[115][Auth::user()->lang]}}</th>
+                            <th>{{$language[116][Auth::user()->lang]}}</th>
+                            <th>Special C.O.D</th>
+                            <th>{{$language[70][Auth::user()->lang]}}</th>
+                            <th>Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -87,7 +91,7 @@
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
-  <script type="text/javascript">
+<script type="text/javascript">
 $('.payments-out-report').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
@@ -102,10 +106,14 @@ var orderPageTable = $('#datatable').DataTable({
     },
     "columns": [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        { data: 'user_details', name: 'user_details' },
-        { data: 'no_of_shipments', name: 'no_of_shipments' },
-        { data: 'total_value', name: 'total_value' },
-        { data: 'settlement_value', name: 'settlement_value' },
+        { data: 'order_id', name: 'order_id' },
+        { data: 'shipment_date', name: 'shipment_date' },
+        { data: 'shipment_mode', name: 'shipment_mode' },
+        { data: 'from_address', name: 'from_address' },
+        { data: 'to_address', name: 'to_address' },
+        { data: 'special_cod', name: 'special_cod' },
+        { data: 'total', name: 'total' },
+        { data: 'paid_status', name: 'paid_status' },
     ]
 });
 

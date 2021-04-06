@@ -57,7 +57,8 @@ class ReportController extends Controller
             $agent = $q->get();
         }
         $language = language::all();
-        return view('admin.shipment_report',compact('agent','language'));
+        $user = User::where('status',4)->get();
+        return view('admin.shipment_report',compact('agent','language','user'));
     }
 
     public function AgentReport(){
@@ -82,9 +83,9 @@ class ReportController extends Controller
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
         $i =DB::table('shipments');
-        if ( $user_type != 3 )
+        if ( $user_type != 'all_user' )
         {
-            if ( $user_type != 2 ){
+            if ( $user_type != 'guest' ){
                 $i->join('users', 'users.id', '=', 'shipments.sender_id');
                 $i->where('users.user_type', $user_type);
             }

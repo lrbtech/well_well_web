@@ -109,7 +109,7 @@ class InvoiceController extends Controller
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="#" onclick="viewPayment('.$invoice->id.')">View Payment</a>    
-                        <a target="_blank" class="dropdown-item" href="/user/invoice-print/'.$invoice->id.'" >Print</a>
+                        <a onclick="PrintInvoice('.$invoice->id.')" class="dropdown-item" href="#" >Print</a>
                     </div>
                 </td>';
             })
@@ -118,6 +118,37 @@ class InvoiceController extends Controller
         ->addIndexColumn()
         ->make(true);
     }
+
+
+    // public function InvoicePrint($id){
+    //     $invoice = invoice::find($id);
+
+    //     $arraydata=array();
+    //     foreach(explode(',',$invoice->shipment_ids) as $shipment_id1){
+    //     $arraydata[]=$shipment_id1;
+    //     }
+       
+    //     $data = shipment::whereIn('id', $arraydata)->get();
+    //     $data1=array();
+    //     //$invoice_item=array();
+    //     foreach ($data as $row) {
+    //         $shipment = shipment::find($row->id);
+    //         $shipment_package = shipment_package::where('shipment_id',$row->id)->first();
+    //         $data1 = array(
+    //             'delivery_date'=>$shipment->delivery_date,
+    //             'tracking_id'=>$shipment_package->sku_value,
+    //             'no_of_packages'=>$shipment->no_of_packages,
+    //             'total'=>$shipment->total,
+    //             'cancel_pay'=>$shipment->cancel_pay,
+    //         );
+    //         $invoice_item[]=$data1;
+    //     }
+
+    //    // return response()->json($invoice_item);
+    //     $pdf = PDF::loadView('print.invoiceprint',compact('invoice','invoice_item'));
+    //     $pdf->setPaper('A4');
+    //     return $pdf->stream('invoice.pdf');
+    // }
 
 
     public function InvoicePrint($id){
@@ -144,10 +175,14 @@ class InvoiceController extends Controller
             $invoice_item[]=$data1;
         }
 
-       // return response()->json($invoice_item);
-        $pdf = PDF::loadView('print.invoiceprint',compact('invoice','invoice_item'));
-        $pdf->setPaper('A4');
-        return $pdf->stream('invoice.pdf');
+        //return view('print.invoiceprint',compact('invoice','invoice_item'));
+        //return response()->json(count($invoice_item));
+        // $pdf = PDF::loadView('print.invoiceprint',compact('invoice','invoice_item'));
+        // $pdf->setPaper('A4');
+        // return $pdf->stream('invoice.pdf');
+
+        $view = view('print.invoiceprint',compact('invoice','invoice_item'))->render();
+        return response()->json(['html'=>$view]);
     }
 
 

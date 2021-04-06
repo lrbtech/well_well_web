@@ -2,6 +2,7 @@
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
+<link rel="stylesheet" type="text/css" href="/assets/app-assets/css/select2.css">
 @endsection
 @section('section')        
         <!-- Right sidebar Ends-->
@@ -60,7 +61,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-md-2">
+                        <!-- <div class="form-group col-md-2">
                             <label>{{$language[110][Auth::guard('admin')->user()->lang]}}</label>
                             <select id="user_type" name="user_type" class="form-control">
                               <option value="3">{{$language[101][Auth::guard('admin')->user()->lang]}}</option>
@@ -68,6 +69,17 @@
                               <option value="1">{{$language[112][Auth::guard('admin')->user()->lang]}}</option>
                               <option value="2">{{$language[113][Auth::guard('admin')->user()->lang]}}</option>
                             </select>
+                        </div> -->
+
+                        <div class="form-group col-md-2">
+                          <label>Select User</label>
+                          <select id="user_type" name="user_type" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                          <option value="all_user">All Data</option>
+                          <option value="guest">Guest</option>
+                            @foreach($user as $row)
+                            <option value="{{$row->id}}">{{$row->customer_id}} - {{$row->first_name}} {{$row->lasst_name}}</option>
+                            @endforeach
+                          </select>
                         </div>
 
                         <div class="form-group col-md-2">
@@ -121,6 +133,8 @@
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
+  <script src="/assets/app-assets/js/select2/select2.full.min.js"></script>
+<script src="/assets/app-assets/js/select2/select2-custom.js"></script>
 
   <script type="text/javascript">
 $('.shipment').addClass('active');
@@ -130,7 +144,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-shipment-report/20/3/1/1",
+        "url": "/admin/get-shipment-report/20/all_user/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -211,6 +225,10 @@ function PrintLabel(id){
   });
 }
 
+
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
 
 </script>
 @endsection

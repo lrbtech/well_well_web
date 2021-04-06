@@ -178,5 +178,35 @@ function viewPayment(id)
   });
 }
 
+
+function PrintInvoice(id){
+  $.ajax({
+    url : '/user/invoice-print/'+id,
+    type: "GET",
+    dataType: "JSON",
+    success: function(data)
+    {
+        var mywindow = window.open('', 'Print Invoice', 'height=600,width=800');
+        var is_chrome = Boolean(mywindow.chrome);
+        mywindow.document.write(data.html);
+        mywindow.document.close(); 
+        if (is_chrome) {
+            setTimeout(function() {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/user/invoice-history";
+            }, 250);
+        } else {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/user/invoice-history";
+        }
+        //PrintDiv(data);
+    }
+  });
+}
+
 </script>
 @endsection

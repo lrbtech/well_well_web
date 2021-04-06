@@ -34,7 +34,7 @@
                   <form action="/admin/excel-agent-report" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="card-header">
-                    <div class="row">
+                      <div class="row">
                         <div class="form-group col-md-3">
                             <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
@@ -60,7 +60,15 @@
                             <!-- <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
                             </button> -->
                         </div>
-                    </div>
+                      </div>
+
+                      <div class="row">
+
+                        <div class="form-group col-md-3">
+                            <button id="paid" class="btn btn-primary btn-block mr-10" type="button">Paid
+                            </button> <br>
+                        </div>
+                      </div>
                     
                   </div>
                   </form>
@@ -69,12 +77,16 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
+                          <tr>
                             <th>#</th>
-                            <th>User Details</th>
-                            <th>No of Shipment</th>
-                            <th>Total COD Value</th>
-                            <th>OverAll Paid Amount</th>
-                            <th>Action</th>
+                            <th>Tracking ID</th>
+                            <th>Date</th>
+                            <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[115][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>{{$language[116][Auth::guard('admin')->user()->lang]}}</th>
+                            <th>Special C.O.D</th>
+                            <th>{{$language[70][Auth::guard('admin')->user()->lang]}}</th>
+                          </tr>
                           </tr>
                         </thead>
                         <tbody>
@@ -108,14 +120,25 @@
                 <form id="form" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <input type="hidden" name="sender_id" id="sender_id">
+                <input type="hidden" name="shipment_ids" id="shipment_ids">
                     <div class="form-group">
                       <label>Date</label>
-                      <input type="date" id="date" name="date" class="form-control">
+                      <input value="{{date('Y-m-d')}}" type="date" id="date" name="date" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label>No Of Shipments</label>
+                      <input readonly type="number" id="no_of_shipments" name="no_of_shipments" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Total Value</label>
+                      <input readonly type="number" id="total_value" name="total_value" class="form-control">
                     </div>
 
                     <div class="form-group">
                       <label>Settlement Value</label>
-                      <input type="number" id="settlement_value" name="settlement_value" class="form-control">
+                      <input readonly type="number" id="settlement_value" name="settlement_value" class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -156,12 +179,15 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
-        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        { data: 'user_details', name: 'user_details' },
-        { data: 'no_of_shipments', name: 'no_of_shipments' },
-        { data: 'total_value', name: 'total_value' },
-        { data: 'settlement_value', name: 'settlement_value' },
-        { data: 'action', name: 'action' },
+        // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'checkbox', name: 'checkbox' },
+        { data: 'order_id', name: 'order_id' },
+        { data: 'shipment_date', name: 'shipment_date' },
+        { data: 'shipment_mode', name: 'shipment_mode' },
+        { data: 'from_address', name: 'from_address' },
+        { data: 'to_address', name: 'to_address' },
+        { data: 'special_cod', name: 'special_cod' },
+        { data: 'total', name: 'total' },
     ]
 });
 
@@ -195,7 +221,29 @@ $('#search').click(function(){
 });
 
 
-
+$('#paid').click(function(){
+    var order_id=[];
+    $(".order_checkbox:checked").each(function(){
+        order_id.push($(this).val());
+    });
+    if(order_id.length > 0){
+        $.ajax({
+            url:"/admin/get-user-settlement",
+            method:"GET",
+            data:{id:order_id},
+            success:function(data){
+              $('input[name=sender_id]').val(data.sender_id);
+              $('input[name=shipment_ids]').val(data.shipment_ids);
+              $('input[name=no_of_shipments]').val(data.no_of_shipments);
+              $('input[name=total_value]').val(data.total_value);
+              $('input[name=settlement_value]').val(data.total_value);
+              $('#popup-modal').modal('show');
+            }
+        });
+    }else{
+        toastr.error("Please select atleast one Checkbox");
+    }
+});
 
 function Settlement(id){
     var r = confirm("Are you sure");

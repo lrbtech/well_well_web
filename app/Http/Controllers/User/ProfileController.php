@@ -14,6 +14,7 @@ use App\Models\shipment;
 use App\Models\shipment_package;
 use App\Models\shipment_notification;
 use App\Models\User;
+use App\Models\admin;
 use App\Models\language;
 use App\Models\add_rate;
 use App\Models\add_rate_item;
@@ -42,8 +43,9 @@ class ProfileController extends Controller
 
     public function editProfile(){
         $customer = User::find(Auth::user()->id);
+        $admin = admin::find($customer->accounts_user_id);
         $language = language::all();
-        return view('user.edit_profile',compact('customer','language'));
+        return view('user.edit_profile',compact('customer','language','admin'));
     }
 
     public function updateProfile(Request $request){        

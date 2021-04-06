@@ -128,6 +128,7 @@ class PendingController extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a href="/user/view-pending-shipment/'.$shipment->id.'"     class="dropdown-item">View Shipment</a>
                         <a onclick="Delete('.$shipment->id.')" class="dropdown-item" href="#">Delete</a>
                     </div>
                 </td>';

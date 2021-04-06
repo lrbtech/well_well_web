@@ -314,8 +314,37 @@ class ShipmentController extends Controller
         return view('user.view_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','shipment_notes','from_address','to_address','user','language','system_logs'));
     }
 
-    public function getShipment(){
-        $shipment = shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+    public function viewPendingShipment($id){
+        $country = country::all();
+        $agent = agent::all();
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+
+        $shipment =temp_shipment::find($id);
+        $user =User::find($shipment->sender_id);
+        $shipment_package = temp_shipment_package::where('temp_id',$id)->get();
+
+        $from_address =manage_address::find($shipment->from_address);
+        $to_address =manage_address::find($shipment->to_address);
+        $language = language::all();
+
+        return view('user.view_pending_shipment',compact('country','city','area','package_category','agent','shipment','shipment_package','from_address','to_address','user','language'));
+    }
+
+    public function getShipment($fdate,$tdate){
+        // $shipment = shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
+        $i =DB::table('shipments as s');
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            $i->whereBetween('s.date', [$fdate1, $tdate1]);
+        }
+        $i->where('s.sender_id', Auth::user()->id);
+        $i->orderBy('s.id', 'DESC');
+        $shipment = $i->get();
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
@@ -458,13 +487,13 @@ class ShipmentController extends Controller
                     $output.='
                     <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
                     <a onclick="CancelRequest('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>
-                    <a href="/user/view-shipment/'.$shipment->id.'" class="dropdown-item">View Shipment</a>
                     ';
                 }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         '.$output.'    
+                        <a href="/user/view-shipment/'.$shipment->id.'" class="dropdown-item">View Shipment</a>
                     </div>
                 </td>';
             })

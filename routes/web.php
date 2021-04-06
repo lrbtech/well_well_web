@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/route-cache', function() {
     $exitCode = Artisan::call('route:cache');
     return 'Routes cache cleared';
+});
+
+Route::get('/back-up', function() {
+    Artisan::call('backup:run --only-db');
+    return 'backup created';
+    //return redirect()->back();
 });
 
 //Clear config cache:
@@ -387,7 +394,11 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/payments-out-report', [App\Http\Controllers\Admin\SettlementController::class, 'PaymentsOutReport']);
     Route::POST('/get-payments-out-report/{user}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getPaymentsOutReport']);
 
+    Route::get('/get-user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'getUserSettlement']);
     Route::POST('/user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'userSettlement']);
+
+    Route::get('/view-user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'viewUserSettlement']);
+    Route::POST('/get-view-user-settlement/{status}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getViewUserSettlement']);
 
     Route::POST('/excel-payments-out-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsOutReport']);
 
@@ -395,9 +406,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-accounts-team-report', [App\Http\Controllers\Admin\SettlementController::class, 'getAccountsTeamReport']);
     Route::POST('/accounts-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'accountsSettlement']);
 
-
     Route::get('/view-agent-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewAgentSettlement']);
-    Route::get('/view-user-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewUserSettlement']);
+    // Route::get('/view-user-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewUserSettlement']);
     Route::get('/view-accounts-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewAccountsSettlement']);
 
     //languages modules
@@ -463,19 +473,31 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('save-invoice-payment', [App\Http\Controllers\Admin\InvoiceController::class, 'saveInvoicePayment']);
     Route::get('view-invoice-payment/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'viewInvoicePayment']);
 
+
+    Route::get('backup', [App\Http\Controllers\BackupController::class, 'index']);
+    // Route::get('backup/create', [App\Http\Controllers\BackupController::class, 'create']);
+    Route::get('backup/download/{file_name}', [App\Http\Controllers\BackupController::class, 'download']);
+    Route::get('backup/delete/{file_name}', [App\Http\Controllers\BackupController::class, 'delete']);
+
+    Route::get('backup/create', function() {
+        $exitCode = Artisan::call('backup:run --only-db');
+        return redirect()->back();
+    });
+
 });
 
 
 Route::group(['prefix' => 'user'],function(){
 
     Route::get('/dashboard', [App\Http\Controllers\User\HomeController::class, 'dashboard'])->name('user.dashboard');
+    Route::POST('/date-dashboard', [App\Http\Controllers\User\HomeController::class, 'dateDashboard']);
     
     Route::get('/new-shipment', [App\Http\Controllers\User\ShipmentController::class, 'newShipment']);
     
     Route::POST('/save-new-address', [App\Http\Controllers\User\ShipmentController::class, 'saveNewAddress']);
     Route::POST('/save-new-shipment', [App\Http\Controllers\User\ShipmentController::class, 'saveNewShipment']);
     Route::get('/shipment', [App\Http\Controllers\User\ShipmentController::class, 'Shipment']);
-    Route::POST('/get-shipment', [App\Http\Controllers\User\ShipmentController::class, 'getShipment']);
+    Route::POST('/get-shipment/{date1}/{date2}', [App\Http\Controllers\User\ShipmentController::class, 'getShipment']);
 
     Route::POST('/save-cancel-request', [App\Http\Controllers\User\ShipmentController::class, 'SaveCancelRequest']);
 
@@ -521,6 +543,8 @@ Route::group(['prefix' => 'user'],function(){
 
     Route::get('/view-shipment/{id}', [App\Http\Controllers\User\ShipmentController::class, 'viewShipment']);
 
+    Route::get('/view-pending-shipment/{id}', [App\Http\Controllers\User\ShipmentController::class, 'viewPendingShipment']);
+
     //report
     Route::get('/shipment-report', [App\Http\Controllers\User\ReportController::class, 'ShipmentReport']);
     Route::POST('/get-shipment-report/{status}/{date1}/{date2}', [App\Http\Controllers\User\ReportController::class, 'getShipmentReport']);
@@ -535,12 +559,16 @@ Route::group(['prefix' => 'user'],function(){
     Route::POST('/get-payments-in-report/{date1}/{date2}', [App\Http\Controllers\User\ReportController::class, 'getPaymentsInReport']);
 
     Route::get('/settlement-details', [App\Http\Controllers\User\ReportController::class, 'settlementDetails']);
+    Route::POST('/date-settlement-details', [App\Http\Controllers\User\ReportController::class, 'dateSettlementDetails']);
 
     Route::get('/invoice-history', [App\Http\Controllers\User\InvoiceController::class, 'InvoiceHistory']);
     Route::POST('/get-invoice-history/{date1}/{date2}', [App\Http\Controllers\User\InvoiceController::class, 'getInvoiceHistory']);
 
     Route::get('/invoice-print/{id}', [App\Http\Controllers\User\InvoiceController::class, 'InvoicePrint']);
     Route::get('view-invoice-payment/{id}', [App\Http\Controllers\User\InvoiceController::class, 'viewInvoicePayment']);
+
+
+    Route::get('/excel-location-download', [App\Http\Controllers\User\ReportController::class, 'excelLocationDownload']);
 
 });
 

@@ -38,7 +38,31 @@ class HomeController extends Controller
 
         $current_month_cod = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->get()->sum("special_cod");
 
-        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod'));
+        $settlement_value = shipment::where('sender_id',Auth::user()->id)->where('paid_status',1)->whereBetween('paid_date', [$cfdate, $cldate])->get()->sum("special_cod");
+
+        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod','settlement_value'));
+    }
+
+
+
+    public function dateDashboard(Request $request){
+        $today = date('Y-m-d');
+        $cfdate = date('Y-m-d', strtotime($request->from_date));
+        $cldate = date('Y-m-d', strtotime($request->to_date));
+        $language = language::all();
+
+        $total_shipment = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->count();
+
+        $shipment = shipment::where('sender_id',Auth::user()->id)->orderBy('id', 'desc')->take('5')->get();
+        $shipment_package = shipment_package::orderBy('id', 'desc')->get();
+
+        $current_month_value = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
+
+        $current_month_cod = shipment::where('sender_id',Auth::user()->id)->whereBetween('date', [$cfdate, $cldate])->get()->sum("special_cod");
+
+        $settlement_value = shipment::where('sender_id',Auth::user()->id)->where('paid_status',1)->whereBetween('paid_date', [$cfdate, $cldate])->get()->sum("special_cod");
+
+        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod','settlement_value'));
     }
     
 }

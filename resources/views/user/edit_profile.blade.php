@@ -10,7 +10,6 @@
       <div class="row">
         <div class="col-lg-6 main-header">
           <h2>{{$language[146][Auth::user()->lang]}}<span>{{$language[147][Auth::user()->lang]}}</span></h2>
-          <h6 class="mb-0">{{$language[9][Auth::user()->lang]}}</h6>
         </div>
         <!-- <div class="col-lg-6 breadcrumb-right">     
           <ol class="breadcrumb">
@@ -57,6 +56,19 @@
                   <label class="form-label">{{$language[151][Auth::user()->lang]}}</label>
                   <input class="form-control" type="text" id="website" name="website" value="{{$customer->website}}">
                 </div>
+
+                @if(!empty($admin))
+                <div class="form-group">
+                  <h4 class="card-title mb-0">Approved Accountant Details</h4>
+                  <br>
+                  <label class="form-label">Name : {{$admin->name}}</label>
+                  <br>
+                  <label class="form-label">Mobile : {{$admin->mobile}}</label>
+                  <br>
+                  <label class="form-label">Email : {{$admin->email}}</label>
+                </div>
+                @endif
+
                 <!-- <div class="form-footer">
                   <button class="btn btn-primary btn-block btn-pill">Save</button>
                 </div> -->

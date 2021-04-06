@@ -27,7 +27,7 @@ class CustomerController extends Controller
 
     public function viewCustomer(){
         $customer = User::orderBy('id','DESC')->get();
-        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        $role_get = role::find(Auth::guard('admin')->user()->id);
         $settings = settings::find(1);
         $language = language::all();
 
@@ -49,7 +49,7 @@ class CustomerController extends Controller
 
     public function registrationCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $role_get = role::find(Auth::guard('admin')->user()->id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -58,7 +58,7 @@ class CustomerController extends Controller
 
     public function salesCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $role_get = role::find(Auth::guard('admin')->user()->id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -67,7 +67,7 @@ class CustomerController extends Controller
 
     public function accountsCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $role_get = role::find(Auth::guard('admin')->user()->id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -76,7 +76,7 @@ class CustomerController extends Controller
 
     public function activeCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->role_id);
+      $role_get = role::find(Auth::guard('admin')->user()->id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -108,7 +108,7 @@ class CustomerController extends Controller
         $customer = User::find($request->id);
         $customer->verify_remark = $request->deny_remark;
         $customer->status = $request->status;
-        $customer->registration_user_id = Auth::guard('admin')->user()->role_id;
+        $customer->registration_user_id = Auth::guard('admin')->user()->id;
         $customer->registration_date_time = date('Y-m-d H:i:s');
         $customer->save();
 
@@ -212,7 +212,7 @@ class CustomerController extends Controller
     public function updateAccountStatus($id,$status){
         $customer = User::find($id);
         $customer->status = $status;
-        $customer->accounts_user_id = Auth::guard('admin')->user()->role_id;
+        $customer->accounts_user_id = Auth::guard('admin')->user()->id;
         $customer->accounts_date_time = date('Y-m-d H:i:s');
         $customer->save();
 
@@ -232,7 +232,7 @@ class CustomerController extends Controller
     public function updateSalestStatus($id,$status){
         $customer = User::find($id);
         $customer->status = $status;
-        $customer->sales_user_id = Auth::guard('admin')->user()->role_id;
+        $customer->sales_user_id = Auth::guard('admin')->user()->id;
         $customer->sales_date_time = date('Y-m-d H:i:s');
         $customer->save();
 
@@ -253,7 +253,7 @@ class CustomerController extends Controller
 
         $customer = User::find($id);
         $settings = settings::find(1);
-        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        $role_get = role::find(Auth::guard('admin')->user()->id);
         
         return view('admin.profile',compact('rate','rate_item','customer','country','city','area','settings','language','role_get'));
     }
