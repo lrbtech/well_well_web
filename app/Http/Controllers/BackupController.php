@@ -47,7 +47,8 @@ class BackupController extends Controller
     {
         try {
             /* only database backup*/
-            Artisan::call('backup:run', ['--only-db'=> true,'--disable-notifications'=> true]);
+            //Artisan::call('backup:run', ['--only-db'=> true,'--disable-notifications'=> true]);
+            Artisan::call('database:backup');
             //Artisan::call('backup:run',['--only-db'=>true]);
             //Artisan::call('backup:run --only-db');
             $output = Artisan::output();
