@@ -27,7 +27,7 @@ class BackupController extends Controller
         // make an array of backup files, with their filesize and creation date
         foreach ($files as $k => $f) {
             // only take the zip files into account
-            if (substr($f, -4) == '.zip' && $disk->exists($f)) {
+            if (substr($f, -4) == '.gz' && $disk->exists($f)) {
                 $backups[] = [
                     'file_path' => $f,
                     'file_name' => str_replace(config('laravel-backup.backup.name') . '/', '', $f),
