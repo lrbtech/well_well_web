@@ -475,14 +475,14 @@ Route::group(['prefix' => 'admin'],function(){
 
 
     Route::get('backup', [App\Http\Controllers\BackupController::class, 'index']);
-    // Route::get('backup/create', [App\Http\Controllers\BackupController::class, 'create']);
+    Route::get('backup/create', [App\Http\Controllers\BackupController::class, 'create']);
     Route::get('backup/download/{file_name}', [App\Http\Controllers\BackupController::class, 'download']);
     Route::get('backup/delete/{file_name}', [App\Http\Controllers\BackupController::class, 'delete']);
 
-    Route::get('backup/create', function() {
-        $exitCode = Artisan::call('backup:run --only-db');
-        return redirect()->back();
-    });
+    // Route::get('backup/create', function() {
+    //     $exitCode = Artisan::call('backup:run --only-db');
+    //     return redirect()->back();
+    // });
 
 });
 
