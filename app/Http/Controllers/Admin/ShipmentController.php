@@ -70,6 +70,24 @@ class ShipmentController extends Controller
         return view('admin.new_shipment',compact('drop_point','country','city','area','package_category','agent', 'language'));
     }
 
+
+    public function editShipment($id){
+        $shipment = shipment::find($id);
+        $shipment_package = shipment_package::where('shipment_id',$id)->get();
+
+        $country = country::all();
+        $user = User::find($shipment->sender_id);
+        $package_category = package_category::where('status',0)->get();
+        $city = city::where('parent_id',0)->where('status',0)->get();
+        $area = city::where('parent_id','!=',0)->where('status',0)->get();
+        $language = language::all();
+        $from_address = manage_address::find($shipment->from_address);
+        $to_address = manage_address::find($shipment->to_address);
+
+        //return response()->json($shipment);
+        return view('admin.edit_shipment',compact('shipment','shipment_package','country','city','area','from_address','to_address','package_category','user','language'));
+    }
+
     public function specialShipment(){
         $drop_point = drop_point::all();
         $country = country::where('status',0)->get();
@@ -458,6 +476,155 @@ class ShipmentController extends Controller
             //return response()->json('successfully save'); 
             return $this->printLabel($shipment->id);
         }
+        
+    }
+
+
+    public function updateShipment(Request $request){
+        $this->validate($request, [
+            'from_address'=>'required',
+            'to_address'=>'required',
+            'shipment_date'=>'required',
+            'shipment_from_time'=>'required',
+            'shipment_type'=>'required',
+            'shipment_mode'=> 'required',
+            'no_of_packages'=> 'required',
+            'declared_value'=> 'required',
+            'category.*'=> 'required',
+            'description.*'=> 'required',
+            'reference_no.*'=> 'required',
+            'weight.*'=> 'required',
+            'length.*'=> 'required',
+            'width.*'=> 'required',
+            'height.*'=> 'required',
+            'chargeable_weight.*'=> 'required',
+            'user_id'=> 'required',
+            'total'=> 'required',
+          ],[
+            'from_address.required' => 'Choose From Address Field is Required',
+            'to_address.required' => 'Choose To Address Field is Required',
+            'shipment_type.required' => 'Pickup/Drop-Off Field is Required',
+            //'price.*.required' => 'Price Field is Required',
+            'user_id.required' => 'Please Choose Customer Field is Required',
+        ]);
+
+
+        $from_address = manage_address::find($request->from_address);
+        $from_station = city::find($from_address->city_id);
+
+        $to_address = manage_address::find($request->to_address);
+        $to_station = city::find($to_address->city_id);
+
+        $shipment = shipment::find($request->shipment_id);
+        $shipment->sender_id = $request->user_id;
+        $shipment->shipment_type = $request->shipment_type;
+        $shipment->shipment_date = date('Y-m-d',strtotime($request->shipment_date));
+        $shipment->shipment_from_time = $request->shipment_from_time;
+        $shipment->shipment_to_time = $request->shipment_to_time;
+        $shipment->from_address = $request->from_address;
+        $shipment->to_address = $request->to_address;
+        $shipment->from_station_id = $from_station->station_id;
+        $shipment->to_station_id = $to_station->station_id;
+        $shipment->shipment_mode = $request->shipment_mode;
+        $shipment->special_service = $request->special_service;
+        $shipment->special_service_description = $request->special_service_description;
+        //$shipment->return_package_cost = $request->return_package_cost;
+        $shipment->special_cod_enable = $request->special_cod_enable;
+        $shipment->special_cod = $request->special_cod;
+        $shipment->no_of_packages = $request->no_of_packages;
+        $shipment->declared_value = $request->declared_value;
+        $shipment->total_weight = $request->total_weight;
+        $shipment->shipment_price = $request->shipment_price;
+        $shipment->postal_charge_percentage = $request->postal_charge_percentage;
+        $shipment->postal_charge = $request->postal_charge;
+        $shipment->sub_total = $request->sub_total;
+        $shipment->vat_percentage = $request->vat_percentage;
+        $shipment->vat_amount = $request->vat_amount;
+        $shipment->insurance_percentage = $request->insurance_percentage;
+        $shipment->insurance_amount = $request->insurance_amount;
+        $shipment->before_total = $request->before_total;
+        $shipment->cod_amount = $request->cod_amount;
+        $shipment->total = $request->total;
+        $shipment->reference_no = $request->reference_no;
+        $shipment->identical = $request->same_data;
+        $shipment->save();
+
+        $system_logs = new system_logs;
+        $system_logs->_id = $shipment->id;
+        $system_logs->category = 'shipment';
+        $system_logs->to_id = Auth::guard('admin')->user()->email;
+        $system_logs->remark = 'Update Shipment to '.Auth::guard('admin')->user()->name;
+        $system_logs->save();
+
+        $arrayshipment = array();
+        $arrayshipment[] = $shipment->id;
+
+        // if($request->same_data == '0'){
+            for ($x=0; $x<count($_POST['weight']); $x++) 
+            {
+                if($_POST['package_id'][$x] != ''){
+                    $shipment_package = shipment_package::find($_POST['package_id'][$x]);
+                    $shipment_package->category = $_POST['category'][$x];
+                    $shipment_package->description = $_POST['description'][$x];
+                    $shipment_package->weight = $_POST['weight'][$x];
+                    $shipment_package->length = $_POST['length'][$x];
+                    $shipment_package->width = $_POST['width'][$x];
+                    $shipment_package->height = $_POST['height'][$x];
+                    $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
+                    $shipment_package->save();
+                }
+                else{
+                    do {
+                        $sku_value = mt_rand( 1000000000, 9999999999 );
+                    } 
+                    while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+
+                    $shipment_package = new shipment_package;
+                    $shipment_package->sku_value = $sku_value;
+                    $shipment_package->shipment_id = $shipment->id;
+                    $shipment_package->category = $_POST['category'][$x];
+                    $shipment_package->description = $_POST['description'][$x];
+                    $shipment_package->weight = $_POST['weight'][$x];
+                    $shipment_package->length = $_POST['length'][$x];
+                    $shipment_package->width = $_POST['width'][$x];
+                    $shipment_package->height = $_POST['height'][$x];
+                    $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
+
+                    if($_POST['weight'][$x]!=""){
+                        $shipment_package->save();
+                    }
+                }
+            }
+        // }
+        // else{
+        //     for ($y=1; $y<=$request->no_of_packages; $y++){
+        //         for ($x=0; $x<count($_POST['weight']); $x++) 
+        //         {
+        //             do {
+        //                 $sku_value = mt_rand( 1000000000, 9999999999 );
+        //             } 
+        //             while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+        //             $shipment_package = new shipment_package;
+        //             $shipment_package->sku_value = $sku_value;
+        //             $shipment_package->shipment_id = $shipment->id;
+        //             $shipment_package->category = $_POST['category'][$x];
+        //             //$shipment_package->reference_no = $_POST['reference_no'][$x];
+        //             $shipment_package->description = $_POST['description'][$x];
+        //             $shipment_package->weight = $_POST['weight'][$x];
+        //             $shipment_package->length = $_POST['length'][$x];
+        //             $shipment_package->width = $_POST['width'][$x];
+        //             $shipment_package->height = $_POST['height'][$x];
+        //             $shipment_package->chargeable_weight = $_POST['chargeable_weight'][$x];
+
+        //             if($_POST['weight'][$x]!=""){
+        //                 $shipment_package->save();
+        //             }
+        //         }
+        //     }
+        //}
+
+        //return response()->json('successfully save'); 
+        return $this->printLabel($shipment->id);
         
     }
 
@@ -968,6 +1135,7 @@ class ShipmentController extends Controller
             ->addColumn('action', function ($shipment) {
                 $output='';
                 $output1='';
+                $output2='';
                 //$role_get = role::find(Auth::guard('admin')->user()->role_id);
                 if($shipment->status == 0){
                     $output.='<a onclick="AssignAgent('.$shipment->id.')" class="dropdown-item" href="#">Assign Agent</a>
@@ -1003,10 +1171,16 @@ class ShipmentController extends Controller
                 if($shipment->status == 8){
                     $output1.='<a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" class="dropdown-item">Print</a>';
                 }
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        '.$output2.'
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a> 
                         <a onclick="CancelRequest('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>
                         '.$output1.'
                         '.$output.'

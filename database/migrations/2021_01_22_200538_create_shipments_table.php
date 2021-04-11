@@ -62,6 +62,9 @@ class CreateShipmentsTable extends Migration
             $table->string('paid_status')->default('0'); 
             $table->string('paid_date')->nullable();
 
+            $table->string('paid_agent_status')->default('0'); 
+            $table->string('paid_agent_date')->nullable();
+
             $table->string('pickup_agent_id')->nullable();
             $table->string('pickup_assign_date')->nullable();
             $table->string('pickup_assign_time')->nullable();

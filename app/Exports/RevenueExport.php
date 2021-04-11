@@ -32,10 +32,11 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($fdate,$tdate)
+    public function __construct($user_type,$fdate,$tdate)
     {
         $this->fdate = $fdate;
         $this->tdate = $tdate;
+        $this->user_type = $user_type;
     }
 
     public function collection()
@@ -46,6 +47,16 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         //     $shipment = shipment::orderBy('id','desc')->get();
         // }
         $i =DB::table('shipments');
+        if ( $this->user_type != 'all_user' )
+        {
+            if ( $this->user_type != 'guest' ){
+                $i->where('shipments.sender_id', $this->user_type);
+                $i->join('users', 'users.id', '=', 'shipments.sender_id');
+            }
+            else{
+                $i->where('shipments.sender_id', 0);
+            }
+        }
         if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
         {
             $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
@@ -121,24 +132,15 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         'Total Weight ' .$shipment->total_weight . ' Kg';
         
         return [
-            $shipment->order_id,
+            $shipment_package[0]->sku_value,
             $shipment->date,
             $user_type,
             $user_details,
             $shipment_mode,
-            $special_service,
             $shipment_details,
-            $ship_from,
-            $ship_to,
-            'AED '.$shipment->shipment_price,
-            'AED '.$shipment->insurance_amount,
-            'AED '.$shipment->cod_amount,
-            'AED '.$shipment->sub_total,
-            'AED '.$shipment->vat_amount,
-            'AED '.$shipment->postal_charge,
-            'AED '.$shipment->total,
-            'AED '.$shipment->special_cod,
-            'AED '.$shipment->collect_cod_amount,
+            $shipment->total,
+            $shipment->special_cod,
+            $shipment->collect_cod_amount,
             $shipment->cod_type,
         ];
     }
@@ -147,22 +149,13 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
     public function headings(): array
     {
         return [
-            'Inv ID',
+            'Tracking ID',
             'Date',
             'User Type',
             'User Details',
             'Shipping Mode',
-            'Special Shipment',
             'Shipment Details',
-            'Ship From',
-            'Ship To',
             'Shipment Price',
-            'Insurance',
-            'C.O.D',
-            'Sub Total',
-            'Vat',
-            'Postal Charge',
-            'Total',
             'Special C.O.D',
             'Collected C.O.D',
             'C.O.D Payment Type',

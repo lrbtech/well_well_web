@@ -767,8 +767,10 @@ function get_from_latlng(id){
         {
             from_lat = data.lat;
             from_lng = data.lng;
-            //google.maps.event.addDomListener(initialize);
-            //initialize();
+            alert(from_lat);
+            //google.maps.event.trigger(autocomplete, 'place_changed');
+            //google.maps.event.addDomListener(window, 'load', initialize);
+            initialize();
         }
     });
 }
@@ -799,6 +801,7 @@ function get_to_latlng(id){
 }
 
     function initialize() {
+        alert(from_lat);
         var latlng = new google.maps.LatLng(from_lat, from_lng);
         var map = new google.maps.Map(document.getElementById('map'), {
             center: latlng,
@@ -810,10 +813,24 @@ function get_to_latlng(id){
             draggable: true,
             anchorPoint: new google.maps.Point(0, -29)
         });
+        
         var input = document.getElementById('searchInput');
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
         var geocoder = new google.maps.Geocoder();
-        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        var options = {
+            bounds: latlng,
+            componentRestrictions: { country: "AE" },
+            strictBounds: true,
+            //types: ["establishment"],
+        };
+
+        var autocomplete = new google.maps.places.Autocomplete(input,options);
+
+        autocomplete.setComponentRestrictions({
+            country: ["AE"],
+        });
+
         autocomplete.bindTo('bounds', map);
         var infowindow = new google.maps.InfoWindow();
         autocomplete.addListener('place_changed', function() {
@@ -835,14 +852,20 @@ function get_to_latlng(id){
 
             marker.setPosition(place.geometry.location);
             marker.setVisible(true);
-
+            console.log(place);
             bindDataToForm(place.formatted_address, place.geometry.location.lat(), place.geometry.location.lng());
             infowindow.setContent(place.formatted_address);
             infowindow.open(map, marker);
 
         });
         // this function will work on marker move event into map 
+        var center = new google.maps.LatLng(from_lat, from_lng);
+        var bounds = new google.maps.LatLngBounds();
+        // var boundsSet = false;
+        var lastPosition = center;
         google.maps.event.addListener(marker, 'dragend', function() {
+            var position = marker.getPosition();
+            bounds.contains(position) ? lastPosition = position : marker.setPosition(lastPosition);
             geocoder.geocode({
                 'latLng': marker.getPosition()
             }, function(results, status) {
@@ -873,7 +896,20 @@ function get_to_latlng(id){
         var input = document.getElementById('searchInput1');
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
         var geocoder = new google.maps.Geocoder();
-        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        var options = {
+            bounds: latlng,
+            componentRestrictions: { country: "AE" },
+            strictBounds: true,
+            //types: ["establishment"],
+        };
+
+        var autocomplete = new google.maps.places.Autocomplete(input,options);
+
+        autocomplete.setComponentRestrictions({
+            country: ["AE"],
+        });
+
         autocomplete.bindTo('bounds', map);
         var infowindow = new google.maps.InfoWindow();
         autocomplete.addListener('place_changed', function() {
@@ -918,8 +954,6 @@ function get_to_latlng(id){
     }
 
     function bindDataToForm(address, lat, lng) {
-        console.log('address');
-        console.log(address);
         document.getElementById('from_address').value = address;
         document.getElementById('from_latitude').value = lat;
         document.getElementById('from_longitude').value = lng;

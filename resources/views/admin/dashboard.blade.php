@@ -291,31 +291,31 @@
                               <h6 class="mb-0">
                               <?php
                               if($row->status == 0){
-                                echo '<button class="btn btn-shadow-primary">Pending</button>';
+                                echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Pending</button></a>';
                               }
                               elseif($row->status == 1){
-                                  echo '<button class="btn btn-shadow-primary">Approved</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Approved</button></a>';
                               }
                               elseif($row->status == 2){
-                                  echo '<button class="btn btn-shadow-primary">Package Collected</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Package Collected</button></a>';
                               }
                               elseif($row->status == 3){
-                                  echo '<button class="btn btn-shadow-primary">Exception</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Exception</button></a>';
                               }
                               elseif($row->status == 4){
-                                  echo '<button class="btn btn-shadow-primary">Received Station Hub</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Received Station Hub</button></a>';
                               }
                               elseif($row->status == 5){
-                                  echo '<button class="btn btn-shadow-primary">Assign Agent to Transit Out (Hub)</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Assign Agent to Transit Out (Hub)</button></a>';
                               }
                               elseif($row->status == 6){
-                                  echo '<button class="btn btn-shadow-primary">Other Transit in Received (Hub)</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Other Transit in Received (Hub)</button></a>';
                               }
                               elseif($row->status == 7){
-                                  echo '<button class="btn btn-shadow-primary">Assign Agent to Delivery</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Assign Agent to Delivery</button></a>';
                               }
                               elseif($row->status == 8){
-                                  echo '<button class="btn btn-shadow-primary">Shipment delivered</button>';
+                                  echo '<a href="/admin/view-shipment/'.$row->id.'" class="btn btn-shadow-primary">Shipment delivered</button></a>';
                               }
                               ?>
                               </h6>

@@ -247,11 +247,14 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'newShipment']);
     Route::get('/special-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'specialShipment']);
 
+    Route::get('/edit-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'editShipment']);
+
     Route::get('/complaint-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'complaintShipment']);
     
     Route::POST('/save-new-address', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewAddress']);
     Route::POST('/save-new-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'saveNewShipment']);
     Route::POST('/save-shipment-notes', [App\Http\Controllers\Admin\ShipmentController::class, 'saveShipmentNotes']);
+    Route::POST('/update-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'updateShipment']);
 
     Route::get('/guest-shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'GuestShipment']);
     Route::get('/get-common-price/{weight}', [App\Http\Controllers\Admin\ShipmentController::class, 'getCommonPrice']);
@@ -376,7 +379,12 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/excel-revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'excelRevenueReport']);
 
     Route::get('/revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'RevenueReport']);
-    Route::POST('/get-revenue-report/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getRevenueReport']);
+    Route::POST('/get-revenue-report/{user_type}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getRevenueReport']);
+
+    Route::get('/all-revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'AllRevenueReport']);
+    Route::POST('/get-all-revenue-report/{user_type}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getAllRevenueReport']);
+
+    Route::POST('/print-all-revenue-report', [App\Http\Controllers\Admin\ReportController::class, 'printAllRevenueReport']);
 
 
     //report
@@ -386,10 +394,15 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/courier-team-guest-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'CourierTeamGuestSettlement']);
     Route::POST('/get-courier-team-guest-settlement/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getCourierTeamGuestSettlement']);
 
+    Route::get('/get-agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'getAgentSettlement']);
     Route::POST('/agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'agentSettlement']);
 
-    Route::POST('/excel-payments-in-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsInReport']);
+    Route::get('/view-agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'viewAgentSettlement']);
+    Route::POST('/get-view-agent-settlement/{agent_id}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getViewAgentSettlement']);
 
+    Route::POST('/print-agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'printAgentSettlement']);
+
+    Route::POST('/excel-payments-in-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsInReport']);
 
     Route::get('/payments-out-report', [App\Http\Controllers\Admin\SettlementController::class, 'PaymentsOutReport']);
     Route::POST('/get-payments-out-report/{user}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getPaymentsOutReport']);
@@ -397,8 +410,12 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/get-user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'getUserSettlement']);
     Route::POST('/user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'userSettlement']);
 
+    Route::POST('/print-user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'printUserSettlement']);
+
     Route::get('/view-user-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'viewUserSettlement']);
-    Route::POST('/get-view-user-settlement/{status}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getViewUserSettlement']);
+    Route::POST('/get-view-user-settlement/{user_id}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getViewUserSettlement']);
+
+    Route::get('/excel-user-settlement/{user_id}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'excelUserSettlement']);
 
     Route::POST('/excel-payments-out-report', [App\Http\Controllers\Admin\SettlementController::class, 'excelPaymentsOutReport']);
 
@@ -409,6 +426,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/view-agent-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewAgentSettlement']);
     // Route::get('/view-user-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewUserSettlement']);
     Route::get('/view-accounts-settlement/{id}', [App\Http\Controllers\Admin\SettlementController::class, 'viewAccountsSettlement']);
+
+    Route::POST('/print-accounts-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'printAccountsSettlement']);
 
     //languages modules
     Route::get('/languages', [App\Http\Controllers\Admin\SettingsController::class, 'languageTable']);

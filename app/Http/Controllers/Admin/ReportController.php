@@ -86,8 +86,9 @@ class ReportController extends Controller
         if ( $user_type != 'all_user' )
         {
             if ( $user_type != 'guest' ){
+                $i->where('shipments.sender_id', $user_type);
                 $i->join('users', 'users.id', '=', 'shipments.sender_id');
-                $i->where('users.user_type', $user_type);
+                //$i->where('users.user_type', $user_type);
             }
             else{
                 $i->where('shipments.sender_id', 0);
@@ -307,8 +308,9 @@ class ReportController extends Controller
             
             $fdate = date('Y-m-d', strtotime($request->from_date));
             $tdate = date('Y-m-d', strtotime($request->to_date));
+            $user_type = $request->user_type;
             
-            return Excel::download(new RevenueExport($fdate,$tdate), 'revenuereport.xlsx');
+            return Excel::download(new RevenueExport($user_type,$fdate,$tdate), 'revenuereport.xlsx');
         //}
         //return (new BookingExport($fdate,$tdate))->download('report.xlsx');
     }
@@ -317,15 +319,33 @@ class ReportController extends Controller
     public function RevenueReport(){
         $agent=agent::all();
         $language=language::all();
-        return view('admin.revenue_report',compact('agent','language'));
+        $user = User::where('status',4)->get();
+        return view('admin.revenue_report',compact('agent','language','user'));
+    }
+
+    public function AllRevenueReport(){
+        $agent=agent::all();
+        $language=language::all();
+        $user = User::where('status',4)->get();
+        return view('admin.all_revenue_report',compact('agent','language','user'));
     }
 
 
-    public function getRevenueReport($fdate,$tdate){
+    public function getRevenueReport($user_type,$fdate,$tdate){
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
         $i =DB::table('shipments');
+        if ( $user_type != 'all_user' )
+        {
+            if ( $user_type != 'guest' ){
+                $i->where('shipments.sender_id', $user_type);
+                $i->join('users', 'users.id', '=', 'shipments.sender_id');
+            }
+            else{
+                $i->where('shipments.sender_id', 0);
+            }
+        }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
             $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
@@ -399,6 +419,98 @@ class ReportController extends Controller
         ->make(true);
 
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+    public function getAllRevenueReport($user_type,$fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
+        
+        $i =DB::table('shipments as s');
+        if ( $user_type != 'all_user' )
+        {
+            $i->where('s.sender_id', $user_type);
+            $i->join('users', 'users.id', '=', 's.sender_id');
+        }
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            $i->whereBetween('s.date', [$fdate1, $tdate1]);
+        }
+        $i->where('s.status',8);
+        $i->where('s.sender_id','!=',0);
+        $i->groupBy('s.sender_id');
+        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.total) as total")  , DB::raw("s.sender_id") ]);
+        $shipment = $i->get();
+
+        return Datatables::of($shipment)
+            ->addColumn('account_id', function ($shipment) {
+                $user = User::find($shipment->sender_id);
+                return '<td>
+                <p>' . $user->customer_id . '</p>
+                <p>' . $user->first_name . ' ' . $user->last_name . '</p>
+                <p>' . $user->mobile . '</p>
+                </td>';
+            })
+            ->addColumn('no_of_packages', function ($shipment) {
+                return '<td>
+                <p>No of Packages : ' .$shipment->no_of_packages . '</p>
+                </td>';
+            })
+            ->addColumn('no_of_shipments', function ($shipment) {
+                return '<td>
+                <p>No of Shipments : ' .$shipment->no_of_shipments . '</p>
+                </td>';
+            })
+            ->addColumn('special_cod', function ($shipment) {
+                return '<td>
+                <p>' .$shipment->special_cod . ' AED</p>
+                </td>';
+            })
+            ->addColumn('total', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->total . ' AED</p>
+                </td>';
+            })
+            
+        ->rawColumns(['no_of_shipments', 'no_of_packages', 'special_cod','total','account_id'])
+        ->addIndexColumn()
+        ->make(true);
+    }
+
+    public static function printAllRevenueReportUserDetails($id){
+        $user = User::find($id);
+        return '
+        '. $user->customer_id .'
+        '. $user->first_name . $user->last_name .'
+        '. $user->mobile .'
+        ';
+    }
+
+    public function printAllRevenueReport(Request $request){
+        $fdate = date('Y-m-d', strtotime($request->from_date));
+        $tdate = date('Y-m-d', strtotime($request->to_date));
+        
+        $i =DB::table('shipments as s');
+        if ( $request->user_type != 'all_user' )
+        {
+            $i->where('s.sender_id', $request->user_type);
+            $i->join('users', 'users.id', '=', 's.sender_id');
+        }
+        if ( $fdate != '1970-01-01' && $tdate != '1970-01-01' )
+        {
+            $i->whereBetween('s.date', [$fdate, $tdate]);
+        }
+        $i->where('s.status',8);
+        $i->where('s.sender_id','!=',0);
+        $i->groupBy('s.sender_id');
+        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.total) as total")  , DB::raw("s.sender_id") ]);
+        $shipment = $i->get();
+
+        $user = User::where('status',4)->get();
+
+        $pdf = PDF::loadView('print.print_all_revenue_report',compact('shipment','fdate','tdate','user'));
+        $pdf->setPaper('A4');
+        return $pdf->stream('print_all_revenue_report.pdf');
+
     }
 
 

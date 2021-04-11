@@ -249,8 +249,12 @@
 
   <script type="text/javascript">
 $('.shipment').addClass('active');
+
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
+       "language": {
+          processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+        },
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
@@ -272,6 +276,7 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'action', name: 'action' },
     ]
 });
+
 
 $('#search').click(function(){
     //alert('hi');

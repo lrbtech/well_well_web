@@ -2,6 +2,7 @@
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
+<link rel="stylesheet" type="text/css" href="/assets/app-assets/css/select2.css">
 @endsection
 @section('section')        
         <!-- Right sidebar Ends-->
@@ -34,17 +35,28 @@
                   {{ csrf_field() }}
                   <div class="card-header">
                     <div class="row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
                         </div>
 
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
 
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
+                          <label>Select User</label>
+                          <select id="user_type" name="user_type" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                          <option value="all_user">All Data</option>
+                          <option value="guest">Guest</option>
+                            @foreach($user as $row)
+                            <option value="{{$row->id}}">{{$row->customer_id}} - {{$row->first_name}} {{$row->lasst_name}}</option>
+                            @endforeach
+                          </select>
+                        </div>
+
+                        <div class="form-group col-md-3">
                             <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}</button> <br>
                             <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="submit">Excel
                             </button>
@@ -92,16 +104,22 @@
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
+  <script src="/assets/app-assets/js/select2/select2.full.min.js"></script>
+  <script src="/assets/app-assets/js/select2/select2-custom.js"></script>
 
   <script type="text/javascript">
-$('.shipment').addClass('active');
+$('.revenue-report').addClass('active');
+
+$(document).ready(function() {
+  $('.js-example-basic-single').select2();
+});
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-revenue-report/1/1",
+        "url": "/admin/get-revenue-report/all_user/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -136,7 +154,8 @@ $('#search').click(function(){
     }else{
       tdate = '1';
     }
-    var new_url = '/admin/get-revenue-report/'+fdate+'/'+tdate;
+    var user_type = $('#user_type').val();
+    var new_url = '/admin/get-revenue-report/'+user_type+'/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });

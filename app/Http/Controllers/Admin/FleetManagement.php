@@ -15,6 +15,12 @@ use Auth;
 
 class FleetManagement extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+        date_default_timezone_set("Asia/Dubai");
+        date_default_timezone_get();
+    }
     public function getVehicleType(){
         $vehicle_type = vehicle_type::all();
         $language = language::all();
@@ -189,11 +195,15 @@ class FleetManagement extends Controller
 
     //Remainder Management
     public function getRemainder(){
-        $fleet_management = fleet_management::where('status',0)->get();
         //$fleet_management = fleet_management::whereRaw('DAYOFYEAR(curdate()) <= DAYOFYEAR(dob) AND DAYOFYEAR(curdate()) + 7 >=  dayofyear(dob)')->orderByRaw('DAYOFYEAR(dob)')->get();
 
+        $vehicle_type = vehicle_type::where('status',0)->get();
+        $vehicle_group = vehicle_group::where('status',0)->get();
+        $fleet_management = fleet_management::where('status',0)->get();
+        $agent = agent::where('status',0)->get();
         $language = language::all();
-        return view('admin.fleet_remainder',compact('fleet_management','language'));
+        $role_get = role::where('id','=',Auth::guard('admin')->user()->role_id)->first();
+        return view('admin.fleet_remainder',compact('fleet_management','language','vehicle_type','vehicle_group','agent','role_get'));
     }
 
 }

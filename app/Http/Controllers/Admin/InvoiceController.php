@@ -386,6 +386,15 @@ class InvoiceController extends Controller
                     </td>';
                 }
             })
+            ->addColumn('status', function ($invoice) {
+                $balance = $invoice->total - $invoice->paid;
+                if($balance == 0){
+                    return '<p>Paid</p>';
+                }
+                else{
+                    return '<p>Un Paid</p>';
+                }
+            })
             ->addColumn('no_of_shipments', function ($invoice) {
                 return '<td>
                 <p>'.$invoice->no_of_shipments.'</p>
@@ -405,17 +414,29 @@ class InvoiceController extends Controller
             })
             
             ->addColumn('action', function($invoice){
+                $output='';
+                $balance = $invoice->total - $invoice->paid;
+                if($balance == 0){
+                    $output.=' 
+                        <a class="dropdown-item" href="#" onclick="viewPayment('.$invoice->id.')">View Payment</a>   
+                    ';
+                }
+                else{
+                    $output.=' 
+                        <a class="dropdown-item" href="#" onclick="newPayment('.$invoice->id.')">Add Payment</a> 
+                        <a class="dropdown-item" href="#" onclick="viewPayment('.$invoice->id.')">View Payment</a>   
+                    ';
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="#" onclick="newPayment('.$invoice->id.')">Add Payment</a> 
-                        <a class="dropdown-item" href="#" onclick="viewPayment('.$invoice->id.')">View Payment</a>    
+                        '.$output.'
                         <a onclick="PrintInvoice('.$invoice->id.')" class="dropdown-item" href="#" >Print</a>
                     </div>
                 </td>';
             })
             
-        ->rawColumns(['user_details','invoice_date','user_type','no_of_shipments','total','no_of_packages','action'])
+        ->rawColumns(['user_details','invoice_date','user_type','no_of_shipments','total','no_of_packages','action','status'])
         ->addIndexColumn()
         ->make(true);
     }

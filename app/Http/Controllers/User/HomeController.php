@@ -40,7 +40,7 @@ class HomeController extends Controller
 
         $settlement_value = shipment::where('sender_id',Auth::user()->id)->where('paid_status',1)->whereBetween('paid_date', [$cfdate, $cldate])->get()->sum("special_cod");
 
-        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod','settlement_value'));
+        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod','settlement_value','cfdate','cldate'));
     }
 
 
@@ -62,7 +62,7 @@ class HomeController extends Controller
 
         $settlement_value = shipment::where('sender_id',Auth::user()->id)->where('paid_status',1)->whereBetween('paid_date', [$cfdate, $cldate])->get()->sum("special_cod");
 
-        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod','settlement_value'));
+        return view('user.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','current_month_cod','settlement_value','cfdate','cldate'));
     }
     
 }

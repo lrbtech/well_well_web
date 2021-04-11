@@ -306,7 +306,7 @@
 
             <li class="location-download">
               <a target="_blank" class="sidebar-header location-download" href="/pdfview/api_integration.pdf">
-              <i data-feather="settings"></i>
+              <i data-feather="eye"></i>
               <span> Api Integration</span>
               </a>
             </li>

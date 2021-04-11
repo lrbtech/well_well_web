@@ -25,7 +25,7 @@
                     <h2 style="font-weight:bold; font-size: 32px; color: #2d87ba; max-width: 85%; line-height: 1.1; margin: 10px 0 0; padding: 0; float: left">Invoice</h2>
                   </div>
                   <div style="color:black; text-align: right; padding-top:40px; padding-right: 40px; float: right;">
-                      <img style="width:100px;height:80px;" src="assets/images/logo.png">
+                      <img style="width:100px;height:80px;" src="/assets/images/logo.png">
                   </div>
                 </div>
                 
@@ -66,6 +66,39 @@
                     </tr>
                   </tbody>
                 </table>
+                <!-- <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
+                  <thead style="text-transform: uppercase;color:#fff; padding: 10px 10px 10px 10px; background: #2d87ba; border-right: 2px solid white;">
+                    <tr>
+                      <td style="font-weight:bold;border-bottom:2px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">From</td>
+                      <td style="font-weight:bold;border-bottom:2px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">To</td>
+                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">No Of Shipments</td>
+                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">No Of Packages</td>
+                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">Total</td>
+                    </tr>
+                  </thead>
+                  <tbody id="lineItem">
+                    @foreach($invoice_item as $key => $row)
+                    <tr>
+                        <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">
+                        {{$key+1}}
+                        </td>
+                        <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">
+                        @if($row['cancel_pay'] == 0)
+                        <p>Tracking ID : {{$row['tracking_id']}} Delivery Charge</p>
+                        @else 
+                        <p style="color:red;">Tracking ID : {{$row['tracking_id']}} Delivery Charge</p>
+                        @endif
+                        </td>
+                        <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
+                        <span id="tmp_item_name" style="word-wrap: break-word;">
+                        {{$row['no_of_packages']}}
+                        </span>
+                        </td>
+                        <td valign="top" style="border-bottom:1px solid #2d87ba; padding: 7px 40px 7px 0; font-size: 12px; text-align: right;">{{round($row['total'],2)}}</td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table> -->
                 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
                   <thead style="text-transform: uppercase;color:#fff; padding: 10px 10px 10px 10px; background: #2d87ba; border-right: 2px solid white;">
                     <tr>

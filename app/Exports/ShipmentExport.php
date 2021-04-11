@@ -42,11 +42,11 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
     public function collection()
     {
         $i =DB::table('shipments');
-        if ( $this->user_type != 3 )
+        if ( $this->user_type != 'all_user' )
         {
-            if ( $this->user_type != 2 ){
+            if ( $this->user_type != 'guest' ){
+                $i->where('shipments.sender_id', $this->user_type);
                 $i->join('users', 'users.id', '=', 'shipments.sender_id');
-                $i->where('users.user_type', $this->user_type);
             }
             else{
                 $i->where('shipments.sender_id', 0);
@@ -273,19 +273,10 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $user_type,
             $user_details,
             $shipment_mode,
-            $special_service,
             $shipment_details,
-            $ship_from,
-            $ship_to,
-            'AED '.$shipment->shipment_price,
-            'AED '.$shipment->insurance_amount,
-            'AED '.$shipment->cod_amount,
-            'AED '.$shipment->sub_total,
-            'AED '.$shipment->vat_amount,
-            'AED '.$shipment->postal_charge,
-            'AED '.$shipment->total,
-            'AED '.$shipment->special_cod,
-            'AED '.$shipment->collect_cod_amount,
+            $shipment->total,
+            $shipment->special_cod,
+            $shipment->collect_cod_amount,
             $shipment->cod_type,
         ];
     }
@@ -299,18 +290,8 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             'User Type',
             'User Details',
             'Shipping Mode',
-            'Special Shipment',
             'Shipment Details',
-            'Ship From',
-            'Ship To',
-            'Total',
             'Shipment Price',
-            'Insurance',
-            'C.O.D',
-            'Sub Total',
-            'Vat',
-            'Postal Charge',
-            'Total',
             'Special C.O.D',
             'Collected C.O.D',
             'C.O.D Payment Type',

@@ -74,10 +74,10 @@
                         <div class="form-group col-md-2">
                           <label>Select User</label>
                           <select id="user_type" name="user_type" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                          <option value="all_user">All Data</option>
-                          <option value="guest">Guest</option>
+                            <option value="all_user">All Data</option>
+                            <option value="guest">Guest</option>
                             @foreach($user as $row)
-                            <option value="{{$row->id}}">{{$row->customer_id}} - {{$row->first_name}} {{$row->lasst_name}}</option>
+                            <option value="{{$row->id}}">{{$row->customer_id}} - {{$row->first_name}} {{$row->last_name}}</option>
                             @endforeach
                           </select>
                         </div>
@@ -137,7 +137,7 @@
 <script src="/assets/app-assets/js/select2/select2-custom.js"></script>
 
   <script type="text/javascript">
-$('.shipment').addClass('active');
+$('.shipment-report').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,

@@ -471,8 +471,8 @@
 
               @if($role_get->vehicle_create == 'on' || $role_get->vehicle_group == 'on' || $role_get->vehicle_type == 'on')
               <li>
-                <span class="badge badge-pill badge-danger">20</span>
-                <span class="badge badge-pill badge-warning">20</span>
+                <span class="badge badge-pill badge-danger">0</span>
+                <span class="badge badge-pill badge-warning">0</span>
               
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-car"></i><span>{{$language[307][Auth::guard('admin')->user()->lang]}} </span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
@@ -524,7 +524,9 @@
                   <li class="shipment-report"><a class="shipment-report" href="/admin/shipment-report">{{$language[192][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
                   @if($role_get->revenue_report == 'on')
-                   <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">{{$language[193][Auth::guard('admin')->user()->lang]}}</a></li> 
+                   <li class="revenue-report"><a class="revenue-report" href="/admin/revenue-report">{{$language[193][Auth::guard('admin')->user()->lang]}}</a></li>
+
+                   <li class="all-revenue-report"><a class="all-revenue-report" href="/admin/all-revenue-report">Revenue Report Group</a></li> 
                   @endif
                   @if($role_get->agent_report == 'on')
                   <li class="agent-report"><a class="agent-report" href="/admin/agent-report">{{$language[316][Auth::guard('admin')->user()->lang]}}</a></li> 
@@ -546,6 +548,8 @@
                   @if($role_get->courier_team_guest_settlement_report == 'on')
                   <li class="courier-team-guest-settlement"><a class="courier-team-guest-settlement" href="/admin/courier-team-guest-settlement">{{$language[330][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
+
+                  <li class="view-agent-settlement"><a class="view-agent-settlement" href="/admin/view-agent-settlement">Agent Settlement</a></li> 
 
                   @if($role_get->accounts_team_settlement_report == 'on')
                   <li class="accounts-team-report"><a class="accounts-team-report" href="/admin/accounts-team-report">{{$language[319][Auth::guard('admin')->user()->lang]}}</a></li> 

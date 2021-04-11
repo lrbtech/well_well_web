@@ -565,10 +565,17 @@ class AllShipment extends Controller
             })
 
             ->addColumn('action', function ($shipment) {
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        '.$output2.'
                         <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
                     </div>
                 </td>';
@@ -797,10 +804,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        '.$output2.'
                         <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
                     </div>
                 </td>';
@@ -920,10 +934,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                         <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
                     </div>
                 </td>';
@@ -1035,12 +1056,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
-                // <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
-                // <a class="dropdown-item" href="/admin/pickup-station/'.$shipment->id.'">Received Station Hub</a>
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -1180,20 +1206,17 @@ class AllShipment extends Controller
                 
             })
             ->addColumn('action', function ($shipment) {
-                $output='';
-                // if($shipment->status == 4){
-                //     if($shipment->from_station_id == $shipment->to_station_id){
-                //         $output.='<a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>';
-                //     }
-                //     else{
-                //         $output.='<a onclick="AssignAgentStation('.$shipment->id.')" class="dropdown-item">Assign Agent to Transit out (Hub)</a>';
-                //     }
-                // }
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
-                        '.$output.'
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -1332,12 +1355,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
-                // <a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
-                        
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -1473,12 +1501,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
-                // <a onclick="AssignAgentDelivery('.$shipment->id.')" class="dropdown-item">Agent Assign to Delivery</a>
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
-                        
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -1580,12 +1613,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
-                // <a href="/admin/shipment-delivery/'.$shipment->id.'" class="dropdown-item">Shipment Delivery</a>
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
-                        
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -1830,10 +1868,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -2031,10 +2076,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -2234,10 +2286,17 @@ class AllShipment extends Controller
                 }
             })
             ->addColumn('action', function ($shipment) {
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
                     </div>
                 </td>';
             })
@@ -2334,16 +2393,18 @@ class AllShipment extends Controller
                 // }
             })
             ->addColumn('action', function ($shipment) {
-                $output='';
-                // if($shipment->status == 10){
-                //     $output.='<a onclick="ShipmentCancelled('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>';
-                // }
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
-                        '.$output.'
-                   </div>
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
+                    </div>
                 </td>';
             })
             
@@ -2426,16 +2487,18 @@ class AllShipment extends Controller
                 return '<td><p>Hold Shipment</p></td>';
             })
             ->addColumn('action', function ($shipment) {
-                $output='';
-                // if($shipment->status == 10){
-                //     $output.='<a onclick="ShipmentCancelled('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>';
-                // }
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
-                        '.$output.'
-                   </div>
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
+                    </div>
                 </td>';
             })
             
@@ -2480,13 +2543,11 @@ class AllShipment extends Controller
             })
            
             ->addColumn('action', function ($shipment) {
-                $output='';
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->shipment_id.'">View Shipment</a>    
-                        '.$output.'
-                   </div>
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                    </div>
                 </td>';
             })
             

@@ -27,29 +27,29 @@ class CustomerController extends Controller
 
     public function viewCustomer(){
         $customer = User::orderBy('id','DESC')->get();
-        $role_get = role::find(Auth::guard('admin')->user()->id);
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
         $settings = settings::find(1);
         $language = language::all();
 
-        if(Auth::guard('admin')->user()->role_id == 1){
-            return view('admin.admin_customer',compact('customer','role_get','settings', 'language' ));
-        }
-        else if(Auth::guard('admin')->user()->role_id == 2){
-            return view('admin.registration_customer',compact('customer','role_get','settings', 'language'));
-        }
-        else if(Auth::guard('admin')->user()->role_id == 3){
-            return view('admin.sales_customer',compact('customer','role_get','settings','language'));
-        }
-        else if(Auth::guard('admin')->user()->role_id == 4){
-            return view('admin.accounts_customer',compact('customer','role_get','settings','language'));
-        }else{
+        // if(Auth::guard('admin')->user()->role_id == 1){
+        //     return view('admin.admin_customer',compact('customer','role_get','settings', 'language' ));
+        // }
+        // else if(Auth::guard('admin')->user()->role_id == 2){
+        //     return view('admin.registration_customer',compact('customer','role_get','settings', 'language'));
+        // }
+        // else if(Auth::guard('admin')->user()->role_id == 3){
+        //     return view('admin.sales_customer',compact('customer','role_get','settings','language'));
+        // }
+        // else if(Auth::guard('admin')->user()->role_id == 4){
+        //     return view('admin.accounts_customer',compact('customer','role_get','settings','language'));
+        // }else{
            return view('admin.admin_customer',compact('customer','role_get','settings', 'language' ));
-        }
+        //}
     }
 
     public function registrationCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->id);
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -58,7 +58,7 @@ class CustomerController extends Controller
 
     public function salesCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->id);
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -67,7 +67,7 @@ class CustomerController extends Controller
 
     public function accountsCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->id);
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -76,7 +76,7 @@ class CustomerController extends Controller
 
     public function activeCustomer(){
       $customer = User::orderBy('id','DESC')->get();
-      $role_get = role::find(Auth::guard('admin')->user()->id);
+      $role_get = role::find(Auth::guard('admin')->user()->role_id);
       $settings = settings::find(1);
       $language = language::all();
 
@@ -253,7 +253,7 @@ class CustomerController extends Controller
 
         $customer = User::find($id);
         $settings = settings::find(1);
-        $role_get = role::find(Auth::guard('admin')->user()->id);
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
         
         return view('admin.profile',compact('rate','rate_item','customer','country','city','area','settings','language','role_get'));
     }

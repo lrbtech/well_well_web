@@ -90,44 +90,39 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
+                <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
                   <thead style="text-transform: uppercase;color:#fff; padding: 10px 10px 10px 10px; background: #2d87ba; border-right: 2px solid white;">
                     <tr>
                       <td style="font-weight:bold;border-bottom:2px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="10%">No</td>
-                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">Shipment ID</td>
-                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="25%">From</td>
-                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="25%">To</td>
-                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">Status</td>
+                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">Tracking ID</td>
+                      <!-- <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="25%">From</td>
+                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="25%">To</td> -->
+                      <td style="font-weight:bold;border-bottom:1px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">Amount</td>
                     </tr>
                   </thead>
                   <tbody id="lineItem">
-                    @foreach($datas as $key => $row)
+                    @foreach($delivery_shipment as $key => $row)
                     <tr>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">{{$key + 1}}</td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row['order_id']}}
+                        @foreach($shipment_package as $key => $packages)
+                          @if($row->id == $packages->shipment_id)
+                          #{{$packages->sku_value}}
+                          <?php break; ?>
+                          @endif
+                        @endforeach
                         </span>
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row['from_station']}}
-                        </span>
-                        </td>
-                        <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
-                        <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row['to_station']}}
-                        </span>
-                        </td>
-                        <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
-                        <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row['status']}}
+                        AED {{$row->collect_cod_amount}}
                         </span>
                         </td>
                     </tr>
                     @endforeach
                   </tbody>
-                </table> -->
+                </table>
 
 
 <style media="print">

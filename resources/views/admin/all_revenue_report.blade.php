@@ -11,7 +11,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>User <span>Settlement </span></h2> 
+                  <h2>Revenue <span>{{$language[99][Auth::guard('admin')->user()->lang]}}  </span></h2> 
                   <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -31,10 +31,10 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
-                  <form target="_blank" action="/admin/print-user-settlement" method="POST" enctype="multipart/form-data">
+                <form target="_blank" action="/admin/print-all-revenue-report" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="card-header">
-                      <div class="row">
+                    <div class="row">
                         <div class="form-group col-md-3">
                             <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
@@ -44,10 +44,12 @@
                             <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
+
                         <div class="form-group col-md-3">
                           <label>Select User</label>
-                          <select id="user_id" name="user_id" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                          <option value="user">Select User</option>
+                          <select id="user_type" name="user_type" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                          <option value="all_user">All Data</option>
+                          <!-- <option value="guest">Guest</option> -->
                             @foreach($user as $row)
                             <option value="{{$row->id}}">{{$row->customer_id}} - {{$row->first_name}} {{$row->last_name}}</option>
                             @endforeach
@@ -55,16 +57,11 @@
                         </div>
 
                         <div class="form-group col-md-3">
-                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}
-                            </button> <br>
-                            <button class="btn btn-primary btn-block mr-10" type="submit">Print
-                            </button>
-                            <br>
-                            <button id="exceldownload" class="btn btn-primary btn-block mr-10" type="button">Excel
+                            <button id="search" class="btn btn-primary btn-block mr-10" type="button">{{$language[114][Auth::guard('admin')->user()->lang]}}</button> <br>
+                            <button id="print" class="btn btn-primary btn-block mr-10" type="submit">Print
                             </button>
                         </div>
-                      </div>
-                    
+                    </div>
                   </div>
                   </form>
                   <div class="card-body">
@@ -72,14 +69,12 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
-                          <tr>
                             <th>#</th>
-                            <th>Date</th>
+                            <th>Account ID</th>
                             <th>No of Shipments</th>
-                            <th>Amount</th>
-                            <th>Upload Slip</th>
-                            <th>Admin<th>
-                          </tr>
+                            <th>No of Packages</th>
+                            <th>Total</th>
+                            <th>Special C.O.D</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -105,33 +100,35 @@
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
-
   <script src="/assets/app-assets/js/select2/select2.full.min.js"></script>
-<script src="/assets/app-assets/js/select2/select2-custom.js"></script>
+  <script src="/assets/app-assets/js/select2/select2-custom.js"></script>
 
   <script type="text/javascript">
-$('.view-user-settlement').addClass('active');
+$('.all-revenue-report').addClass('active');
+
+$(document).ready(function() {
+  $('.js-example-basic-single').select2();
+});
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
     "serverSide": true,
     //"pageLength": 50,
     "ajax":{
-        "url": "/admin/get-view-user-settlement/user/1/1",
+        "url": "/admin/get-all-revenue-report/all_user/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        { data: 'date', name: 'date' },
+        { data: 'account_id', name: 'account_id' },
         { data: 'no_of_shipments', name: 'no_of_shipments' },
-        { data: 'amount', name: 'amount' },
-        { data: 'slip', name: 'slip' },
-        { data: 'admin', name: 'admin' },
+        { data: 'no_of_packages', name: 'no_of_packages' },        
+        { data: 'total', name: 'total' },
+        { data: 'special_cod', name: 'special_cod' },
     ]
 });
-
 
 $('#search').click(function(){
     //alert('hi');
@@ -139,47 +136,44 @@ $('#search').click(function(){
     var to_date = $('#to_date').val();
     var fdate;
     var tdate;
-    if(from_date!=""){
+    if(from_date!="" && from_date!=null){
       fdate = from_date;
     }else{
       fdate = '1';
     }
-    if(to_date!=""){
+    if(to_date!="" && to_date!=null){
       tdate = to_date;
     }else{
       tdate = '1';
     }
-    var user_id = $('#user_id').val();
-    var new_url = '/admin/get-view-user-settlement/'+user_id+'/'+fdate+'/'+tdate;
+    var user_type = $('#user_type').val();
+    var new_url = '/admin/get-all-revenue-report/'+user_type+'/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });
 
-$('#exceldownload').click(function(){
-    //alert('hi');
-    var from_date = $('#from_date').val();
-    var to_date = $('#to_date').val();
-    var fdate;
-    var tdate;
-    if(from_date!=""){
-      fdate = from_date;
-    }else{
-      fdate = '1';
-    }
-    if(to_date!=""){
-      tdate = to_date;
-    }else{
-      tdate = '1';
-    }
-    var user_id = $('#user_id').val();
-    window.location.href = '/admin/excel-user-settlement/'+user_id+'/'+fdate+'/'+tdate;
-    //orderPageTable.draw();
-});
 
-
-$(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});
+// $('#downloadexcel').click(function(){
+//   var formData = new FormData($('#form')[0]);
+//     $.ajax({
+//         url : '/admin/excel-revenue-report',
+//         type: "POST",
+//         data: formData,
+//         contentType: false,
+//         processData: false,
+//         dataType: "JSON",
+//         success: function(data)
+//         {                
+//             $("#form")[0].reset();
+//             toastr.success(data, 'Successfully Export');
+//         },error: function (data) {
+//             var errorData = data.responseJSON.errors;
+//             $.each(errorData, function(i, obj) {
+//             toastr.error(obj[0]);
+//       });
+//     }
+//     });
+// });
 
 </script>
 @endsection

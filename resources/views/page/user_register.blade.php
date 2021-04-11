@@ -981,11 +981,9 @@ $(document).ready(function () {
         },
 
         errorPlacement: function (error, element) {
-            
             //var errorData = element.responseJSON.errors;
             // console.log(element.attr("name"))
             // $.each(error, function(i, obj) {
-
             var errorName;
             if(element.attr("name") == "user_type"){
                 errorName = "Business Type";

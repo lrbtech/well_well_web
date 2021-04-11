@@ -75,6 +75,7 @@
                             <th>No of Shipments</th>
                             <th>No of Packages</th>
                             <th>Total</th>
+                            <th>Status</th>
                             <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
@@ -219,6 +220,7 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'no_of_shipments', name: 'no_of_shipments' },
         { data: 'no_of_packages', name: 'no_of_packages' },
         { data: 'total', name: 'total' },
+        { data: 'status', name: 'status' },
         { data: 'action', name: 'action' },
     ]
 });

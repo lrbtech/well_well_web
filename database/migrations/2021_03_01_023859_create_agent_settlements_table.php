@@ -16,6 +16,8 @@ class CreateAgentSettlementsTable extends Migration
         Schema::create('agent_settlements', function (Blueprint $table) {
             $table->id();
             $table->string('date')->nullable();
+            $table->TEXT('shipment_ids')->nullable();
+            $table->string('no_of_shipments')->nullable();
             $table->string('agent_id')->nullable();
             $table->string('receiver_id')->nullable();
             $table->string('amount')->nullable();

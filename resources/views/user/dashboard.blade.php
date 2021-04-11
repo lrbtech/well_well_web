@@ -37,12 +37,12 @@
               <div class="row">
                 <div class="form-group col-md-3">
                     <label>{{$language[117][Auth::user()->lang]}}</label>
-                    <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                    <input value="{{$cfdate}}" autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
                 </div>
 
                 <div class="form-group col-md-3">
                     <label>{{$language[118][Auth::user()->lang]}}</label>
-                    <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                    <input value="{{$cldate}}" autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                 </div>
 
                 <div class="form-group col-md-3">
