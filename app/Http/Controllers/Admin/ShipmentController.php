@@ -1139,13 +1139,7 @@ class ShipmentController extends Controller
                 //$role_get = role::find(Auth::guard('admin')->user()->role_id);
                 if($shipment->status == 0){
                     $output.='<a onclick="AssignAgent('.$shipment->id.')" class="dropdown-item" href="#">Assign Agent</a>
-                    <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
-                }
-                elseif($shipment->status == 1){
-                    $output.='<a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
-                }
-                elseif($shipment->status == 3){
-                    $output.='<a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>';
+                    ';
                 }
                 // elseif($shipment->status == 2){
                 //     $output.='<a class="dropdown-item" href="/admin/pickup-station/'.$shipment->id.'">Received Station Hub</a>';
@@ -1179,6 +1173,7 @@ class ShipmentController extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         '.$output2.'
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a> 
                         <a onclick="CancelRequest('.$shipment->id.')" class="dropdown-item" href="#">Shipment Cancel</a>

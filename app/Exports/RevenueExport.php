@@ -133,6 +133,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         
         return [
             $shipment_package[0]->sku_value,
+            $shipment->reference_no,
             $shipment->date,
             $user_type,
             $user_details,
@@ -150,6 +151,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
     {
         return [
             'Tracking ID',
+            'Reference No',
             'Date',
             'User Type',
             'User Details',

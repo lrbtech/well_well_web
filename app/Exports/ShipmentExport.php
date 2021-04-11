@@ -269,6 +269,7 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         
         return [
             $shipment_package[0]->sku_value,
+            $shipment->reference_no,
             $shipment->date,
             $user_type,
             $user_details,
@@ -286,6 +287,7 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
     {
         return [
             'Tracking ID',
+            'Reference No',
             'Date',
             'User Type',
             'User Details',

@@ -278,7 +278,11 @@ class ReportController extends Controller
             })
             ->addColumn('action', function ($shipment) {
                 return '<td>
-                <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
+                        <a  class="dropdown-item" target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a>  
+                    </div>
                 </td>';
             })
             
@@ -701,7 +705,11 @@ class ReportController extends Controller
             })
             ->addColumn('action', function ($shipment) {
                 return '<td>
-                <p><a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a></p>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
+                        <a  class="dropdown-item" target="_blank" href="/admin/print-invoice/'.$shipment->id.'" >Print</a>  
+                    </div>
                 </td>';
             })
             

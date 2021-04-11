@@ -179,13 +179,13 @@ function PrintLabel(id){
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/shipment-report";
+            window.location.href="/admin/agent-report";
             }, 250);
         } else {
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/shipment-report";
+            window.location.href="/admin/agent-report";
         }
         //PrintDiv(data);
         

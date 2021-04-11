@@ -358,6 +358,7 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
         
         return [
             $shipment_package[0]->sku_value,
+            $shipment->reference_no,
             $shipment->date,
             $user_type,
             $user_details,
@@ -386,6 +387,7 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
     {
         return [
             'Tracking ID',
+            'Reference No',
             'Date',
             'User Type',
             'User Details',

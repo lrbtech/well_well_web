@@ -148,5 +148,35 @@ $('#search').click(function(){
     //orderPageTable.draw();
 });
 
+
+function PrintLabel(id){
+  $.ajax({
+    url : '/admin/print-label/'+id,
+    type: "GET",
+    dataType: "JSON",
+    success: function(data)
+    {
+        var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
+        var is_chrome = Boolean(mywindow.chrome);
+        mywindow.document.write(data.html);
+        mywindow.document.close(); 
+        if (is_chrome) {
+            setTimeout(function() {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/admin/shipment-delivered";
+            }, 250);
+        } else {
+            mywindow.focus(); 
+            mywindow.print(); 
+            mywindow.close();
+            window.location.href="/admin/shipment-delivered";
+        }
+        //PrintDiv(data);
+    }
+  });
+}
+
 </script>
 @endsection

@@ -117,16 +117,15 @@ function PrintLabel(id){
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/get-cancel-request";
+            window.location.href="/admin/cancel-request";
             }, 250);
         } else {
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/get-cancel-request";
+            window.location.href="/admin/cancel-request";
         }
         //PrintDiv(data);
-        
     }
   });
 }

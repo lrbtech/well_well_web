@@ -465,7 +465,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a onclick="PrintLabel('.$shipment->sender_id.')" class="dropdown-item" href="#">Print Label</a>
+                        <a onclick="PrintLabel('.$shipment->sender_id.')" class="dropdown-item" href="#">AWB Print</a>
                     </div>
                 </td>';
             })
@@ -576,7 +576,7 @@ class AllShipment extends Controller
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
                         '.$output2.'
-                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                     </div>
                 </td>';
             })
@@ -683,7 +683,7 @@ class AllShipment extends Controller
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
-                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                     </div>
                 </td>';
             })
@@ -815,7 +815,7 @@ class AllShipment extends Controller
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
                         '.$output2.'
-                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                     </div>
                 </td>';
             })
@@ -945,7 +945,7 @@ class AllShipment extends Controller
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
-                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">Print Label</a>
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                     </div>
                 </td>';
             })
@@ -1065,6 +1065,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -1215,6 +1216,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -1364,6 +1366,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -1510,6 +1513,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -1622,6 +1626,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -1757,6 +1762,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>    
                         <a target="_blank" href="/admin/print-invoice/'.$shipment->id.'" class="dropdown-item">Print</a>
                     </div>
@@ -1877,6 +1883,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -2085,6 +2092,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -2402,6 +2410,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
@@ -2496,6 +2505,7 @@ class AllShipment extends Controller
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                     </div>
