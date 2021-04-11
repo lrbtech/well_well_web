@@ -32,11 +32,10 @@
       <thead>
         <tr>
             <th>#</th>
-            <th>Account ID</th>
-            <th>No of Shipments</th>
-            <th>No of Packages</th>
-            <th>Total</th>
-            <th>Special C.O.D</th>
+            <th>Date</th>
+            <th>Admin</th>
+            <th>Paid Amount</th>
+            <th>Mode<th>
         </tr>
         
       </thead>
@@ -46,20 +45,21 @@
                     <td>
                       {{$key + 1}}
                     </td>
-                  <td>
-            {{ \App\Http\Controllers\Admin\ReportController::printAllRevenueReportUserDetails($row->sender_id) }}
+                    <td>
+                      {{date('d-m-Y',strtotime($row->date))}}
                   </td>
                   <td>
-                      {{$row->no_of_shipments}}
+            {{ \App\Http\Controllers\Admin\SettlementController::printAccountsSettlementAdminDetails($row->admin_id) }}
                   </td>
                   <td>
-                      {{$row->no_of_packages}}
+                      AED {{$row->amount}}
                   </td>
                   <td>
-                      AED {{$row->total}}
-                  </td>
-                  <td>
-                      AED {{$row->special_cod}}
+                  @if($row->mode == 1)
+                        C.O.D
+                    @elseif($row->mode == 2)
+                        Guest
+                    @endif
                   </td>
                 </tr>
             @endforeach 

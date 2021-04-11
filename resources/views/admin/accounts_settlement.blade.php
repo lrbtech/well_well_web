@@ -29,6 +29,28 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
+                <form target="_blank" action="/admin/print-accounts-settlement" method="post" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="card-header">
+                      <div class="row">
+                        <div class="form-group col-md-3">
+                            <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
+                            <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                          <button class="btn btn-primary btn-block mr-10" type="submit">Print
+                          </button>
+                        </div>
+                      </div>
+                    
+                  </div>
+                  </form>
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="display" id="basic-1">

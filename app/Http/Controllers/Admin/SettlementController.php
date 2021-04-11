@@ -864,6 +864,14 @@ class SettlementController extends Controller
 
     }
 
+    public static function printAccountsSettlementAdminDetails($id){
+        $admin = admin::find($id);
+        return '
+        '. $admin->employee_id .'
+        '. $admin->name .'
+        ';
+    }
+
     public function printAccountsSettlement(Request $request){
         $fdate = date('Y-m-d', strtotime($request->from_date));
         $tdate = date('Y-m-d', strtotime($request->to_date));

@@ -33,9 +33,9 @@
         <tr>
             <th>#</th>
             <th>Date</th>
-            <th>Admin</th>
-            <th>Paid Amount</th>
-            <th>Mode<th>
+            <th>No of Shipments</th>
+            <th>Amount</th>
+            <th>Receiver</th>
         </tr>
         
       </thead>
@@ -49,17 +49,17 @@
                       {{date('d-m-Y',strtotime($row->date))}}
                   </td>
                   <td>
-            {{ \App\Http\Controllers\Admin\ReportController::printAllRevenueReportUserDetails($row->sender_id) }}
+                      {{$row->no_of_shipments}}
                   </td>
                   <td>
                       AED {{$row->amount}}
                   </td>
                   <td>
-                  @if($row->mode == 1)
-                        C.O.D
-                    @elseif($row->mode == 2)
-                        Guest
+                  @foreach($admin as $admin1)
+                    @if($row->admin_id == $admin1->id)
+                      {{$admin1->name}}
                     @endif
+                  @endforeach
                   </td>                  
                 </tr>
             @endforeach 
