@@ -51,7 +51,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         {
             if ( $this->user_type != 'guest' ){
                 $i->where('shipments.sender_id', $this->user_type);
-                $i->join('users', 'users.id', '=', 'shipments.sender_id');
+               // $i->join('users', 'users.id', '=', 'shipments.sender_id');
             }
             else{
                 $i->where('shipments.sender_id', 0);

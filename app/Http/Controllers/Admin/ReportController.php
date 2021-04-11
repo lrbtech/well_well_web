@@ -87,8 +87,7 @@ class ReportController extends Controller
         {
             if ( $user_type != 'guest' ){
                 $i->where('shipments.sender_id', $user_type);
-                $i->join('users', 'users.id', '=', 'shipments.sender_id');
-                //$i->where('users.user_type', $user_type);
+                //$i->join('users', 'users.id', '=', 'shipments.sender_id');
             }
             else{
                 $i->where('shipments.sender_id', 0);
@@ -340,7 +339,7 @@ class ReportController extends Controller
         {
             if ( $user_type != 'guest' ){
                 $i->where('shipments.sender_id', $user_type);
-                $i->join('users', 'users.id', '=', 'shipments.sender_id');
+                //$i->join('users', 'users.id', '=', 'shipments.sender_id');
             }
             else{
                 $i->where('shipments.sender_id', 0);
@@ -429,7 +428,7 @@ class ReportController extends Controller
         if ( $user_type != 'all_user' )
         {
             $i->where('s.sender_id', $user_type);
-            $i->join('users', 'users.id', '=', 's.sender_id');
+            //$i->join('users', 'users.id', '=', 's.sender_id');
         }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
