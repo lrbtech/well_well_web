@@ -66,7 +66,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
+                <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
                   <thead style="text-transform: uppercase;color:#fff; padding: 10px 10px 10px 10px; background: #2d87ba; border-right: 2px solid white;">
                     <tr>
                       <td style="font-weight:bold;border-bottom:2px solid #EDEDED;  padding: 10px 10px 10px 10px;" width="20%">From</td>
@@ -77,28 +77,31 @@
                     </tr>
                   </thead>
                   <tbody id="lineItem">
-                    @foreach($invoice_item as $key => $row)
                     <tr>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">
-                        {{$key+1}}
+                        {{date('d-m-Y',strtotime($start_date))}}
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 40px; font-size: 12px;">
-                        @if($row['cancel_pay'] == 0)
-                        <p>Tracking ID : {{$row['tracking_id']}} Delivery Charge</p>
-                        @else 
-                        <p style="color:red;">Tracking ID : {{$row['tracking_id']}} Delivery Charge</p>
-                        @endif
+                        {{date('d-m-Y',strtotime($end_date))}}
                         </td>
                         <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
                         <span id="tmp_item_name" style="word-wrap: break-word;">
-                        {{$row['no_of_packages']}}
+                        {{$invoice->no_of_shipments}}
                         </span>
                         </td>
-                        <td valign="top" style="border-bottom:1px solid #2d87ba; padding: 7px 40px 7px 0; font-size: 12px; text-align: right;">{{round($row['total'],2)}}</td>
+                        <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
+                        <span id="tmp_item_name" style="word-wrap: break-word;">
+                        {{$invoice->no_of_packages}}
+                        </span>
+                        </td>
+                        <td style="border-bottom:1px solid #EDEDED; padding: 7px 5px 7px 0px; font-size: 12px;">
+                        <span id="tmp_item_name" style="word-wrap: break-word;">
+                        {{$invoice->total}} AED
+                        </span>
+                        </td>
                     </tr>
-                    @endforeach
                   </tbody>
-                </table> -->
+                </table>
                 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-family: Verdana, Arial, Helvetica, sans-serif;color:#000; font-size: 12px;">
                   <thead style="text-transform: uppercase;color:#fff; padding: 10px 10px 10px 10px; background: #2d87ba; border-right: 2px solid white;">
                     <tr>

@@ -450,10 +450,13 @@ class InvoiceController extends Controller
         $arraydata[]=$shipment_id1;
         }
        
-        $data = shipment::whereIn('id', $arraydata)->get();
+        $data = shipment::whereIn('id', $arraydata)->orderBy('shipment_date', 'ASC')->get();
         $data1=array();
         //$invoice_item=array();
+        $start_date='';
+        $end_date='';
         foreach ($data as $row) {
+            $start_date = $data[0]->shipment_date;
             $shipment = shipment::find($row->id);
             $shipment_package = shipment_package::where('shipment_id',$row->id)->first();
             $data1 = array(
@@ -464,6 +467,7 @@ class InvoiceController extends Controller
                 'cancel_pay'=>$shipment->cancel_pay,
             );
             $invoice_item[]=$data1;
+            $end_date = $row->shipment_date;
         }
 
         //return view('print.invoiceprint',compact('invoice','invoice_item'));
@@ -472,7 +476,7 @@ class InvoiceController extends Controller
         // $pdf->setPaper('A4');
         // return $pdf->stream('invoice.pdf');
 
-        $view = view('print.invoiceprint',compact('invoice','invoice_item'))->render();
+        $view = view('print.invoiceprint',compact('invoice','invoice_item','end_date','start_date'))->render();
         return response()->json(['html'=>$view]);
     }
 
