@@ -47,17 +47,54 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
         }
         if ( $this->agent_id != 'agent' )
         {
-            $i->where('shipments.pickup_agent_id', $this->agent_id);
-            // $i->orWhere('shipments.package_collect_agent_id', $this->agent_id);
-            // $i->orWhere('shipments.pickup_exception_id', $this->agent_id);
-            // $i->orWhere('shipments.package_collect_agent_id', $this->agent_id);
-            // $i->orWhere('shipments.transit_in_id', $this->agent_id);
-            // $i->orWhere('shipments.revenue_exception_id', $this->agent_id);
-            // $i->orWhere('shipments.transit_out_id', $this->agent_id);
-            // $i->orWhere('shipments.package_at_station_id', $this->agent_id);
-            // $i->orWhere('shipments.van_scan_id', $this->agent_id);
-            // $i->orWhere('shipments.delivery_agent_id', $this->agent_id);
-            // $i->orWhere('shipments.delivery_exception_id', $this->agent_id);
+            $i->where([
+                ['shipments.pickup_agent_id',$this->agent_id],
+                ['shipments.status',1]
+            ]);
+            $i->orWhere([
+                ['shipments.package_collect_agent_id',$this->agent_id],
+                ['shipments.status',2]
+            ]);
+            $i->orWhere([
+                ['shipments.pickup_exception_id',$this->agent_id],
+                ['shipments.status',3]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_in_id',$this->agent_id],
+                ['shipments.status',4]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_in_id1',$this->agent_id],
+                ['shipments.status',11]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_out_id',$this->agent_id],
+                ['shipments.status',6]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_out_id1',$this->agent_id],
+                ['shipments.status',12]
+            ]);
+            $i->orWhere([
+                ['shipments.package_at_station_id',$this->agent_id],
+                ['shipments.status',13]
+            ]);
+            $i->orWhere([
+                ['shipments.package_at_station_id1',$this->agent_id],
+                ['shipments.status',14]
+            ]);
+            $i->orWhere([
+                ['shipments.van_scan_id',$this->agent_id],
+                ['shipments.status',7]
+            ]);
+            $i->orWhere([
+                ['shipments.delivery_agent_id',$this->agent_id],
+                ['shipments.status',8]
+            ]);
+            $i->orWhere([
+                ['shipments.delivery_exception_id',$this->agent_id],
+                ['shipments.status',9]
+            ]);
         }
 
         $i->orderBy('shipments.id','DESC');

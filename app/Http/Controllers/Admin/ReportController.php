@@ -526,22 +526,60 @@ class ReportController extends Controller
     
         if ( $agent_id != 'agent' )
         {
-            $i->where('shipments.pickup_agent_id', $agent_id);
-            // $i->orWhere('shipments.package_collect_agent_id', $agent_id);
-            // $i->orWhere('shipments.pickup_exception_id', $agent_id);
-            // $i->orWhere('shipments.transit_in_id', $agent_id);
-            // $i->orWhere('shipments.revenue_exception_id', $agent_id);
-            // $i->orWhere('shipments.transit_out_id', $agent_id);
-            // $i->orWhere('shipments.package_at_station_id', $agent_id);
-            // $i->orWhere('shipments.van_scan_id', $agent_id);
-            // $i->orWhere('shipments.delivery_agent_id', $agent_id);
-            // $i->orWhere('shipments.delivery_exception_id', $agent_id);
+            $i->where([
+                ['shipments.pickup_agent_id',$agent_id],
+                ['shipments.status',1]
+            ]);
+            $i->orWhere([
+                ['shipments.package_collect_agent_id',$agent_id],
+                ['shipments.status',2]
+            ]);
+            $i->orWhere([
+                ['shipments.pickup_exception_id',$agent_id],
+                ['shipments.status',3]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_in_id',$agent_id],
+                ['shipments.status',4]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_in_id1',$agent_id],
+                ['shipments.status',11]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_out_id',$agent_id],
+                ['shipments.status',6]
+            ]);
+            $i->orWhere([
+                ['shipments.transit_out_id1',$agent_id],
+                ['shipments.status',12]
+            ]);
+            $i->orWhere([
+                ['shipments.package_at_station_id',$agent_id],
+                ['shipments.status',13]
+            ]);
+            $i->orWhere([
+                ['shipments.package_at_station_id1',$agent_id],
+                ['shipments.status',14]
+            ]);
+            $i->orWhere([
+                ['shipments.van_scan_id',$agent_id],
+                ['shipments.status',7]
+            ]);
+            $i->orWhere([
+                ['shipments.delivery_agent_id',$agent_id],
+                ['shipments.status',8]
+            ]);
+            $i->orWhere([
+                ['shipments.delivery_exception_id',$agent_id],
+                ['shipments.status',9]
+            ]);
         }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
             $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
         }
-
+        $i->where('shipments.status','!=', 0);
         $i->orderBy('shipments.id','DESC');
         $shipment = $i->get();
 
@@ -627,47 +665,109 @@ class ReportController extends Controller
                 elseif($shipment->status == 1){
                     $agent = agent::find($shipment->pickup_agent_id);
                     if(!empty($agent)){
-                        return 'Schedule for Pickup '.$agent->agent_id;
+                        return '<td>
+                        <p>Schedule for Pickup</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                     else{
                         return 'Schedule for Pickup';
                     }
                 }
                 elseif($shipment->status == 2){
-                    $agent = agent::find($shipment->pickup_agent_id);
+                    $agent = agent::find($shipment->package_collect_agent_id);
                     if(!empty($agent)){
-                        return 'Package Collected '.$agent->agent_id;
+                        return '<td>
+                        <p>Package Collected</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                     else{
                         return 'Package Collected';
                     }
                 }
                 elseif($shipment->status == 3){
-                    return '<td>
-                    <p>Pickup Exception</p>
-                    <p>' . $shipment->exception_category . '</p>
-                    <p>' . $shipment->exception_remark . '</p>
-                    </td>';
+                    $agent = agent::find($shipment->pickup_exception_id);
+                    if(!empty($agent)){
+                        return '<td>
+                        <p>Pickup Exception</p>
+                        <p>' . $shipment->exception_category . '</p>
+                        <p>' . $shipment->exception_remark . '</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
+                    }
+                    else{
+                        return '<td>
+                        <p>Pickup Exception</p>
+                        <p>' . $shipment->exception_category . '</p>
+                        <p>' . $shipment->exception_remark . '</p>
+                        </td>';
+                    }
                 }
                 elseif($shipment->status == 4){
-                    return '<p>Transit In '.$from_station->station.'</p>';
+                    $agent = agent::find($shipment->transit_in_id);
+                    if(!empty($agent)){
+                        return '<td>
+                        <p>Transit In '.$from_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
+                    }
                 }
                 elseif($shipment->status == 6){
-                    return '<p>Transit Out '.$from_station->station.'</p>';
+                    $agent = agent::find($shipment->transit_out_id);
+                    if(!empty($agent)){
+                        return '<td>
+                        <p>Transit Out '.$from_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
+                    }
+                }
+                elseif($shipment->status == 13){
+                    $agent = agent::find($shipment->package_at_station_id);
+                    if(!empty($agent)){
+                        return '<td>
+                        <p>Package At Station '.$from_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
+                    }
                 }
                 elseif($shipment->status == 11){
-                    return '<p>Transit In '.$to_station->station.'</p>';
+                    $agent = agent::find($shipment->transit_in_id1);
+                    if(!empty($agent)){
+                        return '<p>Transit In '.$to_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
                 }
                 elseif($shipment->status == 12){
-                    return '<p>Transit Out '.$to_station->station.'</p>';
+                    $agent = agent::find($shipment->transit_out_id1);
+                    if(!empty($agent)){
+                        return '<p>Transit Out '.$to_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
+                }
+                elseif($shipment->status == 14){
+                    $agent = agent::find($shipment->package_at_station_id1);
+                    if(!empty($agent)){
+                        return '<p>Package At Station '.$to_station->station.'</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
                 }
                 elseif($shipment->status == 7){
-                    $agent = agent::find($shipment->delivery_agent_id);
+                    $agent = agent::find($shipment->van_scan_id);
                     if(!empty($agent)){
                         return '
                         <p>In the Van for Delivery</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
+                        <p>Agent ID '.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
                     }
                     else{
                         return '
@@ -680,8 +780,8 @@ class ReportController extends Controller
                     if(!empty($agent)){
                         return '
                         <p>Shipment delivered</p>
-                        <p>Agent ID '.$agent->agent_id.'</p>'
-                       ;
+                        <p>Agent ID '.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
                     }
                     else{
                         return '
@@ -690,11 +790,22 @@ class ReportController extends Controller
                     }
                 }
                 elseif($shipment->status == 9){
-                    return '<td>
-                    <p>Delivery Exception</p>
-                    <p>' . $shipment->delivery_exception_category . '</p>
-                    <p>' . $shipment->delivery_exception_remark . '</p>
-                    </td>';
+                    $agent = agent::find($shipment->delivery_exception_id);
+                    if(!empty($agent)){
+                        return '
+                        <p>Delivery Exception</p>
+                        <p>' . $shipment->delivery_exception_category . '</p>
+                        <p>' . $shipment->delivery_exception_remark . '</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
+                    else{
+                        return '<td>
+                        <p>Delivery Exception</p>
+                        <p>' . $shipment->delivery_exception_category . '</p>
+                        <p>' . $shipment->delivery_exception_remark . '</p>
+                        </td>';
+                    }
                 }
                 elseif($shipment->status == 10){
                     return '<td>
