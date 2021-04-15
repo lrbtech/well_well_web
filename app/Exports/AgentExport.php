@@ -379,6 +379,10 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             $van_scan,
             $delivery_exception,
             $delivery,
+            $shipment->total,
+            $shipment->special_cod,
+            $shipment->collect_cod_amount,
+            $shipment->cod_type,
         ];
     }
 
@@ -408,6 +412,10 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             'Van for Delivery',
             'Delivery Exception',
             'Shipment Delivered',
+            'Shipment Price',
+            'Special C.O.D',
+            'Collected C.O.D',
+            'C.O.D Payment Type',
         ];
     }
 

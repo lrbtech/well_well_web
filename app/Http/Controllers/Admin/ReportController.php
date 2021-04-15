@@ -523,23 +523,23 @@ class ReportController extends Controller
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
         $i =DB::table('shipments');
-        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
-        {
-            $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
-        }
+    
         if ( $agent_id != 'agent' )
         {
             $i->where('shipments.pickup_agent_id', $agent_id);
-            $i->orWhere('shipments.package_collect_agent_id', $agent_id);
-            $i->orWhere('shipments.pickup_exception_id', $agent_id);
-            $i->orWhere('shipments.package_collect_agent_id', $agent_id);
-            $i->orWhere('shipments.transit_in_id', $agent_id);
-            $i->orWhere('shipments.revenue_exception_id', $agent_id);
-            $i->orWhere('shipments.transit_out_id', $agent_id);
-            $i->orWhere('shipments.package_at_station_id', $agent_id);
-            $i->orWhere('shipments.van_scan_id', $agent_id);
-            $i->orWhere('shipments.delivery_agent_id', $agent_id);
-            $i->orWhere('shipments.delivery_exception_id', $agent_id);
+            // $i->orWhere('shipments.package_collect_agent_id', $agent_id);
+            // $i->orWhere('shipments.pickup_exception_id', $agent_id);
+            // $i->orWhere('shipments.transit_in_id', $agent_id);
+            // $i->orWhere('shipments.revenue_exception_id', $agent_id);
+            // $i->orWhere('shipments.transit_out_id', $agent_id);
+            // $i->orWhere('shipments.package_at_station_id', $agent_id);
+            // $i->orWhere('shipments.van_scan_id', $agent_id);
+            // $i->orWhere('shipments.delivery_agent_id', $agent_id);
+            // $i->orWhere('shipments.delivery_exception_id', $agent_id);
+        }
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
         }
 
         $i->orderBy('shipments.id','DESC');
