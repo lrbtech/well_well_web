@@ -528,51 +528,75 @@ class ReportController extends Controller
         {
             $i->where([
                 ['shipments.pickup_agent_id',$agent_id],
-                ['shipments.status',1]
+                ['shipments.status',1],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.package_collect_agent_id',$agent_id],
-                ['shipments.status',2]
+                ['shipments.status',2],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.pickup_exception_id',$agent_id],
-                ['shipments.status',3]
+                ['shipments.status',3],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.transit_in_id',$agent_id],
-                ['shipments.status',4]
+                ['shipments.status',4],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.transit_in_id1',$agent_id],
-                ['shipments.status',11]
+                ['shipments.status',11],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.transit_out_id',$agent_id],
-                ['shipments.status',6]
+                ['shipments.status',6],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.transit_out_id1',$agent_id],
-                ['shipments.status',12]
+                ['shipments.status',12],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.package_at_station_id',$agent_id],
-                ['shipments.status',13]
+                ['shipments.status',13],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.package_at_station_id1',$agent_id],
-                ['shipments.status',14]
+                ['shipments.status',14],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.van_scan_id',$agent_id],
-                ['shipments.status',7]
+                ['shipments.status',7],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.delivery_agent_id',$agent_id],
-                ['shipments.status',8]
+                ['shipments.status',8],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
             $i->orWhere([
                 ['shipments.delivery_exception_id',$agent_id],
-                ['shipments.status',9]
+                ['shipments.status',9],
+                ['shipments.date','<=',$fdate1],
+                ['shipments.date','>=',$tdate1],
             ]);
         }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
