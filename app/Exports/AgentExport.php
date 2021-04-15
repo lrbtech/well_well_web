@@ -48,16 +48,16 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
         if ( $this->agent_id != 'agent' )
         {
             $i->where('shipments.pickup_agent_id', $this->agent_id);
-            $i->orWhere('shipments.package_collect_agent_id', $this->agent_id);
-            $i->orWhere('shipments.pickup_exception_id', $this->agent_id);
-            $i->orWhere('shipments.package_collect_agent_id', $this->agent_id);
-            $i->orWhere('shipments.transit_in_id', $this->agent_id);
-            $i->orWhere('shipments.revenue_exception_id', $this->agent_id);
-            $i->orWhere('shipments.transit_out_id', $this->agent_id);
-            $i->orWhere('shipments.package_at_station_id', $this->agent_id);
-            $i->orWhere('shipments.van_scan_id', $this->agent_id);
-            $i->orWhere('shipments.delivery_agent_id', $this->agent_id);
-            $i->orWhere('shipments.delivery_exception_id', $this->agent_id);
+            // $i->orWhere('shipments.package_collect_agent_id', $this->agent_id);
+            // $i->orWhere('shipments.pickup_exception_id', $this->agent_id);
+            // $i->orWhere('shipments.package_collect_agent_id', $this->agent_id);
+            // $i->orWhere('shipments.transit_in_id', $this->agent_id);
+            // $i->orWhere('shipments.revenue_exception_id', $this->agent_id);
+            // $i->orWhere('shipments.transit_out_id', $this->agent_id);
+            // $i->orWhere('shipments.package_at_station_id', $this->agent_id);
+            // $i->orWhere('shipments.van_scan_id', $this->agent_id);
+            // $i->orWhere('shipments.delivery_agent_id', $this->agent_id);
+            // $i->orWhere('shipments.delivery_exception_id', $this->agent_id);
         }
 
         $i->orderBy('shipments.id','DESC');
