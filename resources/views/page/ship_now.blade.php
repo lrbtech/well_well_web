@@ -767,10 +767,10 @@ function get_from_latlng(id){
         {
             from_lat = data.lat;
             from_lng = data.lng;
-            alert(from_lat);
+            //alert(from_lat);
             //google.maps.event.trigger(autocomplete, 'place_changed');
             //google.maps.event.addDomListener(window, 'load', initialize);
-            initialize();
+            //initialize();
         }
     });
 }
@@ -801,7 +801,7 @@ function get_to_latlng(id){
 }
 
     function initialize() {
-        alert(from_lat);
+        //alert(from_lat);
         var latlng = new google.maps.LatLng(from_lat, from_lng);
         var map = new google.maps.Map(document.getElementById('map'), {
             center: latlng,
@@ -864,8 +864,8 @@ function get_to_latlng(id){
         // var boundsSet = false;
         var lastPosition = center;
         google.maps.event.addListener(marker, 'dragend', function() {
-            var position = marker.getPosition();
-            bounds.contains(position) ? lastPosition = position : marker.setPosition(lastPosition);
+            // var position = marker.getPosition();
+            // bounds.contains(position) ? lastPosition = position : marker.setPosition(lastPosition);
             geocoder.geocode({
                 'latLng': marker.getPosition()
             }, function(results, status) {
