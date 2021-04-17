@@ -98,6 +98,7 @@ class AppServiceProvider extends ServiceProvider
                 $i2->where('shipments.delivery_reschedule',1);
                 $i2->where('shipments.delivery_reschedule_date',$today);
                 $i2->where('shipments.hold_status',0);
+                $i2->where('shipments.status','!=',8);
                 $i2->orderBy('shipments.id','DESC');
                 $today_delivery = $i2->count();
 
@@ -105,6 +106,7 @@ class AppServiceProvider extends ServiceProvider
                 $i3->where('shipments.delivery_reschedule',1);
                 $i3->where('shipments.delivery_reschedule_date','!=',$today);
                 $i3->where('shipments.hold_status',0);
+                $i3->where('shipments.status','!=',8);
                 $i3->orderBy('shipments.id','DESC');
                 $future_delivery = $i3->count();
             }
@@ -204,6 +206,7 @@ class AppServiceProvider extends ServiceProvider
                 $i2->where([['shipments.from_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date',$today]]);
                 $i2->orWhere([['shipments.to_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date',$today]]);
                 $i2->where('shipments.hold_status',0);
+                $i2->where('shipments.status','!=',8);
                 $i2->orderBy('shipments.id','DESC');
                 $today_delivery = $i2->count();
                 
@@ -211,6 +214,7 @@ class AppServiceProvider extends ServiceProvider
                 $i3->where([['shipments.from_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date','!=',$today]]);
                 $i3->orWhere([['shipments.to_station_id',Auth::guard('admin')->user()->station_id],['shipments.delivery_reschedule',1],['shipments.delivery_reschedule_date','!=',$today]]);
                 $i3->where('shipments.hold_status',0);
+                $i3->where('shipments.status','!=',8);
                 $i3->orderBy('shipments.id','DESC');
                 $future_delivery = $i3->count();
 
