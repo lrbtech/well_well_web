@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\URL;
 namespace App\Providers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        URL::forceScheme('https');
         Schema::defaultStringLength(191);
         view()->composer('admin.layouts', function($view) {
     

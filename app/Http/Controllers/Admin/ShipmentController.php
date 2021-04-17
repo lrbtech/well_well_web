@@ -1110,12 +1110,13 @@ class ShipmentController extends Controller
                 elseif($shipment->status == 9){
                     $agent = agent::find($shipment->delivery_exception_id);
                     if(!empty($agent)){
-                        return '
+                        return '<td>
                         <p>Delivery Exception</p>
                         <p>' . $shipment->delivery_exception_category . '</p>
                         <p>' . $shipment->delivery_exception_remark . '</p>
                         <p>Agent ID :'.$agent->agent_id.'</p>
-                        <p>Name :' . $agent->name . '</p>';
+                        <p>Name :' . $agent->name . '</p>
+                        </td>';
                     }
                     else{
                         return '<td>
@@ -1186,7 +1187,6 @@ class ShipmentController extends Controller
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','user_id','account_id'])
         ->addIndexColumn()
         ->make(true);
-
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
     }
 
