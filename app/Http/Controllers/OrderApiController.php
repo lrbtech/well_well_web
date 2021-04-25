@@ -39,10 +39,10 @@ class OrderApiController extends Controller
         $account_id = $request->header('Account_ID');
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         //WellWell@2021
-        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
-            return response()->json(['message' => 'App Key Not Found'], 401);
-        }
-        elseif(empty($user)){
+        // if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+        //     return response()->json(['message' => 'App Key Not Found'], 401);
+        // }
+        if(empty($user)){
             return response()->json(['message' => 'Account ID Not Found'], 401);
         }
         else{
