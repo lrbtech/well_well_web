@@ -38,8 +38,15 @@ class OrderApiController extends Controller
         $token = $request->header('APP_KEY');
         $account_id = $request->header('Account_ID');
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
-        return response()->json($token);
-        return response()->json($account_id);
+        //return response()->json($token);
+        //return response()->json($account_id);
+
+        $headers = apache_request_headers();
+
+        foreach ($headers as $header => $value) {
+            echo "$header: $value <br />\n";
+        }
+
         //WellWell@2021
         // if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
         //     return response()->json(['message' => 'App Key Not Found'], 401);
