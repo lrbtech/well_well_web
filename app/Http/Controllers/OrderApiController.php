@@ -35,44 +35,40 @@ class OrderApiController extends Controller
     // }
 
     public function getArea(Request $request){ 
-        $token = $request->header('APP_KEY');
-        $account_id = $request->header('Account_ID');
+        // $token = $request->header('APP_KEY');
+        // $account_id = $request->header('Account_ID');
+        $getheaders = apache_request_headers();
+        $token = $getheaders['APP_KEY'];
+        $account_id = $getheaders['Account_ID'];
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
-        //return response()->json($token);
-        //return response()->json($account_id);
-
-        $headers = apache_request_headers();
-
-        return response()->json($headers['APP_KEY']);
-
-        // foreach ($headers as $header => $value) {
-        //     echo "$header: $value <br />\n";
-        // }
 
         //WellWell@2021
-        // if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
-        //     return response()->json(['message' => 'App Key Not Found'], 401);
-        // }
-        // if(empty($user)){
-        //     return response()->json(['message' => 'Account ID Not Found'], 401);
-        // }
-        // else{
-        //     $city = city::where('parent_id',0)->where('city',$request->city)->first();
-        //     $data = city::where('parent_id',$city->id)->where('status',0)->orderBy('city','ASC')->get();
-        //     $datas =array();
-        //     foreach($data as $row){
-        //         $data = array(
-        //             'area' => $row->city,
-        //         );
-        //         $datas[] = $data;
-        //     }
-        //     return response()->json($datas); 
-        // }
+        if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
+            return response()->json(['message' => 'App Key Not Found'], 401);
+        }
+        if(empty($user)){
+            return response()->json(['message' => 'Account ID Not Found'], 401);
+        }
+        else{
+            $city = city::where('parent_id',0)->where('city',$request->city)->first();
+            $data = city::where('parent_id',$city->id)->where('status',0)->orderBy('city','ASC')->get();
+            $datas =array();
+            foreach($data as $row){
+                $data = array(
+                    'area' => $row->city,
+                );
+                $datas[] = $data;
+            }
+            return response()->json($datas); 
+        }
     }
 
     public function createOrder(Request $request){ 
-        $token = $request->header('APP_KEY');
-        $account_id = $request->header('Account_ID');
+        // $token = $request->header('APP_KEY');
+        // $account_id = $request->header('Account_ID');
+        $getheaders = apache_request_headers();
+        $token = $getheaders['APP_KEY'];
+        $account_id = $getheaders['Account_ID'];
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
             return response()->json(['message' => 'App Key Not Found'], 401);
@@ -382,8 +378,11 @@ class OrderApiController extends Controller
 
 
     public function pendingShipment(Request $request){ 
-        $token = $request->header('APP_KEY');
-        $account_id = $request->header('Account_ID');
+        // $token = $request->header('APP_KEY');
+        // $account_id = $request->header('Account_ID');
+        $getheaders = apache_request_headers();
+        $token = $getheaders['APP_KEY'];
+        $account_id = $getheaders['Account_ID'];
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         //WellWell@2021
         if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
@@ -423,8 +422,11 @@ class OrderApiController extends Controller
 
     public function deletePendingShipment(Request $request)
     {
-        $token = $request->header('APP_KEY');
-        $account_id = $request->header('Account_ID');
+        // $token = $request->header('APP_KEY');
+        // $account_id = $request->header('Account_ID');
+        $getheaders = apache_request_headers();
+        $token = $getheaders['APP_KEY'];
+        $account_id = $getheaders['Account_ID'];
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         //WellWell@2021
         if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
@@ -443,8 +445,11 @@ class OrderApiController extends Controller
 
     public function shipmentCancel(Request $request)
     {
-        $token = $request->header('APP_KEY');
-        $account_id = $request->header('Account_ID');
+        // $token = $request->header('APP_KEY');
+        // $account_id = $request->header('Account_ID');
+        $getheaders = apache_request_headers();
+        $token = $getheaders['APP_KEY'];
+        $account_id = $getheaders['Account_ID'];
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         //WellWell@2021
         if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
@@ -479,8 +484,11 @@ class OrderApiController extends Controller
 
     public function shipmentHold(Request $request)
     {
-        $token = $request->header('APP_KEY');
-        $account_id = $request->header('Account_ID');
+        // $token = $request->header('APP_KEY');
+        // $account_id = $request->header('Account_ID');
+        $getheaders = apache_request_headers();
+        $token = $getheaders['APP_KEY'];
+        $account_id = $getheaders['Account_ID'];
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         //WellWell@2021
         if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
@@ -509,8 +517,11 @@ class OrderApiController extends Controller
 
     public function shipmentUnhold(Request $request)
     {
-        $token = $request->header('APP_KEY');
-        $account_id = $request->header('Account_ID');
+        // $token = $request->header('APP_KEY');
+        // $account_id = $request->header('Account_ID');
+        $getheaders = apache_request_headers();
+        $token = $getheaders['APP_KEY'];
+        $account_id = $getheaders['Account_ID'];
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         //WellWell@2021
         if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
