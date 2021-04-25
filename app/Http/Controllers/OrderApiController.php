@@ -43,7 +43,7 @@ class OrderApiController extends Controller
 
         $headers = apache_request_headers();
 
-        return response()->json($headers);
+        return response()->json($headers['APP_KEY']);
 
         // foreach ($headers as $header => $value) {
         //     echo "$header: $value <br />\n";
