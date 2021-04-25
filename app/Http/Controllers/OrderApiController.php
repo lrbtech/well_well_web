@@ -43,9 +43,11 @@ class OrderApiController extends Controller
 
         $headers = apache_request_headers();
 
-        foreach ($headers as $header => $value) {
-            echo "$header: $value <br />\n";
-        }
+        return response()->json($headers);
+
+        // foreach ($headers as $header => $value) {
+        //     echo "$header: $value <br />\n";
+        // }
 
         //WellWell@2021
         // if($token != '$2y$10$/e.dAudOkbZZ2iec4zSNa.eHxLeElTAaeonpe6qtuD14O4VgYR0s2'){
