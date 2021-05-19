@@ -44,6 +44,21 @@ class ShipmentController extends Controller
         date_default_timezone_get();
     }
 
+    private function generateSkuValue(){
+        $sku_value = mt_rand( 1000000000, 9999999999);
+        if(DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
+            generateSkuValue();
+        }
+        else{
+            if(DB::table( 'temp_shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
+                generateSkuValue();
+            }
+            else{
+                return $sku_value;
+            }
+        }
+    }
+
     public function ShipmentExcel(){
         $language = language::all();
         return view('admin.shipment_excel',compact('language'));
@@ -313,10 +328,12 @@ class ShipmentController extends Controller
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
-                do {
-                    $sku_value = mt_rand( 1000000000, 9999999999 );
-                } 
-                while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                // do {
+                //     $sku_value = mt_rand( 1000000000, 9999999999 );
+                // } 
+                // while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+
+                $sku_value =  $this->generateSkuValue();
 
                 $shipment_package = new shipment_package;
                 $shipment_package->sku_value = $sku_value;
@@ -339,10 +356,11 @@ class ShipmentController extends Controller
             for ($y=1; $y<=$request->no_of_packages; $y++){
                 for ($x=0; $x<count($_POST['weight']); $x++) 
                 {
-                    do {
-                        $sku_value = mt_rand( 1000000000, 9999999999 );
-                    } 
-                    while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                    // do {
+                    //     $sku_value = mt_rand( 1000000000, 9999999999 );
+                    // } 
+                    // while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                    $sku_value =  $this->generateSkuValue();
                     $shipment_package = new shipment_package;
                     $shipment_package->sku_value = $sku_value;
                     $shipment_package->shipment_id = $shipment->id;
@@ -419,10 +437,12 @@ class ShipmentController extends Controller
             if($request->same_data == '0'){
                 for ($x=0; $x<count($_POST['weight']); $x++) 
                 {
-                    do {
-                        $sku_value = mt_rand( 1000000000, 9999999999 );
-                    } 
-                    while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                    // do {
+                    //     $sku_value = mt_rand( 1000000000, 9999999999 );
+                    // } 
+                    // while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+
+                    $sku_value =  $this->generateSkuValue();
 
                     $shipment_package = new shipment_package;
                     $shipment_package->sku_value = $sku_value;
@@ -445,10 +465,11 @@ class ShipmentController extends Controller
                 for ($y=1; $y<=$request->no_of_packages; $y++){
                     for ($x=0; $x<count($_POST['weight']); $x++) 
                     {
-                        do {
-                            $sku_value = mt_rand( 1000000000, 9999999999 );
-                        } 
-                        while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                        // do {
+                        //     $sku_value = mt_rand( 1000000000, 9999999999 );
+                        // } 
+                        // while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                        $sku_value =  $this->generateSkuValue();
                         $shipment_package = new shipment_package;
                         $shipment_package->sku_value = $sku_value;
                         $shipment_package->shipment_id = $shipment1->id;
@@ -574,10 +595,12 @@ class ShipmentController extends Controller
                     $shipment_package->save();
                 }
                 else{
-                    do {
-                        $sku_value = mt_rand( 1000000000, 9999999999 );
-                    } 
-                    while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                    // do {
+                    //     $sku_value = mt_rand( 1000000000, 9999999999 );
+                    // } 
+                    // while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+
+                    $sku_value =  $this->generateSkuValue();
 
                     $shipment_package = new shipment_package;
                     $shipment_package->sku_value = $sku_value;

@@ -219,7 +219,10 @@ class OrderApiController extends Controller
         if($request->order['identical'] == '0'){
             foreach ($request->order['package'] as $row) 
             {
+                $sku_value =  $this->generateSkuValue();
+
                 $shipment_package = new temp_shipment_package;
+                $shipment_package->sku_value = $sku_value;
                 $shipment_package->temp_id = $shipment->id;
                 $shipment_package->category = $row['category'];
                 $shipment_package->description = $row['description'];
@@ -243,7 +246,10 @@ class OrderApiController extends Controller
             for ($y=1; $y<=$request->order['no_of_packages']; $y++){
                 foreach ($request->order['package'] as $row) 
                 {
+                    $sku_value =  $this->generateSkuValue();
+
                     $shipment_package = new temp_shipment_package;
+                    $shipment_package->sku_value = $sku_value;
                     $shipment_package->temp_id = $shipment->id;
                     $shipment_package->category = $row['category'];
                     $shipment_package->description = $row['description'];
@@ -264,11 +270,31 @@ class OrderApiController extends Controller
                 }
             }
         }
+        $temp_shipment_package = temp_shipment_package::where('temp_id',$shipment->id)->get();
+        $sku_value1;
+        foreach($temp_shipment_package as $row){
+            $sku_value1[]=$row->sku_value;
+        }
+        $sku_value = collect($sku_value1)->implode(',');
 
-        return response()->json(['id' => $shipment->id , 'message' => 'Save Successfully','status'=>200], 200);
+        return response()->json(['id' => $shipment->id , 'sku_value' => $sku_value , 'message' => 'Save Successfully','status'=>200], 200);
         }
     }
 
+    private function generateSkuValue(){
+        $sku_value = mt_rand( 1000000000, 9999999999);
+        if(DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
+            generateSkuValue();
+        }
+        else{
+            if(DB::table( 'temp_shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
+                generateSkuValue();
+            }
+            else{
+                return $sku_value;
+            }
+        }
+    }
 
     public function getShipmentPrice($user_id,$weight,$to_address,$shipment_mode,$declared_value,$cod_enable){
         $rate = add_rate::where('user_id',$user_id)->first();

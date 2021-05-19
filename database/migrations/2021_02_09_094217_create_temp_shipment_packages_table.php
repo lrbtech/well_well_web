@@ -16,6 +16,7 @@ class CreateTempShipmentPackagesTable extends Migration
         Schema::create('temp_shipment_packages', function (Blueprint $table) {
             $table->id();
             $table->string('temp_id')->nullable();  
+            $table->string('sku_value')->nullable();  
             $table->string('category')->nullable();
             $table->TEXT('description')->nullable();
             $table->string('weight')->nullable();  

@@ -166,7 +166,10 @@ class ShipmentController extends Controller
         if($request->same_data == '0'){
             for ($x=0; $x<count($_POST['weight']); $x++) 
             {
+                $sku_value = $this->generateSkuValue();
+
                 $shipment_package = new temp_shipment_package;
+                $shipment_package->sku_value = $sku_value;
                 $shipment_package->temp_id = $shipment->id;
                 $shipment_package->category = $_POST['category'][$x];
                 //$shipment_package->reference_no = $_POST['reference_no'][$x];
@@ -186,7 +189,10 @@ class ShipmentController extends Controller
             for ($y=1; $y<=$request->no_of_packages; $y++){
                 for ($x=0; $x<count($_POST['weight']); $x++) 
                 {
+                    $sku_value = $this->generateSkuValue();
+
                     $shipment_package = new temp_shipment_package;
+                    $shipment_package->sku_value = $sku_value;
                     $shipment_package->temp_id = $shipment->id;
                     $shipment_package->category = $_POST['category'][$x];
                     //$shipment_package->reference_no = $_POST['reference_no'][$x];
@@ -246,7 +252,10 @@ class ShipmentController extends Controller
             if($request->same_data == '0'){
                 for ($x=0; $x<count($_POST['weight']); $x++) 
                 {
+                    $sku_value = $this->generateSkuValue();
+
                     $shipment_package = new temp_shipment_package;
+                    $shipment_package->sku_value = $sku_value;
                     $shipment_package->temp_id = $shipment1->id;
                     $shipment_package->category = $_POST['category'][$x];
                     //$shipment_package->reference_no = $_POST['reference_no'][$x];
@@ -266,7 +275,10 @@ class ShipmentController extends Controller
                 for ($y=1; $y<=$request->no_of_packages; $y++){
                     for ($x=0; $x<count($_POST['weight']); $x++) 
                     {
+                        $sku_value = $this->generateSkuValue();
+
                         $shipment_package = new temp_shipment_package;
+                        $shipment_package->sku_value = $sku_value;
                         $shipment_package->temp_id = $shipment1->id;
                         $shipment_package->category = $_POST['category'][$x];
                         //$shipment_package->reference_no = $_POST['reference_no'][$x];
@@ -286,6 +298,21 @@ class ShipmentController extends Controller
         }
         return response()->json('successfully save'); 
         //return $this->printLabel($shipment->id);
+    }
+
+    private function generateSkuValue(){
+        $sku_value = mt_rand( 1000000000, 9999999999);
+        if(DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
+            generateSkuValue();
+        }
+        else{
+            if(DB::table( 'temp_shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
+                generateSkuValue();
+            }
+            else{
+                return $sku_value;
+            }
+        }
     }
 
     public function Shipment(){

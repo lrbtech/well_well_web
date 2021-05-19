@@ -211,13 +211,13 @@ class PendingController extends Controller
 
             $temp_shipment_package = temp_shipment_package::where('temp_id', $temp_shipment->id)->get();
             foreach ($temp_shipment_package as $temp) {
-                do {
-                    $sku_value = mt_rand( 1000000000, 9999999999);
-                } 
-                while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
+                // do {
+                //     $sku_value = mt_rand( 1000000000, 9999999999);
+                // } 
+                // while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
 
                 $shipment_package = new shipment_package;
-                $shipment_package->sku_value = $sku_value;
+                $shipment_package->sku_value = $temp->sku_value;
                 $shipment_package->shipment_id = $shipment->id;
                 $shipment_package->category = $temp->category;
                 //$shipment_package->reference_no = $temp->reference_no;
