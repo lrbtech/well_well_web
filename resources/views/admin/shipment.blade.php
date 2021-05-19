@@ -77,7 +77,7 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
-                            <th>#</th>
+                            <!-- <th>#</th> -->
                             <th>Account ID</th>
                             <th>{{$language[326][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
@@ -264,7 +264,7 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
-        { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        //{ data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'account_id', name: 'account_id' },
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },
