@@ -284,11 +284,11 @@ class OrderApiController extends Controller
     private function generateSkuValue(){
         $sku_value = mt_rand( 1000000000, 9999999999);
         if(DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
-            generateSkuValue();
+            $this->generateSkuValue();
         }
         else{
             if(DB::table( 'temp_shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
-                generateSkuValue();
+                $this->generateSkuValue();
             }
             else{
                 return $sku_value;
