@@ -26,7 +26,7 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="/assets/login/assets/css/demo.css" rel="stylesheet" />
     
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCanHknp355-rJzwBPbz1FZDWs9t9ym_lY&sensor=false&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcmxZ2i6FQ0--w87BgqBoTxfpOCsbq3tw&sensor=false&libraries=places"></script>
     
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
