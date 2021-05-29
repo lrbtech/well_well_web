@@ -44,6 +44,25 @@ class HomeController extends Controller
 
         $current_month_value = shipment::whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
         $language = language::all();
-        return view('admin.dashboard',compact('total_shipment','shipment','current_month_value','total_individual','total_business','role_get','language','shipment_package'));
+        return view('admin.dashboard',compact('total_shipment','shipment','current_month_value','total_individual','total_business','role_get','language','shipment_package','cfdate','cldate'));
+    }
+    
+    public function dateDashboard(Request $request){
+        $today = date('Y-m-d');
+        $cfdate = date('Y-m-d', strtotime($request->from_date));
+        $cldate = date('Y-m-d', strtotime($request->to_date));
+        $language = language::all();
+
+        $total_shipment = shipment::whereBetween('date', [$cfdate, $cldate])->count();
+
+        $shipment = shipment::orderBy('id', 'desc')->take('5')->get();
+        $shipment_package = shipment_package::orderBy('id', 'desc')->get();
+
+        $current_month_value = shipment::whereBetween('date', [$cfdate, $cldate])->get()->sum("total");
+
+        $total_individual = User::where('user_type','0')->whereBetween('date', [$cfdate, $cldate])->count();
+        $total_business = User::where('user_type','1')->whereBetween('date', [$cfdate, $cldate])->count();
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.dashboard',compact('total_shipment','shipment','current_month_value','language','shipment_package','cfdate','cldate','total_individual','total_business','role_get'));
     }
 }

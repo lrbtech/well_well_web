@@ -34,6 +34,16 @@
                   @if($role_get->pickup_exception_edit == 'on')
                     <div class="row">
 
+                        <div class="col-md-2">
+                          <label>Select Station</label>
+                          <select id="station_id" name="station_id" class="form-control">
+                          <option value="0">All Station</option>
+                            @foreach($station as $row)
+                            <option value="{{$row->id}}">{{$row->station}}</option>
+                            @endforeach
+                          </select>
+                        </div>
+
                         <div class="col-md-3">
                           <label>{{$language[75][Auth::guard('admin')->user()->lang]}}</label>
                           <select id="agent_id" name="agent_id" class="form-control">
@@ -44,7 +54,7 @@
                           </select>
                         </div>
 
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <button id="save" class="btn btn-primary btn-block mr-10" type="button">{{$language[77][Auth::guard('admin')->user()->lang]}}</button>
                         </div>
                         <div class="form-group col-md-3">
@@ -198,6 +208,7 @@ $(document).on('click','#save', function(){
               //window.location.href="/admin/new-shipment-request";
               var new_url = '/admin/get-pickup-exception/category';
               orderPageTable.ajax.url(new_url).load();
+              $('#agent-model').modal('hide');
             }
         })
     }else{
@@ -226,6 +237,7 @@ $(document).on('click','#assignagent', function(){
               //window.location.href="/admin/new-shipment-request";
               var new_url = '/admin/get-pickup-exception/category';
               orderPageTable.ajax.url(new_url).load();
+              $('#agent-model').modal('hide');
             }
         })
     }else{
@@ -290,5 +302,33 @@ $('#search').click(function(){
     //orderPageTable.draw();
 });
 
+function DeleteShipment(id){
+    var r = confirm("Are you sure");
+    if (r == true) {
+      $.ajax({
+        url : '/admin/pickup-exception-delete/'+id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          toastr.success(data, 'Successfully Delete');
+          var new_url = '/admin/get-pickup-exception/category';
+          orderPageTable.ajax.url(new_url).load();
+        }
+      });
+    } 
+}
+
+$('#station_id').change(function(){
+  var id = $('#station_id').val();
+  $.ajax({
+    url : '/admin/get-agent-details/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#agent_id').html(data);
+    }
+  });
+});
 </script>
 @endsection

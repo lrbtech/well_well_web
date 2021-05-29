@@ -521,6 +521,8 @@
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[99][Auth::guard('admin')->user()->lang]}}</li>
                   @if($role_get->shipment_report == 'on')
+                  <li class="box-report"><a class="box-report" href="/admin/box-report">Report</a></li> 
+
                   <li class="shipment-report"><a class="shipment-report" href="/admin/shipment-report">{{$language[192][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
                   @if($role_get->revenue_report == 'on')

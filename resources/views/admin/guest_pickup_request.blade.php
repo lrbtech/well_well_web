@@ -35,6 +35,16 @@
                     <div class="row">
 
                         <div class="col-md-3">
+                          <label>Select Station</label>
+                          <select id="station_id" name="station_id" class="form-control">
+                            <option value="0">All Station</option>
+                            @foreach($station as $row)
+                            <option value="{{$row->id}}">{{$row->station}}</option>
+                            @endforeach
+                          </select>
+                        </div>
+
+                        <div class="col-md-3">
                           <label>{{$language[75][Auth::guard('admin')->user()->lang]}}</label>
                           <select id="agent_id" name="agent_id" class="form-control">
                             <option value="">{{$language[76][Auth::guard('admin')->user()->lang]}}</option>
@@ -266,5 +276,17 @@ function PrintLabel(id){
     }
   });
 }
+
+$('#station_id').change(function(){
+  var id = $('#station_id').val();
+  $.ajax({
+    url : '/admin/get-agent-details/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#agent_id').html(data);
+    }
+  });
+});
 </script>
 @endsection

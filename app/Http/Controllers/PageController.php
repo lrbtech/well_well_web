@@ -198,6 +198,25 @@ class PageController extends Controller
     }
 
 
+    public function emailValidate($email){
+        $exist = User::where('email',$email)->get();
+        if(count($exist)>0){
+            return response()->json(['status'=>0]);
+        }
+        else{
+            return response()->json(['status'=>1]);
+        }
+    }
+    public function mobileValidate($mobile){
+        $exist = User::where('mobile',$mobile)->get();
+        if(count($exist)>0){
+            return response()->json(['status'=>0]);
+        }
+        else{
+            return response()->json(['status'=>1]);
+        }
+    }
+
     public function saveUserRegister(Request $request){
 
         $this->validate($request, [
@@ -552,7 +571,9 @@ class PageController extends Controller
         $guest_user->shipment_id = $shipment->id;
         $guest_user->save();
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = $request->from_name .'/'. $request->from_mobile;

@@ -33,6 +33,19 @@ class ApiController extends Controller
         date_default_timezone_get();
     }
 
+    public function getClientIP():string
+    {
+        $keys=array('HTTP_CLIENT_IP','HTTP_X_FORWARDED_FOR','HTTP_X_FORWARDED','HTTP_FORWARDED_FOR','HTTP_FORWARDED','REMOTE_ADDR');
+        foreach($keys as $k)
+        {
+            if (!empty($_SERVER[$k]) && filter_var($_SERVER[$k], FILTER_VALIDATE_IP))
+            {
+                return $_SERVER[$k];
+            }
+        }
+        return "UNKNOWN";
+    }
+
     private function send_sms($phone,$msg)
     {
         $requestParams = array(
@@ -745,9 +758,10 @@ class ApiController extends Controller
         $shipment->save();
 }
 
-
+            $get_ip = $this->getClientIP();
             $agent = agent::find($request->agent_id);
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $request->package_id;
             $system_logs->category = 'package';
             $system_logs->to_id = $agent->email;
@@ -803,7 +817,9 @@ class ApiController extends Controller
 
                 $shipment->save();
                 
+                $get_ip = $this->getClientIP();
                 $system_logs = new system_logs;
+                $system_logs->user_ip = $get_ip;
                 $system_logs->_id = $request->shipment_id;
                 $system_logs->category = 'shipment';
                 $system_logs->to_id = $agent->email;
@@ -833,7 +849,9 @@ class ApiController extends Controller
                 $shipment->exception_assign_time = date('H:i:s');
                 $shipment->save();
 
+                $get_ip = $this->getClientIP();
                 $system_logs = new system_logs;
+                $system_logs->user_ip = $get_ip;
                 $system_logs->_id = $request->shipment_id;
                 $system_logs->category = 'shipment';
                 $system_logs->to_id = $agent->email;
@@ -873,7 +891,9 @@ class ApiController extends Controller
                 $shipment->save();
             }
             
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
@@ -926,7 +946,9 @@ class ApiController extends Controller
             $shipment->save();
 
             //$agent = agent::find($request->agent_id);
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
@@ -987,7 +1009,9 @@ class ApiController extends Controller
             $shipment->package_at_station_time = date('H:i:s');
             $shipment->save();
 
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
@@ -1030,7 +1054,9 @@ class ApiController extends Controller
             $shipment->save();
 
             $agent = agent::find($request->agent_id);
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
@@ -1069,7 +1095,9 @@ class ApiController extends Controller
             $shipment->delivery_time = date('H:i:s');
 
             $agent = agent::find($request->agent_id);
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;
@@ -1152,7 +1180,9 @@ class ApiController extends Controller
             $shipment->save();
 
             $agent = agent::find($request->agent_id);
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $request->shipment_id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $agent->email;

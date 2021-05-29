@@ -1427,6 +1427,39 @@ $('#city_id').change(function(){
 });
 
 
+$('#email').blur(function(){
+  var email = $('#email').val();
+  $.ajax({
+    url : '/email-validate/'+email,
+    type: "GET",
+    success: function(data)
+    {
+        if(data.status == 0){
+            toastr.error('This Email Address Has been Already Registered');
+            $('#email').focus();
+            $('#email').val('');
+        }
+    }
+  });
+});
+
+$('#mobile').blur(function(){
+  var mobile = $('#mobile').val();
+  $.ajax({
+    url : '/mobile-validate/'+mobile,
+    type: "GET",
+    success: function(data)
+    {
+        if(data.status == 0){
+            toastr.error('This Mobile Has been Already Registered');
+            $('#mobile').focus();
+            $('#mobile').val('');
+        }
+    }
+  });
+});
+
+
 </script>
 
 </html>

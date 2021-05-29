@@ -39,29 +39,16 @@
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table class="display" id="basic-1">
+                      <table class="display" id="datatable">
                         <thead>
                             <tr>
-                                <th>#</th>
-                               
+                                <th>IP</th>
                                 <th>{{$language[218][Auth::guard('admin')->user()->lang]}}</th>
-                         
                                 <th>{{$language[299][Auth::guard('admin')->user()->lang]}}</th>
                                 <th>log</th>
-
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($logs as $key => $row)
-                        <tr>
-                            <td>{{$key + 1}}</td>
-                         
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->user}}</td>
-                            <td>{{$row->log}}</td>
-                            </tr>
-
-                         @endforeach
                         </tbody>
                       </table>
                     </div>
@@ -86,9 +73,28 @@
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
 <script type="text/javascript">
-$('.country').addClass('active');
+$('.user-logs').addClass('active');
 
-
+var orderPageTable = $('#datatable').DataTable({
+    "processing": true,
+       "language": {
+          processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+        },
+    "serverSide": true,
+    "pageLength": 10,
+    "ajax":{
+        "url": "/admin/get-log-view",
+        "dataType": "json",
+        "type": "POST",
+        "data":{ _token: "{{csrf_token()}}"}
+    },
+    "columns": [
+        { data: 'user_ip', name: 'user_ip' },
+        { data: 'date', name: 'date' },
+        { data: 'user', name: 'user' },
+        { data: 'log', name: 'log' },
+    ]
+});
 
 </script>
 @endsection

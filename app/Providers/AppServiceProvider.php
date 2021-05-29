@@ -77,6 +77,7 @@ class AppServiceProvider extends ServiceProvider
                 $i =DB::table('shipments');
                 $i->where('shipments.status',3);
                 $i->where('shipments.hold_status',0);
+                $i->where('shipments.show_status',0);
                 $i->orderBy('shipments.id','DESC');
                 $pickup_exception = $i->count();
 
@@ -139,6 +140,7 @@ class AppServiceProvider extends ServiceProvider
                 $i =DB::table('shipments');
                 $i->where('shipments.status',3);
                 $i->where('shipments.hold_status',0);
+                $i->where('shipments.show_status',0);
                 $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
                 $i->orderBy('shipments.id','DESC');
                 $pickup_exception = $i->count();

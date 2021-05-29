@@ -34,12 +34,33 @@
                   {{ csrf_field() }}
                   <div class="card-header">
                     <div class="row">
-                        <div class="form-group col-md-3">
+
+                        <div class="col-md-3">
+                          <label>Select Station</label>
+                          <select id="station_id" name="station_id" class="form-control">
+                          <option value="0">All Station</option>
+                            @foreach($station as $row)
+                            <option value="{{$row->id}}">{{$row->station}}</option>
+                            @endforeach
+                          </select>
+                        </div>
+
+                        <div class="col-md-3">
+                          <label>{{$language[75][Auth::guard('admin')->user()->lang]}}</label>
+                          <select id="agent_id" name="agent_id" class="form-control">
+                            <option value="">{{$language[76][Auth::guard('admin')->user()->lang]}}</option>
+                            @foreach($agent as $row)
+                            <option value="{{$row->id}}">{{$row->name}}</option>
+                            @endforeach
+                          </select>
+                        </div>
+
+                        <div class="form-group col-md-2">
                             <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
                         </div>
 
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
                             <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
@@ -59,7 +80,7 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
-                            <th>#</th>
+                          <th><input type="checkbox" name="order_master_checkbox" class="order_master_checkbox" value=""/></th>
                             <th>Tracking ID</th>
                             <th>Shipment Details</th>
                             <th>{{$language[59][Auth::guard('admin')->user()->lang]}}</th>
@@ -87,6 +108,44 @@
           <!-- Container-fluid Ends-->
         </div>
 
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="agent-model" tabindex="-1" role="dialog" aria-labelledby="agent-model" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-grey-dark-5">
+                <h6 class="modal-title " id="modal-title">View Agent Details</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="agent-form" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+
+                    <div class="form-group">
+                        <label>No of Shipments</label>
+                        <input readonly type="text" name="no_of_shipments" id="no_of_shipments" class="form-control" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>No of Packages</label>
+                        <input readonly type="text" name="no_of_packages" id="no_of_packages" class="form-control" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Total Weight</label>
+                        <input readonly type="text" name="total_weight" id="total_weight" class="form-control" >
+                    </div>
+
+                    <div class="form-group">
+                        <button id="assignagent" class="btn btn-primary btn-block mr-10" type="button">Assign Agent</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Bootstrap Modal -->  
 @endsection
 @section('extra-js')
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
@@ -107,7 +166,8 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
-        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'checkbox', name: 'checkbox' , orderable:false, searchable:false },
         { data: 'order_id', name: 'order_id' },
         { data: 'total_weight', name: 'total_weight' },
         { data: 'shipment_date', name: 'shipment_date' },
@@ -118,6 +178,90 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'status', name: 'status' },
         { data: 'action', name: 'action' },
     ]
+});
+
+
+$(document).on('click','.order_master_checkbox', function(){
+  if($(".order_master_checkbox").prop('checked') == true){
+      $(".order_checkbox").prop('checked',true);
+  } else{
+      $(".order_checkbox").prop('checked',false);
+  }
+});
+
+
+$(document).on('click','#save', function(){
+    var order_id=[];
+    var agent_id = $('#agent_id').val();
+
+  if(agent_id != ''){
+    $(".order_checkbox:checked").each(function(){
+        order_id.push($(this).val());
+    });
+    if(order_id.length > 0){
+        $.ajax({
+            url:"/admin/checkbox-assign-agent",
+            method:"GET",
+            data:{id:order_id,agent_id:agent_id},
+            success:function(data){
+              toastr.success(data);
+              //window.location.href="/admin/new-shipment-request";
+              var new_url = '/admin/get-schedule-for-pickup/1/1';
+              orderPageTable.ajax.url(new_url).load();
+            }
+        })
+    }else{
+        toastr.error("Please select atleast one Checkbox");
+    }
+  }else{
+    toastr.error("Please select Agent");
+  }
+});
+
+
+$(document).on('click','#assignagent', function(){
+    var order_id=[];
+    var agent_id = $('#agent_id').val();
+
+  if(agent_id != ''){
+    $(".order_checkbox:checked").each(function(){
+        order_id.push($(this).val());
+    });
+    if(order_id.length > 0){
+        $.ajax({
+            url:"/admin/checkbox-assign-agent",
+            method:"GET",
+            data:{id:order_id,agent_id:agent_id},
+            success:function(data){
+              toastr.success(data);
+              //window.location.href="/admin/new-shipment-request";
+              var new_url = '/admin/get-schedule-for-pickup/1/1';
+              orderPageTable.ajax.url(new_url).load();
+              $('#agent-model').modal('hide');
+            }
+        })
+    }else{
+        toastr.error("Please select atleast one Checkbox");
+    }
+  }else{
+    toastr.error("Please select Agent");
+  }
+});
+
+
+$(document).on('change','#agent_id', function(){
+  var agent_id = $('#agent_id').val();
+  $.ajax({
+    url : '/admin/get-agent-shipment/'+agent_id,
+    type: "GET",
+    dataType: "JSON",
+    success:function(data) {
+      $("#no_of_packages").val(data.shipment.no_of_packages);
+      $("#no_of_shipments").val(data.shipment.no_of_shipments);
+      $("#total_weight").val(data.shipment.total_weight);
+      $('#agent-model').modal('show');
+    }
+  });
 });
 
 $('#search').click(function(){
@@ -171,6 +315,16 @@ function PrintLabel(id){
   });
 }
 
-
+$('#station_id').change(function(){
+  var id = $('#station_id').val();
+  $.ajax({
+    url : '/admin/get-agent-details/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#agent_id').html(data);
+    }
+  });
+});
 </script>
 @endsection

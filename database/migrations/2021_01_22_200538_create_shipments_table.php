@@ -29,6 +29,7 @@ class CreateShipmentsTable extends Migration
             $table->string('from_station_id')->default('0'); 
             $table->string('to_station_id')->default('0'); 
             $table->string('notification_enable')->nullable();  
+            $table->TEXT('shipment_notes')->nullable();
             $table->string('special_service')->nullable();  
             $table->TEXT('special_service_description')->nullable();  
             $table->string('special_cod_enable')->nullable();
@@ -57,6 +58,8 @@ class CreateShipmentsTable extends Migration
             $table->string('total')->nullable();
             $table->string('cancel_fees')->nullable();
             $table->string('status')->default('0'); 
+            $table->string('show_status')->default('0'); 
+            $table->TEXT('delete_reason')->nullable();  
             $table->string('invoice_status')->default('0'); 
             $table->string('hold_status')->default('0'); 
             $table->string('paid_status')->default('0'); 

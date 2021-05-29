@@ -41,11 +41,38 @@ class AllShipment extends Controller
         date_default_timezone_get();
     }
 
+    public function getagentdetails($id){ 
+        if($id == 0){
+            $agent = agent::where('status',0)->get();
+        }
+        else{
+            $q =DB::table('agents as a');
+            $q->join('cities as c','a.city_id','=','c.id');
+            $q->where('c.station_id', $id);
+            $q->select('a.*');
+            $agent = $q->get();
+        }
+        $output ='<option value="">Select Driver</option>';
+        foreach ($agent as $key => $value) {
+            $output .= '<option value="'.$value->id.'">'.$value->name.'</option>';
+        }
+        echo $output;
+    }
+
+    public function PickupExceptionDelete($id){
+        $shipment = shipment::find($id);
+        $shipment->show_status = 1;
+        $shipment->save();
+
+        return response()->json(['message'=>'Successfully Delete'],200); 
+    }
+
     public function ScheduleForPickup(){
         $agent = agent::all();
+        $station = station::all();
         $language = language::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.schedule_for_pickup',compact('agent','language','role_get'));
+        return view('admin.schedule_for_pickup',compact('agent','language','role_get','station'));
     }
 
     public function NewShipmentRequest(){
@@ -60,8 +87,9 @@ class AllShipment extends Controller
             $agent = $q->get();
         }
         $language = language::all();
+        $station = station::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.new_shipment_request',compact('agent', 'language','role_get'));
+        return view('admin.new_shipment_request',compact('agent', 'language','role_get','station'));
     }
 
 
@@ -78,7 +106,8 @@ class AllShipment extends Controller
         }
         $language = language::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.guest_pickup_request',compact('agent', 'language','role_get'));
+        $station = station::all();
+        return view('admin.guest_pickup_request',compact('agent', 'language','role_get','station'));
     }
 
     public function PickupException(){
@@ -95,14 +124,16 @@ class AllShipment extends Controller
         $exception_category = exception_category::where('exception_status',0)->where('status',0)->get();
         $language = language::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.pickup_exception',compact('agent','language','exception_category','role_get'));
+        $station = station::all();
+        return view('admin.pickup_exception',compact('agent','language','exception_category','role_get','station'));
     }
 
     public function PackageCollected(){
         $agent = agent::all();
         $language = language::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.package_collected',compact('agent','language','role_get'));
+        $station = station::all();
+        return view('admin.package_collected',compact('agent','language','role_get','station'));
     }
 
     public function TransitIn(){
@@ -130,7 +161,8 @@ class AllShipment extends Controller
         $agent = agent::all();
         $language = language::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.ready_for_delivery',compact('agent','language','role_get'));
+        $station = station::all();
+        return view('admin.ready_for_delivery',compact('agent','language','role_get','station'));
     }
 
     public function DeliveryException(){
@@ -198,7 +230,8 @@ class AllShipment extends Controller
         }
         $language = language::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.today_pickup_request',compact('agent','language','role_get'));
+        $station = station::all();
+        return view('admin.today_pickup_request',compact('agent','language','role_get','station'));
     }
 
     public function FuturePickupRequest(){
@@ -214,7 +247,8 @@ class AllShipment extends Controller
         }
         $language = language::all();
         $role_get = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.future_pickup_request',compact('agent','language','role_get'));
+        $station = station::all();
+        return view('admin.future_pickup_request',compact('agent','language','role_get','station'));
     }
 
     public function checkboxAssignAgent(Request $request)
@@ -269,6 +303,43 @@ class AllShipment extends Controller
         }
         return response()->json(["Successfully Update"], 200);
     }
+
+
+    public function getshipmentdetails($id)
+    {
+        $arraydata=array();
+        foreach(explode(',',$id) as $user1){
+        $arraydata[]=$user1;
+        }
+       
+        $data = shipment_package::whereIn('shipment_id', $arraydata)->get();
+        $output = '<table class="display">
+        <thead>
+          <tr>
+            <th style="width:20%;">Tracking ID</th>
+            <th style="width:20%;">Category</th>
+            <th style="width:30%;">Description</th>
+            <th style="width:20%;">Length * Width * Height</th>
+            <th style="width:10%;">Weight</th>
+          </tr>
+        </thead>
+        <tbody>';
+           foreach ($data as $value) {
+            $category = package_category::find($value->category);
+            $output .='<tr>
+                <td>'.$value->sku_value.'</td>
+                <td>'.$category->category.'</td>
+                <td>'.$value->description.'</td>
+                <td>'.$value->length.' * '.$value->width.' *  '.$value->height.'</td>
+                <td>'.$value->weight.' Kg</td>
+            </tr>';
+           }
+           $output .='</tbody>
+        </table>';
+
+        echo $output;
+    }
+
 
 
     public function getTodayPickupRequest(){
@@ -356,10 +427,17 @@ class AllShipment extends Controller
             })
 
             ->addColumn('action', function ($shipment) {
+                $today = date('Y-m-d');
+                $all_shipment = shipment::where('shipment_date',$shipment->shipment_date)->where('sender_id',$shipment->sender_id)->where('from_address',$shipment->from_address)->where('shipment_from_time',$shipment->shipment_from_time)->where('shipment_to_time',$shipment->shipment_to_time)->where('status',0)->get();
+                $order_id = '';
+                foreach ($all_shipment as $key => $value) {
+                    $datas[] = $value->id;
+                } 
+                $order_id = collect($datas)->implode(',');
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a onclick="PrintLabel('.$shipment->sender_id.')" class="dropdown-item" href="#">Print Label</a>
+                        <a onclick="ShowShipment('.$order_id.')" class="dropdown-item" href="#">Show Shipment</a>
                     </div>
                 </td>';
             })
@@ -462,10 +540,17 @@ class AllShipment extends Controller
             })
 
             ->addColumn('action', function ($shipment) {
+                $today = date('Y-m-d');
+                $all_shipment = shipment::where('shipment_date',$shipment->shipment_date)->where('sender_id',$shipment->sender_id)->where('from_address',$shipment->from_address)->where('shipment_from_time',$shipment->shipment_from_time)->where('shipment_to_time',$shipment->shipment_to_time)->where('status',0)->get();
+                $order_id = '';
+                foreach ($all_shipment as $key => $value) {
+                    $datas[] = $value->id;
+                } 
+                $order_id = collect($datas)->implode(',');
                 return '<td>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a onclick="PrintLabel('.$shipment->sender_id.')" class="dropdown-item" href="#">AWB Print</a>
+                        <a onclick="ShowShipment('.$order_id.')" class="dropdown-item" href="#">Show Shipment</a>
                     </div>
                 </td>';
             })
@@ -726,6 +811,9 @@ class AllShipment extends Controller
         }
 
         return Datatables::of($shipment)
+            ->addColumn('checkbox', function ($shipment) {
+                return '<td><input type="checkbox" name="order_checkbox[]" class="order_checkbox" value="' . $shipment->id . '"></td>';
+            })
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
@@ -820,7 +908,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','total_weight'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','total_weight','checkbox'])
         ->addIndexColumn()
         ->make(true);
 
@@ -839,6 +927,7 @@ class AllShipment extends Controller
             }
             $i->where('shipments.status',3);
             $i->where('shipments.hold_status',0);
+            $i->where('shipments.show_status',0);
             $i->orderBy('shipments.id','DESC');
             $shipment = $i->get();
         }
@@ -851,6 +940,7 @@ class AllShipment extends Controller
             }
             $i->where('shipments.status',3);
             $i->where('shipments.hold_status',0);
+            $i->where('shipments.show_status',0);
             $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
             $i->orderBy('shipments.id','DESC');
             $shipment = $i->get();
@@ -946,6 +1036,7 @@ class AllShipment extends Controller
                         <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
                         '.$output2.' 
                         <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
+                        <a onclick="DeleteShipment('.$shipment->id.')" class="dropdown-item" href="#">Delete</a>
                     </div>
                 </td>';
             })

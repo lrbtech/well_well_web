@@ -97,7 +97,7 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
-                            <th>#</th>
+                            <!-- <th>#</th> -->
                             <th>Account ID</th>
                             <th>Tracking ID</th>
                             <th>Date</th>
@@ -150,7 +150,7 @@ var orderPageTable = $('#datatable').DataTable({
         "data":{ _token: "{{csrf_token()}}"}
     },
     "columns": [
-        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'account_id', name: 'account_id' },
         { data: 'order_id', name: 'order_id' },
         { data: 'shipment_date', name: 'shipment_date' },

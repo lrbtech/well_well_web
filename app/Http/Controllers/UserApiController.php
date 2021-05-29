@@ -38,6 +38,20 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class UserApiController extends Controller
 {
+
+    public function getClientIP():string
+    {
+        $keys=array('HTTP_CLIENT_IP','HTTP_X_FORWARDED_FOR','HTTP_X_FORWARDED','HTTP_FORWARDED_FOR','HTTP_FORWARDED','REMOTE_ADDR');
+        foreach($keys as $k)
+        {
+            if (!empty($_SERVER[$k]) && filter_var($_SERVER[$k], FILTER_VALIDATE_IP))
+            {
+                return $_SERVER[$k];
+            }
+        }
+        return "UNKNOWN";
+    }
+
     private function send_sms($phone,$msg)
     {
         $requestParams = array(
@@ -405,7 +419,9 @@ class UserApiController extends Controller
             $guest_user->shipment_id = $shipment->id;
             $guest_user->save();
     
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $request->from_name .'/'. $request->from_mobile;
@@ -1185,7 +1201,9 @@ class UserApiController extends Controller
 
             $user = User::find($temp_shipment->sender_id);
                         
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $user->email;
@@ -1749,7 +1767,9 @@ class UserApiController extends Controller
 
         $user = User::find($shipment->sender_id);
         
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = $user->email;
@@ -1780,7 +1800,9 @@ class UserApiController extends Controller
 
         $user = User::find($shipment->sender_id);
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = $user->email;

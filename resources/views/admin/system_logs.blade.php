@@ -39,40 +39,18 @@
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table class="display" id="basic-1">
+                      <table class="display" id="datatable">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>IP</th>
                                 <th>{{$language[215][Auth::guard('admin')->user()->lang]}} / {{$language[216][Auth::guard('admin')->user()->lang]}} / {{$language[217][Auth::guard('admin')->user()->lang]}}</th>
                                 <th>{{$language[218][Auth::guard('admin')->user()->lang]}}</th>
-                         
                                 <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                                 <th>{{$language[219][Auth::guard('admin')->user()->lang]}}</th>
                                 <th>{{$language[220][Auth::guard('admin')->user()->lang]}}</th>
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($systemLogs as $key => $row)
-                        <tr>
-                            <td>{{$key + 1}}</td>
-                            <td>
-                            @if($row->category == 'shipment')
-                              @foreach($shipment as $ship)
-                                @if($row->_id == $ship->id)
-                                {{$ship->order_id}}
-                                @endif
-                              @endforeach
-                            @else 
-                            {{$row->_id}}
-                            @endif
-                            </td>
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->to_id}}</td>
-                            <td>{{$row->category}}</td>
-                            <td>{{$row->remark}}</td>
-                            </tr>
-
-                         @endforeach
                         </tbody>
                       </table>
                     </div>
@@ -97,9 +75,30 @@
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
 <script type="text/javascript">
-$('.country').addClass('active');
+$('.system-logs').addClass('active');
 
-
+var orderPageTable = $('#datatable').DataTable({
+    "processing": true,
+       "language": {
+          processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+        },
+    "serverSide": true,
+    "pageLength": 10,
+    "ajax":{
+        "url": "/admin/get-system-logs",
+        "dataType": "json",
+        "type": "POST",
+        "data":{ _token: "{{csrf_token()}}"}
+    },
+    "columns": [
+        { data: 'user_ip', name: 'user_ip' },
+        { data: 'user_id', name: 'user_id' },
+        { data: 'date', name: 'date' },
+        { data: 'user', name: 'user' },
+        { data: 'category', name: 'category' },
+        { data: 'remark', name: 'remark' },
+    ]
+});
 
 </script>
 @endsection

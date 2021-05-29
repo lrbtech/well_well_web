@@ -545,11 +545,8 @@ class SettingsController extends Controller
     // }
 
     public function systemLogs(){
-        $systemLogs = system_logs::orderBy('id','DESC')->get();
-        $shipment_package = shipment_package::all();
-        $shipment = shipment::all();
         $language = language::all();
-         return view('admin.system_logs',compact('systemLogs','language','shipment_package','shipment'));
+        return view('admin.system_logs',compact('language'));
     }
 
 

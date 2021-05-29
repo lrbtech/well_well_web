@@ -516,6 +516,22 @@ visibility: visible;
 
               <div class="col-sm-12">
                 <div class="card">
+                  <div class="card-header">
+                    <h5>Shipment Notes</h5>
+                  </div>
+                    <div class="card-body megaoptions-border-space-sm">                      
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label>Shipment Notes</label>
+                          <textarea class="form-control" id="shipment_notes" name="shipment_notes"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <div class="card">
                 <div class="card-header">
                     <h5>{{$language[62][Auth::guard('admin')->user()->lang]}}</h5><span>{{$language[63][Auth::guard('admin')->user()->lang]}} </span>
                   </div>

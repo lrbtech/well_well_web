@@ -34,6 +34,19 @@ class OrderApiController extends Controller
     //     return response()->json(['message' => 'Unauthorized Access','status'=>419], 419);
     // }
 
+    public function getClientIP():string
+    {
+        $keys=array('HTTP_CLIENT_IP','HTTP_X_FORWARDED_FOR','HTTP_X_FORWARDED','HTTP_FORWARDED_FOR','HTTP_FORWARDED','REMOTE_ADDR');
+        foreach($keys as $k)
+        {
+            if (!empty($_SERVER[$k]) && filter_var($_SERVER[$k], FILTER_VALIDATE_IP))
+            {
+                return $_SERVER[$k];
+            }
+        }
+        return "UNKNOWN";
+    }
+
     public function getArea(Request $request){ 
         // $token = $request->header('APP_KEY');
         // $account_id = $request->header('Account_ID');
@@ -497,7 +510,9 @@ class OrderApiController extends Controller
             $shipment->status = 10;
             $shipment->save();
 
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $user->email;
@@ -530,7 +545,9 @@ class OrderApiController extends Controller
             $shipment->hold_status = 1;
             $shipment->save();
             
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $user->email;
@@ -563,7 +580,9 @@ class OrderApiController extends Controller
             $shipment->hold_status = 0;
             $shipment->save();
             
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = $user->email;

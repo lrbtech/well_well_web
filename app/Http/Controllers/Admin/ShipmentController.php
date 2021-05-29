@@ -44,6 +44,19 @@ class ShipmentController extends Controller
         date_default_timezone_get();
     }
 
+    public function getClientIP():string
+    {
+        $keys=array('HTTP_CLIENT_IP','HTTP_X_FORWARDED_FOR','HTTP_X_FORWARDED','HTTP_FORWARDED_FOR','HTTP_FORWARDED','REMOTE_ADDR');
+        foreach($keys as $k)
+        {
+            if (!empty($_SERVER[$k]) && filter_var($_SERVER[$k], FILTER_VALIDATE_IP))
+            {
+                return $_SERVER[$k];
+            }
+        }
+        return "UNKNOWN";
+    }
+
     private function generateSkuValue(){
         $sku_value = mt_rand( 1000000000, 9999999999);
         if(DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
@@ -227,7 +240,9 @@ class ShipmentController extends Controller
         $manage_address->address2 = $request->address2;
         $manage_address->address3 = $request->address3;
         $manage_address->save();
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $manage_address->id;
         $system_logs->category = 'address';
         $system_logs->to_id = Auth::guard('admin')->user()->email;
@@ -292,6 +307,7 @@ class ShipmentController extends Controller
         $shipment->from_station_id = $from_station->station_id;
         $shipment->to_station_id = $to_station->station_id;
         $shipment->shipment_mode = $request->shipment_mode;
+        $shipment->shipment_notes = $request->shipment_notes;
         $shipment->special_service = $request->special_service;
         $shipment->special_service_description = $request->special_service_description;
         $shipment->return_package_cost = $request->return_package_cost;
@@ -315,7 +331,9 @@ class ShipmentController extends Controller
         $shipment->identical = $request->same_data;
         $shipment->save();
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::guard('admin')->user()->email;
@@ -406,6 +424,7 @@ class ShipmentController extends Controller
             $shipment1->special_service_description = $request->special_service_description;
             $shipment1->return_package_cost = $request->return_package_cost;
             $shipment1->special_cod_enable = $request->special_cod_enable;
+            $shipment->shipment_notes = $request->shipment_notes;
             $shipment1->special_cod = $request->special_cod;
             $shipment1->no_of_packages = $request->no_of_packages;
             $shipment1->declared_value = $request->declared_value;
@@ -427,7 +446,9 @@ class ShipmentController extends Controller
 
             $arrayshipment[] = $shipment1->id;
 
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $shipment1->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = Auth::guard('admin')->user()->email;
@@ -545,6 +566,7 @@ class ShipmentController extends Controller
         $shipment->from_address = $request->from_address;
         $shipment->to_address = $request->to_address;
         $shipment->from_station_id = $from_station->station_id;
+        $shipment->shipment_notes = $request->shipment_notes;
         $shipment->to_station_id = $to_station->station_id;
         $shipment->shipment_mode = $request->shipment_mode;
         $shipment->special_service = $request->special_service;
@@ -570,7 +592,9 @@ class ShipmentController extends Controller
         $shipment->identical = $request->same_data;
         $shipment->save();
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::guard('admin')->user()->email;
@@ -666,7 +690,9 @@ class ShipmentController extends Controller
         $shipment->pickup_assign_time = date('H:i:s');
         $shipment->status = 1;
         $shipment->save();
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::guard('admin')->user()->email;
@@ -795,7 +821,9 @@ class ShipmentController extends Controller
         $shipment->status = 10;
         $shipment->save();
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::guard('admin')->user()->email;
@@ -869,6 +897,7 @@ class ShipmentController extends Controller
                 $shipment->whereBetween('shipments.date', [$fdate1, $tdate1]);
             }
             $shipment->where('shipments.hold_status',0);
+            $shipment->where('shipments.show_status',0);
             $shipment->orderBy('shipments.id','DESC');
             //$shipment = $shipment->get();
         }
@@ -913,6 +942,7 @@ class ShipmentController extends Controller
                 $shipment->whereBetween('shipments.date', [$fdate1, $tdate1]);
             }
             $shipment->where('shipments.hold_status',0);
+            $shipment->where('shipments.show_status',0);
             $shipment->orderBy('shipments.id','DESC');
             //$shipment = $i->get();
         }

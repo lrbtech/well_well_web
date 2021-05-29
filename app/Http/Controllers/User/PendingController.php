@@ -38,6 +38,19 @@ class PendingController extends Controller
         date_default_timezone_get();
     }
 
+    public function getClientIP():string
+    {
+        $keys=array('HTTP_CLIENT_IP','HTTP_X_FORWARDED_FOR','HTTP_X_FORWARDED','HTTP_FORWARDED_FOR','HTTP_FORWARDED','REMOTE_ADDR');
+        foreach($keys as $k)
+        {
+            if (!empty($_SERVER[$k]) && filter_var($_SERVER[$k], FILTER_VALIDATE_IP))
+            {
+                return $_SERVER[$k];
+            }
+        }
+        return "UNKNOWN";
+    }
+
     public function PendingShipment(){
         $language = language::all();
         return view('user.pending_shipment',compact('language'));
@@ -179,6 +192,7 @@ class PendingController extends Controller
             $shipment->from_station_id = $from_station->station_id;
             $shipment->to_station_id = $to_station->station_id;
             $shipment->shipment_mode = $temp_shipment->shipment_mode;
+            $shipment->shipment_notes = $temp_shipment->shipment_notes;
             //$shipment->special_service = $temp_shipment->special_service;
             //$shipment->special_service_description = $temp_shipment->special_service_description;
             $shipment->return_package_cost = $temp_shipment->return_package_cost;
@@ -202,7 +216,9 @@ class PendingController extends Controller
             $shipment->identical = $temp_shipment->identical;
             $shipment->save();
                         
+            $get_ip = $this->getClientIP();
             $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
             $system_logs->_id = $shipment->id;
             $system_logs->category = 'shipment';
             $system_logs->to_id = Auth::user()->email;

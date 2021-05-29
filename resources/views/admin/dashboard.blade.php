@@ -32,6 +32,25 @@
           </div>
           <!-- Container-fluid starts-->
           <div class="container-fluid">
+          <form action="/admin/date-dashboard" method="post" enctype="multipart/form-data">
+            {{ csrf_field() }}
+              <div class="row">
+                <div class="form-group col-md-3">
+                    <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
+                    <input value="{{$cfdate}}" autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
+                    <input value="{{$cldate}}" autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <button id="search" class="btn btn-primary btn-block mr-10" type="submit">{{$language[114][Auth::guard('admin')->user()->lang]}}
+                    </button>
+                </div>
+              </div>
+            </form>
             <div class="row">
           
             @if($role_get->dashboard != 'on')

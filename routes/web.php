@@ -85,6 +85,9 @@ Route::get('/get-available-time/{date}', [App\Http\Controllers\PageController::c
 
 Route::get('/delete-dublicate-data', [App\Http\Controllers\PageController::class, 'deleteDublicateData']);
 
+Route::get('/mobile-validate/{mobile}', [App\Http\Controllers\PageController::class, 'mobileValidate']);
+Route::get('/email-validate/{email}', [App\Http\Controllers\PageController::class, 'emailValidate']);
+
 
 Route::group(['prefix' => 'admin'],function(){
 
@@ -99,6 +102,7 @@ Route::group(['prefix' => 'admin'],function(){
 
 
 	Route::get('/dashboard', [App\Http\Controllers\Admin\HomeController::class, 'dashboard'])->name('admin.dashboard');
+    Route::POST('/date-dashboard', [App\Http\Controllers\Admin\HomeController::class, 'dateDashboard']);
 
     Route::get('/view-customer', [App\Http\Controllers\Admin\CustomerController::class, 'viewCustomer']);
 
@@ -325,6 +329,9 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/pickup-exception', [App\Http\Controllers\Admin\AllShipment::class, 'PickupException']);
     Route::POST('/get-pickup-exception/{category}', [App\Http\Controllers\Admin\AllShipment::class, 'getPickupException']);
+    Route::get('/pickup-exception-delete/{id}', [App\Http\Controllers\Admin\AllShipment::class, 'PickupExceptionDelete']);
+
+    Route::get('/get-shipment-details/{id}', [App\Http\Controllers\Admin\AllShipment::class, 'getshipmentdetails']);
 
     Route::get('/package-collected', [App\Http\Controllers\Admin\AllShipment::class, 'PackageCollected']);
     Route::POST('/get-package-collected/{date1}/{date2}', [App\Http\Controllers\Admin\AllShipment::class, 'getPackageCollected']);
@@ -359,6 +366,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/hold-request', [App\Http\Controllers\Admin\AllShipment::class, 'HoldRequest']);
     Route::POST('/get-hold-request', [App\Http\Controllers\Admin\AllShipment::class, 'getHoldRequest']);
 
+    Route::get('/get-agent-details/{id}', [App\Http\Controllers\Admin\AllShipment::class, 'getagentdetails']);
+
     Route::get('/update-cancel-request/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'updateCancelRequest']);
 
     Route::get('/revenue-exception', [App\Http\Controllers\Admin\AllShipment::class, 'revenueException']);
@@ -367,6 +376,10 @@ Route::group(['prefix' => 'admin'],function(){
     //report
     Route::get('/shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'ShipmentReport']);
     Route::POST('/get-shipment-report/{status}/{user_type}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getShipmentReport']);
+
+    //report
+    Route::get('/box-report', [App\Http\Controllers\Admin\ReportController::class, 'BoxReport']);
+    Route::POST('/search-box-report', [App\Http\Controllers\Admin\ReportController::class, 'SearchBoxReport']);
 
     //report
     Route::get('/agent-report', [App\Http\Controllers\Admin\ReportController::class, 'AgentReport']);
@@ -437,6 +450,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/delete_language', [App\Http\Controllers\Admin\SettingsController::class, 'deleteLanguage']);
 
     Route::get('/system-logs', [App\Http\Controllers\Admin\SettingsController::class, 'systemLogs']);
+    Route::POST('/get-system-logs', [App\Http\Controllers\Admin\logController::class, 'getSystemLogs']);
     // Route::get('/shipment-track/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'shipmentTrack']);
 
     Route::POST('/shipment-track', [App\Http\Controllers\Admin\ShipmentController::class, 'shipmentTrack']);
@@ -448,6 +462,7 @@ Route::group(['prefix' => 'admin'],function(){
     
     //user Logs
     Route::get('/user-logs', [App\Http\Controllers\Admin\logController::class, 'logView']);
+    Route::POST('/get-log-view', [App\Http\Controllers\Admin\logController::class, 'getLogView']);
 
 
     //fleet management
@@ -497,6 +512,7 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('backup/create', [App\Http\Controllers\BackupController::class, 'create']);
     Route::get('backup/download/{file_name}', [App\Http\Controllers\BackupController::class, 'download']);
     Route::get('backup/delete/{file_name}', [App\Http\Controllers\BackupController::class, 'delete']);
+
 
     // Route::get('backup/create', function() {
     //     $exitCode = Artisan::call('backup:run --only-db');

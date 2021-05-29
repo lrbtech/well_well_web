@@ -33,7 +33,15 @@
                 <div class="card-header">
                   @if($role_get->today_bulk_pickup_request_edit == 'on')
                     <div class="row">
-
+                        <div class="col-md-3">
+                          <label>Select Station</label>
+                          <select id="station_id" name="station_id" class="form-control">
+                          <option value="0">All Station</option>
+                            @foreach($station as $row)
+                            <option value="{{$row->id}}">{{$row->station}}</option>
+                            @endforeach
+                          </select>
+                        </div>
                         <div class="col-md-3">
                           <label>{{$language[75][Auth::guard('admin')->user()->lang]}}</label>
                           <select id="agent_id" name="agent_id" class="form-control">
@@ -62,7 +70,7 @@
                             <th>No of Packages</th>
                             <th>Pickup Location</th>
                             <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
-                            <!-- <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th> -->
+                            <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -119,6 +127,27 @@
     </div>
 </div>
 <!-- /Bootstrap Modal -->  
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="shipment_modal" tabindex="-1" role="dialog" aria-labelledby="shipment_modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-grey-dark-5">
+                <h6 class="modal-title text-white" id="modal-title">Shipment Details</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="shipment_details" class="table-responsive">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Bootstrap Modal -->
+
 @endsection
 @section('extra-js')
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
@@ -148,9 +177,23 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'no_of_packages', name: 'no_of_packages' },
         { data: 'from_address', name: 'from_address' },
         { data: 'status', name: 'status' },
-        // { data: 'action', name: 'action' },
+        { data: 'action', name: 'action' },
     ]
 });
+
+
+function ShowShipment(id)
+{
+    $.ajax({
+    url : '/admin/get-shipment-details/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#shipment_details').html(data);
+        $('#shipment_modal').modal('show');
+    }
+  });
+}
 
 $(document).on('click','.order_master_checkbox', function(){
   if($(".order_master_checkbox").prop('checked') == true){
@@ -265,5 +308,17 @@ function PrintLabel(id){
     }
   });
 }
+
+$('#station_id').change(function(){
+  var id = $('#station_id').val();
+  $.ajax({
+    url : '/admin/get-agent-details/'+id,
+    type: "GET",
+    success: function(data)
+    {
+        $('#agent_id').html(data);
+    }
+  });
+});
 </script>
 @endsection

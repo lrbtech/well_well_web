@@ -43,81 +43,140 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
         $i =DB::table('shipments');
         if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
         {
-            $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
+            $i->where([
+                ['shipments.status',1],
+                ['shipments.pickup_assign_date','<=',$this->tdate],
+                ['shipments.pickup_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',2],
+                ['shipments.package_collect_date','<=',$this->tdate],
+                ['shipments.package_collect_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',3],
+                ['shipments.exception_assign_date','<=',$this->tdate],
+                ['shipments.exception_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',4],
+                ['shipments.transit_in_date','<=',$this->tdate],
+                ['shipments.transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',11],
+                ['shipments.transit_in_date','<=',$this->tdate],
+                ['shipments.transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',6],
+                ['shipments.transit_out_date','<=',$this->tdate],
+                ['shipments.transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',12],
+                ['shipments.transit_out_date','<=',$this->tdate],
+                ['shipments.transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',13],
+                ['shipments.package_at_station_date','<=',$this->tdate],
+                ['shipments.package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',14],
+                ['shipments.package_at_station_date','<=',$this->tdate],
+                ['shipments.package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',7],
+                ['shipments.van_scan_date','<=',$this->tdate],
+                ['shipments.van_scan_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',8],
+                ['shipments.delivery_date','<=',$this->tdate],
+                ['shipments.delivery_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['shipments.status',9],
+                ['shipments.delivery_exception_assign_date','<=',$this->tdate],
+                ['shipments.delivery_exception_assign_date','>=',$this->fdate],
+            ]);
         }
         if ( $this->agent_id != 'agent' )
         {
             $i->where([
-                ['shipments.pickup_agent_id',$this->agent_id],
+                ['shipments.pickup_agent_id',$agent_id],
                 ['shipments.status',1],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.pickup_assign_date','<=',$this->tdate],
+                ['shipments.pickup_assign_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.package_collect_agent_id',$this->agent_id],
+                ['shipments.package_collect_agent_id',$agent_id],
                 ['shipments.status',2],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.package_collect_date','<=',$this->tdate],
+                ['shipments.package_collect_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.pickup_exception_id',$this->agent_id],
+                ['shipments.pickup_exception_id',$agent_id],
                 ['shipments.status',3],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.exception_assign_date','<=',$this->tdate],
+                ['shipments.exception_assign_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_in_id',$this->agent_id],
+                ['shipments.transit_in_id',$agent_id],
                 ['shipments.status',4],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.transit_in_date','<=',$this->tdate],
+                ['shipments.transit_in_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_in_id1',$this->agent_id],
+                ['shipments.transit_in_id1',$agent_id],
                 ['shipments.status',11],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.transit_in_date','<=',$this->tdate],
+                ['shipments.transit_in_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_out_id',$this->agent_id],
+                ['shipments.transit_out_id',$agent_id],
                 ['shipments.status',6],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.transit_out_date','<=',$this->tdate],
+                ['shipments.transit_out_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_out_id1',$this->agent_id],
+                ['shipments.transit_out_id1',$agent_id],
                 ['shipments.status',12],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.transit_out_date','<=',$this->tdate],
+                ['shipments.transit_out_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.package_at_station_id',$this->agent_id],
+                ['shipments.package_at_station_id',$agent_id],
                 ['shipments.status',13],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.package_at_station_date','<=',$this->tdate],
+                ['shipments.package_at_station_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.package_at_station_id1',$this->agent_id],
+                ['shipments.package_at_station_id1',$agent_id],
                 ['shipments.status',14],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.package_at_station_date','<=',$this->tdate],
+                ['shipments.package_at_station_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.van_scan_id',$this->agent_id],
+                ['shipments.van_scan_id',$agent_id],
                 ['shipments.status',7],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.van_scan_date','<=',$this->tdate],
+                ['shipments.van_scan_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.delivery_agent_id',$this->agent_id],
+                ['shipments.delivery_agent_id',$agent_id],
                 ['shipments.status',8],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.delivery_date','<=',$this->tdate],
+                ['shipments.delivery_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.delivery_exception_id',$this->agent_id],
+                ['shipments.delivery_exception_id',$agent_id],
                 ['shipments.status',9],
-                ['shipments.date','<=',$this->tdate],
-                ['shipments.date','>=',$this->fdate],
+                ['shipments.delivery_exception_assign_date','<=',$this->tdate],
+                ['shipments.delivery_exception_assign_date','>=',$this->fdate],
             ]);
         }
 
@@ -415,12 +474,55 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             }
         }
 
+        $shipment_date='';
+        if($shipment->status == 0){
+            $shipment_date= date("d-m-Y",strtotime($shipment->date));
+        }
+        elseif($shipment->status == 1){
+            $shipment_date= date("d-m-Y",strtotime($shipment->pickup_assign_date));
+        }
+        elseif($shipment->status == 2){
+            $shipment_date= date("d-m-Y",strtotime($shipment->package_collect_date));
+        }
+        elseif($shipment->status == 3){
+            $shipment_date= date("d-m-Y",strtotime($shipment->exception_assign_date));
+        }
+        elseif($shipment->status == 4){
+            $shipment_date= date("d-m-Y",strtotime($shipment->transit_in_date));
+        }
+        elseif($shipment->status == 6){
+            $shipment_date= date("d-m-Y",strtotime($shipment->transit_out_date));
+        }
+        elseif($shipment->status == 13){
+            $shipment_date= date("d-m-Y",strtotime($shipment->package_at_station_date));
+        }
+        elseif($shipment->status == 11){
+            $shipment_date= date("d-m-Y",strtotime($shipment->transit_in_date));
+        }
+        elseif($shipment->status == 12){
+            $shipment_date= date("d-m-Y",strtotime($shipment->transit_out_date));
+        }
+        elseif($shipment->status == 14){
+            $shipment_date= date("d-m-Y",strtotime($shipment->package_at_station_date));
+        }
+        elseif($shipment->status == 7){
+            $shipment_date= date("d-m-Y",strtotime($shipment->van_scan_date));
+        }
+        elseif($shipment->status == 8){
+            $shipment_date= date("d-m-Y",strtotime($shipment->delivery_date));
+        }
+        elseif($shipment->status == 9){
+            $shipment_date= date("d-m-Y",strtotime($shipment->delivery_exception_assign_date));
+        }
+        elseif($shipment->status == 10){
+            $shipment_date= date("d-m-Y",strtotime($shipment->cancel_request_date));
+        }
 
         
         return [
             $shipment_package[0]->sku_value,
             $shipment->reference_no,
-            $shipment->date,
+            $shipment_date,
             $user_type,
             $user_details,
             $shipment_mode,

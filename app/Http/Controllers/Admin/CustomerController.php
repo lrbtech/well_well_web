@@ -265,6 +265,9 @@ public function editRateCard($id)
 $data = add_rate::where('user_id',$id)->first();
 $settings = settings::find(1);
 $output='<div class="row" id="service_area_show">
+<div class="col-md-12">
+  <h3>Basic Info</h3>
+</div>
 <div class="form-group col-md-3">
   <div class="checkbox checkbox-primary">';
   if($data->insurance_enable == '1'){
@@ -316,6 +319,9 @@ $output='<div class="row" id="service_area_show">
 </div>
 
 <div class="row" id="non_service_area_table">
+<div class="col-md-12">
+  <h3>Additional Fees</h3>
+</div>
 <div class="form-group col-md-6">
   <label>0 to 5 kg Price</label>
   <input value="'.$data->before_5_kg_price.'" autocomplete="off" type="text" id="before_5_kg_price" name="before_5_kg_price" class="form-control">
@@ -381,6 +387,9 @@ $output='<div class="row" id="service_area_show">
 
 
 <div class="row" id="special_service_table">
+<div class="col-md-12">
+  <h3>Additional Fees</h3>
+</div>
 <table id="productTable" class="table">
 <thead class="thead-primary">
     <tr style="text-align: center;">
@@ -433,6 +442,9 @@ $output='<div class="row" id="service_area_show">
 </div>
 
 <div class="row" id="same_day_delivery_table">
+<div class="col-md-12">
+  <h3>Additional Fees</h3>
+</div>
 <table id="productTable1" class="table">
 <thead class="thead-primary">
   <tr style="text-align: center;">

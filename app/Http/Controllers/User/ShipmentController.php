@@ -40,6 +40,19 @@ class ShipmentController extends Controller
         date_default_timezone_get();
     }
 
+    public function getClientIP():string
+    {
+        $keys=array('HTTP_CLIENT_IP','HTTP_X_FORWARDED_FOR','HTTP_X_FORWARDED','HTTP_FORWARDED_FOR','HTTP_FORWARDED','REMOTE_ADDR');
+        foreach($keys as $k)
+        {
+            if (!empty($_SERVER[$k]) && filter_var($_SERVER[$k], FILTER_VALIDATE_IP))
+            {
+                return $_SERVER[$k];
+            }
+        }
+        return "UNKNOWN";
+    }
+
     public function newShipment(){
         $settings = settings::find(1);
         $drop_point = drop_point::all();
@@ -88,7 +101,9 @@ class ShipmentController extends Controller
         $manage_address->address3 = $request->address3;
         $manage_address->save();
         
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $manage_address->id;
         $system_logs->category = 'address';
         $system_logs->to_id = Auth::user()->email;
@@ -140,6 +155,7 @@ class ShipmentController extends Controller
         $shipment->from_station_id = $from_station->station_id;
         $shipment->to_station_id = $to_station->station_id;
         $shipment->shipment_mode = $request->shipment_mode;
+        $shipment->shipment_notes = $request->shipment_notes;
         //$shipment->special_service = $request->special_service;
         //$shipment->special_service_description = $request->special_service_description;
         $shipment->return_package_cost = $request->return_package_cost;
@@ -226,6 +242,7 @@ class ShipmentController extends Controller
             $shipment1->from_station_id = $to_station->station_id;
             $shipment1->to_station_id = $from_station->station_id;
             $shipment1->shipment_mode = $request->shipment_mode;
+            $shipment->shipment_notes = $request->shipment_notes;
             //$shipment1->special_service = $request->special_service;
             //$shipment1->special_service_description = $request->special_service_description;
             $shipment1->return_package_cost = $request->return_package_cost;
@@ -543,7 +560,9 @@ class ShipmentController extends Controller
         $shipment->status = 10;
         $shipment->save();
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::user()->email;
@@ -558,7 +577,9 @@ class ShipmentController extends Controller
         $shipment->hold_status = 1;
         $shipment->save();
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::user()->email;
@@ -573,7 +594,9 @@ class ShipmentController extends Controller
         $shipment->hold_status = 0;
         $shipment->save();
 
+        $get_ip = $this->getClientIP();
         $system_logs = new system_logs;
+        $system_logs->user_ip = $get_ip;
         $system_logs->_id = $shipment->id;
         $system_logs->category = 'shipment';
         $system_logs->to_id = Auth::user()->email;
