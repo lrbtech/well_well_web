@@ -132,7 +132,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button onclick="updateAssignAgent()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Save</button>
+                        <button onclick="updateAssignAgent()" class="btn btn-primary btn-block mr-10" type="button">Save</button>
                     </div>
                 </form>
             </div>
@@ -167,7 +167,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button onclick="updateAssignAgentStation()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Save</button>
+                        <button onclick="updateAssignAgentStation()" class="btn btn-primary btn-block mr-10" type="button">Save</button>
                     </div>
                 </form>
             </div>
@@ -202,7 +202,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button onclick="updateAssignAgentDelivery()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Update</button>
+                        <button onclick="updateAssignAgentDelivery()" class="btn btn-primary btn-block mr-10" type="button">Update</button>
                     </div>
                 </form>
             </div>
@@ -232,7 +232,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button onclick="SaveCancelRequest()" id="saveButton" class="btn btn-primary btn-block mr-10" type="button">Add</button>
+                        <button onclick="SaveCancelRequest()" class="btn btn-primary btn-block mr-10" type="button">Add</button>
                     </div>
                 </form>
             </div>
@@ -256,7 +256,7 @@ var orderPageTable = $('#datatable').DataTable({
           processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
         },
     "serverSide": true,
-    "pageLength": 10,
+    //"pageLength": 10,
     "ajax":{
         "url": "/admin/get-shipment/20/1/1",
         "dataType": "json",
