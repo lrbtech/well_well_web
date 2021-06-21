@@ -128,7 +128,7 @@ class ReportController extends Controller
 
 
     public function getShipmentReport($status,$user_type,$fdate,$tdate){
-        set_time_limit(8000000);
+        ini_set('max_execution_time', 600); //3 minutes
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
