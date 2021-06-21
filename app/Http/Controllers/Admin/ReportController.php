@@ -417,6 +417,8 @@ class ReportController extends Controller
         }
         $shipment->where('shipments.status',8);
         $shipment->orderBy('shipments.id','DESC');
+        $shipment->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.no_of_packages','shipments.total_weight','shipments.shipment_price','shipments.postal_charge_percentage','shipments.postal_charge','shipments.vat_percentage','shipments.vat_amount','shipments.id','shipments.insurance_percentage','shipments.insurance_amount','shipments.cod_amount','shipments.total');
+        $shipment->get();
         //$shipment = $i->get();
 
         return Datatables::of($shipment)
@@ -437,7 +439,9 @@ class ReportController extends Controller
                     </td>';
                 }
             })
-            
+            ->addColumn('reference_no', function ($shipment) {
+                return '<td>'.$shipment->reference_no.'</td>';
+            })
             ->addColumn('total_weight', function ($shipment) {
                 return '<td>
                 <p>No of Packages : ' .$shipment->no_of_packages . '</p>
