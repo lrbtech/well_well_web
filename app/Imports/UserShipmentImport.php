@@ -129,7 +129,7 @@ class UserShipmentImport implements ToModel, WithHeadingRow
                 $shipment->special_cod = $row['cash_on_delivery'];
             }
             $shipment->no_of_packages = $row['no_of_packages'];
-            $shipment->declared_value = $row['declared_value'];
+            $shipment->declared_value = $row['cash_on_pickup'] + $row['cash_on_delivery'];
             $shipment->reference_no = $row['reference'];
             $shipment->identical = 0;
 

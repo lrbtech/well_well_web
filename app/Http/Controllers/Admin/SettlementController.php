@@ -181,7 +181,7 @@ class SettlementController extends Controller
         })
         ->addColumn('shipment_date', function ($shipment) {
             return '<td>
-            <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
+            <p>' . date("d-m-Y",strtotime($shipment->delivery_date)) . '</p>
             </td>';
         })
 
@@ -279,7 +279,7 @@ class SettlementController extends Controller
         })
         ->addColumn('shipment_date', function ($shipment) {
             return '<td>
-            <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
+            <p>' . date("d-m-Y",strtotime($shipment->package_collect_date)) . '</p>
             </td>';
         })
 
@@ -377,7 +377,7 @@ class SettlementController extends Controller
         })
         ->addColumn('shipment_date', function ($shipment) {
             return '<td>
-            <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
+            <p>' . date("d-m-Y",strtotime($shipment->package_collect_date)) . '</p>
             </td>';
         })
 

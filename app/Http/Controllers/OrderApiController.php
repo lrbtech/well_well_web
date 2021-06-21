@@ -164,8 +164,11 @@ class OrderApiController extends Controller
         $shipment->to_station_id = $to_station->station_id;
         $shipment->shipment_mode = $request->order['shipment_mode'];
         $shipment->return_package_cost = 2;
-        $shipment->special_cod_enable = $request->order['cod_enable'];
+        //$shipment->special_cod_enable = $request->order['cod_enable'];
         $shipment->special_cod = $request->order['cod_value'];
+        if($request->order['cod_value'] > 0){
+            $shipment->special_cod_enable = 1;
+        }
         $shipment->no_of_packages = $request->order['no_of_packages'];
         $shipment->declared_value = $request->order['declared_value'];
         $shipment->reference_no = $request->order['reference'];
