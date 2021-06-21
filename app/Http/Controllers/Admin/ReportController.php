@@ -163,7 +163,7 @@ class ReportController extends Controller
 
         $i->where('shipments.show_status',0);
         $i->orderBy('shipments.id','DESC');
-        $shipment = $i->latest()->get();
+        $shipment = $i->latest();
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
