@@ -316,13 +316,15 @@ function PrintLabel(id){
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/shipment";
+            var new_url = '/admin/get-shipment/20/1/1';
+            orderPageTable.ajax.url(new_url).load();
             }, 250);
         } else {
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/shipment";
+            var new_url = '/admin/get-shipment/20/1/1';
+            orderPageTable.ajax.url(new_url).load();
         }
         //PrintDiv(data);
     }
@@ -362,7 +364,8 @@ function updateAssignAgent(){
         {                
             $("#form")[0].reset();
             $('#assign-agent-modal').modal('hide');
-            location.reload();
+            var new_url = '/admin/get-shipment/20/1/1';
+            orderPageTable.ajax.url(new_url).load();
             toastr.success(data, 'Successfully Save');
         },error: function (data) {
             var errorData = data.responseJSON.errors;
@@ -385,7 +388,8 @@ function updateAssignAgentStation(){
         {                
             $("#form1")[0].reset();
             $('#assign-agent-station-modal').modal('hide');
-            location.reload();
+            var new_url = '/admin/get-shipment/20/1/1';
+            orderPageTable.ajax.url(new_url).load();
             toastr.success(data, 'Successfully Save');
         },error: function (data) {
             var errorData = data.responseJSON.errors;
@@ -408,7 +412,8 @@ function updateAssignAgentDelivery(){
         {                
             $("#form2")[0].reset();
             $('#assign-agent-delivery-modal').modal('hide');
-            location.reload();
+            var new_url = '/admin/get-shipment/20/1/1';
+            orderPageTable.ajax.url(new_url).load();
             toastr.success(data, 'Successfully Save');
         },error: function (data) {
             var errorData = data.responseJSON.errors;
@@ -439,7 +444,8 @@ function SaveCancelRequest(){
         {                
             $("#cancel_form")[0].reset();
             $('#cancel_modal').modal('hide');
-            location.reload();
+            var new_url = '/admin/get-shipment/20/1/1';
+            orderPageTable.ajax.url(new_url).load();
             toastr.success(data, 'Successfully Save');
         },error: function (data) {
             var errorData = data.responseJSON.errors;
