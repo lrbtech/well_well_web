@@ -128,7 +128,6 @@ class ReportController extends Controller
 
 
     public function getShipmentReport($status,$user_type,$fdate,$tdate){
-        ini_set('max_execution_time', 600); //3 minutes
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
@@ -164,7 +163,7 @@ class ReportController extends Controller
 
         $i->where('shipments.show_status',0);
         $i->orderBy('shipments.id','DESC');
-        $i->select('shipments.*');
+        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.date','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.return_shipment_id','shipments.cancel_remark','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.delivery_agent_id','shipments.exception_category','shipments.exception_remark','shipments.pickup_agent_id');
         $shipment = $i->get();
 
         return Datatables::of($shipment)
