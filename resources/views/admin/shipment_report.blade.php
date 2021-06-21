@@ -97,7 +97,7 @@
                       <table class="display" id="datatable">
                         <thead>
                           <tr>
-                            <!-- <th>#</th> -->
+                            <th>#</th>
                             <th>Account ID</th>
                             <th>Tracking ID</th>
                             <th>Reference No</th>
@@ -158,7 +158,7 @@ var orderPageTable = $('#datatable').DataTable({
     //   { "searchable": true, "targets": [0,1,2,3,4,5,6,7,8,9] }
     // ],
     "columns": [
-        // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        { data: 'DT_RowIndex', orderable: false, searchable: false },
         { data: 'account_id', name: 'account_id' },
         { data: 'order_id', name: 'order_id' },
         { data: 'reference_no', name: 'reference_no' },

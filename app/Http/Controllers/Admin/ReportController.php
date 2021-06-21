@@ -128,6 +128,7 @@ class ReportController extends Controller
 
 
     public function getShipmentReport($status,$user_type,$fdate,$tdate){
+        set_time_limit(0);
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
@@ -164,7 +165,7 @@ class ReportController extends Controller
         $i->where('shipments.show_status',0);
         $i->orderBy('shipments.id','DESC');
         $i->select('shipments.*');
-        $shipment = $i;
+        $shipment = $i->get();
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
