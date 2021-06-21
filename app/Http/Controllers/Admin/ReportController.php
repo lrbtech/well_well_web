@@ -163,9 +163,9 @@ class ReportController extends Controller
 
         $i->where('shipments.show_status',0);
         $i->orderBy('shipments.id','DESC');
-        $shipment = $i->latest();
+        $shipment = $i->latest()->get();
 
-        return Datatables::collection($shipment)
+        return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
