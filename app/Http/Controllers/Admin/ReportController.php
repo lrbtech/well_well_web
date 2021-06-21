@@ -163,9 +163,9 @@ class ReportController extends Controller
 
         $i->where('shipments.show_status',0);
         $i->orderBy('shipments.id','DESC');
-        $shipment = $i->query();
+        $shipment = $i->latest();
 
-        return Datatables::of($shipment)
+        return Datatables::collection($shipment)
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
@@ -349,7 +349,7 @@ class ReportController extends Controller
             
         ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','reference_no'])
         ->addIndexColumn()
-        ->make(true);
+        ->toJson();
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
     }
 
