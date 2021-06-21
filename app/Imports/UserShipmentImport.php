@@ -129,7 +129,8 @@ class UserShipmentImport implements ToModel, WithHeadingRow
                 $shipment->special_cod = $row['cash_on_delivery'];
             }
             $shipment->no_of_packages = $row['no_of_packages'];
-            $shipment->declared_value = $row['cash_on_pickup'] + $row['cash_on_delivery'];
+            $declared_value = $row['cash_on_pickup'] + $row['cash_on_delivery'];
+            $shipment->declared_value = $declared_value;
             $shipment->reference_no = $row['reference'];
             $shipment->identical = 0;
 
@@ -154,7 +155,7 @@ class UserShipmentImport implements ToModel, WithHeadingRow
                 $cod_enable=0;
             }
             
-            $price = $this->getShipmentPrice($user->id,$total_weight,$to_address->id,$row['shipment_mode'],$row['declared_value'],$cod_enable);
+            $price = $this->getShipmentPrice($user->id,$total_weight,$to_address->id,$row['shipment_mode'],$declared_value,$cod_enable);
 
 
             $shipment->shipment_price = $price->original['shipment_price'];
