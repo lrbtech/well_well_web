@@ -73,8 +73,10 @@
                             <td>
                                 @if($row->mode == 1)
                                 COD 
-                                @else 
+                                @elseif($row->mode == 2)
                                 GUEST
+                                @elseif($row->mode == 3)
+                                COP
                                 @endif
                             </td>
                             <td>

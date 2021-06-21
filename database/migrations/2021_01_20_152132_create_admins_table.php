@@ -32,6 +32,8 @@ class CreateAdminsTable extends Migration
             $table->string('paid_guest')->default('0');
             $table->string('total_cod')->default('0');
             $table->string('paid_cod')->default('0');
+            $table->string('total_cop')->default('0');
+            $table->string('paid_cop')->default('0'); 
             $table->timestamps();
         });
     }

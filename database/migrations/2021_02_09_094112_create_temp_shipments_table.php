@@ -32,6 +32,8 @@ class CreateTempShipmentsTable extends Migration
             $table->TEXT('special_service_description')->nullable();  
             $table->string('special_cod_enable')->nullable();
             $table->string('special_cod')->nullable();
+            $table->string('special_cop_enable')->nullable();
+            $table->string('special_cop')->nullable();
             $table->string('return_package_cost')->nullable();
             $table->string('shipment_mode')->nullable();
             $table->string('no_of_packages')->nullable(); 

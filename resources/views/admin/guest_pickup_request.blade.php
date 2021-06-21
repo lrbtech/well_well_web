@@ -57,6 +57,9 @@
                         <div class="form-group col-md-3">
                             <button id="save" class="btn btn-primary btn-block mr-10" type="button">{{$language[77][Auth::guard('admin')->user()->lang]}}</button>
                         </div>
+                        <div class="form-group col-md-3">
+                          <button id="print" class="btn btn-primary btn-block mr-10" type="button">Bulk Print</button>
+                      </div>
                     </div>
                   @endif
                   </div>
@@ -143,8 +146,11 @@ $('.guest-pickup-request').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
+       "language": {
+          processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+        },
     "serverSide": true,
-    //"pageLength": 50,
+    "pageLength": 100,
     "ajax":{
         "url": "/admin/get-guest-pickup-request",
         "dataType": "json",
@@ -172,6 +178,42 @@ $(document).on('click','.order_master_checkbox', function(){
   }
 });
 
+$(document).on('click','#print', function(){
+    var order_id=[];
+    $(".order_checkbox:checked").each(function(){
+        order_id.push($(this).val());
+    });
+    if(order_id.length > 0){
+        $.ajax({
+            url:"/admin/bulk-print-label",
+            method:"GET",
+            data:{id:order_id},
+            success:function(data){
+              var mywindow = window.open('', 'BIlling Application', 'height=600,width=800');
+              var is_chrome = Boolean(mywindow.chrome);
+              mywindow.document.write(data.html);
+              mywindow.document.close(); 
+              if (is_chrome) {
+                  setTimeout(function() {
+                  mywindow.focus(); 
+                  mywindow.print(); 
+                  mywindow.close();
+                  var new_url = '/admin/get-guest-pickup-request';
+                  orderPageTable.ajax.url(new_url).load(null, false);
+                  }, 250);
+              } else {
+                  mywindow.focus(); 
+                  mywindow.print(); 
+                  mywindow.close();
+                  var new_url = '/admin/get-guest-pickup-request';
+                  orderPageTable.ajax.url(new_url).load(null, false);
+              }
+            }
+        })
+    }else{
+        toastr.error("Please select atleast one Checkbox");
+    }
+});
 
 $(document).on('click','#save', function(){
     var order_id=[];

@@ -10,7 +10,7 @@
             <div class="page-header">
               <div class="row">
                 <div class="col-lg-6 main-header">
-                  <h2>Courier Team Guest <span>Settlement </span></h2> 
+                  <h2>Courier Team COP <span>Settlement </span></h2> 
                   <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
@@ -81,8 +81,8 @@
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[115][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[116][Auth::guard('admin')->user()->lang]}}</th>
-                            <th>Special C.O.D</th>
-                            <th>Collected C.O.D</th>
+                            <th>Special C.O.P</th>
+                            <th>Collected C.O.P</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -115,7 +115,7 @@
                 <form id="form" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <input type="hidden" name="delivery_agent_id" id="delivery_agent_id">\
-                <input value="2" type="hidden" name="mode" id="mode">
+                <input value="3" type="hidden" name="mode" id="mode">
                 <input type="hidden" name="shipment_ids" id="shipment_ids">
                     <div class="form-group">
                       <label>Date</label>
@@ -149,7 +149,7 @@
   <script src="/assets/app-assets/js/chat-menu.js"></script>
 
   <script type="text/javascript">
-$('.courier-team-guest-settlement').addClass('active');
+$('.courier-team-cop-settlement').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
@@ -159,7 +159,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     "pageLength": 100,
     "ajax":{
-        "url": "/admin/get-courier-team-guest-settlement/agent/1/1",
+        "url": "/admin/get-courier-team-cop-settlement/agent/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -201,7 +201,7 @@ $('#search').click(function(){
       tdate = '1';
     }
     var agent_id = $('#agent_id').val();
-    var new_url = '/admin/get-courier-team-guest-settlement/'+agent_id+'/'+fdate+'/'+tdate;
+    var new_url = '/admin/get-courier-team-cop-settlement/'+agent_id+'/'+fdate+'/'+tdate;
     orderPageTable.ajax.url(new_url).load();
     //orderPageTable.draw();
 });

@@ -402,14 +402,38 @@ visibility: visible;
               
               {{-- Shipment details end --}}
 
+
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <!-- <h5>Special Services</h5><span>(optional) </span> -->
+                    <h5>Billing</h5>
+                    <!-- <span>(optional) </span> -->
                   </div>
                     <div class="card-body megaoptions-border-space-sm">
                       <div class="row">
-                        
+                        <div class="col-sm-6">
+                          <div class="card">
+                            <div class="media p-20">
+                              <div class="checkbox checkbox-secondary mr-3">
+                                <input {{ ($shipment->special_cop_enable == '1' ? ' checked' : '') }} id="special_cop_enable1" type="checkbox" name="special_cop_enable" value="1">
+                                <label for="special_cop_enable1"></label>
+                              </div>
+                              <div class="media-body">
+                                <h6 class="mt-0 mega-title-badge">Cash on Pickup
+                                  <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
+                                </h6>
+                                <p>(Shipper)</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 show_special_cop">
+                            <label>How Much Amount to Be Collected?</label>
+                            <input value="{{$shipment->special_cop}}" class="form-control" id="special_cop" name="special_cop" type="number">
+                        </div>
+                      </div>
+
+                      <div class="row">
                         <div class="col-sm-6">
                           <div class="card">
                             <div class="media p-20">
@@ -421,22 +445,20 @@ visibility: visible;
                                 <h6 class="mt-0 mega-title-badge">{{$language[53][Auth::guard('admin')->user()->lang]}}
                                   <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
                                 </h6>
-                                <p>({{$language[54][Auth::guard('admin')->user()->lang]}})</p>
+                                <p>(Recepient)</p>
                               </div>
                             </div>
                           </div>
                         </div>
-
                         <div class="col-sm-6 show_special_cod">
                             <label>How Much Amount to Be Collected?</label>
                             <input value="{{$shipment->special_cod}}" class="form-control" id="special_cod" name="special_cod" type="number">
                         </div>
-
-                        
                       </div>
+
                     </div>
                 </div>
-              </div>                
+              </div>             
               
 
               <div class="col-sm-12">
@@ -893,6 +915,17 @@ $('#shipment_from_time').blur(function(){
 
   var to_time = moment.utc(shipment_from_time,'hh:mm A').add(2,'hour').format('hh:mm A');
   $("#shipment_to_time").val(to_time);
+});
+
+$('.show_special_cop').hide();
+$('#special_cop_enable1').click(function(){
+  if ($(this).is(':checked')) {
+    $('.show_special_cop').show();
+    getvalue();
+  } else {
+    $('.show_special_cop').hide();
+    getvalue();
+  }
 });
 
 $('#special_cod_enable1').click(function(){

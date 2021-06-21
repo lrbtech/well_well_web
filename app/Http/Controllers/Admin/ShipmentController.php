@@ -311,6 +311,8 @@ class ShipmentController extends Controller
         $shipment->special_service = $request->special_service;
         $shipment->special_service_description = $request->special_service_description;
         $shipment->return_package_cost = $request->return_package_cost;
+        $shipment->special_cop_enable = $request->special_cop_enable;
+        $shipment->special_cop = $request->special_cop;
         $shipment->special_cod_enable = $request->special_cod_enable;
         $shipment->special_cod = $request->special_cod;
         $shipment->no_of_packages = $request->no_of_packages;
@@ -426,6 +428,8 @@ class ShipmentController extends Controller
             $shipment1->special_cod_enable = $request->special_cod_enable;
             $shipment->shipment_notes = $request->shipment_notes;
             $shipment1->special_cod = $request->special_cod;
+            $shipment->special_cop_enable = $request->special_cop_enable;
+            $shipment->special_cop = $request->special_cop;
             $shipment1->no_of_packages = $request->no_of_packages;
             $shipment1->declared_value = $request->declared_value;
             $shipment1->total_weight = $request->total_weight;
@@ -574,6 +578,8 @@ class ShipmentController extends Controller
         //$shipment->return_package_cost = $request->return_package_cost;
         $shipment->special_cod_enable = $request->special_cod_enable;
         $shipment->special_cod = $request->special_cod;
+        $shipment->special_cop_enable = $request->special_cop_enable;
+        $shipment->special_cop = $request->special_cop;
         $shipment->no_of_packages = $request->no_of_packages;
         $shipment->declared_value = $request->declared_value;
         $shipment->total_weight = $request->total_weight;
@@ -1132,6 +1138,14 @@ class ShipmentController extends Controller
                         <p>Name :' . $agent->name . '</p>';
                     }
                 }
+                elseif($shipment->status == 15){
+                    $agent = agent::find($shipment->return_shipment_id);
+                    if(!empty($agent)){
+                        return '<p>Return to Shipper</p>
+                        <p>Agent ID :'.$agent->agent_id.'</p>
+                        <p>Name :' . $agent->name . '</p>';
+                    }
+                }
                 elseif($shipment->status == 7){
                     $agent = agent::find($shipment->van_scan_id);
                     if(!empty($agent)){
@@ -1573,6 +1587,30 @@ class ShipmentController extends Controller
 
         echo $output;
     }
+    public function bulkPrint(Request $request){
+        $shipment = shipment::whereIn('id', $request->id)->get();
+        $shipment_package = shipment_package::whereIn('shipment_id',$request->id)->get();
 
+        $shipment_count = shipment_package::whereIn('shipment_id',$request->id)->count();
+
+        $all_shipments = DB::table("shipment_packages as sp")
+        ->whereIn("sp.shipment_id",$request->id)
+        ->join('shipments as s', 's.id', '=', 'sp.shipment_id')
+        ->join('stations as st', 'st.id', '=', 's.to_station_id')
+        ->join('manage_addresses as fa', 'fa.id', '=', 's.from_address')
+        ->join('manage_addresses as ta', 'ta.id', '=', 's.to_address')
+        ->select('s.*','sp.shipment_id','sp.sku_value','sp.length','sp.width','sp.height','sp.category','sp.description','st.station','fa.contact_name as from_name','fa.contact_mobile as from_mobile','fa.city_id as from_city','fa.area_id as from_area','ta.city_id','ta.area_id','ta.address1','ta.address2','ta.address3','ta.contact_name','ta.contact_mobile','ta.contact_landline')
+        //->groupBy("users.id")
+        ->get();
+
+        $country = country::all();
+        $package_category = package_category::all();
+        $user = User::find(Auth::user()->id);
+        $city = city::where('parent_id',0)->get();
+        $area = city::where('parent_id','!=',0)->get();
+        $view = view('print.bulkprintlabel',compact('shipment','shipment_package','country','city','area','shipment_count','all_shipments','package_category','user'))->render();
+
+        return response()->json(['html'=>$view]);
+    }
 
 }

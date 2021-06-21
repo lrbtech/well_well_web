@@ -273,6 +273,13 @@
               </a>
             </li>
 
+            <li class="shipment-excel">
+              <a class="sidebar-header shipment-excel" href="/user/shipment-excel">
+              <i data-feather="folder-plus"></i>
+              <span> Upload Excel</span>
+              </a>
+            </li>
+
             <li class="shipment">
               <a class="sidebar-header shipment" href="/user/shipment">
               <i data-feather="eye"></i>

@@ -354,6 +354,9 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/shipment-delivered', [App\Http\Controllers\Admin\AllShipment::class, 'ShipmentDelivered']);
     Route::POST('/get-shipment-delivered/{date1}/{date2}', [App\Http\Controllers\Admin\AllShipment::class, 'getShipmentDelivered']);
 
+    Route::get('/return-shipper', [App\Http\Controllers\Admin\AllShipment::class, 'returnShipper']);
+    Route::POST('/get-return-shipper', [App\Http\Controllers\Admin\AllShipment::class, 'getReturnShipper']);
+
     Route::get('/today-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'TodayDelivery']);
     Route::POST('/get-today-delivery', [App\Http\Controllers\Admin\AllShipment::class, 'getTodayDelivery']);
 
@@ -406,6 +409,9 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/courier-team-guest-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'CourierTeamGuestSettlement']);
     Route::POST('/get-courier-team-guest-settlement/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getCourierTeamGuestSettlement']);
+
+    Route::get('/courier-team-cop-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'CourierTeamCOPSettlement']);
+    Route::POST('/get-courier-team-cop-settlement/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\SettlementController::class, 'getCourierTeamCOPSettlement']);
 
     Route::get('/get-agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'getAgentSettlement']);
     Route::POST('/agent-settlement', [App\Http\Controllers\Admin\SettlementController::class, 'agentSettlement']);
@@ -513,6 +519,8 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('backup/download/{file_name}', [App\Http\Controllers\BackupController::class, 'download']);
     Route::get('backup/delete/{file_name}', [App\Http\Controllers\BackupController::class, 'delete']);
 
+    Route::get('/bulk-print', [App\Http\Controllers\Admin\ShipmentController::class, 'bulkPrint']);
+
 
     // Route::get('backup/create', function() {
     //     $exitCode = Artisan::call('backup:run --only-db');
@@ -605,5 +613,7 @@ Route::group(['prefix' => 'user'],function(){
 
     Route::get('/excel-location-download', [App\Http\Controllers\User\ReportController::class, 'excelLocationDownload']);
 
+    Route::get('/shipment-excel', [App\Http\Controllers\User\ShipmentController::class, 'ShipmentExcel']);
+    Route::POST('/upload-shipment-excel', [App\Http\Controllers\User\ShipmentController::class, 'UploadShipmentExcel']);
 });
 

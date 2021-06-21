@@ -87,6 +87,7 @@
                       <option value="">SELECT</option>
                       <option value="1">COD</option>
                       <option value="2">GUEST</option>
+                      <option value="3">COP</option>
                       </select>
                     </div>
 

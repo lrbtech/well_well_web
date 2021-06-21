@@ -26,11 +26,12 @@ use Hash;
 use Mail;
 use PDF;
 use DB;
+use Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;   
 
-class ShipmentImport implements ToModel, WithHeadingRow
+class UserShipmentImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -42,7 +43,7 @@ class ShipmentImport implements ToModel, WithHeadingRow
         // return new shipment([
         //     //
         // ]);
-        $account_id = $row['account_id'];
+        $account_id = Auth::user()->customer_id;
         $user = User::where('customer_id',$account_id)->where('status',4)->first();
         if(empty($user)){
             return response()->json(['message' => 'Account ID Not Found'], 401);
@@ -58,7 +59,7 @@ class ShipmentImport implements ToModel, WithHeadingRow
             $from_address->country_id = 1;
             $from_address->contact_name = $row['pick_up_name'];
             $from_address->contact_mobile = $row['pick_up_mobile'];
-            $from_address->contact_landline = $row['pick_up_land_line'];
+            //$from_address->contact_landline = $row['pick_up_land_line'];
             $from_address_type=0;
             if($row['pick_up_address_type'] == 'Home'){
                 $from_address_type=1;
@@ -70,8 +71,8 @@ class ShipmentImport implements ToModel, WithHeadingRow
                 $from_address_type=3;
             }
             $from_address->address_type = $from_address_type;
-            $from_address->latitude = $row['pick_up_latitude'];
-            $from_address->longitude = $row['pick_up_longitude'];
+            // $from_address->latitude = $row['pick_up_latitude'];
+            // $from_address->longitude = $row['pick_up_longitude'];
             $from_address->address1 = $row['pick_up_address'];
             $from_address->save();
 
@@ -86,7 +87,7 @@ class ShipmentImport implements ToModel, WithHeadingRow
             $to_address->country_id = 1;
             $to_address->contact_name = $row['delivery_name'];
             $to_address->contact_mobile = $row['delivery_mobile'];
-            $to_address->contact_landline = $row['delivery_land_line'];
+            //$to_address->contact_landline = $row['delivery_land_line'];
             $to_address_type=0;
             if($row['delivery_address_type'] == 'Home'){
                 $to_address_type=1;
@@ -98,39 +99,35 @@ class ShipmentImport implements ToModel, WithHeadingRow
                 $to_address_type=3;
             }
             $to_address->address_type = $to_address_type;
-            $to_address->latitude = $row['delivery_latitude'];
-            $to_address->longitude = $row['delivery_longitude'];
+            // $to_address->latitude = $row['delivery_latitude'];
+            // $to_address->longitude = $row['delivery_longitude'];
             $to_address->address1 = $row['delivery_address'];
             $to_address->save();
             
             $from_station = city::find($from_city->id);
             $to_station = city::find($to_city->id);
 
-            $config = [
-                'table' => 'shipments',
-                'field' => 'order_id',
-                'length' => 6,
-                'prefix' => '0'
-            ];
-    
-            $order_id = IdGenerator::generate($config);
 
-            $shipment = new shipment;
-            $shipment->order_id = $order_id;
+            $shipment = new temp_shipment;
             $shipment->date = date('Y-m-d');
             $shipment->sender_id = $user->id;
             $shipment->shipment_type = 1;
-            $shipment->shipment_date = date('Y-m-d',strtotime($row['shipment_date']));
-            $shipment->shipment_from_time = $row['shipment_from_time'];
-            $shipment->shipment_to_time = $row['shipment_to_time'];
+            // $shipment->shipment_date = date('Y-m-d',strtotime($row['shipment_date']));
+            // $shipment->shipment_from_time = $row['shipment_from_time'];
+            // $shipment->shipment_to_time = $row['shipment_to_time'];
             $shipment->from_address = $from_address->id;
             $shipment->to_address = $to_address->id;
             $shipment->from_station_id = $from_station->station_id;
             $shipment->to_station_id = $to_station->station_id;
             $shipment->shipment_mode = $row['shipment_mode'];
             $shipment->return_package_cost = 2;
-            $shipment->special_cod_enable = $row['cod_enable'];
-            $shipment->special_cod = $row['cod_value'];
+            //$shipment->special_cod_enable = $row['cod_enable'];
+            if($row['cash_on_pickup'] > 0){
+                $shipment->special_cop = $row['cash_on_pickup'];
+            }
+            if($row['cash_on_delivery'] > 0){
+                $shipment->special_cod = $row['cash_on_delivery'];
+            }
             $shipment->no_of_packages = $row['no_of_packages'];
             $shipment->declared_value = $row['declared_value'];
             $shipment->reference_no = $row['reference'];
@@ -150,7 +147,7 @@ class ShipmentImport implements ToModel, WithHeadingRow
             $shipment->total_weight = $total_weight;
             
             $cod_enable;
-            if($row['cod_enable'] == '1'){
+            if($row['cash_on_delivery'] > 0){
                 $cod_enable = 1;
             }
             else{
@@ -175,10 +172,10 @@ class ShipmentImport implements ToModel, WithHeadingRow
 
             $sku_value =  $this->generateSkuValue();
 
-            $shipment_package = new shipment_package;
-            $shipment_package->shipment_id = $shipment->id;
+            $shipment_package = new temp_shipment_package;
+            $shipment_package->temp_id = $shipment->id;
             $shipment_package->sku_value = $sku_value;
-            $shipment_package->category = $row['category'];
+            $shipment_package->category = 2;
             $shipment_package->description = $row['description'];
             $shipment_package->weight = $row['weight'];
             $shipment_package->length = $row['length'];
@@ -198,7 +195,6 @@ class ShipmentImport implements ToModel, WithHeadingRow
         }
     }
 
-
     public function generateSkuValue(){
         $sku_value = mt_rand( 1000000000, 9999999999);
         if(DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists()){
@@ -213,6 +209,7 @@ class ShipmentImport implements ToModel, WithHeadingRow
             }
         }
     }
+
 
     public function getShipmentPrice($user_id,$weight,$to_address,$shipment_mode,$declared_value,$cod_enable){
         $rate = add_rate::where('user_id',$user_id)->first();

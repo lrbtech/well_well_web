@@ -30,6 +30,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Auth;
 use DB;
 use PDF;
+use App\Imports\UserShipmentImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ShipmentController extends Controller
 {
@@ -161,6 +163,8 @@ class ShipmentController extends Controller
         $shipment->return_package_cost = $request->return_package_cost;
         $shipment->special_cod_enable = $request->special_cod_enable;
         $shipment->special_cod = $request->special_cod;
+        $shipment->special_cop_enable = $request->special_cop_enable;
+        $shipment->special_cop = $request->special_cop;
         $shipment->no_of_packages = $request->no_of_packages;
         $shipment->declared_value = $request->declared_value;
         $shipment->total_weight = $request->total_weight;
@@ -248,6 +252,8 @@ class ShipmentController extends Controller
             $shipment1->return_package_cost = $request->return_package_cost;
             $shipment1->special_cod_enable = $request->special_cod_enable;
             $shipment1->special_cod = $request->special_cod;
+            $shipment->special_cop_enable = $request->special_cop_enable;
+            $shipment->special_cop = $request->special_cop;
             $shipment1->no_of_packages = $request->no_of_packages;
             $shipment1->declared_value = $request->declared_value;
             $shipment1->total_weight = $request->total_weight;
@@ -863,6 +869,21 @@ class ShipmentController extends Controller
         }
 
         echo $output;
+    }
+
+    public function ShipmentExcel(){
+        $language = language::all();
+        return view('user.shipment_excel',compact('language'));
+    }
+
+    function UploadShipmentExcel(Request $request)
+    {
+        $this->validate($request, [
+            'excel_file'  => 'required|mimes:xls,xlsx'
+        ]);
+
+        Excel::import(new UserShipmentImport,request()->file('excel_file'));
+        return back()->with('success', 'Excel Data Imported successfully.');
     }
 
 

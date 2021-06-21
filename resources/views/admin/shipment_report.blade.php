@@ -100,6 +100,7 @@
                             <!-- <th>#</th> -->
                             <th>Account ID</th>
                             <th>Tracking ID</th>
+                            <th>Reference No</th>
                             <th>Date</th>
                             <th>{{$language[32][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[115][Auth::guard('admin')->user()->lang]}}</th>
@@ -141,18 +142,26 @@ $('.shipment-report').addClass('active');
 
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
+      "language": {
+        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+      },
     "serverSide": true,
-    //"pageLength": 50,
+    "pageLength": 100,
     "ajax":{
         "url": "/admin/get-shipment-report/20/all_user/1/1",
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
     },
+    // "columnDefs": 
+    // [
+    //   { "searchable": true, "targets": [0,1,2,3,4,5,6,7,8,9] }
+    // ],
     "columns": [
         // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         { data: 'account_id', name: 'account_id' },
         { data: 'order_id', name: 'order_id' },
+        { data: 'reference_no', name: 'reference_no' },
         { data: 'shipment_date', name: 'shipment_date' },
         { data: 'shipment_mode', name: 'shipment_mode' },
         { data: 'from_address', name: 'from_address' },

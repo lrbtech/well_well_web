@@ -1,4 +1,4 @@
-@extends('admin.layouts')
+@extends('user.layouts')
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
@@ -11,7 +11,6 @@
               <div class="row">
                 <div class="col-lg-6 main-header">
                   <h2>Upload <span>Excel </span></h2> 
-                  <h6 class="mb-0">{{$language[9][Auth::guard('admin')->user()->lang]}}</h6>
                 </div>
                 <!-- <div class="col-lg-6 breadcrumb-right">     
                   <ol class="breadcrumb">
@@ -30,7 +29,7 @@
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
-                <form action="/admin/upload-shipment-excel" method="post" enctype="multipart/form-data">
+                <form action="/user/upload-shipment-excel" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="card-header">
 
@@ -53,7 +52,7 @@
 @endif
                     <div class="row">
                         <h2>
-                        Sample Excel File Download <a href="/excel/admin_excel_structure.xlsx">Here</a>
+                        Sample Excel File Download <a href="/excel/customer_excel_structure.xlsx">Here</a>
                         </h2>
                     </div>
                     <div class="row">

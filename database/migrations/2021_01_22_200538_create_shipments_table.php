@@ -35,6 +35,9 @@ class CreateShipmentsTable extends Migration
             $table->string('special_cod_enable')->nullable();
             $table->string('special_cod')->nullable();
             $table->string('collect_cod_amount')->nullable();
+            $table->string('special_cop_enable')->nullable();
+            $table->string('special_cop')->nullable();
+            $table->string('collect_cop_amount')->nullable();
             $table->string('cod_type')->nullable();
             $table->string('credit_verification_code')->nullable();
             $table->string('last_four_digit')->nullable();
@@ -67,6 +70,9 @@ class CreateShipmentsTable extends Migration
 
             $table->string('paid_agent_status')->default('0'); 
             $table->string('paid_agent_date')->nullable();
+
+            $table->string('paid_agent_cop_status')->default('0'); 
+            $table->string('paid_agent_cop_date')->nullable();
 
             $table->string('pickup_agent_id')->nullable();
             $table->string('pickup_assign_date')->nullable();
@@ -133,6 +139,11 @@ class CreateShipmentsTable extends Migration
             $table->string('delivery_date')->nullable();
             $table->string('delivery_time')->nullable();
             $table->TEXT('delivery_notes')->nullable();
+
+            $table->string('return_shipment_id')->nullable();
+            $table->string('return_shipment_date')->nullable();
+            $table->string('return_shipment_time')->nullable();
+            $table->TEXT('return_notes')->nullable();
 
             $table->string('delivery_exception_id')->nullable();
             $table->string('delivery_exception_category')->nullable();

@@ -430,6 +430,8 @@
                 <a class="bar-icons" href="javascript:void(0)"><i class="pe-7s-cart"></i><span>{{$language[89][Auth::guard('admin')->user()->lang]}}</span></a>
                 <ul class="iconbar-mainmenu custom-scrollbar">
                   <li class="iconbar-header">{{$language[89][Auth::guard('admin')->user()->lang]}}</li>
+                  <li class="return-shipper"><a class="return-shipper" href="/admin/return-shipper">Return to Shipper</a></li>
+
                   @if($role_get->van_for_delivery == 'on')
                   <li class="ready-for-delivery"><a class="ready-for-delivery" href="/admin/ready-for-delivery">{{$language[186][Auth::guard('admin')->user()->lang]}} <span class="badge-pill badge-danger">{{$van_for_delivery}}</span></a></li>
                   @endif
@@ -545,6 +547,8 @@
                   
                   @if($role_get->courier_team_cod_settlement_report == 'on')
                   <li class="payments-in-report"><a class="payments-in-report" href="/admin/payments-in-report">{{$language[318][Auth::guard('admin')->user()->lang]}}</a></li> 
+
+                  <li class="courier-team-cop-settlement"><a class="courier-team-cop-settlement" href="/admin/courier-team-cop-settlement">Courier Team COP Settlement Report</a></li> 
                   @endif
 
                   @if($role_get->courier_team_guest_settlement_report == 'on')

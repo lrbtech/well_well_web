@@ -198,6 +198,8 @@ class PendingController extends Controller
             $shipment->return_package_cost = $temp_shipment->return_package_cost;
             $shipment->special_cod_enable = $temp_shipment->special_cod_enable;
             $shipment->special_cod = $temp_shipment->special_cod;
+            $shipment->special_cop_enable = $temp_shipment->special_cop_enable;
+            $shipment->special_cop = $temp_shipment->special_cop;
             $shipment->no_of_packages = $temp_shipment->no_of_packages;
             $shipment->declared_value = $temp_shipment->declared_value;
             $shipment->total_weight = $temp_shipment->total_weight;
@@ -227,11 +229,6 @@ class PendingController extends Controller
 
             $temp_shipment_package = temp_shipment_package::where('temp_id', $temp_shipment->id)->get();
             foreach ($temp_shipment_package as $temp) {
-                // do {
-                //     $sku_value = mt_rand( 1000000000, 9999999999);
-                // } 
-                // while ( DB::table( 'shipment_packages' )->where( 'sku_value', $sku_value )->exists() );
-
                 $shipment_package = new shipment_package;
                 $shipment_package->sku_value = $temp->sku_value;
                 $shipment_package->shipment_id = $shipment->id;
@@ -243,7 +240,6 @@ class PendingController extends Controller
                 $shipment_package->width = $temp->width;
                 $shipment_package->height = $temp->height;
                 $shipment_package->chargeable_weight = $temp->chargeable_weight;
-
                 $shipment_package->save();
             }
             

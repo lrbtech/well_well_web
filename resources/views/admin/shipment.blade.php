@@ -256,7 +256,7 @@ var orderPageTable = $('#datatable').DataTable({
           processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
         },
     "serverSide": true,
-    //"pageLength": 10,
+    "pageLength": 100,
     "ajax":{
         "url": "/admin/get-shipment/20/1/1",
         "dataType": "json",

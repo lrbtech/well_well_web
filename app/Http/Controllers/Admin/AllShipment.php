@@ -75,6 +75,14 @@ class AllShipment extends Controller
         return view('admin.schedule_for_pickup',compact('agent','language','role_get','station'));
     }
 
+    public function returnShipper(){
+        $agent = agent::all();
+        $station = station::all();
+        $language = language::all();
+        $role_get = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.return_shipper',compact('agent','language','role_get','station'));
+    }
+
     public function NewShipmentRequest(){
         if(Auth::guard('admin')->user()->station_id == '0'){
             $agent = agent::all();
@@ -346,27 +354,27 @@ class AllShipment extends Controller
         if(Auth::guard('admin')->user()->station_id == '0'){
             //$shipment = shipment::where('status',0)->orderBy('id','DESC')->get();
             $today = date('Y-m-d');
-            $q =DB::table('shipments as s');
-            $q->where('s.shipment_date', $today);
-            $q->where('s.status', 0);
-            $q->where('s.sender_id','!=',0);
-            $q->where('s.hold_status',0);
-            $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-            $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
-            $shipment = $q->get();
+            $shipment =DB::table('shipments as s');
+            $shipment->where('s.shipment_date', $today);
+            $shipment->where('s.status', 0);
+            $shipment->where('s.sender_id','!=',0);
+            $shipment->where('s.hold_status',0);
+            $shipment->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
+            $shipment->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") ,DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
+            //$shipment = $q->get();
         }
         else{
             //$shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',0)->orderBy('id','DESC')->get();
             $today = date('Y-m-d');
-            $q =DB::table('shipments as s');
-            $q->where('s.from_station_id', Auth::guard('admin')->user()->station_id);
-            $q->where('s.shipment_date',$today);
-            $q->where('s.status', 0);
-            $q->where('s.sender_id','!=',0);
-            $q->where('s.hold_status',0);
-            $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-            $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")]);
-            $shipment = $q->get();
+            $shipment =DB::table('shipments as s');
+            $shipment->where('s.from_station_id', Auth::guard('admin')->user()->station_id);
+            $shipment->where('s.shipment_date',$today);
+            $shipment->where('s.status', 0);
+            $shipment->where('s.sender_id','!=',0);
+            $shipment->where('s.hold_status',0);
+            $shipment->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
+            $shipment->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")]);
+            //$shipment = $q->get();
         }
         
         return Datatables::of($shipment)
@@ -453,27 +461,27 @@ class AllShipment extends Controller
         if(Auth::guard('admin')->user()->station_id == '0'){
             //$shipment = shipment::where('status',0)->orderBy('id','DESC')->get();
             $today = date('Y-m-d');
-            $q =DB::table('shipments as s');
-            $q->where('s.shipment_date','!=',$today);
-            $q->where('s.status', 0);
-            $q->where('s.sender_id','!=',0);
-            $q->where('s.hold_status',0);
-            $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-            $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
-            $shipment = $q->get();
+            $shipment =DB::table('shipments as s');
+            $shipment->where('s.shipment_date','!=',$today);
+            $shipment->where('s.status', 0);
+            $shipment->where('s.sender_id','!=',0);
+            $shipment->where('s.hold_status',0);
+            $shipment->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
+            $shipment->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
+            //$shipment = $q->get();
         }
         else{
             //$shipment = shipment::where('from_station_id',Auth::guard('admin')->user()->station_id)->where('status',0)->orderBy('id','DESC')->get();
             $today = date('Y-m-d');
-            $q =DB::table('shipments as s');
-            $q->where('s.from_station_id', Auth::guard('admin')->user()->station_id);
-            $q->where('s.shipment_date','!=',$today);
-            $q->where('s.status', 0);
-            $q->where('s.sender_id','!=',0);
-            $q->where('s.hold_status',0);
-            $q->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
-            $q->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
-            $shipment = $q->get();
+            $shipment =DB::table('shipments as s');
+            $shipment->where('s.from_station_id', Auth::guard('admin')->user()->station_id);
+            $shipment->where('s.shipment_date','!=',$today);
+            $shipment->where('s.status', 0);
+            $shipment->where('s.sender_id','!=',0);
+            $shipment->where('s.hold_status',0);
+            $shipment->groupBy('s.sender_id','s.shipment_date','s.from_address','s.shipment_from_time','s.shipment_to_time');
+            $shipment->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("s.from_address") , DB::raw("s.sender_id") , DB::raw("s.shipment_from_time") , DB::raw("s.shipment_to_time") , DB::raw("s.shipment_date")  ]);
+            //$shipment = $q->get();
         }
         
         return Datatables::of($shipment)
@@ -1704,6 +1712,118 @@ class AllShipment extends Controller
                 else{
                     return '
                     <p>In the Van for Delivery</p>'
+                    ;
+                }
+            })
+            ->addColumn('action', function ($shipment) {
+                $output2='';
+                if(Auth::guard('admin')->user()->role_id == 0){
+                    if($shipment->sender_id != 0){
+                        $output2.='<a class="dropdown-item" href="/admin/edit-shipment/'.$shipment->id.'">Edit Shipment</a>';
+                    }
+                }
+                return '<td>
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(140px, 183px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a onclick="PrintLabel('.$shipment->id.')" class="dropdown-item" href="#">AWB Print</a>
+                        <a class="dropdown-item" href="/admin/view-shipment/'.$shipment->id.'">View Shipment</a>   
+                        '.$output2.' 
+                    </div>
+                </td>';
+            })
+            
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status'])
+        ->addIndexColumn()
+        ->make(true);
+
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+    public function getReturnShipper(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $shipment = shipment::where('status',15)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+        }
+        else{
+            // $shipment = shipment::where('to_station_id',Auth::guard('admin')->user()->station_id)->where('status',7)->where('hold_status',0)->orderBy('id', 'DESC')->get();
+            $shipment = DB::table('shipments')
+            ->where([['from_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','15']])
+            ->orWhere([['to_station_id',Auth::guard('admin')->user()->station_id],
+                    ['status','15']])
+            ->where('hold_status',0)->orderBy('id', 'DESC')
+            ->get();
+        }
+
+        return Datatables::of($shipment)
+            ->addColumn('order_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+                return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('shipment_time', function ($shipment) {
+                return '<td>'.date('h:i a',strtotime($shipment->van_scan_time)).'</td>';
+            })
+            ->addColumn('shipment_mode', function ($shipment) {
+                $special_service='';
+                if ($shipment->shipment_mode == 2) {
+                    $special_service.='<p>Express</p>';
+                } else {
+                    $special_service.='<p>Standard</p>';
+                }
+                if ($shipment->special_service == 1) {
+                    $special_service.='<p>Special Service</p>';
+                    $special_service.='<p>'.$shipment->special_service_description.'</p>';
+                }
+                return $special_service;
+            })
+            ->addColumn('shipment_date', function ($shipment) {
+                return '<td>
+                <p>' . date("d-m-Y",strtotime($shipment->van_scan_date)) . '</p>
+                </td>';
+            })
+            ->addColumn('from_address', function ($shipment) {
+                $from_address = manage_address::find($shipment->from_address);
+                $from_city = city::find($from_address->city_id);
+                $from_area = city::find($from_address->area_id);
+                $from_station = station::find($shipment->from_station_id);
+                if(!empty($from_area)){
+                return '<td>
+                <p>' . $from_area->city . '</p>
+                <p>' . $from_city->city . '</p>
+                <p><b>Station :' . $from_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('to_address', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $to_station = station::find($shipment->to_station_id);
+                if(!empty($to_area)){
+                return '<td>
+                <p>' . $to_area->city . '</p>
+                <p>' . $to_city->city . '</p>
+                <p><b>Station :' . $to_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('status', function ($shipment) {
+                $agent = agent::find($shipment->return_shipment_id);
+                if(!empty($agent)){
+                    return '
+                    <p>Return to Shipper</p>
+                    <p>Agent ID :'.$agent->agent_id.'</p>
+                    <p>Name :' . $agent->name . '</p>'
+                    ;
+                }
+                else{
+                    return '
+                    <p>Return to Shipper</p>'
                     ;
                 }
             })

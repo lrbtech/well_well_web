@@ -78,6 +78,21 @@ class SettlementController extends Controller
         return view('admin.courier_guest_settlement',compact('agent','language'));
     }
 
+    public function CourierTeamCOPSettlement(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $agent = agent::all();
+        }
+        else{
+            $q =DB::table('agents as a');
+            $q->join('cities as c','a.city_id','=','c.id');
+            $q->where('c.station_id', Auth::guard('admin')->user()->station_id);
+            $q->select('a.*');
+            $agent = $q->get();
+        }
+        $language = language::all();
+        return view('admin.agent_cop_settlement',compact('agent','language'));
+    }
+
     public function PaymentsOutReport(){
         $user = User::where('status',4)->get();
         $language = language::all();
@@ -142,6 +157,104 @@ class SettlementController extends Controller
             $i->where('s.special_cod_enable', 1);
             $i->where('s.paid_agent_status', 0);
             $i->where('s.status', 8);
+            $shipment = $i->get();
+        }
+        else{
+            $shipment = array();
+        }
+
+        return Datatables::of($shipment)
+        ->addColumn('order_id', function ($shipment) {
+            $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
+            return '<td>'.$shipment_package[0]->sku_value.'</td>';
+        })
+        ->addColumn('checkbox', function ($shipment) {
+            $today = date('Y-m-d');
+            return '<td><input type="checkbox" name="order_checkbox[]" class="order_checkbox" value="' . $shipment->id . '"></td>';
+        })
+        ->addColumn('shipment_mode', function ($shipment) {
+            if ($shipment->shipment_mode == 2) {
+                return '<td>Express</td>';
+            } else {
+                return '<td>Standard</td>';
+            }
+        })
+        ->addColumn('shipment_date', function ($shipment) {
+            return '<td>
+            <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
+            </td>';
+        })
+
+        ->addColumn('from_address', function ($shipment) {
+            $from_address = manage_address::find($shipment->from_address);
+            $from_city = city::find($from_address->city_id);
+            $from_area = city::find($from_address->area_id);
+            $from_station = station::find($shipment->from_station_id);
+            $user = User::find($shipment->sender_id);
+            if(!empty($from_area)){
+            return '<td>
+            <p><b>Mobile :' . $from_address->contact_mobile . '</b></p>
+            <p>' . $from_area->city . '</p>
+            <p>' . $from_city->city . '</p>
+            <p><b>Station :' . $from_station->station . '</b></p>
+            </td>';
+            }
+            else{
+                return '<td></td>';
+            }
+        })
+        ->addColumn('to_address', function ($shipment) {
+            $to_address = manage_address::find($shipment->to_address);
+            $to_city = city::find($to_address->city_id);
+            $to_area = city::find($to_address->area_id);
+            $to_station = station::find($shipment->to_station_id);
+            if(!empty($to_area)){
+            return '<td>
+            <p><b>Mobile :' . $to_address->contact_mobile . '</b></p>
+            <p>' . $to_area->city . '</p>
+            <p>' . $to_city->city . '</p>
+            <p><b>Station :' . $to_station->station . '</b></p>
+            </td>';
+            }
+            else{
+                return '<td></td>';
+            }
+        })
+        ->addColumn('collected_value', function ($shipment) {
+            return '<td>
+            <p>AED ' . $shipment->collect_cod_amount . '</p>
+            </td>';
+        })
+        ->addColumn('special_cod', function ($shipment) {
+            return '<td>
+            <p>AED ' . $shipment->special_cod . '</p>
+            </td>';
+        })
+        
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','collected_value','special_cod','checkbox'])
+        ->addIndexColumn()
+        ->make(true);
+        //return Datatables::of($orders) ->addIndexColumn()->make(true);
+    }
+
+
+    public function getCourierTeamCOPSettlement($agent_id,$fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
+
+        if ( $agent_id != 'agent'){
+            $i =DB::table('shipments as s');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                $i->whereBetween('s.package_collect_date', [$fdate1, $tdate1]);
+            }
+            if ( $agent_id != 'agent' )
+            {
+                $i->where('s.package_collect_agent_id', $agent_id);
+            }
+            $i->where('s.collect_cop_amount','!=','');
+            $i->where('s.paid_agent_cop_status', 0);
+            $i->where('s.sender_id','!=',0);
             $shipment = $i->get();
         }
         else{
@@ -518,6 +631,15 @@ class SettlementController extends Controller
             $admin->total_guest = $admin->total_guest + $request->amount;
             $admin->save();
         }
+        if($request->mode == '3'){
+            $agent = agent::find($request->delivery_agent_id);
+            $agent->paid_cop = $agent->paid_cop + $request->amount;
+            $agent->save();
+
+            $admin = admin::find(Auth::guard('admin')->user()->id);
+            $admin->total_cop = $admin->total_cop + $request->amount;
+            $admin->save();
+        }
 
         $arraydata=array();
         foreach(explode(',',$request->shipment_ids) as $user1){
@@ -591,6 +713,28 @@ class SettlementController extends Controller
             }
             $accounts_settlement->save();
         }
+
+        if($request->mode == '3'){
+            $accounts_settlement = new accounts_settlement;
+            $accounts_settlement->date = date('Y-m-d',strtotime($request->date));
+            $accounts_settlement->amount = $request->amount;
+            $accounts_settlement->mode = $request->mode;
+            $accounts_settlement->admin_id = Auth::guard('admin')->user()->id;
+
+            $admin = admin::find(Auth::guard('admin')->user()->id);
+            $admin->paid_cop = $admin->paid_cop + $request->amount;
+            $admin->save();
+
+            if($request->image!=""){
+                if($request->file('image')!=""){
+                $image = $request->file('image');
+                $upload_image = rand() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('upload_slip/'), $upload_image);
+                $accounts_settlement->image = $upload_image;
+                }
+            }
+            $accounts_settlement->save();
+        }
         
         return response()->json('successfully update'); 
     }
@@ -627,12 +771,17 @@ class SettlementController extends Controller
         $delivery_agent_id;
         foreach ($data as $row) {
             $shipment = shipment::find($row->id);
-            $total_value = $total_value + $shipment->collect_cod_amount;
             if($request->mode == 1){
                 $delivery_agent_id = $shipment->delivery_agent_id;
+                $total_value = $total_value + $shipment->collect_cod_amount;
             }
             elseif($request->mode == 2){
                 $delivery_agent_id = $shipment->package_collect_agent_id;
+                $total_value = $total_value + $shipment->collect_cod_amount;
+            }
+            elseif($request->mode == 3){
+                $delivery_agent_id = $shipment->package_collect_agent_id;
+                $total_value = $total_value + $shipment->collect_cop_amount;
             }
             $no_of_shipments++;
         }
@@ -711,6 +860,7 @@ class SettlementController extends Controller
             ->addColumn('collect_amount', function ($admin) {
                 return '<td>
                 <p>COD Payment : ' . $admin->total_cod . ' AED</p>
+                <p>COP Payment : ' . $admin->total_cop . ' AED</p>
                 <p>Guest Payment : ' . $admin->total_guest . ' AED</p>
                 </td>';
             })
@@ -718,6 +868,7 @@ class SettlementController extends Controller
             ->addColumn('paid', function ($admin) {
                 return '<td>
                 <p>COD Payment : ' . $admin->paid_cod . ' AED</p>
+                <p>COP Payment : ' . $admin->paid_cop . ' AED</p>
                 <p>Guest Payment : ' . $admin->paid_guest . ' AED</p>
                 </td>';
             })
@@ -725,6 +876,7 @@ class SettlementController extends Controller
             ->addColumn('balance', function ($admin) {
                 return '<td>
                 <p>COD Payment : ' . ($admin->total_cod - $admin->paid_cod) . ' AED</p>
+                <p>COP Payment : ' . ($admin->total_cop - $admin->paid_cop) . ' AED</p>
                 <p>Guest Payment : ' . ($admin->total_guest - $admin->paid_guest) . ' AED</p>
                 </td>';
             })
@@ -799,7 +951,9 @@ class SettlementController extends Controller
             elseif($shipment->mode == 2){
                 return '<td>Guest</td>';
             }
-
+            elseif($shipment->mode == 3){
+                return '<td>C.O.P</td>';
+            }
         })
         
         ->rawColumns(['date','amount','admin','mode','no_of_shipments'])
