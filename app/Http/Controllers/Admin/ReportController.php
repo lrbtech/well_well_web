@@ -132,6 +132,72 @@ class ReportController extends Controller
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
         $i = DB::table('shipments');
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            // $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+            $i->where(function($query) use ($tdate1,$fdate1){
+                $query->where([
+                    ['status',1],
+                    ['pickup_assign_date','<=',$tdate1],
+                    ['pickup_assign_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',2],
+                    ['package_collect_date','<=',$tdate1],
+                    ['package_collect_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',3],
+                    ['exception_assign_date','<=',$tdate1],
+                    ['exception_assign_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',4],
+                    ['transit_in_date','<=',$tdate1],
+                    ['transit_in_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',11],
+                    ['transit_in_date','<=',$tdate1],
+                    ['transit_in_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',6],
+                    ['transit_out_date','<=',$tdate1],
+                    ['transit_out_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',12],
+                    ['transit_out_date','<=',$tdate1],
+                    ['transit_out_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',13],
+                    ['package_at_station_date','<=',$tdate1],
+                    ['package_at_station_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',14],
+                    ['package_at_station_date','<=',$tdate1],
+                    ['package_at_station_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',7],
+                    ['van_scan_date','<=',$tdate1],
+                    ['van_scan_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',8],
+                    ['delivery_date','<=',$tdate1],
+                    ['delivery_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',9],
+                    ['delivery_exception_assign_date','<=',$tdate1],
+                    ['delivery_exception_assign_date','>=',$fdate1],
+                ]);
+            });
+        }
         if ( $user_type != 'all_user' )
         {
             if ( $user_type != 'guest' ){
@@ -156,14 +222,10 @@ class ReportController extends Controller
                 $i->where('shipments.status', $status);
             }
         }
-        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
-        {
-            $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
-        }
 
         $i->where('shipments.show_status',0);
         $i->orderBy('shipments.id','DESC');
-        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.date','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.return_shipment_id','shipments.cancel_remark','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.delivery_agent_id','shipments.exception_category','shipments.exception_remark','shipments.pickup_agent_id');
+        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.date','shipments.pickup_assign_date','shipments.package_collect_date','shipments.exception_assign_date','shipments.transit_in_date','shipments.transit_out_date','shipments.package_at_station_date','shipments.van_scan_date','shipments.delivery_date','shipments.delivery_exception_assign_date','shipments.cancel_request_date','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.return_shipment_id','shipments.cancel_remark','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.delivery_agent_id','shipments.exception_category','shipments.exception_remark','shipments.pickup_agent_id');
         $shipment = $i->get();
 
         return Datatables::of($shipment)
@@ -195,9 +257,48 @@ class ReportController extends Controller
                 }
             })
             ->addColumn('shipment_date', function ($shipment) {
-                return '<td>
-                <p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>
-                </td>';
+                if($shipment->status == 0){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->date)) . '</p>';
+                }
+                elseif($shipment->status == 1){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->pickup_assign_date)) . '</p>';
+                }
+                elseif($shipment->status == 2){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->package_collect_date)) . '</p>';
+                }
+                elseif($shipment->status == 3){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->exception_assign_date)) . '</p>';
+                }
+                elseif($shipment->status == 4){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->transit_in_date)) . '</p>';
+                }
+                elseif($shipment->status == 6){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->transit_out_date)) . '</p>';
+                }
+                elseif($shipment->status == 13){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->package_at_station_date)) . '</p>';
+                }
+                elseif($shipment->status == 11){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->transit_in_date)) . '</p>';
+                }
+                elseif($shipment->status == 12){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->transit_out_date)) . '</p>';
+                }
+                elseif($shipment->status == 14){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->package_at_station_date)) . '</p>';
+                }
+                elseif($shipment->status == 7){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->van_scan_date)) . '</p>';
+                }
+                elseif($shipment->status == 8){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->delivery_date)) . '</p>';
+                }
+                elseif($shipment->status == 9){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->delivery_exception_assign_date)) . '</p>';
+                }
+                elseif($shipment->status == 10){
+                    return '<p>' . date("d-m-Y",strtotime($shipment->cancel_request_date)) . '</p>';
+                }
             })
 
             ->addColumn('from_address', function ($shipment) {
@@ -413,7 +514,7 @@ class ReportController extends Controller
         }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
-            $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+            $i->whereBetween('shipments.delivery_date', [$fdate1, $tdate1]);
         }
         $i->where('shipments.status',8);
         $i->orderBy('shipments.id','DESC');
@@ -482,7 +583,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','postal_charge', 'shipment_price', 'total_weight','total','vat','insurance','cod_amount','account_id'])
+        ->rawColumns(['order_id','postal_charge', 'shipment_price', 'total_weight','total','vat','insurance','cod_amount','account_id','reference_no'])
         ->addIndexColumn()
         ->make(true);
 
@@ -501,7 +602,7 @@ class ReportController extends Controller
         }
         if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
         {
-            $i->whereBetween('s.date', [$fdate1, $tdate1]);
+            $i->whereBetween('s.delivery_date', [$fdate1, $tdate1]);
         }
         $i->where('s.status',8);
         $i->where('s.sender_id','!=',0);
@@ -583,13 +684,138 @@ class ReportController extends Controller
 
 
 
-    public function getAgentReport($agent_id,$fdate,$tdate){
+    public function getAgentReport($agent_id,$fdate,$tdate,$shipment_status){
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
         
         $i =DB::table('shipments');
-    
-        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' && $agent_id != 'agent' )
+        if ( $fdate != '1' && $tdate != '1' && $agent_id == 'agent' && $shipment_status == '20' )
+        {
+            $i->where([
+                ['status',1],
+                ['pickup_assign_date','<=',$tdate1],
+                ['pickup_assign_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',2],
+                ['package_collect_date','<=',$tdate1],
+                ['package_collect_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',3],
+                ['exception_assign_date','<=',$tdate1],
+                ['exception_assign_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',4],
+                ['transit_in_date','<=',$tdate1],
+                ['transit_in_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',11],
+                ['transit_in_date','<=',$tdate1],
+                ['transit_in_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',6],
+                ['transit_out_date','<=',$tdate1],
+                ['transit_out_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',12],
+                ['transit_out_date','<=',$tdate1],
+                ['transit_out_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',13],
+                ['package_at_station_date','<=',$tdate1],
+                ['package_at_station_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',14],
+                ['package_at_station_date','<=',$tdate1],
+                ['package_at_station_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',7],
+                ['van_scan_date','<=',$tdate1],
+                ['van_scan_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',8],
+                ['delivery_date','<=',$tdate1],
+                ['delivery_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',9],
+                ['delivery_exception_assign_date','<=',$tdate1],
+                ['delivery_exception_assign_date','>=',$fdate1],
+            ]);
+        }
+        else if ( $fdate != '1' && $tdate != '1' && $agent_id == 'agent' && $shipment_status != '20' )
+        {
+            $i->where([
+                ['status',$shipment_status],
+                ['pickup_assign_date','<=',$tdate1],
+                ['pickup_assign_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['package_collect_date','<=',$tdate1],
+                ['package_collect_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['exception_assign_date','<=',$tdate1],
+                ['exception_assign_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['transit_in_date','<=',$tdate1],
+                ['transit_in_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['transit_in_date','<=',$tdate1],
+                ['transit_in_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['transit_out_date','<=',$tdate1],
+                ['transit_out_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['transit_out_date','<=',$tdate1],
+                ['transit_out_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['package_at_station_date','<=',$tdate1],
+                ['package_at_station_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['package_at_station_date','<=',$tdate1],
+                ['package_at_station_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['van_scan_date','<=',$tdate1],
+                ['van_scan_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['delivery_date','<=',$tdate1],
+                ['delivery_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['status',$shipment_status],
+                ['delivery_exception_assign_date','<=',$tdate1],
+                ['delivery_exception_assign_date','>=',$fdate1],
+            ]);
+        }
+        else if ( $fdate != '1' && $tdate != '1' && $agent_id != 'agent' && $shipment_status == '20' )
         {
             $i->where([
                 ['pickup_agent_id',$agent_id],
@@ -664,16 +890,94 @@ class ReportController extends Controller
                 ['delivery_exception_assign_date','>=',$fdate1],
             ]);
         }
+        else if ( $fdate != '1' && $tdate != '1' && $agent_id != 'agent' && $shipment_status != '20' )
+        {
+            $i->where([
+                ['pickup_agent_id',$agent_id],
+                ['status',$shipment_status],
+                ['pickup_assign_date','<=',$tdate1],
+                ['pickup_assign_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['package_collect_agent_id',$agent_id],
+                ['status',$shipment_status],
+                ['package_collect_date','<=',$tdate1],
+                ['package_collect_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['pickup_exception_id',$agent_id],
+                ['status',$shipment_status],
+                ['exception_assign_date','<=',$tdate1],
+                ['exception_assign_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['transit_in_id',$agent_id],
+                ['status',$shipment_status],
+                ['transit_in_date','<=',$tdate1],
+                ['transit_in_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['transit_in_id1',$agent_id],
+                ['status',$shipment_status],
+                ['transit_in_date','<=',$tdate1],
+                ['transit_in_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['transit_out_id',$agent_id],
+                ['status',$shipment_status],
+                ['transit_out_date','<=',$tdate1],
+                ['transit_out_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['transit_out_id1',$agent_id],
+                ['status',$shipment_status],
+                ['transit_out_date','<=',$tdate1],
+                ['transit_out_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['package_at_station_id',$agent_id],
+                ['status',$shipment_status],
+                ['package_at_station_date','<=',$tdate1],
+                ['package_at_station_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['package_at_station_id1',$agent_id],
+                ['status',$shipment_status],
+                ['package_at_station_date','<=',$tdate1],
+                ['package_at_station_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['van_scan_id',$agent_id],
+                ['status',$shipment_status],
+                ['van_scan_date','<=',$tdate1],
+                ['van_scan_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['delivery_agent_id',$agent_id],
+                ['status',$shipment_status],
+                ['delivery_date','<=',$tdate1],
+                ['delivery_date','>=',$fdate1],
+            ]);
+            $i->orWhere([
+                ['delivery_exception_id',$agent_id],
+                ['status',$shipment_status],
+                ['delivery_exception_assign_date','<=',$tdate1],
+                ['delivery_exception_assign_date','>=',$fdate1],
+            ]);
+        }
         $i->where('status','!=', 0);
         $i->where('show_status',0);
         $i->orderBy('id','DESC');
-        $i->select('shipments.order_id','shipments.sender_id','shipments.shipment_mode','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.date','shipments.pickup_assign_date','shipments.package_collect_date','shipments.exception_assign_date','shipments.transit_in_date','shipments.transit_out_date','shipments.package_at_station_date','shipments.van_scan_date','shipments.delivery_date','shipments.delivery_exception_assign_date','shipments.cancel_request_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark');
+        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.date','shipments.pickup_assign_date','shipments.package_collect_date','shipments.exception_assign_date','shipments.transit_in_date','shipments.transit_out_date','shipments.package_at_station_date','shipments.van_scan_date','shipments.delivery_date','shipments.delivery_exception_assign_date','shipments.cancel_request_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark');
         $shipment = $i->get();
 
         return Datatables::of($shipment)
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('reference_no', function ($shipment) {
+                return '<td>'.$shipment->reference_no.'</td>';
             })
             ->addColumn('account_id', function ($shipment) {
                 if($shipment->sender_id == '0'){
@@ -950,7 +1254,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','reference_no'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
@@ -960,8 +1264,9 @@ class ReportController extends Controller
         $fdate = date('Y-m-d', strtotime($request->from_date));
         $tdate = date('Y-m-d', strtotime($request->to_date));
         $agent_id = $request->agent_id;
+        $shipment_status = $request->shipment_status;
         
-        return Excel::download(new AgentExport($agent_id,$fdate,$tdate), 'agentreport.xlsx');
+        return Excel::download(new AgentExport($agent_id,$fdate,$tdate,$shipment_status), 'agentreport.xlsx');
         //return (new BookingExport($fdate,$tdate))->download('report.xlsx');
     }
 

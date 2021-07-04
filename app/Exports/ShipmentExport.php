@@ -42,6 +42,74 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
     public function collection()
     {
         $i =DB::table('shipments');
+        if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
+        {
+            //$i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
+            $tdate1 = $this->tdate;
+            $fdate1 = $this->fdate;
+            $i->where(function($query) use ($tdate1,$fdate1){
+                $query->where([
+                    ['status',1],
+                    ['pickup_assign_date','<=',$tdate1],
+                    ['pickup_assign_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',2],
+                    ['package_collect_date','<=',$tdate1],
+                    ['package_collect_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',3],
+                    ['exception_assign_date','<=',$tdate1],
+                    ['exception_assign_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',4],
+                    ['transit_in_date','<=',$tdate1],
+                    ['transit_in_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',11],
+                    ['transit_in_date','<=',$tdate1],
+                    ['transit_in_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',6],
+                    ['transit_out_date','<=',$tdate1],
+                    ['transit_out_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',12],
+                    ['transit_out_date','<=',$tdate1],
+                    ['transit_out_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',13],
+                    ['package_at_station_date','<=',$tdate1],
+                    ['package_at_station_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',14],
+                    ['package_at_station_date','<=',$tdate1],
+                    ['package_at_station_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',7],
+                    ['van_scan_date','<=',$tdate1],
+                    ['van_scan_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',8],
+                    ['delivery_date','<=',$tdate1],
+                    ['delivery_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',9],
+                    ['delivery_exception_assign_date','<=',$tdate1],
+                    ['delivery_exception_assign_date','>=',$fdate1],
+                ]);
+            });
+        }
         if ( $this->user_type != 'all_user' )
         {
             if ( $this->user_type != 'guest' ){
@@ -66,11 +134,6 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
                 $i->where('shipments.status', $this->status);
             }
         }
-        if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
-        {
-            $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
-        }
-
         $i->orderBy('shipments.id','DESC');
         return $shipment = $i->get();
         //return booking::query()->whereYear('created_at', $this->fdate);
@@ -107,153 +170,8 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $ship_to = $to_area->city . $to_city->city . 'Station :' . $to_station->station;
         }
 
-        $status='';
-        if($shipment->status == 0){
-            $status='Ready for Pickup';
-        }
-        elseif($shipment->status == 1){
-            $agent = agent::find($shipment->pickup_agent_id);
-            if(!empty($agent)){
-                $status='Schedule for Pickup '.$agent->agent_id;
-            }
-            else{
-                $status='Schedule for Pickup';
-            }
-        }
-        elseif($shipment->status == 2){
-            $agent = agent::find($shipment->pickup_agent_id);
-            if(!empty($agent)){
-                $status='Package Collected '.$agent->agent_id;
-            }
-            else{
-                $status='Package Collected';
-            }
-        }
-        elseif($shipment->status == 3){
-            $status='
-            Pickup Exception
-            ' . $shipment->exception_category . '
-            ' . $shipment->exception_remark . '
-            ';
-        }
-        elseif($shipment->status == 4){
-            $from_station = station::find($shipment->from_station_id);
-            $agent = agent::find($shipment->transit_in_id);
-            if(!empty($agent)){
-                $status='
-                Transit In '.$from_station->station.'
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                Transit In '.$from_station->station.''
-               ;
-            }
-        }
-        elseif($shipment->status == 11){
-            $to_station = station::find($shipment->to_station_id);
-            $agent = agent::find($shipment->transit_in_id);
-            if(!empty($agent)){
-                $status='
-                Transit In '.$to_station->station.'
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                Transit In '.$to_station->station.''
-               ;
-            }
-        }
-        elseif($shipment->status == 6){
-            $from_station = station::find($shipment->from_station_id);
-            $agent = agent::find($shipment->transit_out_id);
-            if(!empty($agent)){
-                $status='
-                Transit Out '.$from_station->station.'
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                Transit Out '.$from_station->station.''
-               ;
-            }
-        }
-        elseif($shipment->status == 12){
-            $to_station = station::find($shipment->to_station_id);
-            $agent = agent::find($shipment->transit_out_id);
-            if(!empty($agent)){
-                $status='
-                Transit Out '.$to_station->station.'
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                Transit Out '.$to_station->station.''
-               ;
-            }
-        }
-        elseif($shipment->status == 7){
-            $agent = agent::find($shipment->delivery_agent_id);
-            if(!empty($agent)){
-                $status='
-                In the Van for Delivery
-                Agent ID '.$agent->agent_id.''
-               ;
-            }
-            else{
-                $status='
-                In the Van for Delivery'
-               ;
-            }
-        }
-        elseif($shipment->status == 8){
-            $agent = agent::find($shipment->delivery_agent_id);
-            if(!empty($agent)){
-                $status='Shipment delivered
-                Agent ID '.$agent->agent_id;
-            }
-            else{
-                $status='Shipment delivered';
-               ;
-            }
-        }
-        elseif($shipment->status == 9){
-            $status='
-            Delivery Exception
-            ' . $shipment->delivery_exception_category . '
-            ' . $shipment->delivery_exception_remark . '
-            ';
-        }
-        elseif($shipment->status == 10){
-            $status='
-            Canceled
-            ' . $shipment->cancel_remark . '
-            ';
-        }
-
-        $special_service='';
-        if ($shipment->special_service == 1) {
-            $special_service.='Special Service';
-            $special_service.=$shipment->special_service_description;
-        }
 
         $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
-        $user_type='';
-        if($shipment->sender_id == '0'){
-            $user_type='Guest';
-        }
-        else{
-            if($user->user_type == '0'){
-                $user_type='Individual';
-            }
-            elseif($user->user_type == '1'){
-                $user_type='Commercial';
-            }
-        }
 
         $user_details='';
         if($shipment->sender_id == '0'){
@@ -264,21 +182,28 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $user_details=$user->name . $user->mobile . $user->email;
         }
 
+        $account_id='';
+        if($shipment->sender_id == '0'){
+            $account_id='GUEST';
+        }
+        else{
+            $account_id = $user->customer_id;
+        }
+
         $shipment_details = 'No of Packages : ' .$shipment->no_of_packages . 
         'Total Weight ' .$shipment->total_weight . ' Kg';
         
         return [
-            $shipment_package[0]->sku_value,
-            $shipment->reference_no,
-            $shipment->date,
-            $user_type,
             $user_details,
-            $shipment_mode,
+            $account_id,
+            $shipment_package[0]->sku_value,
+            //$shipment->reference_no,
+            $shipment->date,
             $shipment_details,
-            $shipment->total,
+            $ship_from,
+            $ship_to,
+            $shipment->special_cop,
             $shipment->special_cod,
-            $shipment->collect_cod_amount,
-            $shipment->cod_type,
         ];
     }
 
@@ -286,17 +211,16 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
     public function headings(): array
     {
         return [
-            'Tracking ID',
-            'Reference No',
-            'Date',
-            'User Type',
             'User Details',
-            'Shipping Mode',
+            'Account ID',
+            'Tracking ID',
+            //'Reference No',
+            'Date',
             'Shipment Details',
-            'Shipment Price',
-            'Special C.O.D',
-            'Collected C.O.D',
-            'C.O.D Payment Type',
+            'Shipment From',
+            'Shipment To',
+            'C.O.P',
+            'C.O.D',
         ];
     }
 

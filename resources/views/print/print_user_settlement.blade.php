@@ -35,7 +35,7 @@
             <th>Date</th>
             <th>No of Shipments</th>
             <th>Amount</th>
-            <th>Receiver</th>
+            <th>Paid By</th>
         </tr>
         
       </thead>

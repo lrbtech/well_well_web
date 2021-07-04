@@ -59,7 +59,7 @@ class RevenueExport implements FromCollection, ShouldAutoSize , WithHeadings , W
         }
         if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
         {
-            $i->whereBetween('shipments.date', [$this->fdate, $this->tdate]);
+            $i->whereBetween('shipments.delivery_date', [$this->fdate, $this->tdate]);
         }
         $i->where('shipments.status',8);
         $i->orderBy('shipments.id','DESC');

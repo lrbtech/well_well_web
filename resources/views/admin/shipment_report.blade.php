@@ -3,6 +3,11 @@
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/select2.css">
+<style>
+div.dataTables_wrapper div.dataTables_processing {
+  top: 0%;
+}
+</style>
 @endsection
 @section('section')        
         <!-- Right sidebar Ends-->
@@ -37,12 +42,12 @@
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label>{{$language[117][Auth::guard('admin')->user()->lang]}}</label>
-                            <input autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
+                            <input value="<?php echo date('Y-m-d',strtotime('first day of this month')); ?>" autocomplete="off" type="date" id="from_date" name="from_date" class="form-control">
                         </div>
 
                         <div class="form-group col-md-3">
                             <label>{{$language[118][Auth::guard('admin')->user()->lang]}}</label>
-                            <input autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
+                            <input value="<?php echo date('Y-m-d',strtotime('last day of this month')); ?>" autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
                         <div class="form-group col-md-2">
                             <label>{{$language[100][Auth::guard('admin')->user()->lang]}}</label>
@@ -140,6 +145,26 @@
   <script type="text/javascript">
 $('.shipment-report').addClass('active');
 
+function search_url(){
+  var from_date = $('#from_date').val();
+  var to_date = $('#to_date').val();
+  var fdate;
+  var tdate;
+  if(from_date!=""){
+    fdate = from_date;
+  }else{
+    fdate = '1';
+  }
+  if(to_date!=""){
+    tdate = to_date;
+  }else{
+    tdate = '1';
+  }
+  var shipment_status = $('#shipment_status').val();
+  var user_type = $('#user_type').val();
+  return '/admin/get-shipment-report/'+shipment_status+'/'+user_type+'/'+fdate+'/'+tdate;
+}
+
 var orderPageTable = $('#datatable').DataTable({
     "processing": true,
       "language": {
@@ -148,7 +173,7 @@ var orderPageTable = $('#datatable').DataTable({
     "serverSide": true,
     "pageLength": 100,
     "ajax":{
-        "url": "/admin/get-shipment-report/20/all_user/1/1",
+        "url": search_url(),
         "dataType": "json",
         "type": "POST",
         "data":{ _token: "{{csrf_token()}}"}
@@ -182,26 +207,8 @@ var orderPageTable = $('#datatable').DataTable({
 
 
 $('#search').click(function(){
-    //alert('hi');
-    var from_date = $('#from_date').val();
-    var to_date = $('#to_date').val();
-    var fdate;
-    var tdate;
-    if(from_date!=""){
-      fdate = from_date;
-    }else{
-      fdate = '1';
-    }
-    if(to_date!=""){
-      tdate = to_date;
-    }else{
-      tdate = '1';
-    }
-    var shipment_status = $('#shipment_status').val();
-    var user_type = $('#user_type').val();
-    var new_url = '/admin/get-shipment-report/'+shipment_status+'/'+user_type+'/'+fdate+'/'+tdate;
-    orderPageTable.ajax.url(new_url).load();
-    //orderPageTable.draw();
+    var new_url = search_url();
+    orderPageTable.ajax.url(new_url).load(null, false);
 });
 
 function PrintLabel(id){
@@ -220,13 +227,15 @@ function PrintLabel(id){
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/shipment-report";
+            var new_url = search_url();
+            orderPageTable.ajax.url(new_url).load(null, false);
             }, 250);
         } else {
             mywindow.focus(); 
             mywindow.print(); 
             mywindow.close();
-            window.location.href="/admin/shipment-report";
+            var new_url = search_url();
+            orderPageTable.ajax.url(new_url).load(null, false);
         }
         //PrintDiv(data);
         

@@ -63,6 +63,9 @@ Route::post('/update-pickup', [App\Http\Controllers\ApiController::class, 'updat
 Route::post('/update-delivery', [App\Http\Controllers\ApiController::class, 'updateDelivery']);
 Route::post('/delivery-exception', [App\Http\Controllers\ApiController::class, 'deliveryException']);
 
+Route::post('/update-return-shipper', [App\Http\Controllers\ApiController::class, 'updateReturnShipper']);
+Route::post('/change-ownership', [App\Http\Controllers\ApiController::class, 'changeOwnership']);
+
 
 
 //order api

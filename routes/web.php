@@ -386,7 +386,7 @@ Route::group(['prefix' => 'admin'],function(){
 
     //report
     Route::get('/agent-report', [App\Http\Controllers\Admin\ReportController::class, 'AgentReport']);
-    Route::POST('/get-agent-report/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getAgentReport']);
+    Route::POST('/get-agent-report/{agent}/{date1}/{date2}/{status}', [App\Http\Controllers\Admin\ReportController::class, 'getAgentReport']);
 
     Route::POST('/excel-agent-report', [App\Http\Controllers\Admin\ReportController::class, 'excelAgentReport']);
 

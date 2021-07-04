@@ -150,7 +150,6 @@ class ApiController extends Controller
 
     public function getPickup($agent_id){
         $shipment = shipment::where('pickup_agent_id',$agent_id)->where('status',1)->get();
-
         $data =array();
         $datas =array();
         foreach ($shipment as $key => $value) {
@@ -170,7 +169,11 @@ class ApiController extends Controller
                 'name' => '',
                 'mobile' => '',
                 'user_type' => '',
+                'special_cop' => '',
             );
+            if($shipment->special_cop != 'null'){
+                $data['special_cop'] = $shipment->special_cop;
+            }
             $address = manage_address::find($value->from_address);
             $city = city::find($address->city_id);
             $area = city::find($address->area_id);
@@ -218,7 +221,6 @@ class ApiController extends Controller
 
     public function getDelivery($agent_id){
         $shipment = shipment::where('delivery_agent_id',$agent_id)->where('status',7)->get();
-
         $data =array();
         $datas =array();
         foreach ($shipment as $key => $value) {
@@ -278,7 +280,6 @@ class ApiController extends Controller
 
     public function getStation($agent_id){
         $shipment = shipment::where('transit_in_id',$agent_id)->where('status',5)->get();
-
         $data =array();
         $datas =array();
         foreach ($shipment as $key => $value) {
@@ -368,6 +369,7 @@ class ApiController extends Controller
             'insurance_amount' => '',
             'cod_amount' => '',
             'user_type'=>'',
+            'special_cop' => '',
         );
         
         if($shipment->sender_id != 0){
@@ -393,6 +395,9 @@ class ApiController extends Controller
         }
         if($shipment->cod_amount != 'null'){
             $data['cod_amount'] = $shipment->cod_amount;
+        }
+        if($shipment->special_cop != 'null'){
+            $data['special_cop'] = $shipment->special_cop;
         }
         $address = manage_address::find($shipment->from_address);
         $city = city::find($address->city_id);
@@ -815,6 +820,14 @@ class ApiController extends Controller
                     $agent1->save();
                 }
 
+                // if($shipment->special_cop > 0){
+                //     $cop_amount=0;
+                //     $cop_amount = (float)$shipment->cop_amount;
+                //     $shipment->collect_cop_amount = (float)$cop_amount;
+                //     $agent->total_cop = (float)$agent->total_cop + (float)$cop_amount;
+                //     $agent->save();
+                // }
+
                 $shipment->save();
                 
                 $get_ip = $this->getClientIP();
@@ -1163,6 +1176,125 @@ class ApiController extends Controller
         } 
     }
 
+
+    public function updateReturnShipper(Request $request){
+        try{
+            $shipment = shipment::find($request->shipment_id);
+            $shipment->status = 15;
+            $shipment->return_shipment_id = $request->agent_id;
+            $shipment->return_shipment_date = date('Y-m-d');
+            $shipment->return_shipment_time = date('H:i:s');
+            $shipment->return_notes = $request->return_notes;
+
+            $agent = agent::find($request->agent_id);
+            $get_ip = $this->getClientIP();
+            $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Shipment Return to Shipper by Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+
+            $shipment->save();
+
+            $shipment_package1 = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            $msg= "Track ID : ".$shipment_package1->sku_value." Return to Shipper Successfully";
+            $this->sendNotificationAgent($msg,$agent->id);
+            if($shipment->sender_id != 0){
+            $user_notification = User::find($shipment->sender_id);
+            $this->sendNotificationUser($msg,$user_notification->id);
+            }            
+
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
+
+
+    public function changeOwnership(Request $request){
+        try{
+            $shipment = shipment::find($request->shipment_id);
+            if($shipment->status == 1){
+                $shipment->pickup_agent_id = $request->agent_id;
+                $shipment->pickup_assign_date = date('Y-m-d');
+                $shipment->pickup_assign_time = date('H:i:s');
+            }
+            elseif($shipment->status == 2){
+                $shipment->package_collect_agent_id = $request->agent_id;
+                $shipment->package_collect_date = date('Y-m-d');
+                $shipment->package_collect_time = date('H:i:s');
+            }
+            elseif($shipment->status == 4){
+                $shipment->transit_in_id = $request->agent_id;
+                $shipment->transit_in_date = date('Y-m-d');
+                $shipment->transit_in_time = date('H:i:s');
+            }
+            elseif($shipment->status == 11){
+                $shipment->transit_in_id1 = $request->agent_id;
+                $shipment->transit_in_date = date('Y-m-d');
+                $shipment->transit_in_time = date('H:i:s');
+            }
+            elseif($shipment->status == 6){
+                $shipment->transit_out_id = $request->agent_id;
+                $shipment->transit_out_date = date('Y-m-d');
+                $shipment->transit_out_time = date('H:i:s');
+            }
+            elseif($shipment->status == 12){
+                $shipment->transit_out_id1 = $request->agent_id;
+                $shipment->transit_out_date = date('Y-m-d');
+                $shipment->transit_out_time = date('H:i:s');
+            }
+            elseif($shipment->status == 13){
+                $shipment->package_at_station_id = $request->agent_id;
+                $shipment->package_at_station_date = date('Y-m-d');
+                $shipment->package_at_station_time = date('H:i:s');
+            }
+            elseif($shipment->status == 14){
+                $shipment->package_at_station_id = $request->agent_id;
+                $shipment->package_at_station_date = date('Y-m-d');
+                $shipment->package_at_station_time = date('H:i:s');
+            }
+            elseif($shipment->status == 7){
+                $shipment->van_scan_id = $request->agent_id;
+                $shipment->van_scan_date = date('Y-m-d');
+                $shipment->van_scan_time = date('H:i:s');
+            }
+            elseif($shipment->status == 8){
+                $shipment->delivery_agent_id = $request->agent_id;
+                $shipment->delivery_date = date('Y-m-d');
+                $shipment->delivery_time = date('H:i:s');
+            }
+
+            $agent = agent::find($request->agent_id);
+            $get_ip = $this->getClientIP();
+            $system_logs = new system_logs;
+            $system_logs->user_ip = $get_ip;
+            $system_logs->_id = $request->shipment_id;
+            $system_logs->category = 'shipment';
+            $system_logs->to_id = $agent->email;
+            $system_logs->remark = 'Shipment Change Ownership to Agent Id:'.$agent->agent_id.'/'.$agent->name.'/'.$agent->mobile.'/'.$agent->email;
+            $system_logs->save();
+
+            $shipment->save();
+
+            $shipment_package1 = shipment_package::where('shipment_id',$request->shipment_id)->first();
+            $msg= "Track ID : ".$shipment_package1->sku_value." Change Ownership Successfully";
+            $this->sendNotificationAgent($msg,$agent->id);
+
+            return response()->json(
+                ['message' => 'Update Successfully',
+                'shipment_id'=>$shipment->id,
+                ],200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(),'status'=>400], 400);
+        } 
+    }
+
     public function deliveryException(Request $request){
         try{
             $shipment = shipment::find($request->shipment_id);
@@ -1231,10 +1363,10 @@ class ApiController extends Controller
         // $delivery = shipment::where('order_id',$exist[0]->order_id)->where('delivery_agent_id',$request->agent_id)->where('status',7)->first();
             foreach($exist as $row){
                 if($row->pickup_agent_id == $request->agent_id && $row->status == 1){
-                    return response()->json(['message' => 'Successfully Send','shipment_id'=>$row->id,'status'=>0], 200);
+                    return response()->json(['message' => 'Successfully Send','shipment_id'=>$row->id,'shipment_status'=>$row->status,'status'=>0], 200);
                 }
                 elseif($row->delivery_agent_id == $request->agent_id && $row->status == 7){
-                    return response()->json(['message' => 'Successfully Send','shipment_id'=>$row->id,'status'=>1], 200);
+                    return response()->json(['message' => 'Successfully Send','shipment_id'=>$row->id,'shipment_status'=>$row->status,'status'=>1], 200);
                 }
                 else{
                     return response()->json(['message' => 'Status Not Available','status'=>400], 400);
@@ -1259,14 +1391,14 @@ class ApiController extends Controller
             $q =DB::table('shipment_packages as sp');
             $q->where('sp.sku_value', $request->barcode);
             $q->join('shipments as s','s.id','=','sp.shipment_id');
-            $q->select('s.status','sp.*');
+            $q->select('s.status as shipment_status','sp.*');
             $check1 = $q->get();
 
         
         if(count($check1)>0){
             if($check1[0]->status != '10'){
                 $data = array('shipment_id' => (int)$check1[0]->shipment_id,
-                'package_id' => $check1[0]->id);
+                'package_id' => $check1[0]->id,'shipment_status'=>$check1[0]->shipment_status);
                 $datas[]=$data;
                 return response()->json($datas, 200);
             }else{

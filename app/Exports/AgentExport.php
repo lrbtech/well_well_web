@@ -31,152 +31,291 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($agent_id,$fdate,$tdate)
+    public function __construct($agent_id,$fdate,$tdate,$shipment_status)
     {
         $this->fdate = $fdate;
         $this->tdate = $tdate;
         $this->agent_id = $agent_id;
+        $this->shipment_status = $shipment_status;
     }
 
     public function collection()
     {
         $i =DB::table('shipments');
-        // if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' )
-        // {
-        //     $i->where([
-        //         ['shipments.status',1],
-        //         ['shipments.pickup_assign_date','<=',$this->tdate],
-        //         ['shipments.pickup_assign_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',2],
-        //         ['shipments.package_collect_date','<=',$this->tdate],
-        //         ['shipments.package_collect_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',3],
-        //         ['shipments.exception_assign_date','<=',$this->tdate],
-        //         ['shipments.exception_assign_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',4],
-        //         ['shipments.transit_in_date','<=',$this->tdate],
-        //         ['shipments.transit_in_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',11],
-        //         ['shipments.transit_in_date','<=',$this->tdate],
-        //         ['shipments.transit_in_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',6],
-        //         ['shipments.transit_out_date','<=',$this->tdate],
-        //         ['shipments.transit_out_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',12],
-        //         ['shipments.transit_out_date','<=',$this->tdate],
-        //         ['shipments.transit_out_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',13],
-        //         ['shipments.package_at_station_date','<=',$this->tdate],
-        //         ['shipments.package_at_station_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',14],
-        //         ['shipments.package_at_station_date','<=',$this->tdate],
-        //         ['shipments.package_at_station_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',7],
-        //         ['shipments.van_scan_date','<=',$this->tdate],
-        //         ['shipments.van_scan_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',8],
-        //         ['shipments.delivery_date','<=',$this->tdate],
-        //         ['shipments.delivery_date','>=',$this->fdate],
-        //     ]);
-        //     $i->orWhere([
-        //         ['shipments.status',9],
-        //         ['shipments.delivery_exception_assign_date','<=',$this->tdate],
-        //         ['shipments.delivery_exception_assign_date','>=',$this->fdate],
-        //     ]);
-        // }
-        if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' && $this->agent_id != 'agent' )
+        if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' && $this->agent_id == 'agent' && $this->shipment_status == '20' )
         {
             $i->where([
-                ['shipments.pickup_agent_id',$this->agent_id],
-                ['shipments.status',1],
-                ['shipments.pickup_assign_date','<=',$this->tdate],
-                ['shipments.pickup_assign_date','>=',$this->fdate],
+                ['status',1],
+                ['pickup_assign_date','<=',$this->tdate],
+                ['pickup_assign_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.package_collect_agent_id',$this->agent_id],
-                ['shipments.status',2],
-                ['shipments.package_collect_date','<=',$this->tdate],
-                ['shipments.package_collect_date','>=',$this->fdate],
+                ['status',2],
+                ['package_collect_date','<=',$this->tdate],
+                ['package_collect_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.pickup_exception_id',$this->agent_id],
-                ['shipments.status',3],
-                ['shipments.exception_assign_date','<=',$this->tdate],
-                ['shipments.exception_assign_date','>=',$this->fdate],
+                ['status',3],
+                ['exception_assign_date','<=',$this->tdate],
+                ['exception_assign_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_in_id',$this->agent_id],
-                ['shipments.status',4],
-                ['shipments.transit_in_date','<=',$this->tdate],
-                ['shipments.transit_in_date','>=',$this->fdate],
+                ['status',4],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_in_id1',$this->agent_id],
-                ['shipments.status',11],
-                ['shipments.transit_in_date','<=',$this->tdate],
-                ['shipments.transit_in_date','>=',$this->fdate],
+                ['status',11],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_out_id',$this->agent_id],
-                ['shipments.status',6],
-                ['shipments.transit_out_date','<=',$this->tdate],
-                ['shipments.transit_out_date','>=',$this->fdate],
+                ['status',6],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.transit_out_id1',$this->agent_id],
-                ['shipments.status',12],
-                ['shipments.transit_out_date','<=',$this->tdate],
-                ['shipments.transit_out_date','>=',$this->fdate],
+                ['status',12],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.package_at_station_id',$this->agent_id],
-                ['shipments.status',13],
-                ['shipments.package_at_station_date','<=',$this->tdate],
-                ['shipments.package_at_station_date','>=',$this->fdate],
+                ['status',13],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.package_at_station_id1',$this->agent_id],
-                ['shipments.status',14],
-                ['shipments.package_at_station_date','<=',$this->tdate],
-                ['shipments.package_at_station_date','>=',$this->fdate],
+                ['status',14],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.van_scan_id',$this->agent_id],
-                ['shipments.status',7],
-                ['shipments.van_scan_date','<=',$this->tdate],
-                ['shipments.van_scan_date','>=',$this->fdate],
+                ['status',7],
+                ['van_scan_date','<=',$this->tdate],
+                ['van_scan_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.delivery_agent_id',$this->agent_id],
-                ['shipments.status',8],
-                ['shipments.delivery_date','<=',$this->tdate],
-                ['shipments.delivery_date','>=',$this->fdate],
+                ['status',8],
+                ['delivery_date','<=',$this->tdate],
+                ['delivery_date','>=',$this->fdate],
             ]);
             $i->orWhere([
-                ['shipments.delivery_exception_id',$this->agent_id],
-                ['shipments.status',9],
-                ['shipments.delivery_exception_assign_date','<=',$this->tdate],
-                ['shipments.delivery_exception_assign_date','>=',$this->fdate],
+                ['status',9],
+                ['delivery_exception_assign_date','<=',$this->tdate],
+                ['delivery_exception_assign_date','>=',$this->fdate],
+            ]);
+        }
+        else if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' && $this->agent_id == 'agent' && $this->shipment_status != '20' )
+        {
+            $i->where([
+                ['status',$this->shipment_status],
+                ['pickup_assign_date','<=',$this->tdate],
+                ['pickup_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['package_collect_date','<=',$this->tdate],
+                ['package_collect_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['exception_assign_date','<=',$this->tdate],
+                ['exception_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['van_scan_date','<=',$this->tdate],
+                ['van_scan_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['delivery_date','<=',$this->tdate],
+                ['delivery_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['status',$this->shipment_status],
+                ['delivery_exception_assign_date','<=',$this->tdate],
+                ['delivery_exception_assign_date','>=',$this->fdate],
+            ]);
+        }
+        else if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' && $this->agent_id != 'agent' && $this->shipment_status == '20' )
+        {
+            $i->where([
+                ['pickup_agent_id',$this->agent_id],
+                ['status',1],
+                ['pickup_assign_date','<=',$this->tdate],
+                ['pickup_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['package_collect_agent_id',$this->agent_id],
+                ['status',2],
+                ['package_collect_date','<=',$this->tdate],
+                ['package_collect_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['pickup_exception_id',$this->agent_id],
+                ['status',3],
+                ['exception_assign_date','<=',$this->tdate],
+                ['exception_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_in_id',$this->agent_id],
+                ['status',4],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_in_id1',$this->agent_id],
+                ['status',11],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_out_id',$this->agent_id],
+                ['status',6],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_out_id1',$this->agent_id],
+                ['status',12],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['package_at_station_id',$this->agent_id],
+                ['status',13],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['package_at_station_id1',$this->agent_id],
+                ['status',14],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['van_scan_id',$this->agent_id],
+                ['status',7],
+                ['van_scan_date','<=',$this->tdate],
+                ['van_scan_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['delivery_agent_id',$this->agent_id],
+                ['status',8],
+                ['delivery_date','<=',$this->tdate],
+                ['delivery_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['delivery_exception_id',$this->agent_id],
+                ['status',9],
+                ['delivery_exception_assign_date','<=',$this->tdate],
+                ['delivery_exception_assign_date','>=',$this->fdate],
+            ]);
+        }
+        else if ( $this->fdate != '1970-01-01' && $this->tdate != '1970-01-01' && $this->agent_id != 'agent' && $this->shipment_status != '20' )
+        {
+            $i->where([
+                ['pickup_agent_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['pickup_assign_date','<=',$this->tdate],
+                ['pickup_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['package_collect_agent_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['package_collect_date','<=',$this->tdate],
+                ['package_collect_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['pickup_exception_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['exception_assign_date','<=',$this->tdate],
+                ['exception_assign_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_in_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_in_id1',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['transit_in_date','<=',$this->tdate],
+                ['transit_in_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_out_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['transit_out_id1',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['transit_out_date','<=',$this->tdate],
+                ['transit_out_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['package_at_station_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['package_at_station_id1',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['package_at_station_date','<=',$this->tdate],
+                ['package_at_station_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['van_scan_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['van_scan_date','<=',$this->tdate],
+                ['van_scan_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['delivery_agent_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['delivery_date','<=',$this->tdate],
+                ['delivery_date','>=',$this->fdate],
+            ]);
+            $i->orWhere([
+                ['delivery_exception_id',$this->agent_id],
+                ['status',$this->shipment_status],
+                ['delivery_exception_assign_date','<=',$this->tdate],
+                ['delivery_exception_assign_date','>=',$this->fdate],
             ]);
         }
 

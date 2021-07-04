@@ -905,7 +905,7 @@ class ShipmentController extends Controller
             $i->where('shipments.hold_status',0);
             $i->where('shipments.show_status',0);
             $i->orderBy('shipments.id','DESC');
-            $i->select('shipments.order_id','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
+            $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
             $shipment = $i->get();
         }
         else{
@@ -951,7 +951,7 @@ class ShipmentController extends Controller
             $i->where('shipments.hold_status',0);
             $i->where('shipments.show_status',0);
             $i->orderBy('shipments.id','DESC');
-            $i->select('shipments.order_id','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
+            $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
             $shipment = $i->get();
         }
         
@@ -959,6 +959,9 @@ class ShipmentController extends Controller
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('reference_no', function ($shipment) {
+                return '<td>'.$shipment->reference_no.'</td>';
             })
             ->addColumn('account_id', function ($shipment) {
                 if($shipment->sender_id == '0'){
@@ -1253,7 +1256,7 @@ class ShipmentController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','user_id','account_id'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','user_id','account_id','reference_no'])
         //->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);

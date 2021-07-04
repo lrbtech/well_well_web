@@ -1864,7 +1864,7 @@ class AllShipment extends Controller
             $i->where('shipments.status',8);
             $i->where('shipments.hold_status',0);
             $i->orderBy('shipments.id','DESC');
-            $i->select('shipments.order_id','shipments.sender_id','shipments.delivery_date','shipments.delivery_time','shipments.shipment_mode','shipments.special_service','shipments.from_address','shipments.to_address','shipments.from_station_id','shipments.id','shipments.to_station_id','shipments.delivery_agent_id','shipments.special_service_description');
+            $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.delivery_date','shipments.delivery_time','shipments.shipment_mode','shipments.special_service','shipments.from_address','shipments.to_address','shipments.from_station_id','shipments.id','shipments.to_station_id','shipments.delivery_agent_id','shipments.special_service_description');
             $shipment = $i->get();
         }
         else{
@@ -1877,7 +1877,7 @@ class AllShipment extends Controller
             $i->orWhere([['shipments.to_station_id',Auth::guard('admin')->user()->station_id],['shipments.status','8']]);
             $i->where('shipments.hold_status',0);
             $i->orderBy('shipments.id','DESC');
-            $i->select('shipments.order_id','shipments.sender_id','shipments.delivery_date','shipments.delivery_time','shipments.shipment_mode','shipments.special_service','shipments.from_address','shipments.to_address','shipments.from_station_id','shipments.id','shipments.to_station_id','shipments.delivery_agent_id','shipments.special_service_description');            
+            $i->select('shipments.order_id','shipments.sender_id','shipments.reference_no','shipments.delivery_date','shipments.delivery_time','shipments.shipment_mode','shipments.special_service','shipments.from_address','shipments.to_address','shipments.from_station_id','shipments.id','shipments.to_station_id','shipments.delivery_agent_id','shipments.special_service_description');            
             $shipment = $i->get();
         }
 
@@ -1885,6 +1885,9 @@ class AllShipment extends Controller
             ->addColumn('order_id', function ($shipment) {
                 $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
                 return '<td>'.$shipment_package[0]->sku_value.'</td>';
+            })
+            ->addColumn('reference_no', function ($shipment) {
+                return '<td>'.$shipment->reference_no.'</td>';
             })
             ->addColumn('account_id', function ($shipment) {
                 if($shipment->sender_id == '0'){
@@ -1981,7 +1984,7 @@ class AllShipment extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','account_id'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_time', 'shipment_mode','action','status','account_id','reference_no'])
         //->addIndexColumn()
         ->make(true);
 
