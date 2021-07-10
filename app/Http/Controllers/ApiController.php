@@ -169,11 +169,11 @@ class ApiController extends Controller
                 'name' => '',
                 'mobile' => '',
                 'user_type' => '',
-                'special_cop' => '',
+                // 'special_cop' => '',
             );
-            if($shipment->special_cop != 'null'){
-                $data['special_cop'] = $shipment->special_cop;
-            }
+            // if($shipment->special_cop != 'null'){
+            //     $data['special_cop'] = $shipment->special_cop;
+            // }
             $address = manage_address::find($value->from_address);
             $city = city::find($address->city_id);
             $area = city::find($address->area_id);
@@ -369,7 +369,7 @@ class ApiController extends Controller
             'insurance_amount' => '',
             'cod_amount' => '',
             'user_type'=>'',
-            'special_cop' => '',
+            //'special_cop' => '',
         );
         
         if($shipment->sender_id != 0){
@@ -396,9 +396,9 @@ class ApiController extends Controller
         if($shipment->cod_amount != 'null'){
             $data['cod_amount'] = $shipment->cod_amount;
         }
-        if($shipment->special_cop != 'null'){
-            $data['special_cop'] = $shipment->special_cop;
-        }
+        // if($shipment->special_cop != 'null'){
+        //     $data['special_cop'] = $shipment->special_cop;
+        // }
         $address = manage_address::find($shipment->from_address);
         $city = city::find($address->city_id);
         $area = city::find($address->area_id);

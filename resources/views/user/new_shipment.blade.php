@@ -432,7 +432,7 @@ visibility: visible;
                                 <label for="special_cod_enable1"></label>
                               </div>
                               <div class="media-body">
-                                <h6 class="mt-0 mega-title-badge">{{$language[53][Auth::guard('admin')->user()->lang]}}
+                                <h6 class="mt-0 mega-title-badge">{{$language[53][Auth::user()->lang]}}
                                   <!-- <span class="badge badge-secondary pull-right digits">10 AED</span> -->
                                 </h6>
                                 <p>(Recepient)</p>
