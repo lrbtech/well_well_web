@@ -685,7 +685,8 @@ class ShipmentController extends Controller
     public function Shipment(){
         $agent=agent::all();
         $language=language::all();
-        return view('admin.shipment',compact('agent','language') );
+        $user = User::where('status',4)->get();
+        return view('admin.shipment',compact('agent','language','user') );
     }
 
     public function assignAgent(Request $request){
@@ -879,7 +880,7 @@ class ShipmentController extends Controller
         return response()->json('successfully update'); 
     }
 
-    public function getShipment($status,$fdate,$tdate){
+    public function getShipment($status,$user_type,$fdate,$tdate){
         $fdate1 = date('Y-m-d', strtotime($fdate));
         $tdate1 = date('Y-m-d', strtotime($tdate));
         if(Auth::guard('admin')->user()->station_id == '0'){
@@ -896,6 +897,15 @@ class ShipmentController extends Controller
                 }
                 else{
                     $i->where('shipments.status', $status);
+                }
+            }
+            if ( $user_type != 'all_user' )
+            {
+                if ( $user_type != 'guest' ){
+                    $i->where('shipments.sender_id', $user_type);
+                }
+                else{
+                    $i->where('shipments.sender_id', 0);
                 }
             }
             if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
@@ -923,6 +933,15 @@ class ShipmentController extends Controller
                 }
                 else{
                     $i->where('shipments.status', $status);
+                }
+            }
+            if ( $user_type != 'all_user' )
+            {
+                if ( $user_type != 'guest' ){
+                    $i->where('shipments.sender_id', $user_type);
+                }
+                else{
+                    $i->where('shipments.sender_id', 0);
                 }
             }
             if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )

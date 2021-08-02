@@ -535,6 +535,7 @@
                   @if($role_get->agent_report == 'on')
                   <li class="agent-report"><a class="agent-report" href="/admin/agent-report">{{$language[316][Auth::guard('admin')->user()->lang]}}</a></li> 
                   @endif
+                  <li class="van-scan-report"><a class="van-scan-report" href="/admin/van-scan-report">Van Scan Report</a></li> 
                 </ul>
               </li>
               @endif

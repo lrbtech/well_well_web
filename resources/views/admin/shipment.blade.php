@@ -2,6 +2,7 @@
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/assets/app-assets/css/pe7-icon.css">
+<link rel="stylesheet" type="text/css" href="/assets/app-assets/css/select2.css">
 <style>
 div.dataTables_wrapper div.dataTables_processing {
   top: 0%;
@@ -49,11 +50,11 @@ div.dataTables_wrapper div.dataTables_processing {
                             <input value="<?php echo date('Y-m-d',strtotime('last day of this month')); ?>" autocomplete="off" type="date" id="to_date" name="to_date" class="form-control">
                         </div>
                         
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <label>{{$language[100][Auth::guard('admin')->user()->lang]}}</label>
                             <select id="shipment_status" name="shipment_status" class="form-control">
                               <option value="20">All Data</option>
-                              <option value="0">New Request</option>
+                              <option value="0">Ready for Pickup</option>
                               <option value="1">Pickup Assigned</option>
                               <option value="2">Package Collected</option>
                               <option value="3">Pickup Exception</option>
@@ -65,6 +66,17 @@ div.dataTables_wrapper div.dataTables_processing {
                               <option value="10">Cancel Shipment</option>
                               <!-- <option value="11">Shipment Hold</option> -->
                             </select>
+                        </div>
+
+                        <div class="form-group col-md-2">
+                          <label>Select User</label>
+                          <select id="user_type" name="user_type" class="js-example-basic-single col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                            <option value="all_user">All Data</option>
+                            <option value="guest">Guest</option>
+                            @foreach($user as $row)
+                            <option value="{{$row->id}}">{{$row->customer_id}} - {{$row->first_name}} {{$row->last_name}}</option>
+                            @endforeach
+                          </select>
                         </div>
 
                         <div class="form-group col-md-2">
@@ -252,6 +264,8 @@ div.dataTables_wrapper div.dataTables_processing {
   <script src="/assets/app-assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
   <script src="/assets/app-assets/js/datatable/datatables/datatable.custom.js"></script>
   <script src="/assets/app-assets/js/chat-menu.js"></script>
+  <script src="/assets/app-assets/js/select2/select2.full.min.js"></script>
+<script src="/assets/app-assets/js/select2/select2-custom.js"></script>
 
   <script type="text/javascript">
 $('.shipment').addClass('active');
@@ -272,7 +286,8 @@ function search_url(){
     tdate = '1';
   }
   var shipment_status = $('#shipment_status').val();
-  return '/admin/get-shipment/'+shipment_status+'/'+fdate+'/'+tdate;
+  var user_type = $('#user_type').val();
+  return '/admin/get-shipment/'+shipment_status+'/'+user_type+'/'+fdate+'/'+tdate;
 }
 
 var orderPageTable = $('#datatable').DataTable({
@@ -464,5 +479,9 @@ function SaveCancelRequest(){
     }
     });
 }
+
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
 </script>
 @endsection

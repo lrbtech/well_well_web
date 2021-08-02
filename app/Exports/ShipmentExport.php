@@ -179,7 +179,7 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $user_details=$address->contact_name . $address->contact_mobile;
         }
         else{
-            $user_details=$user->name . $user->mobile . $user->email;
+            $user_details=$user->first_name.$user->last_name.' - '.$user->mobile.' - '. $user->email;
         }
 
         $account_id='';
@@ -187,7 +187,15 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $account_id='GUEST';
         }
         else{
-            $account_id = $user->customer_id;
+            $account_id=$user->customer_id;
+        }
+
+        $company_name='';
+        if($shipment->sender_id == '0'){
+            $company_name='GUEST';
+        }
+        else{
+            $company_name=$user->business_name;
         }
 
         $shipment_details = 'No of Packages : ' .$shipment->no_of_packages . 
@@ -196,6 +204,7 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         return [
             $user_details,
             $account_id,
+            $company_name,
             $shipment_package[0]->sku_value,
             //$shipment->reference_no,
             $shipment->date,
@@ -204,6 +213,7 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $ship_to,
             $shipment->special_cop,
             $shipment->special_cod,
+            $shipment->total,
         ];
     }
 
@@ -213,6 +223,7 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         return [
             'User Details',
             'Account ID',
+            'Company Name',
             'Tracking ID',
             //'Reference No',
             'Date',
@@ -221,6 +232,7 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             'Shipment To',
             'C.O.P',
             'C.O.D',
+            'Delivery Fees',
         ];
     }
 

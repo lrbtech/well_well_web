@@ -1785,6 +1785,9 @@ class ApiController extends Controller
             elseif($row->status == 8 && $row->delivery_agent_id == $id && $row->delivery_date == $today){
                 $completed++;
             }
+            elseif($row->status == 9 && $row->delivery_exception_id == $id && $row->delivery_exception_assign_date == $today){
+                $exception++;
+            }
         }
         $total_shipment = $on_pickup + $pickup + $exception + $hub + $delivery + $completed;
 

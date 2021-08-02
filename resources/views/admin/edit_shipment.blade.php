@@ -557,7 +557,7 @@ visibility: visible;
                           <label class="col-sm-6 col-form-label">{{$language[64][Auth::guard('admin')->user()->lang]}} ({{$language[65][Auth::guard('admin')->user()->lang]}} = <span id="total_weight_label">0</span> Kg)</label>
                             <div class="col-sm-6">
                               <input value="{{$shipment->total_weight}}" type="hidden" name="total_weight" id="total_weight">
-                              <input value="{{$shipment->shipment_price}}" readonly class="form-control" name="shipment_price" id="shipment_price" type="text">
+                              <input value="{{$shipment->shipment_price}}"  class="form-control" name="shipment_price" id="shipment_price" type="text">
                             </div>
                           </div>
 
@@ -567,7 +567,7 @@ visibility: visible;
                             <div class="col-sm-6">
                               <input readonly name="insurance_enable" id="insurance_enable" type="hidden">
                               <input value="{{$shipment->insurance_percentage}}" readonly name="insurance_percentage" id="insurance_percentage" type="hidden">
-                              <input value="{{$shipment->insurance_amount}}" readonly class="form-control" name="insurance_amount" id="insurance_amount" type="text">
+                              <input value="{{$shipment->insurance_amount}}" class="form-control" name="insurance_amount" id="insurance_amount" type="text">
                             </div>
                           </div>
                           <div class="form-group row">
@@ -576,14 +576,14 @@ visibility: visible;
                               <input readonly name="cod_enable" id="cod_enable" type="hidden">
                               <input readonly name="cod_price" id="cod_price" type="hidden">
                               <input value="{{$shipment->before_total}}" readonly name="before_total" id="before_total" type="hidden">
-                              <input value="{{$shipment->cod_amount}}" readonly class="form-control" name="cod_amount" id="cod_amount" type="text">
+                              <input value="{{$shipment->cod_amount}}" class="form-control" name="cod_amount" id="cod_amount" type="text">
                             </div>
                           </div>
 
                           <div class="form-group row">
                             <label class="col-sm-6 col-form-label">{{$language[67][Auth::guard('admin')->user()->lang]}} </label>
                             <div class="col-sm-6">
-                              <input value="{{$shipment->sub_total}}" readonly class="form-control" name="sub_total" id="sub_total" type="text">
+                              <input value="{{$shipment->sub_total}}" class="form-control" name="sub_total" id="sub_total" type="text">
                             </div>
                           </div>
 
@@ -592,7 +592,7 @@ visibility: visible;
                             <div class="col-sm-6">
                               <input readonly name="vat_enable" id="vat_enable" type="hidden">
                               <input value="{{$shipment->vat_percentage}}" readonly name="vat_percentage" id="vat_percentage" type="hidden">
-                              <input value="{{$shipment->vat_amount}}" readonly class="form-control" name="vat_amount" id="vat_amount" type="text">
+                              <input value="{{$shipment->vat_amount}}"  class="form-control" name="vat_amount" id="vat_amount" type="text">
                             </div>
                           </div>
 
@@ -601,14 +601,14 @@ visibility: visible;
                             <div class="col-sm-6">
                               <input readonly name="postal_charge_enable" id="postal_charge_enable" type="hidden">
                               <input value="{{$shipment->postal_charge_percentage}}" readonly name="postal_charge_percentage" id="postal_charge_percentage" type="hidden">
-                              <input value="{{$shipment->postal_charge}}" readonly class="form-control" name="postal_charge" id="postal_charge" type="text">
+                              <input value="{{$shipment->postal_charge}}"  class="form-control" name="postal_charge" id="postal_charge" type="text">
                             </div>
                           </div>
 
                           <div class="form-group row">
                             <label class="col-sm-6 col-form-label">{{$language[70][Auth::guard('admin')->user()->lang]}} </label>
                             <div class="col-sm-6">
-                              <input value="{{$shipment->total}}" readonly class="form-control" name="total" id="total" type="text">
+                              <input value="{{$shipment->total}}" class="form-control" name="total" id="total" type="text">
                             </div>
                           </div>
 

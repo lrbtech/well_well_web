@@ -243,7 +243,7 @@ Route::group(['prefix' => 'admin'],function(){
     //shipment
     Route::get('/shipment', [App\Http\Controllers\Admin\ShipmentController::class, 'Shipment']);
     Route::get('/view-shipment/{id}', [App\Http\Controllers\Admin\ShipmentController::class, 'viewShipment']);
-    Route::POST('/get-shipment/{status}/{date1}/{date2}', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
+    Route::POST('/get-shipment/{status}/{user_type}/{date1}/{date2}', [App\Http\Controllers\Admin\ShipmentController::class, 'getShipment']);
 
     Route::get('/shipment-excel', [App\Http\Controllers\Admin\ShipmentController::class, 'ShipmentExcel']);
     Route::POST('/upload-shipment-excel', [App\Http\Controllers\Admin\ShipmentController::class, 'UploadShipmentExcel']);
@@ -389,6 +389,10 @@ Route::group(['prefix' => 'admin'],function(){
     Route::POST('/get-agent-report/{agent}/{date1}/{date2}/{status}', [App\Http\Controllers\Admin\ReportController::class, 'getAgentReport']);
 
     Route::POST('/excel-agent-report', [App\Http\Controllers\Admin\ReportController::class, 'excelAgentReport']);
+
+    Route::get('/van-scan-report', [App\Http\Controllers\Admin\ReportController::class, 'vanScanReport']);
+    Route::POST('/get-van-scan-report/{agent}/{date1}/{date2}', [App\Http\Controllers\Admin\ReportController::class, 'getVanScanReport']);
+    Route::POST('/pdf-van-scan-report', [App\Http\Controllers\Admin\ReportController::class, 'pdfVanScanReport']);
 
     Route::POST('/excel-shipment-report', [App\Http\Controllers\Admin\ReportController::class, 'excelShipmentReport']);
 

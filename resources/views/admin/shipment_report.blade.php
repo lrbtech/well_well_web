@@ -53,7 +53,7 @@ div.dataTables_wrapper div.dataTables_processing {
                             <label>{{$language[100][Auth::guard('admin')->user()->lang]}}</label>
                             <select id="shipment_status" name="shipment_status" class="form-control">
                               <option value="20">All Data</option>
-                              <option value="0">New Request</option>
+                              <option value="0">Ready for Pickup</option>
                               <option value="1">Pickup Assigned</option>
                               <option value="2">Package Collected</option>
                               <option value="3">Pickup Exception</option>

@@ -683,6 +683,156 @@ class ReportController extends Controller
     }
 
 
+    public function vanScanReport(){
+        if(Auth::guard('admin')->user()->station_id == '0'){
+            $agent = agent::where('status',0)->get();
+        }
+        else{
+            $q =DB::table('agents as a');
+            $q->join('cities as c','a.city_id','=','c.id');
+            $q->where('c.station_id', Auth::guard('admin')->user()->station_id);
+            $q->where('a.status',0);
+            $q->select('a.*');
+            $agent = $q->get();
+        }
+        $language = language::all();
+        return view('admin.van_scan_report',compact('agent','language'));
+    }
+
+    public function getVanScanReport($agent_id,$fdate,$tdate){
+        $fdate1 = date('Y-m-d', strtotime($fdate));
+        $tdate1 = date('Y-m-d', strtotime($tdate));
+        
+        $i =DB::table('shipments');
+        if ( $agent_id != 'agent' )
+        {
+            $i->where('shipments.van_scan_id', $agent_id);
+        }
+        if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+        {
+            $i->whereBetween('shipments.van_scan_date', [$fdate1, $tdate1]);
+        }
+        $i->where('shipments.status',7);
+        $i->orderBy('shipments.id','DESC');
+        $shipment = $i->get();
+
+        return Datatables::of($shipment)
+            ->addColumn('order_id', function ($shipment) {
+                $shipment_package = shipment_package::where('shipment_id',$shipment->id)->first();
+                return '<td>#'.$shipment_package->sku_value.'</td>';
+            })
+            ->addColumn('date', function ($shipment) {
+                return '<td>'.date('d-m-Y',strtotime($shipment->van_scan_date)).'</td>';
+            })
+            ->addColumn('reference_no', function ($shipment) {
+                return '<td>'.$shipment->reference_no.'</td>';
+            })
+            ->addColumn('special_cop', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->special_cop . ' AED</p>
+                </td>';
+            })
+            ->addColumn('special_cod', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->special_cod . ' AED</p>
+                </td>';
+            })
+            ->addColumn('total', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->total . ' AED</p>
+                </td>';
+            })
+            ->addColumn('to_address', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                $to_city = city::find($to_address->city_id);
+                $to_area = city::find($to_address->area_id);
+                $to_station = station::find($shipment->to_station_id);
+                if(!empty($to_area)){
+                return '<td>
+                <p>' . $to_area->city . '</p>
+                <p>' . $to_city->city . '</p>
+                <p><b>Station :' . $to_station->station . '</b></p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('to_details', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                if(!empty($to_address)){
+                return '<td>
+                <p>' . $to_address->contact_name . '</p>
+                <p>' . $to_address->contact_mobile . '</p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
+            ->addColumn('driver_name', function ($shipment) {
+                $agent = agent::find($shipment->van_scan_id);
+                if(!empty($agent)){
+                    return '
+                    <p>Agent ID '.$agent->agent_id.'</p>
+                    <p>Name :' . $agent->name . '</p>';
+                }
+            })
+            
+        ->rawColumns(['order_id','date', 'reference_no', 'special_cop','total','special_cod','to_address','to_details','driver_name'])
+        ->addIndexColumn()
+        ->make(true);
+    }
+
+    public static function getagentname($id) {
+        $agent = agent::find($id);
+        return '
+        Agent ID '.$agent->agent_id.'
+        Name :' . $agent->name . '
+        ';
+    }
+    public static function getawbno($id) {
+        $shipment_package = shipment_package::where('shipment_id',$id)->first();
+        return '
+        #'.$shipment_package->sku_value.'
+        ';
+    }
+    public static function getshipto($to_station_id) {
+        $to_station = station::find($to_station_id);
+        return '
+        Station :' . $to_station->station . '
+        ';
+    }
+    public static function gettodetails($to_address) {
+        $to_address = manage_address::find($to_address);
+        return '
+        ' . $to_address->contact_name . '
+        ' . $to_address->contact_mobile . '
+        ';
+            
+    }
+
+    public function pdfVanScanReport(Request $request){
+        $fdate = date('Y-m-d', strtotime($request->from_date));
+        $tdate = date('Y-m-d', strtotime($request->to_date));
+        
+        $i =DB::table('shipments');
+        if ( $request->agent_id != 'agent' )
+        {
+            $i->where('shipments.van_scan_id', $request->agent_id);
+        }
+        if ( $fdate != '1970-01-01' && $tdate != '1970-01-01' )
+        {
+            $i->whereBetween('shipments.van_scan_date', [$fdate, $tdate]);
+        }
+        $i->where('shipments.status',7);
+        $i->orderBy('shipments.id','DESC');
+        $shipment = $i->get();
+
+        $pdf = PDF::loadView('print.print_van_scan_report', compact('shipment'));
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream('report.pdf');
+    }
 
     public function getAgentReport($agent_id,$fdate,$tdate,$shipment_status){
         $fdate1 = date('Y-m-d', strtotime($fdate));
@@ -1076,6 +1226,18 @@ class ReportController extends Controller
                     return '<td></td>';
                 }
             })
+            ->addColumn('to_details', function ($shipment) {
+                $to_address = manage_address::find($shipment->to_address);
+                if(!empty($to_address)){
+                return '<td>
+                <p>' . $to_address->contact_name . '</p>
+                <p>' . $to_address->contact_mobile . '</p>
+                </td>';
+                }
+                else{
+                    return '<td></td>';
+                }
+            })
             ->addColumn('total', function ($shipment) {
                 return '<td>
                 <p>AED ' . $shipment->total . '</p>
@@ -1254,7 +1416,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','reference_no'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','reference_no','to_details'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);

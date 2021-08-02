@@ -149,7 +149,15 @@ th {
                     <strong>Order ID :</strong> </p><span>{{$row->order_id}}</span> -->
                 </div>
                 <p class="m-0">
+                @if(!empty($user))    
+                    @if($user->business_name != '')
+                    {{$user->business_name}}<br>
+                    @else 
+                    {{$row->from_name}}<br>
+                    @endif
+                @else 
                 {{$row->from_name}}<br>
+                @endif
                 {{$row->from_mobile}}<br>
                 @foreach($area as $area1)
                 @if($area1->id == $row->from_area)
