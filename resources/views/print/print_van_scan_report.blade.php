@@ -12,10 +12,11 @@
 
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
-    <table class="table table-bordered">
+    <table style="font-size:12px;" class="table table-bordered">
       <thead>
         <tr>
             <th>Date</th>
+            <th>Sender Details</th>
             <th>Driver Name</th>
             <th>AWB No</th>
             <th>Reference No</th>
@@ -31,6 +32,7 @@
         @foreach($shipment as $row)
         <tr>
             <td>{{$row->van_scan_date}}</td>
+            <td>{{ \App\Http\Controllers\Admin\ReportController::getsenderdetails($row->sender_id) }}</td>
             <td>{{ \App\Http\Controllers\Admin\ReportController::getagentname($row->van_scan_id) }}</td>
             <td>{{ \App\Http\Controllers\Admin\ReportController::getawbno($row->id) }}</td>
             <td>{{$row->reference_no}}</td>

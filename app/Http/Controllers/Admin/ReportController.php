@@ -808,8 +808,21 @@ class ReportController extends Controller
         return '
         ' . $to_address->contact_name . '
         ' . $to_address->contact_mobile . '
-        ';
-            
+        ';   
+    }
+
+    public static function getsenderdetails($sender_id) {
+        if($sender_id == '0'){
+            return 'Guest';
+        }
+        else{
+            $user = User::find($sender_id);
+            return '
+            ' . $user->customer_id . '
+            ' . $user->first_name . ' ' . $user->last_name . '
+            ' . $user->mobile . '
+            ';
+        }
     }
 
     public function pdfVanScanReport(Request $request){
