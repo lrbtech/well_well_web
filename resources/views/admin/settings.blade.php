@@ -59,12 +59,12 @@
                   </div>
                 </div>
 
-                <!-- <div class="col-sm-6 col-md-6">
+                <div class="col-sm-6 col-md-6">
                   <div class="form-group">
                     <label class="form-label">Gust User COD Price</label>
                     <input class="form-control" type="number" id="cod_amount" name="cod_amount" value="{{$settings->cod_amount}}">
                   </div>
-                </div> -->
+                </div>
 
                 <div class="col-md-12 text-right">
                   <button onclick="Update()" class="btn btn-primary btn-pill" type="button">{{$language[135][Auth::guard('admin')->user()->lang]}}</button>

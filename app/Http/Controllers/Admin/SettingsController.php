@@ -76,7 +76,7 @@ class SettingsController extends Controller
         $settings->insurance_percentage = $request->insurance_percentage;
         $settings->vat_percentage = $request->vat_percentage;
         $settings->postal_charge_percentage = $request->postal_charge_percentage;
-        //$settings->cod_amount = $request->cod_amount;
+        $settings->cod_amount = $request->cod_amount;
         $settings->save();
 
         $logController = new logController();
