@@ -124,9 +124,11 @@ class UserShipmentImport implements ToModel, WithHeadingRow
             //$shipment->special_cod_enable = $row['cod_enable'];
             if($row['cash_on_pickup'] > 0){
                 $shipment->special_cop = $row['cash_on_pickup'];
+                $shipment->special_cop_enable = 1;
             }
             if($row['cash_on_delivery'] > 0){
                 $shipment->special_cod = $row['cash_on_delivery'];
+                $shipment->special_cod_enable = 1;
             }
             $shipment->no_of_packages = $row['no_of_packages'];
             $declared_value = $row['cash_on_pickup'] + $row['cash_on_delivery'];
@@ -147,9 +149,9 @@ class UserShipmentImport implements ToModel, WithHeadingRow
             
             $shipment->total_weight = $total_weight;
             
-            $cod_enable;
+            $cod_enable=0;
             if($row['cash_on_delivery'] > 0){
-                $cod_enable = 1;
+                $cod_enable=1;
             }
             else{
                 $cod_enable=0;

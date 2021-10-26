@@ -209,7 +209,7 @@ class OrderApiController extends Controller
         $shipment->total_weight = $total_weight;
         $cod_enable;
         if($request->order['cod_enable'] == '1'){
-            $cod_enable = 1;
+            $cod_enable=1;
         }
         else{
             $cod_enable=0;
