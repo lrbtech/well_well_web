@@ -377,8 +377,11 @@ class OrderApiController extends Controller
             $insurance_amount = ($settings->insurance_percentage/100) * $declared_value;
         }
         
-        if($cod_enable == 1){
-            $cod_amount = $settings->cod_amount;
+        // if($cod_enable == 1){
+        //     $cod_amount = $settings->cod_amount;
+        // }
+        if($rate->cod_enable == 1){
+            $cod_amount = $rate->cod_price;
         }
 
         $sub_total = $price + $insurance_amount + $cod_amount;
