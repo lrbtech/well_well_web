@@ -55,7 +55,19 @@ class UserShipmentImport implements ToModel, WithHeadingRow
             $from_city = city::where('parent_id',0)->where('city',$row['pick_up_city'])->first();
             $from_address->city_id = $from_city->id;
             $from_area = city::where('parent_id',$from_city->id)->where('city',$row['pick_up_area'])->first();
-            $from_address->area_id = $from_area->id;
+            if(!empty($from_area)){
+                $from_address->area_id = $from_area->id;
+            }
+            else{
+                $new_pickup_city = new city;
+                $new_pickup_city->city = $row['pick_up_area'];
+                $new_pickup_city->country_id = 1;
+                $new_pickup_city->remote_area = 0;
+                $new_pickup_city->parent_id = $from_city->id;
+                $new_pickup_city->save();
+                
+                $from_address->area_id = $new_pickup_city->id;
+            }
             $from_address->country_id = 1;
             $from_address->contact_name = $row['pick_up_name'];
             $from_address->contact_mobile = $row['pick_up_mobile'];
@@ -83,7 +95,21 @@ class UserShipmentImport implements ToModel, WithHeadingRow
             $to_city = city::where('parent_id',0)->where('city',$row['delivery_city'])->first();
             $to_address->city_id = $to_city->id;
             $to_area = city::where('parent_id',$to_city->id)->where('city',$row['delivery_area'])->first();
-            $to_address->area_id = $to_area->id;
+            
+            if(!empty($to_area)){
+                $to_address->area_id = $to_area->id;
+            }
+            else{
+                $new_delivery_city = new city;
+                $new_delivery_city->city = $row['delivery_area'];
+                $new_delivery_city->country_id = 1;
+                $new_delivery_city->remote_area = 0;
+                $new_delivery_city->parent_id = $to_city->id;
+                $new_delivery_city->save();
+                
+                $to_address->area_id = $new_delivery_city->id;
+            }
+
             $to_address->country_id = 1;
             $to_address->contact_name = $row['delivery_name'];
             $to_address->contact_mobile = $row['delivery_mobile'];
