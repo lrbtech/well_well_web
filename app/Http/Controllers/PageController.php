@@ -92,6 +92,16 @@ class PageController extends Controller
         echo $output;
     }
 
+    public function getallcity(){ 
+        $alldata = city::where('parent_id',0)->orderBy('city','ASC')->get();
+        $data =array();
+        $datas =array();
+        foreach ($alldata as $key => $value) {
+            $data[] = $value->city;
+        }
+        echo implode(",",$data);
+    }
+
     public function getCityData($id){ 
         $data = city::find($id);
         return response()->json($data); 
