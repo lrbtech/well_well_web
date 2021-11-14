@@ -76,7 +76,7 @@ Route::get('/verify-account/{id}', [App\Http\Controllers\PageController::class, 
 
 Route::get('/get-area/{id}', [App\Http\Controllers\PageController::class, 'getArea']);
 Route::get('/get-city-data/{id}', [App\Http\Controllers\PageController::class, 'getCityData']);
-Route::get('/get-all-city', [App\Http\Controllers\PageController::class, 'getallcity']);
+Route::get('/get-all-city-', [App\Http\Controllers\PageController::class, 'getCityData']);
 
 Route::get('/mobile-print-label/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);
 Route::get('/pdfprint/{id}', [App\Http\Controllers\ApiController::class, 'mobilePrintLabel']);

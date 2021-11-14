@@ -482,12 +482,21 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
         }
 
         $user_details='';
+        $user_name='';
+        $user_mobile='';
+        $user_email='';
         if($shipment->sender_id == '0'){
             $address = manage_address::find($shipment->from_address);
             $user_details=$address->contact_name . $address->contact_mobile;
+            $user_name=$address->contact_name;
+            $user_mobile=$address->contact_mobile;
+            $user_email='';
         }
         else{
-            $user_details=$user->name . $user->mobile . $user->email;
+            $user_details=$user->first_name.$user->last_name.' - '.$user->mobile.' - '. $user->email;
+            $user_name=$user->first_name.$user->last_name;
+            $user_mobile=$user->mobile;
+            $user_email=$user->email;
         }
 
         $shipment_details = 'No of Packages : ' .$shipment->no_of_packages . 
@@ -663,7 +672,9 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             $shipment->reference_no,
             $shipment_date,
             $user_type,
-            $user_details,
+            $user_name,
+            $user_mobile,
+            $user_email,
             $shipment_mode,
             $special_service,
             $shipment_details,
@@ -688,6 +699,7 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             $shipment->special_cod,
             $shipment->collect_cod_amount,
             $shipment->cod_type,
+            $shipment->special_cop,
         ];
     }
 
@@ -699,7 +711,9 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             'Reference No',
             'Date',
             'User Type',
-            'User Details',
+            'User Name',
+            'User Mobile',
+            'User Email',
             'Shipping Mode',
             'Special Shipment',
             'Shipment Details',
@@ -724,6 +738,7 @@ class AgentExport implements FromCollection, ShouldAutoSize , WithHeadings , Wit
             'Special C.O.D',
             'Collected C.O.D',
             'C.O.D Payment Type',
+            'Special C.O.P',
         ];
     }
 

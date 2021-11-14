@@ -173,12 +173,21 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
 
         $user_details='';
+        $user_name='';
+        $user_mobile='';
+        $user_email='';
         if($shipment->sender_id == '0'){
             $address = manage_address::find($shipment->from_address);
             $user_details=$address->contact_name . $address->contact_mobile;
+            $user_name=$address->contact_name;
+            $user_mobile=$address->contact_mobile;
+            $user_email='';
         }
         else{
             $user_details=$user->first_name.$user->last_name.' - '.$user->mobile.' - '. $user->email;
+            $user_name=$user->first_name.$user->last_name;
+            $user_mobile=$user->mobile;
+            $user_email=$user->email;
         }
 
         $account_id='';
@@ -202,17 +211,17 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
 
 
         $status='';
+        $status_agent_name='';
+        $status_agent_id='';
         if($shipment->status == 0){
             $status= 'Ready for Pickup';
         }
         elseif($shipment->status == 1){
             $agent = agent::find($shipment->pickup_agent_id);
             if(!empty($agent)){
-                $status= '
-                Schedule for Pickup
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '
-                ';
+                $status= 'Schedule for Pickup';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
             else{
                 $status= 'Schedule for Pickup';
@@ -221,11 +230,9 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         elseif($shipment->status == 2){
             $agent = agent::find($shipment->package_collect_agent_id);
             if(!empty($agent)){
-                $status= '
-                Package Collected
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '
-                ';
+                $status= 'Package Collected';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
             else{
                 $status= 'Package Collected';
@@ -234,17 +241,15 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         elseif($shipment->status == 3){
             $agent = agent::find($shipment->pickup_exception_id);
             if(!empty($agent)){
-                $status= '
-                Pickup Exception
+                $status= 'Pickup Exception
                 ' . $shipment->exception_category . '
                 ' . $shipment->exception_remark . '
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '
                 ';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
             else{
-                $status= '
-                Pickup Exception
+                $status= 'Pickup Exception
                 ' . $shipment->exception_category . '
                 ' . $shipment->exception_remark . '
                 ';
@@ -253,112 +258,99 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         elseif($shipment->status == 4){
             $agent = agent::find($shipment->transit_in_id);
             if(!empty($agent)){
-                $status= '
-                Transit In '.$from_station->station.'
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '
-                ';
+                $status= 'Transit In '.$from_station->station.'';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
         }
         elseif($shipment->status == 6){
             $agent = agent::find($shipment->transit_out_id);
             if(!empty($agent)){
-                $status= '
-                Transit Out '.$from_station->station.'
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '
-                ';
+                $status= 'Transit Out '.$from_station->station.'';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
         }
         elseif($shipment->status == 13){
             $agent = agent::find($shipment->package_at_station_id);
             if(!empty($agent)){
-                $status= '
-                Package At Station '.$from_station->station.'
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '
-                ';
+                $status= 'Package At Station '.$from_station->station.'';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
         }
         elseif($shipment->status == 11){
             $agent = agent::find($shipment->transit_in_id1);
             if(!empty($agent)){
-                $status= 'Transit In '.$to_station->station.'
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '';
+                $status= 'Transit In '.$to_station->station.'';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
         }
         elseif($shipment->status == 12){
             $agent = agent::find($shipment->transit_out_id1);
             if(!empty($agent)){
-                $status= 'Transit Out '.$to_station->station.'
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '';
+                $status= 'Transit Out '.$to_station->station.'';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
         }
         elseif($shipment->status == 14){
             $agent = agent::find($shipment->package_at_station_id1);
             if(!empty($agent)){
-                $status= 'Package At Station '.$to_station->station.'
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '';
+                $status= 'Package At Station '.$to_station->station.'';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
         }
         elseif($shipment->status == 7){
             $agent = agent::find($shipment->van_scan_id);
             if(!empty($agent)){
-                $status= '
-                In the Van for Delivery
-                Agent ID '.$agent->agent_id.'
-                Name :' . $agent->name . '';
+                $status= 'In the Van for Delivery';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
             else{
-                $status= '
-                In the Van for Delivery'
-                ;
+                $status= 'In the Van for Delivery';
             }
         }
         elseif($shipment->status == 8){
             $agent = agent::find($shipment->delivery_agent_id);
             if(!empty($agent)){
-                $status= '
-                Shipment delivered
-                Agent ID '.$agent->agent_id.'
-                Name :' . $agent->name . '';
+                $status= 'Shipment delivered';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
             else{
-                $status= '
-                Shipment delivered'
-                ;
+                $status= 'Shipment delivered';
             }
         }
         elseif($shipment->status == 9){
             $agent = agent::find($shipment->delivery_exception_id);
             if(!empty($agent)){
-                $status= '
-                Delivery Exception
+                $status= 'Delivery Exception
                 ' . $shipment->delivery_exception_category . '
-                ' . $shipment->delivery_exception_remark . '
-                Agent ID :'.$agent->agent_id.'
-                Name :' . $agent->name . '';
+                ' . $shipment->delivery_exception_remark . ' ';
+                $status_agent_name=$agent->name;
+                $status_agent_id=$agent->agent_id;
             }
             else{
-                $status= '
-                Delivery Exception
+                $status= 'Delivery Exception
                 ' . $shipment->delivery_exception_category . '
-                ' . $shipment->delivery_exception_remark . '
+                ' . $shipment->delivery_exception_remark . ' 
                 ';
             }
         }
         elseif($shipment->status == 10){
-            $status= '
-            Shipment Cancel
+            $status= 'Shipment Cancel
             ' . $shipment->cancel_remark . '
             ';
         }
         
         return [
-            $user_details,
+            $user_name,
+            $user_mobile,
+            $user_email,
             $account_id,
             $company_name,
             $shipment_package[0]->sku_value,
@@ -370,7 +362,9 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             $shipment->special_cop,
             $shipment->special_cod,
             $shipment->total,
-            $status
+            $status,
+            $status_agent_id,
+            $status_agent_name
         ];
     }
 
@@ -378,7 +372,9 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
     public function headings(): array
     {
         return [
-            'User Details',
+            'User Name',
+            'User Mobile',
+            'User Email',
             'Account ID',
             'Company Name',
             'Tracking ID',
@@ -391,6 +387,8 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             'C.O.D',
             'Delivery Fees',
             'Status',
+            'Agent ID',
+            'Agent Name'
         ];
     }
 
