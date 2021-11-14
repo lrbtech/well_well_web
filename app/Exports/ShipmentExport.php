@@ -156,8 +156,18 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         $user = User::find($shipment->sender_id);
         
         $ship_from='';
+        $ship_from_name='';
+        $ship_from_mobile='';
+        $ship_from_area='';
+        $ship_from_city='';
+        $ship_from_station='';
         if(!empty($from_area)){
             $ship_from = 'Name :' . $from_address->contact_name . ' Mobile :' . $from_address->contact_mobile . $from_area->city . $from_city->city . ' Station :' . $from_station->station;
+            $ship_from_name=$from_address->contact_name;
+            $ship_from_mobile=$from_address->contact_mobile;
+            $ship_from_area=$from_area->city;
+            $ship_from_city=$from_city->city;
+            $ship_from_station=$from_station->station;
         }
 
         $to_address = manage_address::find($shipment->to_address);
@@ -166,8 +176,18 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
         $to_station = station::find($shipment->to_station_id);
 
         $ship_to='';
+        $ship_to_name='';
+        $ship_to_mobile='';
+        $ship_to_area='';
+        $ship_to_city='';
+        $ship_to_station='';
         if(!empty($to_area)){
             $ship_to = 'Name :' . $to_address->contact_name . ' Mobile :' . $to_address->contact_mobile . $to_area->city . $to_city->city . 'Station :' . $to_station->station;
+            $ship_to_name=$to_address->contact_name;
+            $ship_to_mobile=$to_address->contact_mobile;
+            $ship_to_area=$to_area->city;
+            $ship_to_city=$to_city->city;
+            $ship_to_station=$to_station->station;
         }
 
         $shipment_package = shipment_package::where('shipment_id',$shipment->id)->get();
@@ -357,8 +377,16 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             //$shipment->reference_no,
             $shipment->date,
             $shipment_details,
-            $ship_from,
-            $ship_to,
+            $ship_from_name,
+            $ship_from_mobile,
+            $ship_from_area,
+            $ship_from_city,
+            $ship_from_station,
+            $ship_to_name,
+            $ship_to_mobile,
+            $ship_to_area,
+            $ship_to_city,
+            $ship_to_station,
             $shipment->special_cop,
             $shipment->special_cod,
             $shipment->total,
@@ -381,8 +409,16 @@ class ShipmentExport implements FromCollection, ShouldAutoSize , WithHeadings , 
             //'Reference No',
             'Date',
             'Shipment Details',
-            'Shipment From Details',
-            'Shipment To Details',
+            'Shipment From Name',
+            'Shipment From Mobile',
+            'Shipment From Area',
+            'Shipment From City',
+            'Shipment From Station',
+            'Shipment To Name',
+            'Shipment To Mobile',
+            'Shipment To Area',
+            'Shipment To City',
+            'Shipment To Station',
             'C.O.P',
             'C.O.D',
             'Delivery Fees',
