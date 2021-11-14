@@ -885,6 +885,82 @@ class ShipmentController extends Controller
         $tdate1 = date('Y-m-d', strtotime($tdate));
         if(Auth::guard('admin')->user()->station_id == '0'){
             $i =DB::table('shipments');
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            {
+                // $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+                $i->where(function($query) use ($tdate1,$fdate1){
+                    $query->where([
+                        ['status',1],
+                        ['pickup_assign_date','<=',$tdate1],
+                        ['pickup_assign_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',2],
+                        ['package_collect_date','<=',$tdate1],
+                        ['package_collect_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',3],
+                        ['exception_assign_date','<=',$tdate1],
+                        ['exception_assign_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',4],
+                        ['transit_in_date','<=',$tdate1],
+                        ['transit_in_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',11],
+                        ['transit_in_date','<=',$tdate1],
+                        ['transit_in_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',6],
+                        ['transit_out_date','<=',$tdate1],
+                        ['transit_out_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',12],
+                        ['transit_out_date','<=',$tdate1],
+                        ['transit_out_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',13],
+                        ['package_at_station_date','<=',$tdate1],
+                        ['package_at_station_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',14],
+                        ['package_at_station_date','<=',$tdate1],
+                        ['package_at_station_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',7],
+                        ['van_scan_date','<=',$tdate1],
+                        ['van_scan_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',8],
+                        ['delivery_date','<=',$tdate1],
+                        ['delivery_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',9],
+                        ['delivery_exception_assign_date','<=',$tdate1],
+                        ['delivery_exception_assign_date','>=',$fdate1],
+                    ]);
+                });
+            }
+            if ( $user_type != 'all_user' )
+            {
+                if ( $user_type != 'guest' ){
+                    $i->where('shipments.sender_id', $user_type);
+                    //$i->join('users', 'users.id', '=', 'shipments.sender_id');
+                }
+                else{
+                    $i->where('shipments.sender_id', 0);
+                }
+            }
             if ( $status != 20 )
             {
                 if ( $status == 4 ){
@@ -899,19 +975,33 @@ class ShipmentController extends Controller
                     $i->where('shipments.status', $status);
                 }
             }
-            if ( $user_type != 'all_user' )
-            {
-                if ( $user_type != 'guest' ){
-                    $i->where('shipments.sender_id', $user_type);
-                }
-                else{
-                    $i->where('shipments.sender_id', 0);
-                }
-            }
-            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
-            {
-                $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
-            }
+            // if ( $status != 20 )
+            // {
+            //     if ( $status == 4 ){
+            //         $i->where('shipments.status', 4);
+            //         $i->orWhere('shipments.status', 11);
+            //     }
+            //     elseif ( $status == 6 ){
+            //         $i->where('shipments.status', 6);
+            //         $i->orWhere('shipments.status', 12);
+            //     }
+            //     else{
+            //         $i->where('shipments.status', $status);
+            //     }
+            // }
+            // if ( $user_type != 'all_user' )
+            // {
+            //     if ( $user_type != 'guest' ){
+            //         $i->where('shipments.sender_id', $user_type);
+            //     }
+            //     else{
+            //         $i->where('shipments.sender_id', 0);
+            //     }
+            // }
+            // if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            // {
+            //     $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+            // }
             $i->where('shipments.hold_status',0);
             $i->where('shipments.show_status',0);
             $i->orderBy('shipments.id','DESC');
@@ -921,34 +1011,82 @@ class ShipmentController extends Controller
         else{
             $i =DB::table('shipments');
             $i->where('shipments.from_station_id',Auth::guard('admin')->user()->station_id);
-            if ( $status != 20 )
+            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
             {
-                if ( $status == 4 ){
-                    $i->where('shipments.status', 4);
-                    $i->orWhere('shipments.status', 11);
-                }
-                elseif ( $status == 6 ){
-                    $i->where('shipments.status', 6);
-                    $i->orWhere('shipments.status', 12);
-                }
-                else{
-                    $i->where('shipments.status', $status);
-                }
+                // $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+                $i->where(function($query) use ($tdate1,$fdate1){
+                    $query->where([
+                        ['status',1],
+                        ['pickup_assign_date','<=',$tdate1],
+                        ['pickup_assign_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',2],
+                        ['package_collect_date','<=',$tdate1],
+                        ['package_collect_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',3],
+                        ['exception_assign_date','<=',$tdate1],
+                        ['exception_assign_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',4],
+                        ['transit_in_date','<=',$tdate1],
+                        ['transit_in_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',11],
+                        ['transit_in_date','<=',$tdate1],
+                        ['transit_in_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',6],
+                        ['transit_out_date','<=',$tdate1],
+                        ['transit_out_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',12],
+                        ['transit_out_date','<=',$tdate1],
+                        ['transit_out_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',13],
+                        ['package_at_station_date','<=',$tdate1],
+                        ['package_at_station_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',14],
+                        ['package_at_station_date','<=',$tdate1],
+                        ['package_at_station_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',7],
+                        ['van_scan_date','<=',$tdate1],
+                        ['van_scan_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',8],
+                        ['delivery_date','<=',$tdate1],
+                        ['delivery_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',9],
+                        ['delivery_exception_assign_date','<=',$tdate1],
+                        ['delivery_exception_assign_date','>=',$fdate1],
+                    ]);
+                });
             }
             if ( $user_type != 'all_user' )
             {
                 if ( $user_type != 'guest' ){
                     $i->where('shipments.sender_id', $user_type);
+                    //$i->join('users', 'users.id', '=', 'shipments.sender_id');
                 }
                 else{
                     $i->where('shipments.sender_id', 0);
                 }
             }
-            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
-            {
-                $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
-            }
-            $i->orWhere('shipments.to_station_id',Auth::guard('admin')->user()->station_id);
             if ( $status != 20 )
             {
                 if ( $status == 4 ){
@@ -963,10 +1101,35 @@ class ShipmentController extends Controller
                     $i->where('shipments.status', $status);
                 }
             }
-            if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
-            {
-                $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
-            }
+            // if ( $status != 20 )
+            // {
+            //     if ( $status == 4 ){
+            //         $i->where('shipments.status', 4);
+            //         $i->orWhere('shipments.status', 11);
+            //     }
+            //     elseif ( $status == 6 ){
+            //         $i->where('shipments.status', 6);
+            //         $i->orWhere('shipments.status', 12);
+            //     }
+            //     else{
+            //         $i->where('shipments.status', $status);
+            //     }
+            // }
+            // if ( $user_type != 'all_user' )
+            // {
+            //     if ( $user_type != 'guest' ){
+            //         $i->where('shipments.sender_id', $user_type);
+            //     }
+            //     else{
+            //         $i->where('shipments.sender_id', 0);
+            //     }
+            // }
+            // if ( $fdate1 && $fdate != '1' && $tdate1 && $tdate != '1' )
+            // {
+            //     $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
+            // }
+
+            $i->orWhere('shipments.to_station_id',Auth::guard('admin')->user()->station_id);
             $i->where('shipments.hold_status',0);
             $i->where('shipments.show_status',0);
             $i->orderBy('shipments.id','DESC');
