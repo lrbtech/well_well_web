@@ -37,6 +37,7 @@
             <th>No of Packages</th>
             <th>Total</th>
             <th>Special C.O.D</th>
+            <th>Special C.O.P</th>
         </tr>
         
       </thead>
@@ -60,6 +61,9 @@
                   </td>
                   <td>
                       AED {{$row->special_cod}}
+                  </td>
+                  <td>
+                      AED {{$row->special_cop}}
                   </td>
                 </tr>
             @endforeach 

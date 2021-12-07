@@ -252,7 +252,7 @@ class SettlementController extends Controller
             {
                 $i->where('s.package_collect_agent_id', $agent_id);
             }
-            $i->where('s.collect_cop_amount','!=','');
+            //$i->where('s.collect_cop_amount','!=','');
             $i->where('s.paid_agent_cop_status', 0);
             $i->where('s.sender_id','!=',0);
             $shipment = $i->get();
@@ -781,7 +781,8 @@ class SettlementController extends Controller
             }
             elseif($request->mode == 3){
                 $delivery_agent_id = $shipment->package_collect_agent_id;
-                $total_value = $total_value + $shipment->collect_cop_amount;
+                // $total_value = $total_value + $shipment->collect_cop_amount;
+                $total_value = $total_value + $shipment->special_cop;
             }
             $no_of_shipments++;
         }

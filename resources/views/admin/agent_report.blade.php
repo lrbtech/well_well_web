@@ -102,6 +102,7 @@ div.dataTables_wrapper div.dataTables_processing {
                             <th>{{$language[116][Auth::guard('admin')->user()->lang]}}</th>
                             <th>To Details</th>
                             <th>Special C.O.D</th>
+                            <th>Special C.O.P</th>
                             <th>{{$language[70][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[15][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[16][Auth::guard('admin')->user()->lang]}}</th>
@@ -178,6 +179,7 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'to_address', name: 'to_address' },
         { data: 'to_details', name: 'to_details' },
         { data: 'special_cod', name: 'special_cod' },
+        { data: 'special_cop', name: 'special_cop' },
         { data: 'total', name: 'total' },
         { data: 'status', name: 'status' },
         { data: 'action', name: 'action' },

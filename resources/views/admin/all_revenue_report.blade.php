@@ -75,6 +75,7 @@
                             <th>No of Packages</th>
                             <th>Total</th>
                             <th>Special C.O.D</th>
+                            <th>Special C.O.P</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -127,6 +128,7 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'no_of_packages', name: 'no_of_packages' },        
         { data: 'total', name: 'total' },
         { data: 'special_cod', name: 'special_cod' },
+        { data: 'special_cop', name: 'special_cop' },
     ]
 });
 

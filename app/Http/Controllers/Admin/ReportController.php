@@ -225,7 +225,7 @@ class ReportController extends Controller
 
         $i->where('shipments.show_status',0);
         $i->orderBy('shipments.id','DESC');
-        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.date','shipments.pickup_assign_date','shipments.package_collect_date','shipments.exception_assign_date','shipments.transit_in_date','shipments.transit_out_date','shipments.package_at_station_date','shipments.van_scan_date','shipments.delivery_date','shipments.delivery_exception_assign_date','shipments.cancel_request_date','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.return_shipment_id','shipments.cancel_remark','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.delivery_agent_id','shipments.exception_category','shipments.exception_remark','shipments.pickup_agent_id');
+        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.date','shipments.pickup_assign_date','shipments.package_collect_date','shipments.exception_assign_date','shipments.transit_in_date','shipments.transit_out_date','shipments.package_at_station_date','shipments.van_scan_date','shipments.delivery_date','shipments.delivery_exception_assign_date','shipments.cancel_request_date','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.special_cop','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.return_shipment_id','shipments.cancel_remark','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.delivery_agent_id','shipments.exception_category','shipments.exception_remark','shipments.pickup_agent_id');
         $shipment = $i->get();
 
         return Datatables::of($shipment)
@@ -346,6 +346,11 @@ class ReportController extends Controller
                 <p>AED ' . $shipment->special_cod . '</p>
                 </td>';
             })
+            ->addColumn('special_cop', function ($shipment) {
+                return '<td>
+                <p>AED ' . $shipment->special_cop . '</p>
+                </td>';
+            })
             ->addColumn('status', function ($shipment) {
                 $to_station = station::find($shipment->to_station_id);
                 $from_station = station::find($shipment->from_station_id);
@@ -449,7 +454,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','reference_no'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','special_cop','reference_no'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);
@@ -607,7 +612,7 @@ class ReportController extends Controller
         $i->where('s.status',8);
         $i->where('s.sender_id','!=',0);
         $i->groupBy('s.sender_id');
-        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.total) as total")  , DB::raw("s.sender_id") ]);
+        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.special_cop) as special_cop") , DB::raw("SUM(s.total) as total")  , DB::raw("s.sender_id") ]);
         $shipment = $i->get();
 
         return Datatables::of($shipment)
@@ -634,13 +639,18 @@ class ReportController extends Controller
                 <p>' .$shipment->special_cod . ' AED</p>
                 </td>';
             })
+            ->addColumn('special_cop', function ($shipment) {
+                return '<td>
+                <p>' .$shipment->special_cop . ' AED</p>
+                </td>';
+            })
             ->addColumn('total', function ($shipment) {
                 return '<td>
                 <p>' . $shipment->total . ' AED</p>
                 </td>';
             })
             
-        ->rawColumns(['no_of_shipments', 'no_of_packages', 'special_cod','total','account_id'])
+        ->rawColumns(['no_of_shipments', 'no_of_packages', 'special_cod','special_cop','total','account_id'])
         ->addIndexColumn()
         ->make(true);
     }
@@ -671,7 +681,7 @@ class ReportController extends Controller
         $i->where('s.status',8);
         $i->where('s.sender_id','!=',0);
         $i->groupBy('s.sender_id');
-        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.total) as total")  , DB::raw("s.sender_id") ]);
+        $i->select([DB::raw("SUM(s.no_of_packages) as no_of_packages") ,DB::raw("COUNT(s.id) as no_of_shipments") , DB::raw("SUM(s.special_cod) as special_cod") , DB::raw("SUM(s.special_cop) as special_cop") , DB::raw("SUM(s.total) as total")  , DB::raw("s.sender_id") ]);
         $shipment = $i->get();
 
         $user = User::where('status',4)->get();
@@ -1131,7 +1141,7 @@ class ReportController extends Controller
         $i->where('status','!=', 0);
         $i->where('show_status',0);
         $i->orderBy('id','DESC');
-        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.date','shipments.pickup_assign_date','shipments.package_collect_date','shipments.exception_assign_date','shipments.transit_in_date','shipments.transit_out_date','shipments.package_at_station_date','shipments.van_scan_date','shipments.delivery_date','shipments.delivery_exception_assign_date','shipments.cancel_request_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark');
+        $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_mode','shipments.from_address','shipments.to_address','shipments.special_cod','shipments.special_cop','shipments.total','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.date','shipments.pickup_assign_date','shipments.package_collect_date','shipments.exception_assign_date','shipments.transit_in_date','shipments.transit_out_date','shipments.package_at_station_date','shipments.van_scan_date','shipments.delivery_date','shipments.delivery_exception_assign_date','shipments.cancel_request_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark');
         $shipment = $i->get();
 
         return Datatables::of($shipment)
@@ -1259,6 +1269,11 @@ class ReportController extends Controller
             ->addColumn('special_cod', function ($shipment) {
                 return '<td>
                 <p>AED ' . $shipment->special_cod . '</p>
+                </td>';
+            })
+            ->addColumn('special_cop', function ($shipment) {
+                return '<td>
+                <p>' . $shipment->special_cop . ' AED</p>
                 </td>';
             })
             ->addColumn('status', function ($shipment) {
@@ -1429,7 +1444,7 @@ class ReportController extends Controller
                 </td>';
             })
             
-        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','reference_no','to_details'])
+        ->rawColumns(['order_id','shipment_date', 'from_address', 'to_address','shipment_mode','action','total','status','account_id','special_cod','special_cop','reference_no','to_details'])
         ->addIndexColumn()
         ->make(true);
         //return Datatables::of($orders) ->addIndexColumn()->make(true);

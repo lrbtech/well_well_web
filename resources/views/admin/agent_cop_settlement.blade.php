@@ -82,7 +82,7 @@
                             <th>{{$language[115][Auth::guard('admin')->user()->lang]}}</th>
                             <th>{{$language[116][Auth::guard('admin')->user()->lang]}}</th>
                             <th>Special C.O.P</th>
-                            <th>Collected C.O.P</th>
+                            <!-- <th>Collected C.O.P</th> -->
                           </tr>
                         </thead>
                         <tbody>
@@ -172,7 +172,7 @@ var orderPageTable = $('#datatable').DataTable({
         { data: 'from_address', name: 'from_address' },
         { data: 'to_address', name: 'to_address' },
         { data: 'special_cod', name: 'special_cod' },
-        { data: 'collected_value', name: 'collected_value' },
+        // { data: 'collected_value', name: 'collected_value' },
     ]
 });
 
