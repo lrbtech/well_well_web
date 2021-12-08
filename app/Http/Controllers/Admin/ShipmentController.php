@@ -890,6 +890,11 @@ class ShipmentController extends Controller
                 // $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
                 $i->where(function($query) use ($tdate1,$fdate1){
                     $query->where([
+                        ['status',0],
+                        ['date','<=',$tdate1],
+                        ['date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
                         ['status',1],
                         ['pickup_assign_date','<=',$tdate1],
                         ['pickup_assign_date','>=',$fdate1],
@@ -948,6 +953,11 @@ class ShipmentController extends Controller
                         ['status',9],
                         ['delivery_exception_assign_date','<=',$tdate1],
                         ['delivery_exception_assign_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',10],
+                        ['cancel_request_date','<=',$tdate1],
+                        ['cancel_request_date','>=',$fdate1],
                     ]);
                 });
             }
@@ -1005,7 +1015,7 @@ class ShipmentController extends Controller
             $i->where('shipments.hold_status',0);
             $i->where('shipments.show_status',0);
             $i->orderBy('shipments.id','DESC');
-            $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
+            $i->select('shipments.date','shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
             $shipment = $i->get();
         }
         else{
@@ -1016,6 +1026,11 @@ class ShipmentController extends Controller
                 // $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
                 $i->where(function($query) use ($tdate1,$fdate1){
                     $query->where([
+                        ['status',0],
+                        ['date','<=',$tdate1],
+                        ['date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
                         ['status',1],
                         ['pickup_assign_date','<=',$tdate1],
                         ['pickup_assign_date','>=',$fdate1],
@@ -1074,6 +1089,11 @@ class ShipmentController extends Controller
                         ['status',9],
                         ['delivery_exception_assign_date','<=',$tdate1],
                         ['delivery_exception_assign_date','>=',$fdate1],
+                    ]);
+                    $query->orWhere([
+                        ['status',10],
+                        ['cancel_request_date','<=',$tdate1],
+                        ['cancel_request_date','>=',$fdate1],
                     ]);
                 });
             }
@@ -1133,7 +1153,7 @@ class ShipmentController extends Controller
             $i->where('shipments.hold_status',0);
             $i->where('shipments.show_status',0);
             $i->orderBy('shipments.id','DESC');
-            $i->select('shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
+            $i->select('shipments.date','shipments.order_id','shipments.reference_no','shipments.sender_id','shipments.shipment_from_time','shipments.shipment_to_time','shipments.shipment_mode','shipments.special_service','shipments.special_service_description','shipments.from_address','shipments.to_address','shipments.status','shipments.id','shipments.from_station_id','shipments.to_station_id','shipments.shipment_date','shipments.pickup_agent_id','shipments.package_collect_agent_id','shipments.pickup_exception_id','shipments.exception_category','shipments.exception_remark','shipments.transit_in_id','shipments.transit_out_id','shipments.package_at_station_id','shipments.transit_in_id1','shipments.transit_out_id1','shipments.package_at_station_id1','shipments.van_scan_id','shipments.delivery_agent_id','shipments.delivery_exception_id','shipments.delivery_exception_category','shipments.delivery_exception_remark','shipments.cancel_remark','shipments.return_shipment_id');
             $shipment = $i->get();
         }
         

@@ -137,6 +137,11 @@ class ReportController extends Controller
             // $i->whereBetween('shipments.date', [$fdate1, $tdate1]);
             $i->where(function($query) use ($tdate1,$fdate1){
                 $query->where([
+                    ['status',0],
+                    ['date','<=',$tdate1],
+                    ['date','>=',$fdate1],
+                ]);
+                $query->orWhere([
                     ['status',1],
                     ['pickup_assign_date','<=',$tdate1],
                     ['pickup_assign_date','>=',$fdate1],
@@ -195,6 +200,11 @@ class ReportController extends Controller
                     ['status',9],
                     ['delivery_exception_assign_date','<=',$tdate1],
                     ['delivery_exception_assign_date','>=',$fdate1],
+                ]);
+                $query->orWhere([
+                    ['status',10],
+                    ['cancel_request_date','<=',$tdate1],
+                    ['cancel_request_date','>=',$fdate1],
                 ]);
             });
         }
